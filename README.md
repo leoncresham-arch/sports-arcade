@@ -1,38 +1,36 @@
 # Sports Arcade
 
-An original 3D football game prototype for PC, built with Godot 4. This project starts with a procedural, asset-free pitch and simple gameplay so it can grow using free tools.
+An original football game project designed to grow from a quick browser-playable prototype into a deeper 3D game.
 
-## Current prototype
+## Play in a browser
 
-- 3D pitch, field markings, goals, lighting, and camera
-- Player movement, sprinting, stamina, and shooting
-- Physics-based ball
-- Basic opponent behavior and goalkeeper tracking
-- Scoreboard, match timer, pause, and reset
+The repository now includes a self-contained browser version at **[index.html](./index.html)**. It uses HTML, CSS, and JavaScript, with no build tools or external game assets required.
 
-This is an early starter project and has **not yet been tested in a local Godot runtime**. Expect iteration and bug fixes as development continues.
+### Controls
 
-## Run locally
+- **Computer:** WASD or arrow keys to move, Space to shoot, Shift to sprint, P to pause.
+- **iPad / touch screen:** Drag on the left side of the pitch to move; use the SHOOT and SPRINT buttons below the pitch.
+- **Goal:** Score against CPU United before the 90-second match ends.
 
-1. Install Godot 4.x from https://godotengine.org/download.
-2. Clone or download this repository.
-3. In Godot's Project Manager, select **Import** and choose `project.godot`.
-4. Open the project and press **F6** to run the current scene, or **F5** to run the project.
+### Publish with GitHub Pages
 
-## Controls
+The browser game can be served as a static site with GitHub Pages. The repository is currently private; on GitHub Free, Pages generally requires a public repository. To publish for free, change the repository visibility to public (only if you are comfortable making the code public), then open **Settings → Pages** and select **GitHub Actions** as the build and deployment source. A workflow will publish the browser game when pushed to `main`.
 
-- **WASD / Arrow keys:** Move
-- **Shift:** Sprint
-- **Space:** Shoot when close to the ball
-- **P:** Pause / resume
-- **R:** Reset match
+## Godot 4 prototype
+
+The project also includes an early procedural 3D starter:
+
+- `project.godot`
+- `main.tscn`
+- `scripts/game.gd`
+
+The Godot version is intended for a Mac or PC with Godot 4 installed. It has not yet been tested in a local Godot runtime. The browser game is the better option for playing on an iPad today.
 
 ## Roadmap
 
-1. Test and stabilize movement, ball physics, shooting, goals, and camera.
-2. Improve ball control and player animation.
-3. Add passing, tackling, teammate AI, goalkeeper saves, and formations.
-4. Add menus, teams, audio, controller support, and match options.
-5. Build and test desktop releases; investigate browser export separately.
+1. Test and refine the browser controls and gameplay on touch and desktop.
+2. Add passing, tackles, smarter opponent AI, and goalkeeper saves.
+3. Improve animations, audio, menus, teams, and match options.
+4. Continue the separate 3D Godot version for desktop.
 
-Use original team names, kits, logos, and assets. Do not copy proprietary FIFA / EA Sports FC branding or licensed player likenesses.
+All teams, visual identity, and assets should remain original rather than copying proprietary FIFA / EA Sports FC branding or licensed player likenesses.
