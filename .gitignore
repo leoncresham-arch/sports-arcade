@@ -1,0 +1,12 @@
+# Godot generated files
+.godot/
+.import/
+
+# Build/export output
+build/
+dist/
+exports/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
