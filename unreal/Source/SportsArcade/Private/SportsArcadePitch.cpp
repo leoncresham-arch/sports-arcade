@@ -41,7 +41,7 @@ void ASportsArcadePitch::AddSegment(const FVector2D& Start, const FVector2D& End
     const float Rotation = FMath::RadiansToDegrees(FMath::Atan2(Difference.Y, Difference.X));
 
     // Engine cube mesh is 100 cm per axis. Markings float just above the turf.
-    const FVector Position(Middle.X, Middle.Y, 10.5f);
+    const FVector Position(Middle.X, Middle.Y, 0.5f);
     const FVector Size(Distance / 100.f, LineWidthCm / 100.f, 1.f / 100.f);
     Lines->AddInstance(FTransform(FRotator(0.f, Rotation, 0.f), Position, Size));
 }
