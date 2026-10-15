@@ -67,6 +67,12 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - The behavior is gated by `bUseBroadcastCameraIfPresent` and `bTrackReferenceFootball`; other maps fall back to their ordinary camera.
 - Added a CI source-structure test. **This has not been compiled in Unreal or validated visually.**
 
+## Latest Unreal compatibility fix — 2026-10-15
+
+- Updated `unreal/Tools/Editor/setup_visual_review.py` to use `LevelEditorSubsystem` for map creation/saving, replacing older `EditorLevelLibrary` calls.
+- Extended `unreal/tests/test_preview_bootstrap.py` mocks and failure test accordingly.
+- No genuine Unreal editor run, C++ compile, player asset import, or PC-quality render yet.
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
