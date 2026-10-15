@@ -7,6 +7,11 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## Native visual review scene preparation
+
+- [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
+- The Python script is syntax-checked in CI, **not executed in Unreal**; an actual Unreal workstation and licensed professional 3D art remain necessary to produce a realistic preview.
+
 ## Free automated checks
 
 Every change under `unreal/` triggers [Unreal source scaffold checks](../.github/workflows/unreal-source-check.yml) on GitHub Actions. These zero-cost Python unit tests check the project descriptor, module/targets, header/source pairing, generated-header ordering, camera interfaces, and animation/input wiring.
