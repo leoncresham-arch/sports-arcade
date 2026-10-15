@@ -13,6 +13,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - The [native review-scene script](Tools/Editor/setup_visual_review.py) now places the ball at the centre spot.
 - [Ball physics integration notes](docs/ball-physics.md) detail unfinished collisions, spin, dribbling, and genuine Unreal testing. This code is **not compiled**.
 
+## PC rendering baseline (source-only)
+
+- [PC renderer baseline](docs/pc-renderer-baseline.md) now defines Temporal Super Resolution, Lumen GI/reflections, software distance fields and virtual shadow maps as a **starting** high-end graphics configuration.
+- Hardware ray tracing is not forced. Performance and visuals still require real native GPU profiling.
+- This changes the potential renderer features; it does **not** add professional player or stadium art, nor prove graphics quality.
+
 ## Daylight stadium lighting foundation
 
 - `SportsArcadeLightingRig`: configurable C++ lighting actor combining the directional sun, skylight, sky atmosphere and subtle fog.
