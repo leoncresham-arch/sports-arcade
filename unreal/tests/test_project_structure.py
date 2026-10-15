@@ -93,6 +93,19 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("Surface->SetupAttachment(SceneRoot)", source)
         self.assertIn("FVector Position(Middle.X, Middle.Y, 0.5f)", source)
 
+    def test_goal_frame_and_corner_markings(self):
+        goal_header = read("Source/SportsArcade/Public/SportsArcadeGoal.h")
+        goal_source = read("Source/SportsArcade/Private/SportsArcadeGoal.cpp")
+        pitch_source = read("Source/SportsArcade/Private/SportsArcadePitch.cpp")
+        self.assertIn("732.f", goal_header)
+        self.assertIn("244.f", goal_header)
+        self.assertIn("InternalWidthCm", goal_source)
+        self.assertIn("InternalHeightCm", goal_source)
+        self.assertIn("FramePieces->ClearInstances()", goal_source)
+        self.assertIn("Corner quarter-arcs", pitch_source)
+        self.assertIn("XSide * 100.f", pitch_source)
+        self.assertIn("YSide * 100.f", pitch_source)
+
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
         self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
