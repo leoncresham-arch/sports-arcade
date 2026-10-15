@@ -10,7 +10,7 @@ ASportsArcadeCharacter::ASportsArcadeCharacter()
     bUseControllerRotationYaw = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
-    GetCharacterMovement()->MaxWalkSpeed = 500.f;
+    GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
     GetCharacterMovement()->BrakingDecelerationWalking = 2100.f;
 
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -32,6 +32,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     check(PlayerInputComponent);
     PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ASportsArcadeCharacter::MoveForward);
     PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ASportsArcadeCharacter::MoveRight);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ASportsArcadeCharacter::BeginSprint);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASportsArcadeCharacter::EndSprint);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -48,4 +50,14 @@ void ASportsArcadeCharacter::MoveRight(float Value)
     {
         AddMovementInput(FVector::RightVector, Value);
     }
+}
+
+void ASportsArcadeCharacter::BeginSprint()
+{
+    GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+}
+
+void ASportsArcadeCharacter::EndSprint()
+{
+    GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
 }
