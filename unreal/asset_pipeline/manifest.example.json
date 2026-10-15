@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "notes": "Example only. Fill with verified local assets and their exact licenses. This manifest intentionally contains no downloaded or imported assets.",
+  "assets": [
+    {
+      "id": "hero_footballer",
+      "role": "player_skeletal_mesh",
+      "source_url": "",
+      "creator": "",
+      "license_name": "",
+      "license_url": "",
+      "allows_game_use": false,
+      "allows_public_source_redistribution": false,
+      "local_file": "",
+      "destination": "/Game/SportsArcade/Players",
+      "reviewed": false
+    },
+    {
+      "id": "pitch_turf",
+      "role": "turf_material_source",
+      "source_url": "",
+      "creator": "",
+      "license_name": "",
+      "license_url": "",
+      "allows_game_use": false,
+      "allows_public_source_redistribution": false,
+      "local_file": "",
+      "destination": "/Game/SportsArcade/Materials",
+      "reviewed": false
+    },
+    {
+      "id": "stadium",
+      "role": "stadium_static_mesh",
+      "source_url": "",
+      "creator": "",
+      "license_name": "",
+      "license_url": "",
+      "allows_game_use": false,
+      "allows_public_source_redistribution": false,
+      "local_file": "",
+      "destination": "/Game/SportsArcade/Stadium",
+      "reviewed": false
+    }
+  ]
+}
