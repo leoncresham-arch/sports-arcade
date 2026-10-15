@@ -21,6 +21,13 @@ Run locally with `python3 -m unittest discover -s unreal/tests -v` from the repo
 - Jog and sprint input is wired into the PC C++ character using **WASD / arrows** and **Left Shift**.
 - See [rigging and animation integration](docs/character-animation-pipeline.md) for asset requirements, Unreal setup and visual acceptance tests. No licensed character meshes or animation clips have been integrated yet.
 
+## Regulation goal reference
+
+- `SportsArcadeGoal`: C++ scene actor for goal posts and crossbar at 7.32 m clear width / 2.44 m clear height.
+- `SportsArcadePitch` now also creates 1 m corner quarter-arcs.
+- [Goal and stadium layout integration](docs/goals-and-stadium-layout.md) documents pitch axes, correct placements and future production asset requirements.
+- The frame uses construction cubes only; no realistic net or rendered stadium has been implemented.
+
 ## Measured football pitch foundation
 
 - `SportsArcadePitch`: source-level 105 × 68 m pitch actor with configurable turf/paint materials, halfway line, centre circle, penalty and goal areas, penalty spot and arcs.
