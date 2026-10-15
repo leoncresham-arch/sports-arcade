@@ -106,6 +106,19 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("XSide * 100.f", pitch_source)
         self.assertIn("YSide * 100.f", pitch_source)
 
+    def test_daylight_rig_is_used_by_editor_preview(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeLightingRig.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeLightingRig.cpp")
+        preview = read("Tools/Editor/setup_visual_review.py")
+        for field in ("KeyLightLux", "SkylightIntensity", "SunDirection"):
+            self.assertIn(field, header)
+            self.assertIn(field, source)
+        for component in ("UDirectionalLightComponent", "USkyLightComponent",
+                          "USkyAtmosphereComponent", "UExponentialHeightFogComponent"):
+            self.assertIn(component, header)
+        self.assertIn('resolve_project_class("SportsArcadeLightingRig")', preview)
+        self.assertIn('spawn(editor, lighting_class', preview)
+
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
         self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
