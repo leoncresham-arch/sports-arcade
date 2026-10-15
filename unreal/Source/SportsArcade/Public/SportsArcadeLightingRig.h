@@ -24,7 +24,7 @@ public:
     virtual void OnConstruction(const FTransform& Transform) override;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Lighting",
-              meta=(ClampMin="0.0", ClampMax="20.0"))
+              meta=(ClampMin="0.0", ClampMax="150000.0"))
     float KeyLightLux = 100000.f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Lighting",
