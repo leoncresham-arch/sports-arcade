@@ -24,6 +24,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
 - The Python script is syntax-checked in CI, **not executed in Unreal**; an actual Unreal workstation and licensed professional 3D art remain necessary to produce a realistic preview.
 
+## Asset-import safety maintenance
+
+- Added checks for path traversal, links outside a private asset staging folder, and unsupported file extensions before Unreal import.
+- Updated [Unreal Python console instructions](docs/licensed-asset-intake.md).
+- These tests run without UE; no real artist assets have been imported or previewed.
+
 ## Licensed high-fidelity asset intake
 
 - [Asset intake instructions](docs/licensed-asset-intake.md) document a reviewed-license manifest, fail-closed Python validation, and a local Unreal Editor import script.
