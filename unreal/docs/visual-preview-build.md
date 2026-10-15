@@ -18,7 +18,7 @@ A screenshot of the editor's standard cubes, an AI-generated concept image, or a
 
 The [editor preview bootstrap script](../Tools/Editor/setup_visual_review.py) is intended to create `/Game/Maps/SA_VisualReview` from inside Unreal Editor.
 
-It uses the C++ `SportsArcadePitch`, `SportsArcadeGoal`, `SportsArcadeBroadcastCamera` actors, plus an Unreal sunlight, skylight, atmosphere and subtle fog. It intentionally does **not** try to fake a player with block geometry. It avoids overwriting an existing review map.
+It uses the C++ `SportsArcadePitch`, `SportsArcadeGoal`, `SportsArcadeBroadcastCamera` actors, plus a reusable native `SportsArcadeLightingRig` actor containing sunlight, skylight, sky atmosphere and subtle fog. The rig has adjustable directional sunlight intensity, sun angle and ambient intensity. It intentionally does **not** try to fake a player with block geometry. It avoids overwriting an existing review map.
 
 No third-party assets, photorealistic materials, MetaHumans, animations, or stadium meshes are bundled.
 
@@ -26,7 +26,7 @@ No third-party assets, photorealistic materials, MetaHumans, animations, or stad
 
 1. Open `SportsArcade.uproject` in Unreal Engine and compile the native C++ classes.
 2. Enable the **Python Editor Script Plugin** and restart the editor if prompted.
-3. Open Unreal's Python console and execute the script:
+3. Verify that the `SportsArcadeLightingRig` actor is compiled and exposed to the editor. Open Unreal's Python console and execute the script:
    `exec(open(r"<absolute-repo-path>/unreal/Tools/Editor/setup_visual_review.py", encoding="utf-8").read())`
 4. If APIs differ in the actual Unreal version, fix them against editor error messages instead of claiming the script has run successfully.
 5. Assign legal PBR turf and pitch-line materials; review shadow contact and scale.
@@ -39,3 +39,7 @@ No third-party assets, photorealistic materials, MetaHumans, animations, or stad
 ## Timing
 
 There is no reliable date for a realistic preview while Unreal-capable hardware and an asset-import route are unavailable. Once those are secured, produce a single-player stadium visual slice *before* attempting a full 11v11 match.
+
+### Lighting review
+
+The new `SportsArcadeLightingRig` C++ actor is the starting point for consistent daylight visual comparisons. Its sun lux level, sky brightness and sun direction can be tuned in the editor; it does not replace a stadium roof shadow setup, physically validated exposure or night floodlights. Review first-pass values under calibrated exposure in an actual Unreal render, and compare skin, grass, shadows and kit fabrics at broadcast and close-up camera distances. No such render has yet been produced.
