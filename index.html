@@ -22,7 +22,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .bottom{display:flex;justify-content:center;gap:8px;padding-bottom:env(safe-area-inset-bottom,0px)}
 .action{border:1px solid #4b705f;background:#13392b;color:#f5faef;border-radius:12px;padding:10px 16px;font-size:12px;font-weight:850;letter-spacing:.07em}.action.primary{background:var(--lime);border-color:var(--lime);color:#122417}
 .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#061710a8;backdrop-filter:blur(5px);padding:20px;z-index:3}.dialog{max-width:390px;width:100%;text-align:center;background:#0c281f;border:1px solid #4c705b;border-radius:22px;padding:26px 22px;box-shadow:0 20px 70px #0007}.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--lime);font-weight:900}.dialog h1{font-size:clamp(30px,8vw,46px);line-height:.95;letter-spacing:-.05em;margin:12px 0}.dialog p{color:#bdd2c4;line-height:1.55;font-size:14px}.dialog .action{width:100%;padding:14px;margin-top:8px;font-size:13px}
-.mobile-hint{display:none}.stamina{display:flex;align-items:center;gap:7px;min-width:100px}.stamina span{font-size:10px;font-weight:850;letter-spacing:.05em}.stamina-track{height:7px;width:72px;background:#365b47;border-radius:20px;overflow:hidden}.stamina-fill{height:100%;width:100%;background:var(--lime);border-radius:20px;transition:width .12s linear}.keeper-note{color:#d2efb8}
+.mobile-hint{display:none}.stamina{display:flex;align-items:center;gap:7px;min-width:100px}.stamina span{font-size:10px;font-weight:850;letter-spacing:.05em}.stamina-track{height:7px;width:72px;background:#365b47;border-radius:20px;overflow:hidden}.stamina-fill{height:100%;width:100%;background:var(--lime);border-radius:20px;transition:width .12s linear}.keeper-note{color:#d2efb8}.help{font-size:10px;color:#d0e1d3}.bottom .action{min-width:70px}@media(max-width:700px){.tip>span:first-child{display:none}.tip{justify-content:space-between}.bottom{gap:5px}.bottom .action{font-size:11px}}
 @media(max-width:700px){header{padding-top:max(9px,env(safe-area-inset-top));padding-bottom:8px}.tag{display:none}.mark{width:28px;height:28px}.scorebar{padding:7px 9px;gap:9px;border-radius:11px}.team{letter-spacing:0;font-size:9px}.clock{padding-left:9px;min-width:46px}.arena{border-radius:12px}.tip{font-size:10px}.mobile-hint{display:inline}.bottom .action{flex:1;max-width:170px;padding:13px 8px}}
 @media(min-width:701px){.bottom{display:none}}
 </style>
@@ -32,10 +32,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <main>
   <section class="scorebar" aria-label="Scoreboard"><div class="team">ARCADE FC</div><div class="number home" id="homeScore">0</div><div class="number" style="color:#658776">:</div><div class="number away" id="awayScore">0</div><div class="team">CPU UNITED</div><div class="clock" id="clock">01:30</div></section>
   <section class="arena" id="arena"><canvas id="game" aria-label="Football pitch game"></canvas>
-    <div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">ARCADE MODE · MATCH 01</div><h1>OWN THE<br> PITCH.</h1><p>Score past CPU United before full time.<br><strong>Move</strong> with WASD or arrows. <strong>Space</strong> shoots. <strong>Shift</strong> sprints.<br><span class="mobile-hint">On iPad, drag on the pitch to move and tap SHOOT.</span></p><button class="action primary" id="startBtn">KICK OFF&nbsp; →</button></div></div>
+    <div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">ARCADE MODE · MATCH 01</div><h1>OWN THE<br> PITCH.</h1><p>Score past CPU United before full time.<br><strong>Move</strong> with WASD or arrows. <strong>Space</strong> shoots. <strong>Shift</strong> sprints. <strong>E</strong> passes and <strong>F</strong> tackles.<br><span class="mobile-hint">On iPad, drag on the pitch to move and tap SHOOT.</span></p><button class="action primary" id="startBtn">KICK OFF&nbsp; →</button></div></div>
   </section>
-  <div class="tip"><span><strong>WASD / ARROWS</strong> Move &nbsp; <strong>SPACE</strong> Shoot &nbsp; <strong>SHIFT</strong> Sprint &nbsp; <strong>R</strong> Restart</span><div class="stamina" aria-label="Sprint stamina"><span>ENERGY</span><div class="stamina-track"><div class="stamina-fill" id="staminaFill"></div></div></div><span id="status">READY FOR KICK-OFF</span></div>
-  <div class="bottom"><button class="action" id="sprintBtn">⚡ SPRINT</button><button class="action primary" id="shootBtn">SHOOT ↗</button></div>
+  <div class="tip"><span><strong>WASD / ARROWS</strong> Move &nbsp; <strong>SPACE</strong> Shoot &nbsp; <strong>E</strong> Pass &nbsp; <strong>F</strong> Tackle &nbsp; <strong>SHIFT</strong> Sprint &nbsp; <strong>R</strong> Restart</span><div class="stamina" aria-label="Sprint stamina"><span>ENERGY</span><div class="stamina-track"><div class="stamina-fill" id="staminaFill"></div></div></div><span id="status">READY FOR KICK-OFF</span></div>
+  <div class="bottom"><button class="action" id="sprintBtn">⚡ SPRINT</button><button class="action" id="tackleBtn">TACKLE</button><button class="action" id="passBtn">PASS →</button><button class="action primary" id="shootBtn">SHOOT ↗</button></div>
 </main>
 <script>
 (()=>{
@@ -47,6 +47,8 @@ let W=900,H=520,dpr=1,running=false,finished=false,paused=false,last=0,elapsed=0
 const player={x:.70,y:.5,vx:0,vy:0,r:.025,stamina:100,faceX:-1,faceY:0};
 const cpu={x:.30,y:.5,vx:0,vy:0,r:.026,stamina:100};
 const ball={x:.50,y:.50,vx:0,vy:0,r:.012};
+const mate={x:.78,y:.3,faceX:-1,faceY:0};
+let tackleCooldown=0,passCooldown=0,ballOwner=null,passTarget=null;
 const keepers=[{x:.055,y:.5,side:'left'},{x:.945,y:.5,side:'right'}];
 let joy=null,joyActive=false,sprinting=false;
 function resize(){const rect=arena.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,2);W=Math.max(320,rect.width);H=Math.max(220,rect.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
@@ -78,6 +80,10 @@ function draw(){
  drawPlayer(cx,cy,Math.max(11,Math.min(W,H)*.027),'#f34f59','#ffe0dc',-1,0,'9');
  // Goalkeepers track play inside their own goalmouth.
  for(const k of keepers){const kx=f.x+k.x*f.w,ky=f.y+k.y*f.h;drawPlayer(kx,ky,Math.max(8,Math.min(W,H)*.021),k.side==='left'?'#af89ff':'#6bdfff','#fff',k.side==='left'?1:-1,0,'1')}
+ // Supporting teammate and a subtle pass target indicator.
+ const mx=f.x+mate.x*f.w,my=f.y+mate.y*f.h;
+ if(passTarget){ctx.strokeStyle='#d2ff9b';ctx.lineWidth=2;ctx.beginPath();ctx.arc(mx,my,Math.max(15,Math.min(W,H)*.035),0,Math.PI*2);ctx.stroke()}
+ drawPlayer(mx,my,Math.max(10,Math.min(W,H)*.024),'#b8f46b','#f3ffe0',mate.faceX,mate.faceY,'7');
  // Ball shadow and ball
  ctx.fillStyle='#07281966';ctx.beginPath();ctx.ellipse(bx+2,by+5,Math.max(5,W*.008),Math.max(3,H*.009),0,0,Math.PI*2);ctx.fill();
  const br=Math.max(5,Math.min(W,H)*.012);ctx.fillStyle='#fff9e9';ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#263a31';ctx.lineWidth=1;ctx.stroke();
@@ -92,14 +98,20 @@ function drawPlayer(x,y,r,color,trim,fx,fy,num){
  ctx.fillStyle=trim;ctx.font='900 '+Math.max(8,r*.72)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(num,x,y+.5);
  ctx.strokeStyle=trim;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x+fx*r*.9,y+fy*r*.9);ctx.lineTo(x+fx*r*1.65,y+fy*r*1.65);ctx.stroke();ctx.restore();
 }
-function resetPositions(){player.x=.70;player.y=.5;player.vx=player.vy=0;player.faceX=-1;player.faceY=0;cpu.x=.30;cpu.y=.5;cpu.vx=cpu.vy=0;ball.x=.5;ball.y=.5;ball.vx=ball.vy=0;keepers[0].y=keepers[1].y=.5;kickCooldown=.5}
+function resetPositions(){player.x=.70;player.y=.5;player.vx=player.vy=0;player.faceX=-1;player.faceY=0;cpu.x=.30;cpu.y=.5;cpu.vx=cpu.vy=0;ball.x=.5;ball.y=.5;ball.vx=ball.vy=0;keepers[0].y=keepers[1].y=.5;mate.x=.78;mate.y=.3;passTarget=null;ballOwner=null;tackleCooldown=0;passCooldown=0;kickCooldown=.5}
 function showToast(t){toast=t;toastTime=1.4;statusEl.textContent=t.toUpperCase()}
 function shoot(){if(!running||paused||finished||kickCooldown>0)return;const dx=ball.x-player.x,dy=ball.y-player.y;if(Math.hypot(dx*W,dy*H)>Math.min(W,H)*.11){showToast('Get closer to the ball');return}
  let ax=player.faceX,ay=player.faceY;if(Math.hypot(ax,ay)<.1){ax=-1;ay=0}const n=Math.hypot(ax,ay)||1;ball.vx=ax/n*.82;ball.vy=ay/n*.72;kickCooldown=.35;showToast('SHOT!')}
+function nearBall(actor,reach=.095){const f=field();return Math.hypot((ball.x-actor.x)*f.w,(ball.y-actor.y)*f.h)<Math.min(f.w,f.h)*reach}
+function pass(){if(!running||paused||finished||passCooldown>0)return;if(!nearBall(player)&&!nearBall(mate,.065)){showToast('Get closer to pass');return}
+ const f=field(),dx=(mate.x-ball.x)*f.w,dy=(mate.y-ball.y)*f.h,n=Math.hypot(dx,dy)||1;
+ ball.vx=dx/n*.67;ball.vy=dy/n*.67;passTarget=true;passCooldown=.7;kickCooldown=.35;showToast('PASS!')}
+function tackle(){if(!running||paused||finished||tackleCooldown>0)return;tackleCooldown=1.2;const f=field(),dist=Math.hypot((player.x-cpu.x)*f.w,(player.y-cpu.y)*f.h);
+ if(dist<Math.min(f.w,f.h)*.115&&nearBall(cpu,.085)){ball.vx=player.faceX*.42;ball.vy=player.faceY*.42;ball.x=clamp(player.x+player.faceX*.035,.03,.97);ball.y=clamp(player.y+player.faceY*.035,.03,.97);showToast('BALL WON!')}else showToast('TACKLE MISSED')}
 function start(){if(finished){home=away=0;elapsed=0;remaining=90;player.stamina=100;homeScoreEl.textContent=awayScoreEl.textContent='0';clockEl.textContent='01:30';resetPositions();finished=false}running=true;paused=false;document.getElementById('pauseBtn').textContent='Ⅱ  PAUSE';overlay.style.display='none';last=performance.now();statusEl.textContent='MATCH LIVE'}
 function pause(){if(!running||finished)return;paused=!paused;document.getElementById('pauseBtn').textContent=paused?'▶  RESUME':'Ⅱ  PAUSE';if(paused){overlay.style.display='flex';overlay.querySelector('.eyebrow').textContent='MATCH PAUSED';overlay.querySelector('h1').innerHTML='TAKE A<br>BREATHER.';overlay.querySelector('p').textContent='Your match is paused. Ready when you are.';document.getElementById('startBtn').textContent='RESUME MATCH →'}else{overlay.style.display='none';last=performance.now()}}
 function score(homeGoal){if(homeGoal)home++;else away++;homeScoreEl.textContent=home;awayScoreEl.textContent=away;goalFlash=.8;showToast(homeGoal?'GOAL! ARCADE FC':'CPU UNITED SCORES');resetPositions()}
-function update(dt){if(!running||paused||finished)return;remaining=Math.max(0,remaining-dt);kickCooldown=Math.max(0,kickCooldown-dt);goalFlash=Math.max(0,goalFlash-dt);toastTime=Math.max(0,toastTime-dt);if(toastTime<=0)statusEl.textContent='MATCH LIVE';
+function update(dt){if(!running||paused||finished)return;remaining=Math.max(0,remaining-dt);kickCooldown=Math.max(0,kickCooldown-dt);passCooldown=Math.max(0,passCooldown-dt);tackleCooldown=Math.max(0,tackleCooldown-dt);goalFlash=Math.max(0,goalFlash-dt);toastTime=Math.max(0,toastTime-dt);if(toastTime<=0)statusEl.textContent='MATCH LIVE';
  let ix=0,iy=0;if(keys.has('ArrowLeft')||keys.has('a'))ix--;if(keys.has('ArrowRight')||keys.has('d'))ix++;if(keys.has('ArrowUp')||keys.has('w'))iy--;if(keys.has('ArrowDown')||keys.has('s'))iy++;
  if(joyActive&&joy){ix+=joy.x;iy+=joy.y}let n=Math.hypot(ix,iy);if(n>1){ix/=n;iy/=n}
  const fast=(keys.has('Shift')||sprinting)&&player.stamina>0&&(Math.abs(ix)+Math.abs(iy)>.1),speed=fast?.43:.31;
@@ -107,12 +119,20 @@ function update(dt){if(!running||paused||finished)return;remaining=Math.max(0,re
  staminaFill.style.width=Math.round(player.stamina)+'%';staminaFill.style.background=player.stamina<25?'#ff8c69':'var(--lime)';
  player.x=clamp(player.x+ix*speed*dt,.035,.965);player.y=clamp(player.y+iy*speed*dt,.035,.965);
  if(n>.05){player.faceX=ix;player.faceY=iy}
+ // AI teammate looks for space ahead of the ball but stays available for passes.
+ const targetX=clamp(Math.min(player.x-.16,ball.x-.07),.12,.86),targetY=clamp(player.y<.5?.72:.28,.12,.88);
+ const tx=targetX-mate.x,ty=targetY-mate.y,tn=Math.hypot(tx,ty)||1;
+ mate.x=clamp(mate.x+clamp(tx,-dt*.19,dt*.19),.06,.94);mate.y=clamp(mate.y+clamp(ty,-dt*.19,dt*.19),.06,.94);
+ if(tn>.03){mate.faceX=tx/tn;mate.faceY=ty/tn}
  // CPU chases the ball; once close it kicks toward the player's goal.
  let dx=ball.x-cpu.x,dy=ball.y-cpu.y,dist=Math.hypot(dx*W,dy*H),cpuSpeed=.22;
  if(dist>Math.min(W,H)*.035){cpu.x=clamp(cpu.x+dx/(Math.hypot(dx,dy)||1)*cpuSpeed*dt,.035,.965);cpu.y=clamp(cpu.y+dy/(Math.hypot(dx,dy)||1)*cpuSpeed*dt,.035,.965)}
  else if(kickCooldown<=0){ball.vx=.55;ball.vy=(.5-ball.y)*.6;kickCooldown=.9}
  // Keepers slide along their goal line and clear shots that get close.
  for(const k of keepers){k.y+=clamp(ball.y-k.y,-dt*.55,dt*.55);k.y=clamp(k.y,.39,.61)}
+ // The receiving player settles a pass and redirects the ball into space.
+ if(passTarget&&nearBall(mate,.072)){passTarget=false;ball.vx=-.13;ball.vy=0;showToast('PASS COMPLETE!')}
+ if(passTarget&&passCooldown<=0)passTarget=false;
  // Ball movement, friction, and collision against pitch edges.
  ball.x+=ball.vx*dt;ball.y+=ball.vy*dt;const friction=Math.pow(.985,dt*60);ball.vx*=friction;ball.vy*=friction;
  if(ball.y<.035||ball.y>.965){ball.y=clamp(ball.y,.035,.965);ball.vy*=-.72}
@@ -131,9 +151,11 @@ function frame(now){const dt=Math.min(.033,(now-last)/1000||0);last=now;update(d
 document.getElementById('startBtn').addEventListener('click',()=>{if(paused){paused=false;overlay.style.display='none';document.getElementById('pauseBtn').textContent='Ⅱ  PAUSE';last=performance.now()}else start()});
 document.getElementById('pauseBtn').addEventListener('click',pause);
 document.getElementById('shootBtn').addEventListener('pointerdown',e=>{e.preventDefault();shoot()});
+document.getElementById('passBtn').addEventListener('pointerdown',e=>{e.preventDefault();pass()});
+document.getElementById('tackleBtn').addEventListener('pointerdown',e=>{e.preventDefault();tackle()});
 document.getElementById('sprintBtn').addEventListener('pointerdown',e=>{e.preventDefault();sprinting=true});
 for(const type of ['pointerup','pointercancel','pointerleave'])document.getElementById('sprintBtn').addEventListener(type,()=>sprinting=false);
-window.addEventListener('keydown',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(k);if(e.code==='Space'&&!e.repeat)shoot();if((k==='p'||k==='Escape')&&!e.repeat)pause();if(k==='r'&&!e.repeat){finished=true;start()}});
+window.addEventListener('keydown',e=>{const k=e.key.length===1?e.key.toLowerCase():e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(k);if(e.code==='Space'&&!e.repeat)shoot();if(k==='e'&&!e.repeat)pass();if(k==='f'&&!e.repeat)tackle();if((k==='p'||k==='Escape')&&!e.repeat)pause();if(k==='r'&&!e.repeat){finished=true;start()}});
 window.addEventListener('keyup',e=>{keys.delete(e.key.length===1?e.key.toLowerCase():e.key)});
 window.addEventListener('blur',()=>{keys.clear();sprinting=false;joyActive=false;joy=null;if(running&&!paused&&!finished)pause()});
 canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.pointerType==='pen'){const rect=canvas.getBoundingClientRect();const x=(e.clientX-rect.left)/rect.width;if(x<.65){joyActive=true;joy={x:0,y:0,originX:e.clientX,originY:e.clientY,id:e.pointerId};canvas.setPointerCapture(e.pointerId)}}});
