@@ -25,6 +25,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - If a level does not contain this camera actor, the usual pawn camera remains in use.
 - These functions are source-level additions, with structural tests only; they have **not** been compiled or play-tested in Unreal.
 
+## Unreal 5 editor API alignment
+
+- The native visual-review bootstrap now uses `LevelEditorSubsystem.new_level` and `save_current_level` instead of the older `EditorLevelLibrary` map methods.
+- Expanded simulated-editor tests to cover unavailable level-editor subsystem behavior.
+- This is an API alignment based on Unreal documentation, **not evidence that the script ran in Unreal 5.5**.
+
 ## Scene bootstrap regression tests
 
 - `tests/test_preview_bootstrap.py` now exercises the Unreal Editor setup script with a **simulated editor**. It verifies actors, pitch-end goal coordinates, camera/ball placement, refusal to overwrite an existing level and missing-class failures.
