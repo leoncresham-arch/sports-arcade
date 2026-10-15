@@ -1,5 +1,9 @@
 # Sports Arcade
 
+## Primary project — PC edition
+
+The new [Unreal Engine PC edition](unreal/README.md) is the **main development direction**. Its C++ source and project files are committed but **not compiled or runtime-tested**. The previous HTML/Godot versions remain historical experiments and should not be mistaken for the planned production-quality football game. Native PC rendering and photorealistic asset work require an Unreal-capable computer; GitHub alone cannot render or verify the finished game.
+
 An original football game project designed to grow from a quick browser-playable prototype into a deeper 3D game.
 
 ## 3D preview
