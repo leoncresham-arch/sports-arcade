@@ -6,8 +6,8 @@
 ASportsArcadeBroadcastCamera::ASportsArcadeBroadcastCamera()
 {
     PrimaryActorTick.bCanEverTick = true;
-    SetActorLocation(PitchCentre + CameraOffset);
-    SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PitchCentre));
+    // Do not set world transform in a constructor: the level owns camera placement.
+    // Tick performs the eventual tracking; editor setup places the first shot.
     if (UCameraComponent* Camera = GetCameraComponent())
     {
         Camera->SetFieldOfView(BroadcastFieldOfView);
