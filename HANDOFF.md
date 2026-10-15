@@ -38,6 +38,11 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Work completed purely in GitHub may still be helpful, but the critical blocker is an **actual Unreal render on GPU-equipped hardware**. Treat this as the top delivery risk, not as a reason to endlessly add scaffolds.
 - Verify GitHub Actions via repository Actions API and confirm the latest relevant run status; avoid saying 'passed' based on a previous commit.
 
+## Latest work: asset intake (2026-10-15)
+- Added `unreal/asset_pipeline/validate_manifest.py`, `manifest.example.json`, Unreal-only `Tools/Editor/import_reviewed_assets.py`, and `tests/test_asset_manifest.py`.
+- Added [licensed-asset intake documentation](unreal/docs/licensed-asset-intake.md). No actual third-party models or animations imported.
+- CI tests validate the import manifest but DO NOT run Unreal or confirm an actual render. Always inspect the latest Actions result for the current commit.
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
