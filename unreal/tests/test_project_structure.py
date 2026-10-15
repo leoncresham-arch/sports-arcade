@@ -23,7 +23,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertEqual(descriptor["FileVersion"], 3)
         self.assertTrue(any(m["Name"] == "SportsArcade" and m["Type"] == "Runtime"
                             for m in descriptor["Modules"]))
-        self.assertTrue((ROOT / "Source" / "SportsArcade.Build.cs").is_file())
+        self.assertTrue((ROOT / "Source" / "SportsArcade" / "SportsArcade.Build.cs").is_file())
 
     def test_target_files_and_build_module_are_present(self):
         self.assertTrue((ROOT / "Source" / "SportsArcade.Target.cs").is_file())
@@ -71,7 +71,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
 
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
-        self.assertIn("not been compiled", readme)
+        self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
         self.assertIn("no stadium", readme)
 
 
