@@ -66,6 +66,28 @@ class ManifestTests(unittest.TestCase):
         data["assets"][0]["destination"] = "/Engine/Editor"
         self.assertTrue(any("destination" in p for p in validate_manifest(data, self.base)))
 
+    def test_disallow_unreviewed_executable_file(self):
+        data = copy.deepcopy(self.good)
+        data["assets"][0]["local_file"] = "private/setup.py"
+        errors = validate_manifest(data, self.base)
+        self.assertTrue(any("extension" in error for error in errors))
+
+    def test_symlink_escape_is_rejected(self):
+        data = copy.deepcopy(self.good)
+        with tempfile.TemporaryDirectory() as working, tempfile.TemporaryDirectory() as outside:
+            root = pathlib.Path(working)
+            external = pathlib.Path(outside) / "player.fbx"
+            external.write_bytes(b"external asset")
+            (root / "private").mkdir()
+            (root / "private" / "model.fbx").symlink_to(external)
+            errors = validate_manifest(data, root, require_files=True)
+            self.assertTrue(any("outside staging" in error for error in errors))
+
+    def test_reject_destination_traversal(self):
+        data = copy.deepcopy(self.good)
+        data["assets"][0]["destination"] = "/Game/SportsArcade/Players/../Hidden"
+        self.assertTrue(any("destination" in error for error in validate_manifest(data, self.base)))
+
     def test_file_existence_check(self):
         with tempfile.TemporaryDirectory() as temp:
             p = pathlib.Path(temp)
