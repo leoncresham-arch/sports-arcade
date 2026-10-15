@@ -61,6 +61,12 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - **No real image/video from Unreal exists yet.** Do not imply screenshot capture succeeded merely from a passing mock test.
 - First real graphics-review footage remains blocked by editor/GPU hardware and actual licensed realistic footballer, kit, turf, stadium and animation imports.
 
+## Latest native integration (2026-10-15): broadcast review camera
+
+- `unreal/Source/SportsArcade/Private/SportsArcadeGameMode.cpp` now selects a level-placed `SportsArcadeBroadcastCamera` for the local controller and optionally tracks the reference `SportsArcadeBall`.
+- The behavior is gated by `bUseBroadcastCameraIfPresent` and `bTrackReferenceFootball`; other maps fall back to their ordinary camera.
+- Added a CI source-structure test. **This has not been compiled in Unreal or validated visually.**
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
