@@ -7,11 +7,17 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## New graphics foundations
+
+- `SportsArcadeBroadcastCamera`: Unreal camera actor intended for a televised football view. It can track a focus actor and smoothly follow play across the pitch; it is not wired into a stadium level yet.
+- `Config/DefaultScalability.ini`: initial scalability guidelines without forcing maximum graphics settings onto unsupported PCs.
+- [Camera integration and graphics test instructions](docs/camera-and-graphics-setup.md).
+
 ## What is *not* done
 - The project has not been opened, compiled, cooked, packaged, or tested in Unreal Engine.
 - No stadium, pitch, playable match, character mesh, facial material, animation rig, physics ball, keeper, networking, or photorealistic graphics have been implemented.
 - The default map is Unreal's engine Entry map, which is a **placeholder**, not a football level. A skeletal mesh, animation blueprint, and authored stadium level must be imported and assigned in an editor.
-- The camera is a chase-camera scaffolding rather than final broadcast framing.
+- The default character camera remains a chase-camera scaffold. The new broadcast camera exists as a separate actor but is not assigned as the default view or tested in an authored stadium.
 
 ## Visual priority
 The non-negotiable goal is an original premium-quality football simulation. Visual production must start from legally usable, high-quality, rigged human models, football animations, detailed stadium architecture, PBR materials, and proper lighting—not primitive objects presented as production art.
