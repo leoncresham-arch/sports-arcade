@@ -25,3 +25,13 @@ credentials.json
 # Editor / OS noise
 .DS_Store
 Thumbs.db
+
+# Unreal Engine generated files
+unreal/Binaries/
+unreal/Intermediate/
+unreal/Saved/
+unreal/DerivedDataCache/
+unreal/.vs/
+unreal/*.sln
+unreal/*.VC.db
+unreal/*.VC.opendb
