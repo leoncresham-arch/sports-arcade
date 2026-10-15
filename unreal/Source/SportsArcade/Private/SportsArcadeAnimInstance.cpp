@@ -1,7 +1,6 @@
 #include "SportsArcadeAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "KismetAnimationLibrary.h"
 
 void USportsArcadeAnimInstance::NativeInitializeAnimation()
 {
@@ -43,8 +42,9 @@ void USportsArcadeAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
     bIsFalling = CachedMovement->IsFalling();
 
     const FRotator ActorRotation = CachedCharacter->GetActorRotation();
+    const FVector LocalVelocity = ActorRotation.UnrotateVector(HorizontalVelocity);
     MovementDirection = bIsMoving
-        ? UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity, ActorRotation)
+        ? FMath::RadiansToDegrees(FMath::Atan2(LocalVelocity.Y, LocalVelocity.X))
         : 0.f;
 
     const float CurrentYaw = ActorRotation.Yaw;
