@@ -44,6 +44,7 @@ def main():
     pitch_class = resolve_project_class("SportsArcadePitch")
     goal_class = resolve_project_class("SportsArcadeGoal")
     camera_class = resolve_project_class("SportsArcadeBroadcastCamera")
+    lighting_class = resolve_project_class("SportsArcadeLightingRig")
 
     editor = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     if editor is None:
@@ -73,20 +74,7 @@ def main():
             camera.get_actor_location(), unreal.Vector(0.0, 0.0, 0.0)),
         False)
 
-    sunlight = spawn(editor, unreal.DirectionalLight, "SA | Key Sunlight",
-                     unreal.Vector(0.0, 0.0, 6000.0),
-                     unreal.Rotator(-38.0, -35.0, 0.0))
-    sunlight.get_component_by_class(
-        unreal.DirectionalLightComponent).set_editor_property("intensity", 9.0)
-
-    skylight = spawn(editor, unreal.SkyLight, "SA | Skylight",
-                     unreal.Vector(0.0, 0.0, 2500.0))
-    sky_component = skylight.get_component_by_class(unreal.SkyLightComponent)
-    sky_component.set_editor_property("intensity", 1.0)
-
-    spawn(editor, unreal.SkyAtmosphere, "SA | Atmosphere",
-          unreal.Vector(0.0, 0.0, 0.0))
-    spawn(editor, unreal.ExponentialHeightFog, "SA | Subtle Fog",
+    spawn(editor, lighting_class, "SA | Stadium Daylight Lighting Rig",
           unreal.Vector(0.0, 0.0, 0.0))
 
     if not unreal.EditorLevelLibrary.save_current_level():
