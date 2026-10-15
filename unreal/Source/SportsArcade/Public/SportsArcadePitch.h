@@ -6,6 +6,7 @@
 
 class UHierarchicalInstancedStaticMeshComponent;
 class UStaticMeshComponent;
+class USceneComponent;
 class UMaterialInterface;
 
 /**
@@ -38,6 +39,9 @@ public:
     float LineWidthCm = 12.f;
 
 private:
+    UPROPERTY(VisibleAnywhere, Category="Sports Arcade|Pitch")
+    TObjectPtr<USceneComponent> SceneRoot;
+
     UPROPERTY(VisibleAnywhere, Category="Sports Arcade|Pitch")
     TObjectPtr<UStaticMeshComponent> Surface;
 
