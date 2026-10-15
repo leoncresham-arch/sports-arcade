@@ -7,6 +7,21 @@ build/
 dist/
 exports/
 
+# Private, local-only development files (never commit to the public repo)
+private/
+internal/
+dev-private/
+*.local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
 # Editor / OS noise
 .DS_Store
 Thumbs.db
