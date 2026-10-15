@@ -95,6 +95,29 @@ void ASportsArcadePitch::OnConstruction(const FTransform& Transform)
     AddSegment(FVector2D(0.f, -HalfWidth), FVector2D(0.f, HalfWidth));
     AddCircle(0.f, 0.f, 915.f, 96);
 
+    // Corner quarter-arcs: 1 m radius, painted inside the field of play.
+    // Unlike a full circle, segments stay inside the pitch at each corner.
+    for (const float XSide : { -1.f, 1.f })
+    {
+        for (const float YSide : { -1.f, 1.f })
+        {
+            const FVector2D Corner(XSide * HalfLength, YSide * HalfWidth);
+            const int32 ArcSegments = 16;
+            for (int32 Index = 0; Index < ArcSegments; ++Index)
+            {
+                const float A = UE_HALF_PI * Index / ArcSegments;
+                const float B = UE_HALF_PI * (Index + 1) / ArcSegments;
+                const FVector2D P0(
+                    Corner.X - XSide * 100.f * FMath::Cos(A),
+                    Corner.Y - YSide * 100.f * FMath::Sin(A));
+                const FVector2D P1(
+                    Corner.X - XSide * 100.f * FMath::Cos(B),
+                    Corner.Y - YSide * 100.f * FMath::Sin(B));
+                AddSegment(P0, P1);
+            }
+        }
+    }
+
     // Standard penalty / goal areas; clamp ranges when field dimensions change.
     const float PenaltyHalfWidth = FMath::Min(2016.f, HalfWidth - 200.f);
     const float GoalAreaHalfWidth = FMath::Min(916.f, HalfWidth - 100.f);
