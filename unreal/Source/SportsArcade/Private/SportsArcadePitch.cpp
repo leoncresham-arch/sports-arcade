@@ -2,18 +2,22 @@
 
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASportsArcadePitch::ASportsArcadePitch()
 {
     PrimaryActorTick.bCanEverTick = false;
 
+    SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("PitchRoot"));
+    RootComponent = SceneRoot;
+
     Surface = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurfSurface"));
-    RootComponent = Surface;
+    Surface->SetupAttachment(SceneRoot);
     Surface->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
     Lines = CreateDefaultSubobject<UHierarchicalInstancedStaticMeshComponent>(TEXT("FieldMarkings"));
-    Lines->SetupAttachment(Surface);
+    Lines->SetupAttachment(SceneRoot);
     Lines->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     Lines->SetCastShadow(false);
 
