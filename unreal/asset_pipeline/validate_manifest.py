@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from urllib.parse import urlparse
 
+ALLOWED_EXTENSIONS = {".fbx", ".gltf", ".glb", ".obj", ".png", ".jpg", ".jpeg", ".tga", ".tif", ".tiff", ".exr"}
+
 ALLOWED_ROLES = {
     "player_skeletal_mesh", "football_animation", "goalkeeper_skeletal_mesh",
     "pitch_turf", "turf_material_source", "stadium_static_mesh",
@@ -55,7 +57,9 @@ def validate_manifest(manifest: dict, base_dir: Path, require_files: bool = Fals
                 errors.append(f"{label}: {key} required")
 
         dest = asset.get("destination", "")
-        if not isinstance(dest, str) or not dest.startswith("/Game/SportsArcade/") or ".." in dest:
+        if (not isinstance(dest, str) or
+                not dest.startswith("/Game/SportsArcade/") or
+                any(segment in ("", ".", "..") for segment in dest.split("/")[3:])):
             errors.append(f"{label}: destination must be within /Game/SportsArcade/")
 
         local_file = asset.get("local_file", "")
@@ -65,8 +69,17 @@ def validate_manifest(manifest: dict, base_dir: Path, require_files: bool = Fals
             path = Path(local_file)
             if path.is_absolute() or ".." in path.parts:
                 errors.append(f"{label}: unsafe local_file path")
-            elif require_files and not (base_dir / path).is_file():
-                errors.append(f"{label}: missing local file {local_file}")
+            elif path.suffix.lower() not in ALLOWED_EXTENSIONS:
+                errors.append(f"{label}: unsupported asset file extension")
+            elif require_files:
+                # Relative paths alone are not enough: symlinks could point
+                # outside the private asset staging folder.
+                root = base_dir.resolve()
+                candidate = (root / path).resolve()
+                if not candidate.is_relative_to(root):
+                    errors.append(f"{label}: local file resolves outside staging folder")
+                elif not candidate.is_file():
+                    errors.append(f"{label}: missing local file {local_file}")
 
         # Not a blocker for local editor imports, but prompts an intentional
         # decision before anyone checks binary assets into a public GitHub repo.
