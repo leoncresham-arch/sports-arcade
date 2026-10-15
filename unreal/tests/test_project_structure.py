@@ -60,6 +60,18 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn('ActionName="Sprint"', mapping)
         self.assertIn('Key=LeftShift', mapping)
 
+    def test_native_review_mode_activates_broadcast_camera(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        self.assertIn("virtual void BeginPlay() override;", header)
+        self.assertIn("bUseBroadcastCameraIfPresent", header)
+        self.assertIn("bTrackReferenceFootball", header)
+        self.assertIn("TActorIterator<ASportsArcadeBroadcastCamera>", mode)
+        self.assertIn("TActorIterator<ASportsArcadeBall>", mode)
+        self.assertIn("SetFocusActor(*It)", mode)
+        self.assertIn("SetViewTargetWithBlend(ReviewCamera, 0.0f)", mode)
+        self.assertIn("if (!IsValid(ReviewCamera))", mode)
+
     def test_camera_can_track_and_clear_focus(self):
         header = read("Source/SportsArcade/Public/SportsArcadeBroadcastCamera.h")
         cpp = read("Source/SportsArcade/Private/SportsArcadeBroadcastCamera.cpp")
