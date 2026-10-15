@@ -7,6 +7,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## Physics football foundation
+
+- `SportsArcadeBall`: configurable 22 cm diameter / 0.43 kg physics sphere, directional impulse interface, reset, and placeholder sphere visual.
+- The [native review-scene script](Tools/Editor/setup_visual_review.py) now places the ball at the centre spot.
+- [Ball physics integration notes](docs/ball-physics.md) detail unfinished collisions, spin, dribbling, and genuine Unreal testing. This code is **not compiled**.
+
 ## Daylight stadium lighting foundation
 
 - `SportsArcadeLightingRig`: configurable C++ lighting actor combining the directional sun, skylight, sky atmosphere and subtle fog.
