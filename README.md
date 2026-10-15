@@ -8,9 +8,9 @@ The repository now includes a self-contained browser version at **[index.html](.
 
 ### Controls
 
-- **Computer:** WASD or arrow keys to move, Space to shoot, Shift to sprint, P to pause, R to restart.
-- **iPad / touch screen:** Drag on the left side of the pitch to move; use the SHOOT and SPRINT buttons below the pitch.
-- **Goal:** Score against CPU United before the 90-second match ends. Both goals now have moving keepers; a stamina meter tracks sprint energy.
+- **Computer:** WASD or arrow keys to move, Space to shoot, E to pass, F to tackle, Shift to sprint, P to pause, R to restart.
+- **iPad / touch screen:** Drag on the left side of the pitch to move; use the SHOOT, PASS, TACKLE, and SPRINT buttons below the pitch.
+- **Goal:** Score against CPU United before the 90-second match ends. Both goals have moving keepers; a supporting teammate offers passing options; tackling can win the ball from the CPU; a stamina meter tracks sprint energy.
 
 ### Publish with GitHub Pages
 
@@ -34,7 +34,7 @@ Sports Arcade aims for a polished, original, 3D football experience with the res
 
 ### Development milestones
 
-1. **Playable core:** dependable movement, possession, passes, shooting, tackling, goalkeepers, scoring, and restart behavior; test on touch and keyboard.
+1. **Playable core:** prototype passing, tackling and teammate support are implemented; next refine possession, passing accuracy, responsive controls, goalkeepers, scoring, and restart behavior with real touch and keyboard tests.
 2. **3D vertical slice:** one attractive stadium, two original teams, a full pitch, smooth player locomotion, physically convincing ball movement, and camera options.
 3. **Match systems:** gradually expand from small-sided play to 11v11, formations, switching players, referee rules, fouls, set pieces, substitutes, and capable team AI.
 4. **Presentation:** original kits and player models, animation blending, goal celebrations, replays, menus, stadium sound, crowd ambience, accessible controls, and performance settings.
