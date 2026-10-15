@@ -25,6 +25,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - The broadcast camera no longer forces its world position in the C++ constructor; the authored level defines initial placement.
 - GitHub CI validation is still **not** a real UE compile or scene render.
 
+## Authentic Unreal screenshot preparation
+
+- Added [native render capture helper](Tools/Editor/capture_visual_review.py) and [review procedure](docs/authentic-render-capture.md).
+- It requests a high-resolution screenshot from the **actual Unreal Editor camera** and writes an *unverified request log* for review. No screenshot has been generated, inspected or uploaded yet.
+- CI includes simulated-editor tests for approval gating, camera lookup and capture-request metadata. No native Unreal editor is connected.
+
 ## Native visual review scene preparation
 
 - [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
