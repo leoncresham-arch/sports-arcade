@@ -21,4 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run source and config checks
-        run: python3 -m unittest discover -s unreal/tests -v
+        run: |
+          python3 -m unittest discover -s unreal/tests -v
+          python3 -m compileall -q unreal/Tools/Editor
