@@ -12,4 +12,13 @@ class SPORTSARCADE_API ASportsArcadeGameMode : public AGameModeBase
 
 public:
     ASportsArcadeGameMode();
+
+    /** Use the placed TV camera in a visual review level when one exists. */
+    virtual void BeginPlay() override;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Visual Review")
+    bool bUseBroadcastCameraIfPresent = true;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Visual Review")
+    bool bTrackReferenceFootball = true;
 };
