@@ -29,6 +29,15 @@ private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<UCameraComponent> FollowCamera;
 
+    void BeginSprint();
+    void EndSprint();
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0"))
+    float JogSpeed = 420.f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0"))
+    float SprintSpeed = 650.f;
+
     void MoveForward(float Value);
     void MoveRight(float Value);
 };
