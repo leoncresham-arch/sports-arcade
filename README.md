@@ -32,6 +32,21 @@ Sports Arcade aims for a polished, original, 3D football experience with the res
 
 **Primary platforms:** Safari and Chrome on iPad and desktop. Hardware performance, browser graphics support, touch controls, and download sizes are first-class constraints.
 
+### Visual quality is the first priority
+
+The current 2D web build is a temporary mechanics prototype. The primary next deliverable is a **high-quality 3D visual vertical slice** with a broadcast camera, believable player proportions and animation, professional pitch materials, stadium, kits, shadows, and lighting. Target modern premium football presentation while using wholly original assets and identities.
+
+**Graphics-first order of work:**
+
+1. Select a browser-compatible 3D rendering pipeline and establish a performance budget for iPad Safari and desktop browsers.
+2. Create one carefully lit 3D stadium and realistic-looking pitch with camera controls.
+3. Integrate a high-quality legally usable player model and football, with original kit materials and animation transitions.
+4. Tune football-specific animation: run, sprint, turn, idle, dribble, pass, shoot, tackle, and keeper movement.
+5. Add presentation polish: broadcast camera moves, UI, crowd, audio, replay and goal sequence.
+6. Reintroduce and refine playable match systems using the 3D presentation, expanding only after testing quality and performance.
+
+Keep the existing playable 2D build online during the transition. Avoid promising fidelity equivalent to a commercial AAA release until the 3D slice proves it achievable within budget and browser hardware constraints.
+
 ### Development milestones
 
 1. **Playable core:** prototype passing, tackling and teammate support are implemented; next refine possession, passing accuracy, responsive controls, goalkeepers, scoring, and restart behavior with real touch and keyboard tests.
