@@ -1,5 +1,9 @@
 # Sports Arcade
 
+## iPad visual review
+
+[Open the interactive stadium graphics review](https://leoncresham-arch.github.io/sports-arcade/stadium-review.html) in Safari. It is an original browser scene with stadium seating, a distant instanced crowd, pitch markings, day/night lighting and graphics-quality controls. **This is not an Unreal-rendered or photorealistic preview.** The native Unreal game remains under development in `unreal/`.
+
 ## Primary project — PC edition
 
 **Graphics preview status:** the [browser stadium proof-of-concept](3d.html) is visible but not representative of the final game's quality. There is **no genuine photorealistic Unreal preview yet**. See the [free graphics production plan](docs/graphics-production-plan.md) for source options and the acceptance checklist.
