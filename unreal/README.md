@@ -7,6 +7,14 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## Free automated checks
+
+Every change under `unreal/` triggers [Unreal source scaffold checks](../.github/workflows/unreal-source-check.yml) on GitHub Actions. These zero-cost Python unit tests check the project descriptor, module/targets, header/source pairing, generated-header ordering, camera interfaces, and animation/input wiring.
+
+Run locally with `python3 -m unittest discover -s unreal/tests -v` from the repository root.
+
+**Passing these checks is not proof of successful Unreal compilation, asset integration, graphics quality, or gameplay.** A native Unreal Engine editor build and GPU render are still required.
+
 ## Character animation foundation
 
 - `SportsArcadeAnimInstance` now exposes locomotion data (ground speed, movement direction, turn rate, acceleration, sprint/fall flags) for a future realistic footballer Animation Blueprint.
