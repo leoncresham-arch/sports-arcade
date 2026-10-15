@@ -58,8 +58,12 @@ def main():
             "Rename/move the existing asset before generating another."
         )
 
+    level_editor = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+    if level_editor is None:
+        raise RuntimeError("Unreal LevelEditorSubsystem not available")
+
     unreal.EditorAssetLibrary.make_directory("/Game/Maps")
-    if not unreal.EditorLevelLibrary.new_level(LEVEL_PATH):
+    if not level_editor.new_level(LEVEL_PATH):
         raise RuntimeError("Unable to create " + LEVEL_PATH)
 
     spawn(editor, pitch_class, "SA | Regulation 105x68 Pitch",
@@ -81,7 +85,7 @@ def main():
     spawn(editor, lighting_class, "SA | Stadium Daylight Lighting Rig",
           unreal.Vector(0.0, 0.0, 0.0))
 
-    if not unreal.EditorLevelLibrary.save_current_level():
+    if not level_editor.save_current_level():
         raise RuntimeError("Scene constructed, but could not save preview level")
 
     log("Saved native scene to " + LEVEL_PATH)
