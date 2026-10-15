@@ -69,6 +69,18 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("MaximumLateralTravel", cpp)
         self.assertIn("VInterpTo", cpp)
 
+    def test_visual_asset_catalog_has_required_asset_slots(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeVisualAssetSet.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeVisualAssetSet.cpp")
+        for name in ("PlayerMesh", "GoalkeeperMesh", "IdleAnimation",
+                     "JogAnimation", "SprintAnimation", "TurfMaterial",
+                     "GoalFrameMesh", "GoalNetMaterial", "SourceAndLicenseNotes"):
+            self.assertIn(name, header)
+        self.assertIn("HasCoreVisualReferences", source)
+        candidates = read("docs/free-asset-candidates.md")
+        self.assertIn("Game Animation Sample", candidates)
+        self.assertIn("Digital Human", candidates)
+
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
         self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
