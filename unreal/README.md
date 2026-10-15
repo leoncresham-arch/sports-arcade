@@ -24,6 +24,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
 - The Python script is syntax-checked in CI, **not executed in Unreal**; an actual Unreal workstation and licensed professional 3D art remain necessary to produce a realistic preview.
 
+## Licensed high-fidelity asset intake
+
+- [Asset intake instructions](docs/licensed-asset-intake.md) document a reviewed-license manifest, fail-closed Python validation, and a local Unreal Editor import script.
+- The [manifest template](asset_pipeline/manifest.example.json) contains **no assets** and intentionally fails until actual author, license, source, game-use rights and file locations are verified.
+- Unreal Editor import has **not been executed**; no rigged player, animation, turf material or stadium model has been acquired or rendered.
+
 ## Free automated checks
 
 Every change under `unreal/` triggers [Unreal source scaffold checks](../.github/workflows/unreal-source-check.yml) on GitHub Actions. These zero-cost Python unit tests check the project descriptor, module/targets, header/source pairing, generated-header ordering, camera interfaces, and animation/input wiring.
