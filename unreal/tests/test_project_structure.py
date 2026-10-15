@@ -81,6 +81,18 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("Game Animation Sample", candidates)
         self.assertIn("Digital Human", candidates)
 
+    def test_pitch_dimensions_and_markings(self):
+        header = read("Source/SportsArcade/Public/SportsArcadePitch.h")
+        source = read("Source/SportsArcade/Private/SportsArcadePitch.cpp")
+        self.assertIn("10500.f", header)
+        self.assertIn("6800.f", header)
+        for dimension in ("915.f", "1650.f", "550.f", "1100.f"):
+            self.assertIn(dimension, source)
+        self.assertIn("AddCircle(0.f, 0.f, 915.f", source)
+        self.assertIn("Lines->SetupAttachment(SceneRoot)", source)
+        self.assertIn("Surface->SetupAttachment(SceneRoot)", source)
+        self.assertIn("FVector Position(Middle.X, Middle.Y, 0.5f)", source)
+
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
         self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
