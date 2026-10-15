@@ -19,6 +19,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - The [native visual-review setup script](Tools/Editor/setup_visual_review.py) now places this reusable actor, providing a consistent reference for judging realistic character, turf and kit materials later.
 - This source-level lighting setup has not been rendered or validated in Unreal.
 
+## Scene bootstrap regression tests
+
+- `tests/test_preview_bootstrap.py` now exercises the Unreal Editor setup script with a **simulated editor**. It verifies actors, pitch-end goal coordinates, camera/ball placement, refusal to overwrite an existing level and missing-class failures.
+- The broadcast camera no longer forces its world position in the C++ constructor; the authored level defines initial placement.
+- GitHub CI validation is still **not** a real UE compile or scene render.
+
 ## Native visual review scene preparation
 
 - [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
