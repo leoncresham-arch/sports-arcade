@@ -73,6 +73,12 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Extended `unreal/tests/test_preview_bootstrap.py` mocks and failure test accordingly.
 - No genuine Unreal editor run, C++ compile, player asset import, or PC-quality render yet.
 
+## Latest development — UE5 PC renderer baseline
+
+- Updated `unreal/Config/DefaultEngine.ini` with TSR, Lumen global illumination/reflections, distance fields and virtual shadow maps.
+- Added `unreal/docs/pc-renderer-baseline.md` with hardware validation checklist and source-level regression test.
+- Renderer configuration is **unverified in actual Unreal 5.5**. Do not imply any native PC graphics preview exists.
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
