@@ -2,6 +2,10 @@
 
 An original football game project designed to grow from a quick browser-playable prototype into a deeper 3D game.
 
+## 3D preview
+
+A separate [3D stadium preview](./3d.html) demonstrates the browser renderer, camera, grass pitch, goals, stadium tiers, stadium lighting, and placeholder footballers. It is an early graphical foundation, **not** a production-quality FIFA-style scene yet. Drag on the scene to orbit, pinch/scroll to zoom, and use the camera button to switch viewing angles. It loads Three.js from a CDN and requires an internet connection.
+
 ## Rebuild status
 
 **Clean-slate 3D rebuild planned.** The current 2D game is an archived experimental prototype; none of its gameplay, graphics, or interface are requirements for the final product. The graphics-first production criteria are recorded in [the 3D rebuild brief](docs/3d-rebuild-brief.md). The current game remains online only until a worthy replacement is ready.
