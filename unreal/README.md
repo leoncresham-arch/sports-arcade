@@ -7,6 +7,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## Daylight stadium lighting foundation
+
+- `SportsArcadeLightingRig`: configurable C++ lighting actor combining the directional sun, skylight, sky atmosphere and subtle fog.
+- The [native visual-review setup script](Tools/Editor/setup_visual_review.py) now places this reusable actor, providing a consistent reference for judging realistic character, turf and kit materials later.
+- This source-level lighting setup has not been rendered or validated in Unreal.
+
 ## Native visual review scene preparation
 
 - [Preview build instructions](docs/visual-preview-build.md) and [Unreal Editor Python setup](Tools/Editor/setup_visual_review.py) now describe an initial level with pitch, goals, broadcast camera and sunlight/sky.
