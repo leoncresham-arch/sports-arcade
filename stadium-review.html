@@ -19,8 +19,8 @@ footer strong{color:#d6ff82}
 @media(max-width:660px){header{flex-direction:column}.logo{font-size:12px}.controls{justify-content:flex-start}button{padding:9px;font-size:11px}footer{font-size:11px}}
 </style></head>
 <body>
-<div id="ui"><header><div class="logo"><b>✦</b> SPORTS ARCADE<small>STADIUM LIGHTING STUDY • iPAD REVIEW</small></div><div class="controls"><button id="broadcast" class="active">BROADCAST</button><button id="pitch">PITCH LEVEL</button><button id="corner">CORNER</button><button id="light">NIGHT LIGHTS</button></div></header>
-<footer class="pane"><strong>LIVE 3D VISUAL STUDY</strong> · Drag to orbit · Pinch to zoom · Change camera or lighting<br>Original procedural environment. Not Unreal footage, real player models, or FIFA-quality graphics.</footer></div>
+<div id="ui"><header><div class="logo"><b>✦</b> SPORTS ARCADE<small>STADIUM LIGHTING STUDY • iPAD REVIEW</small></div><div class="controls"><button id="broadcast" class="active">BROADCAST</button><button id="pitch">PITCH LEVEL</button><button id="corner">CORNER</button><button id="light">NIGHT LIGHTS</button><button id="quality">QUALITY: AUTO</button></div></header>
+<footer class="pane"><strong>LIVE 3D VISUAL STUDY</strong> · Drag to orbit · Pinch to zoom · Change camera or lighting<br>Procedural stadium review with distant crowd silhouettes. Not Unreal footage or realistic player models.</footer></div>
 <div id="loading">Preparing interactive stadium…<p>Requires an internet connection and Safari with WebGL enabled.</p></div>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
@@ -81,6 +81,48 @@ dummy.rotation.set(0,0,0);dummy.updateMatrix();inst.setMatrixAt(n++,dummy.matrix
 inst.instanceMatrix.needsUpdate=true;scene.add(inst)}
 for(let side of [-1,1])for(let tier=0;tier<2;tier++){const rows=tier===0?12:10,cols=94,count=rows*cols,inst=new THREE.InstancedMesh(seatGeo,mats(colours[(tier+3)%colours.length]),count);let n=0;
 for(let r=0;r<rows;r++)for(let j=0;j<cols;j++){dummy.position.set(side*(58+r*1.15+tier*15),1.15+r*.72+tier*10.5,-40+j*80/(cols-1));dummy.rotation.set(0,Math.PI/2,0);dummy.updateMatrix();inst.setMatrixAt(n++,dummy.matrix)}inst.instanceMatrix.needsUpdate=true;scene.add(inst)}
+// Distant crowd silhouettes: instancing keeps thousands of spectators cheap.
+// Stylized figures at far distances; NOT licensed photorealistic human assets.
+const personBodyGeometry=new THREE.CapsuleGeometry(.19,.31,3,4);
+const personHeadGeometry=new THREE.IcosahedronGeometry(.14,0);
+const crowdBody=new THREE.InstancedMesh(personBodyGeometry,mats(0xffffff,.96),4500);
+const crowdHead=new THREE.InstancedMesh(personHeadGeometry,mats(0xd7aa84,.99),4500);
+crowdBody.frustumCulled=false;crowdHead.frustumCulled=false;
+const skinColors=[0xf5ccac,0xc99574,0x885e47,0xe4b58e,0x5b3c31];
+const shirtColors=[0x28495f,0xe7e6dc,0x5f8d77,0xbdbaaa,0x314656,0xb4b9c3,0x6b6d82];
+let crowdCount=0;
+function spectator(x,y,z,rotation=0){
+ if(crowdCount>=4500)return;
+ const elevation=y+.42;
+ dummy.position.set(x,elevation,z);dummy.rotation.set(0,rotation,0);dummy.scale.setScalar(.8+rand()*.38);dummy.updateMatrix();
+ crowdBody.setMatrixAt(crowdCount,dummy.matrix);
+ crowdBody.setColorAt(crowdCount,new THREE.Color(shirtColors[Math.floor(rand()*shirtColors.length)]));
+ dummy.position.y=elevation+.49*dummy.scale.y;dummy.updateMatrix();
+ crowdHead.setMatrixAt(crowdCount,dummy.matrix);
+ crowdHead.setColorAt(crowdCount,new THREE.Color(skinColors[Math.floor(rand()*skinColors.length)]));
+ crowdCount++;
+}
+for(const side of [-1,1])for(let tier=0;tier<2;tier++){
+ const rows=tier===0?12:10,cols=tier===0?155:150;
+ for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
+  // Sparse clusters preserve visual depth and avoid a wall of identical people.
+  if(rand()<.46)continue;
+  const x=-82+col*164/(cols-1);
+  spectator(x,1.15+row*.74+tier*10.5,side*(40.5+row*1.23+tier*17));
+ }
+}
+for(const side of [-1,1])for(let tier=0;tier<2;tier++){
+ const rows=tier===0?12:10,cols=94;
+ for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
+  if(rand()<.55)continue;
+  spectator(side*(58+row*1.15+tier*15),1.15+row*.72+tier*10.5,-40+col*80/(cols-1),Math.PI/2);
+ }
+}
+crowdBody.count=crowdCount;crowdHead.count=crowdCount;
+crowdBody.instanceMatrix.needsUpdate=true;crowdHead.instanceMatrix.needsUpdate=true;
+if(crowdBody.instanceColor)crowdBody.instanceColor.needsUpdate=true;
+if(crowdHead.instanceColor)crowdHead.instanceColor.needsUpdate=true;
+scene.add(crowdBody,crowdHead);
 // Terrace fascia, illuminated adverts and a steel cantilever roof
 const fascia=mats(0x1d2935,.75),adColors=[0xbbe474,0x69bfd5,0xe4e8e4,0x83c6a2];
 for(const side of [-1,1]){box(168,1.6,.7,fascia,0,10,side*56);
@@ -103,6 +145,18 @@ function setView(name){preset=name;const p=positions[name];const pos=new THREE.V
 function setNight(enabled){night=enabled;sun.intensity=enabled?.16:3.2;hemisphere.intensity=enabled?.6:2;scene.background.set(enabled?0x101f31:0x91b8cf);scene.fog.color.set(enabled?0x101f31:0x91b8cf);renderer.toneMappingExposure=enabled?1.4:1.05;spotlights.forEach(s=>s.intensity=enabled?2100:0);document.querySelector('#light').classList.toggle('active',enabled);document.querySelector('#light').textContent=enabled?'DAY LIGHT':'NIGHT LIGHTS'}
 document.querySelectorAll('.controls button:not(#light)').forEach(b=>b.addEventListener('click',()=>setView(b.id)));
 document.querySelector('#light').addEventListener('click',()=>setNight(!night));
+let qualityLevel=0;
+const qualityNames=['AUTO','LOW','HIGH'];
+function applyQuality(){
+ const maxScale=qualityLevel===1?1:qualityLevel===2?2:1.5;
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxScale));
+ renderer.shadowMap.enabled=qualityLevel!==1;
+ renderer.setSize(innerWidth,innerHeight);
+ document.querySelector('#quality').textContent='QUALITY: '+qualityNames[qualityLevel];
+ document.querySelector('#quality').classList.toggle('active',qualityLevel===2);
+}
+document.querySelector('#quality').addEventListener('click',()=>{qualityLevel=(qualityLevel+1)%3;applyQuality()});
+
 let active=new Map(),lastDist=0;
 renderer.domElement.addEventListener('pointerdown',e=>{renderer.domElement.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY})});
 renderer.domElement.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;const prev=active.get(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1){theta-=(e.clientX-prev.x)*.004;phi=Math.max(.065,Math.min(1.18,phi-(e.clientY-prev.y)*.004))}else if(active.size===2){const pts=[...active.values()];const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);if(lastDist)distance=Math.max(12,Math.min(230,distance*lastDist/d));lastDist=d}});
