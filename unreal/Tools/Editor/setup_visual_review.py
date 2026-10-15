@@ -45,6 +45,7 @@ def main():
     goal_class = resolve_project_class("SportsArcadeGoal")
     camera_class = resolve_project_class("SportsArcadeBroadcastCamera")
     lighting_class = resolve_project_class("SportsArcadeLightingRig")
+    ball_class = resolve_project_class("SportsArcadeBall")
 
     editor = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
     if editor is None:
@@ -66,6 +67,9 @@ def main():
     for side, x in (("West", GOAL_X[0]), ("East", GOAL_X[1])):
         spawn(editor, goal_class, "SA | " + side + " Goal",
               unreal.Vector(x, 0.0, 0.0))
+
+    spawn(editor, ball_class, "SA | Reference Football (replace mesh)",
+          unreal.Vector(0.0, 0.0, 11.0))
 
     camera = spawn(editor, camera_class, "SA | Broadcast Camera",
                    unreal.Vector(0.0, -8900.0, 3900.0))
