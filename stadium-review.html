@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070f18"><title>Sports Arcade — Stadium Graphics Review</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07111a;color:#eff7f6;font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif}canvas{display:block;touch-action:none}
+#ui{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:max(14px,env(safe-area-inset-top)) 15px max(16px,env(safe-area-inset-bottom))}
+header{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.logo,.pane{background:linear-gradient(115deg,#081d2aee,#0b1725e6);border:1px solid #5e82905a;box-shadow:0 12px 34px #0007;border-radius:13px;backdrop-filter:blur(10px)}
+.logo{padding:12px 16px;font-size:14px;font-weight:850;letter-spacing:.14em}.logo b{color:#d3ff70}.logo small{display:block;margin-top:6px;font-size:10px;font-weight:550;color:#b2c7c5;letter-spacing:.08em}
+.controls{pointer-events:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+button{border:1px solid #9fbbb77e;border-radius:10px;color:white;background:#0b2336dc;font-size:12px;font-weight:750;padding:11px;touch-action:manipulation;cursor:pointer}
+button.active{background:#d6ff82;color:#142622;border-color:#d6ff82}
+footer{align-self:center;max-width:min(760px,94vw);text-align:center;line-height:1.5;padding:11px 16px;font-size:12px;color:#e6eeea}
+footer strong{color:#d6ff82}
+#loading{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:90%;background:#081621ef;border:1px solid #85b8b06c;padding:20px 24px;border-radius:14px;text-align:center;font-weight:650}
+#loading p{font-size:12px;font-weight:400;color:#c2d0d1}
+@media(max-width:660px){header{flex-direction:column}.logo{font-size:12px}.controls{justify-content:flex-start}button{padding:9px;font-size:11px}footer{font-size:11px}}
+</style></head>
+<body>
+<div id="ui"><header><div class="logo"><b>✦</b> SPORTS ARCADE<small>STADIUM LIGHTING STUDY • iPAD REVIEW</small></div><div class="controls"><button id="broadcast" class="active">BROADCAST</button><button id="pitch">PITCH LEVEL</button><button id="corner">CORNER</button><button id="light">NIGHT LIGHTS</button></div></header>
+<footer class="pane"><strong>LIVE 3D VISUAL STUDY</strong> · Drag to orbit · Pinch to zoom · Change camera or lighting<br>Original procedural environment. Not Unreal footage, real player models, or FIFA-quality graphics.</footer></div>
+<div id="loading">Preparing interactive stadium…<p>Requires an internet connection and Safari with WebGL enabled.</p></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
+const loading=document.querySelector('#loading');
+try{
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x91b8cf);scene.fog=new THREE.Fog(0x91b8cf,170,360);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.2,550);
+const mats=(c,r=.88,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+const mesh=(g,m,p,shadow=false)=>{const o=new THREE.Mesh(g,m);o.position.set(...p);o.castShadow=shadow;o.receiveShadow=true;scene.add(o);return o};
+const box=(w,h,d,m,x,y,z)=>mesh(new THREE.BoxGeometry(w,h,d),m,[x,y,z]);
+const hemisphere=new THREE.HemisphereLight(0xe5f4ff,0x25362a,2.0);scene.add(hemisphere);
+const sun=new THREE.DirectionalLight(0xffedcf,3.2);sun.position.set(-55,104,38);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);
+sun.shadow.camera.left=-95;sun.shadow.camera.right=95;sun.shadow.camera.top=95;sun.shadow.camera.bottom=-95;sun.shadow.normalBias=.04;scene.add(sun);
+const spotlights=[];const grey=mats(0x27313b,.85),metal=mats(0x6b7d81,.47,.55);
+box(280,1.2,205,mats(0x3c5151),0,-1.2,0);
+box(125,.32,85,mats(0x182b20),0,-.27,0);
+// Procedural stadium turf texture (original artwork; no external image download)
+const turfCanvas=document.createElement('canvas');turfCanvas.width=1024;turfCanvas.height=768;const c=turfCanvas.getContext('2d');
+for(let i=0;i<14;i++){c.fillStyle=i%2?'#376e38':'#41793e';c.fillRect(i*1024/14,0,1024/14+2,768)}
+let seed=9183;const rand=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296};
+for(let i=0;i<85000;i++){const x=rand()*1024,y=rand()*768,v=Math.floor(rand()*60);c.fillStyle=rand()<.56?'rgba(160,206,125,.10)':'rgba(5,23,6,.11)';c.fillRect(x,y,.4+rand()*1.4,1+rand()*3)}
+// White football markings baked to the surface to avoid z-fighting and reduce draw calls
+c.save();c.strokeStyle='#e5ebe2';c.lineWidth=2.4;c.beginPath();
+const x0=40,y0=41,w=944,h=686,mx=x0+w/2,my=y0+h/2,s=w/105;
+c.rect(x0,y0,w,h);c.moveTo(mx,y0);c.lineTo(mx,y0+h);c.moveTo(mx+9.15*s,my);c.arc(mx,my,9.15*s,0,Math.PI*2);c.moveTo(mx,my);c.arc(mx,my,1.6,0,Math.PI*2);
+for(const side of [-1,1]){const gx=side===-1?x0:x0+w,px=gx-side*16.5*s,small=gx-side*5.5*s;
+c.rect(Math.min(gx,px),my-20.16*s,16.5*s,40.32*s);
+c.rect(Math.min(gx,small),my-9.16*s,5.5*s,18.32*s);
+const penalty=gx-side*11*s;c.moveTo(penalty+1.8,my);c.arc(penalty,my,1.8,0,Math.PI*2);
+const angle=Math.acos(5.5/9.15);if(side===-1){c.moveTo(penalty+9.15*s*Math.cos(-angle),my+9.15*s*Math.sin(-angle));c.arc(penalty,my,9.15*s,-angle,angle)}else{c.moveTo(penalty+9.15*s*Math.cos(Math.PI-angle),my+9.15*s*Math.sin(Math.PI-angle));c.arc(penalty,my,9.15*s,Math.PI-angle,Math.PI+angle)}}
+for(const sx of [-1,1])for(const sy of [-1,1]){const cx=sx===-1?x0:x0+w,cy=sy===-1?y0:y0+h;const a=sx===-1?(sy===-1?0:Math.PI*1.5):(sy===-1?Math.PI*.5:Math.PI);c.moveTo(cx+9*s*Math.cos(a),cy+9*s*Math.sin(a));c.arc(cx,cy,1*s,a,a+Math.PI/2)}
+c.stroke();c.restore();
+const turfTexture=new THREE.CanvasTexture(turfCanvas);turfTexture.colorSpace=THREE.SRGBColorSpace;turfTexture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+const field=mesh(new THREE.PlaneGeometry(105,68),new THREE.MeshStandardMaterial({map:turfTexture,roughness:.96}),[0,0,0]);field.rotation.x=-Math.PI/2;
+// Premium presentation goals: posts, crossbar and faint crossed net strands
+const white=mats(0xe3e9e5,.33,.12);
+function beam(a,b,r=.07,mat=white){const v1=new THREE.Vector3(...a),v2=new THREE.Vector3(...b),d=v2.clone().sub(v1);const o=mesh(new THREE.CylinderGeometry(r,r,d.length(),7),mat,v1.clone().add(v2).multiplyScalar(.5).toArray());o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return o}
+for(const side of [-1,1]){
+const x=side*52.5,z=side*55.2;
+for(const y of [-3.66,3.66]){beam([x,0,y],[x,2.44,y],.07);beam([x,2.44,y],[z,2.5,y],.045,metal);beam([z,.14,y],[z,2.5,y],.03,metal);beam([x,.1,y],[z,.1,y],.025,metal)}
+beam([x,2.44,-3.66],[x,2.44,3.66],.073);
+const pts=[];for(let j=0;j<=14;j++){const y=-3.66+j*7.32/14;pts.push(z,.1,y,z,2.48,y);pts.push(x,2.48,y,z,2.48,y)}
+for(let j=0;j<=7;j++){const h=.12+j*2.33/7;pts.push(z,h,-3.66,z,h,3.66)}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));const net=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0xd8e4e6,transparent:true,opacity:.25}));scene.add(net);
+}
+// One instanced seating draw call per region/tone: better suited to tablets
+const colours=[0x273c51,0x28495a,0x41566c,0x364651,0x59616b,0x2e5261];
+const seatGeo=new THREE.BoxGeometry(.84,.23,.86),dummy=new THREE.Object3D();
+for(let side of [-1,1])for(let tier=0;tier<2;tier++){
+const longSide=true,rows=tier===0?12:10,cols=tier===0?155:150,count=rows*cols;
+const seatMat=mats(colours[(side+1+tier)%colours.length]);const inst=new THREE.InstancedMesh(seatGeo,seatMat,count);
+let n=0;for(let r=0;r<rows;r++)for(let j=0;j<cols;j++){
+dummy.position.set(-82+j*164/(cols-1),1.15+r*.74+tier*10.5,side*(40.5+r*1.23+tier*17));
+dummy.rotation.set(0,0,0);dummy.updateMatrix();inst.setMatrixAt(n++,dummy.matrix)}
+inst.instanceMatrix.needsUpdate=true;scene.add(inst)}
+for(let side of [-1,1])for(let tier=0;tier<2;tier++){const rows=tier===0?12:10,cols=94,count=rows*cols,inst=new THREE.InstancedMesh(seatGeo,mats(colours[(tier+3)%colours.length]),count);let n=0;
+for(let r=0;r<rows;r++)for(let j=0;j<cols;j++){dummy.position.set(side*(58+r*1.15+tier*15),1.15+r*.72+tier*10.5,-40+j*80/(cols-1));dummy.rotation.set(0,Math.PI/2,0);dummy.updateMatrix();inst.setMatrixAt(n++,dummy.matrix)}inst.instanceMatrix.needsUpdate=true;scene.add(inst)}
+// Terrace fascia, illuminated adverts and a steel cantilever roof
+const fascia=mats(0x1d2935,.75),adColors=[0xbbe474,0x69bfd5,0xe4e8e4,0x83c6a2];
+for(const side of [-1,1]){box(168,1.6,.7,fascia,0,10,side*56);
+box(168,.75,.4,mats(0x2e4447),0,.5,side*39.3);
+for(let i=0;i<22;i++){box(7.1,.42,.10,mats(adColors[i%4],.55),-79+i*7.45,1.15,side*38.85)}
+const roof=box(183,1.3,17,mats(0x202c36,.64,.45),0,25.4,side*66);
+for(let i=0;i<20;i++)box(.18,1.7,17,mats(0x54616d,.37,.66),-87+i*9.2,24.6,side*66);
+for(let i=0;i<8;i++){const x=-78+i*22;const pole=box(.65,31,.65,metal,x,13.7,side*83);
+const light=new THREE.SpotLight(0xe0f1ff,0,290,.83,.7);light.position.set(x,25,side*63);light.target.position.set(x*.5,0,side*14);scene.add(light,light.target);spotlights.push(light)}
+}
+for(const side of [-1,1]){box(1,1.5,105,fascia,side*70,11,0);box(17,1,110,mats(0x202c36,.64,.4),side*70,25.4,0)}
+// Pedestal balls to give useful material references but no fake footballers.
+const ball=mesh(new THREE.SphereGeometry(.112,32,20),mats(0xe9e7df,.42),[0,.115,0],true);
+for(let i=0;i<12;i++){const theta=i*2.39996;const x=Math.cos(theta)*.11,z=Math.sin(theta)*.11;
+const patch=mesh(new THREE.CircleGeometry(.026,5),mats(0x253035,.58),[x,.115+Math.sqrt(Math.max(0,.112*.112-x*x-z*z)),z]);patch.rotation.x=-Math.PI/2}
+// Tonemap sets
+const positions={broadcast:[48,36,94],pitch:[-20,5,34],corner:[63,19,54]};let preset='broadcast',night=false,theta=0,phi=.31,distance=121;
+let target=new THREE.Vector3(0,0,0);
+function setView(name){preset=name;const p=positions[name];const pos=new THREE.Vector3(...p);distance=pos.length();theta=Math.atan2(pos.x,pos.z);phi=Math.asin(pos.y/distance);target.set(0,0,0);camera.fov=name==='pitch'?60:44;camera.updateProjectionMatrix();document.querySelectorAll('.controls button:not(#light)').forEach(b=>b.classList.toggle('active',b.id===name))}
+function setNight(enabled){night=enabled;sun.intensity=enabled?.16:3.2;hemisphere.intensity=enabled?.6:2;scene.background.set(enabled?0x101f31:0x91b8cf);scene.fog.color.set(enabled?0x101f31:0x91b8cf);renderer.toneMappingExposure=enabled?1.4:1.05;spotlights.forEach(s=>s.intensity=enabled?2100:0);document.querySelector('#light').classList.toggle('active',enabled);document.querySelector('#light').textContent=enabled?'DAY LIGHT':'NIGHT LIGHTS'}
+document.querySelectorAll('.controls button:not(#light)').forEach(b=>b.addEventListener('click',()=>setView(b.id)));
+document.querySelector('#light').addEventListener('click',()=>setNight(!night));
+let active=new Map(),lastDist=0;
+renderer.domElement.addEventListener('pointerdown',e=>{renderer.domElement.setPointerCapture(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY})});
+renderer.domElement.addEventListener('pointermove',e=>{if(!active.has(e.pointerId))return;const prev=active.get(e.pointerId);active.set(e.pointerId,{x:e.clientX,y:e.clientY});if(active.size===1){theta-=(e.clientX-prev.x)*.004;phi=Math.max(.065,Math.min(1.18,phi-(e.clientY-prev.y)*.004))}else if(active.size===2){const pts=[...active.values()];const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);if(lastDist)distance=Math.max(12,Math.min(230,distance*lastDist/d));lastDist=d}});
+for(const ev of ['pointerup','pointercancel','lostpointercapture'])renderer.domElement.addEventListener(ev,e=>{active.delete(e.pointerId);lastDist=0});
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();distance=Math.max(12,Math.min(230,distance*Math.exp(e.deltaY*.001)))},{passive:false});
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+setView('broadcast');loading.remove();
+let last=0;const animate=t=>{requestAnimationFrame(animate);if(t-last<22)return;last=t;camera.position.set(target.x+distance*Math.cos(phi)*Math.sin(theta),target.y+distance*Math.sin(phi),target.z+distance*Math.cos(phi)*Math.cos(theta));camera.lookAt(target);renderer.render(scene,camera)};requestAnimationFrame(animate);
+}catch(err){loading.innerHTML='This preview could not start.<p>'+String(err.message||err).replaceAll('<','&lt;')+'</p><p>Try Safari with an internet connection and WebGL enabled.</p>';console.error(err)}
+</script></body></html>
