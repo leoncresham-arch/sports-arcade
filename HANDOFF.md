@@ -43,6 +43,11 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added [licensed-asset intake documentation](unreal/docs/licensed-asset-intake.md). No actual third-party models or animations imported.
 - CI tests validate the import manifest but DO NOT run Unreal or confirm an actual render. Always inspect the latest Actions result for the current commit.
 
+## Latest maintenance (2026-10-15): asset intake review
+- Hardened `unreal/asset_pipeline/validate_manifest.py` to reject unsupported asset extensions, destination traversal and symlink escape outside private staging. Expanded CI regression tests.
+- Corrected `unreal/docs/licensed-asset-intake.md` with a concrete Unreal Python-console module-import example.
+- This improves asset intake readiness but **does not prove native Unreal import or compile success**; the realistic PC preview remains blocked on an actual Unreal workstation and licensed art.
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
