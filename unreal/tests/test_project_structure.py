@@ -43,6 +43,19 @@ class UnrealProjectStructureTests(unittest.TestCase):
             self.assertEqual(includes[-1], generated,
                              f"{header.name}: generated header must be the last include")
 
+    def test_high_end_pc_rendering_baseline_is_explicit(self):
+        from configparser import ConfigParser
+        config = ConfigParser(interpolation=None)
+        config.optionxform = str
+        config.read(ROOT / "Config" / "DefaultEngine.ini", encoding="utf-8")
+        renderer = config["/Script/Engine.RendererSettings"]
+        self.assertEqual(renderer["r.DefaultFeature.AntiAliasing"], "4")
+        self.assertEqual(renderer["r.DynamicGlobalIlluminationMethod"], "1")
+        self.assertEqual(renderer["r.ReflectionMethod"], "1")
+        self.assertEqual(renderer["r.GenerateMeshDistanceFields"], "True")
+        self.assertEqual(renderer["r.Shadow.Virtual.Enable"], "1")
+        self.assertNotIn("r.RayTracing", renderer)
+
     def test_game_mode_uses_correct_character(self):
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         self.assertIn("ASportsArcadeCharacter::StaticClass()", mode)
