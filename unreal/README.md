@@ -21,6 +21,12 @@ Run locally with `python3 -m unittest discover -s unreal/tests -v` from the repo
 - Jog and sprint input is wired into the PC C++ character using **WASD / arrows** and **Left Shift**.
 - See [rigging and animation integration](docs/character-animation-pipeline.md) for asset requirements, Unreal setup and visual acceptance tests. No licensed character meshes or animation clips have been integrated yet.
 
+## Measured football pitch foundation
+
+- `SportsArcadePitch`: source-level 105 × 68 m pitch actor with configurable turf/paint materials, halfway line, centre circle, penalty and goal areas, penalty spot and arcs.
+- [Pitch geometry and art integration](docs/pitch-production.md) explains coordinate conventions and unfinished stadium/grass work.
+- This is **not** photorealistic grass or a compiled Unreal level.
+
 ## New graphics foundations
 
 - `SportsArcadeBroadcastCamera`: Unreal camera actor intended for a televised football view. It can track a focus actor and smoothly follow play across the pitch; it is not wired into a stadium level yet.
