@@ -2,6 +2,10 @@
 
 An original football game project designed to grow from a quick browser-playable prototype into a deeper 3D game.
 
+## Rebuild status
+
+**Clean-slate 3D rebuild planned.** The current 2D game is an archived experimental prototype; none of its gameplay, graphics, or interface are requirements for the final product. The graphics-first production criteria are recorded in [the 3D rebuild brief](docs/3d-rebuild-brief.md). The current game remains online only until a worthy replacement is ready.
+
 ## Play in a browser
 
 The repository now includes a self-contained browser version at **[index.html](./index.html)**. It uses HTML, CSS, and JavaScript, with no build tools or external game assets required.
