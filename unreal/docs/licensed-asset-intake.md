@@ -17,7 +17,14 @@ The source repository therefore contains a **manifest template**, a **fail-close
 1. Obtain an asset legally, inspect its exact license, check Unreal compatibility, and store it **outside the public repository**.
 2. Copy `manifest.example.json` into a private working folder and update the entries with the exact author, license name + URL, source URL, reviewed flag, and relative local file path.
 3. Run `python3 unreal/asset_pipeline/validate_manifest.py /path/to/private/manifest.json --require-files`. An unrevised example intentionally fails.
-4. In the Unreal Editor with Python plugin enabled, execute `import_reviewed_assets.py` while passing the reviewed manifest path; verify the actual supported Unreal Python invocation in that engine version.
+4. In Unreal Editor with the Python Editor Script Plugin enabled, use the Python console. Adapt these absolute paths to your private workstation:
+   ```python
+   import sys
+   sys.path.insert(0, r"C:\\path\\to\\sports-arcade\\unreal\\Tools\\Editor")
+   import import_reviewed_assets
+   import_reviewed_assets.main(r"C:\\private-assets\\manifest.json")
+   ```
+   This uses the module's real `__file__` to locate our validation library; it must be tested against the installed Unreal Python API before relying on it.
 5. Review every imported asset: rig, mesh, scaling, LODs, skeleton retargeting, textures, PBR materials, performance, and post-import warnings.
 6. Assemble the visual review map, capture a **genuine native Unreal rendering**, and publish only footage/screenshots licensed for display on the iPad.
 
@@ -25,7 +32,7 @@ The source repository therefore contains a **manifest template**, a **fail-close
 - No importer can independently determine if a license is genuine, whether an attribution is complete, or if redistribution is legally permitted. A human must check source terms.
 - `allows_public_source_redistribution` is recorded for future GitHub decisions; it is not required for import into a private working copy, and **assets without this permission must not be committed as editable source binaries in the public repo**.
 - This is a generic Unreal `AssetImportTask` scaffold and cannot configure every rig/material/animation import correctly without an Unreal runtime and target asset.
-- The validator uses a local manifest path; do not treat it as a remote downloader. No automated third-party downloads occur.
+- The validator uses a local manifest path; do not treat it as a remote downloader. No automated third-party downloads occur. It now rejects unsupported file types and files resolving outside the staging folder (including symlinks).
 - Once hardware is available, Unreal compilation and plugin/Python API compatibility must be tested before claiming this pipeline works end to end.
 
 ## Preview milestone
