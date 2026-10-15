@@ -86,9 +86,13 @@ class PreviewBootstrapTests(unittest.TestCase):
         self.fake.Vector = Vector
         self.fake.Rotator = Rotator
         self.fake.EditorActorSubsystem = object()
-        self.fake.get_editor_subsystem = lambda _: editor
+        self.fake.LevelEditorSubsystem = object()
+        self.fake.get_editor_subsystem = lambda cls: (
+            editor if cls is self.fake.EditorActorSubsystem
+            else self.level if cls is self.fake.LevelEditorSubsystem
+            else None
+        )
         self.fake.EditorAssetLibrary = self.assets
-        self.fake.EditorLevelLibrary = self.level
         self.fake.MathLibrary = types.SimpleNamespace(find_look_at_rotation=lambda a, b: Rotator(-30, 0, 0))
         self.fake.load_class = lambda _, path: path
         self.fake.log = lambda msg: None
@@ -122,6 +126,17 @@ class PreviewBootstrapTests(unittest.TestCase):
         self.assets.exists = True
         module = self.load_script()
         with self.assertRaisesRegex(RuntimeError, "refusing to overwrite"):
+            module.main()
+        self.assertEqual(self.editor.actors, [])
+        self.assertEqual(self.level.created, [])
+
+    def test_level_editor_subsystem_unavailable_aborts_without_creation(self):
+        module = self.load_script()
+        original = self.fake.get_editor_subsystem
+        self.fake.get_editor_subsystem = lambda cls: (
+            None if cls is self.fake.LevelEditorSubsystem else original(cls)
+        )
+        with self.assertRaisesRegex(RuntimeError, "LevelEditorSubsystem not available"):
             module.main()
         self.assertEqual(self.editor.actors, [])
         self.assertEqual(self.level.created, [])
