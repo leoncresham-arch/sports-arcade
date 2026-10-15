@@ -119,6 +119,19 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn('resolve_project_class("SportsArcadeLightingRig")', preview)
         self.assertIn('spawn(editor, lighting_class', preview)
 
+    def test_ball_physics_contract_and_preview_placement(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeBall.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeBall.cpp")
+        preview = read("Tools/Editor/setup_visual_review.py")
+        for value in ("BallRadiusCm = 11.f", "BallMassKg = 0.43f",
+                      "void Kick(", "void ResetToCentre()"):
+            self.assertIn(value, header)
+        for value in ("SetSimulatePhysics(true)", "bUseCCD = true",
+                      "AddImpulse(", "TeleportPhysics"):
+            self.assertIn(value, source)
+        self.assertIn('resolve_project_class("SportsArcadeBall")', preview)
+        self.assertIn('spawn(editor, ball_class', preview)
+
     def test_project_does_not_claim_compiled_or_rendered_artwork(self):
         readme = read("README.md").lower()
         self.assertRegex(readme, r"not been (?:opened, )?compiled|not been opened, compiled")
