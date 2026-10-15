@@ -7,6 +7,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - `Source/`: game/editor targets, module, a minimal game mode, and a locomotion/camera character.
 - `Config/`: default engine settings and WASD / arrow input mapping.
 
+## Character animation foundation
+
+- `SportsArcadeAnimInstance` now exposes locomotion data (ground speed, movement direction, turn rate, acceleration, sprint/fall flags) for a future realistic footballer Animation Blueprint.
+- Jog and sprint input is wired into the PC C++ character using **WASD / arrows** and **Left Shift**.
+- See [rigging and animation integration](docs/character-animation-pipeline.md) for asset requirements, Unreal setup and visual acceptance tests. No licensed character meshes or animation clips have been integrated yet.
+
 ## New graphics foundations
 
 - `SportsArcadeBroadcastCamera`: Unreal camera actor intended for a televised football view. It can track a focus actor and smoothly follow play across the pitch; it is not wired into a stadium level yet.
