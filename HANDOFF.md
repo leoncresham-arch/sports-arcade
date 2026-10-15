@@ -48,6 +48,12 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Corrected `unreal/docs/licensed-asset-intake.md` with a concrete Unreal Python-console module-import example.
 - This improves asset intake readiness but **does not prove native Unreal import or compile success**; the realistic PC preview remains blocked on an actual Unreal workstation and licensed art.
 
+## Latest native PC work — October 15, 2026
+- Removed conflicting world-position assignment from `SportsArcadeBroadcastCamera`'s C++ constructor so level-authored camera placement stays authoritative.
+- Added `unreal/tests/test_preview_bootstrap.py`: simulated Unreal-editor integration tests for the native preview bootstrap script, actor placements, overwrite protection and missing C++ classes.
+- Static/mock tests passed in GitHub CI run: https://github.com/leoncresham-arch/sports-arcade/actions/runs/38825081777
+- **No actual Unreal Editor has been run**; the real PC visual preview and asset import remain blocked on access to a compatible GPU/editor host.
+
 ## Immediate next steps
 1. Confirm new ball/scene source checks pass; fix failures if not.
 2. Research and verify **genuinely available free** Unreal-friendly realistic footballer / animation / stadium assets and record licenses and UE version compatibility. Do not mistake listing images for actual Sports Arcade graphics.
