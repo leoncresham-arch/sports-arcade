@@ -19,6 +19,12 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 - The [native visual-review setup script](Tools/Editor/setup_visual_review.py) now places this reusable actor, providing a consistent reference for judging realistic character, turf and kit materials later.
 - This source-level lighting setup has not been rendered or validated in Unreal.
 
+## Connected native broadcast view
+
+- `SportsArcadeGameMode::BeginPlay` now searches for a placed `SportsArcadeBroadcastCamera`, chooses it as the first local player's view target, and optionally follows the reference football.
+- If a level does not contain this camera actor, the usual pawn camera remains in use.
+- These functions are source-level additions, with structural tests only; they have **not** been compiled or play-tested in Unreal.
+
 ## Scene bootstrap regression tests
 
 - `tests/test_preview_bootstrap.py` now exercises the Unreal Editor setup script with a **simulated editor**. It verifies actors, pitch-end goal coordinates, camera/ball placement, refusal to overwrite an existing level and missing-class failures.
