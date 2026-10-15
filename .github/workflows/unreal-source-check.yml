@@ -23,4 +23,4 @@ jobs:
       - name: Run source and config checks
         run: |
           python3 -m unittest discover -s unreal/tests -v
-          python3 -m compileall -q unreal/Tools/Editor
+          python3 -m compileall -q unreal/Tools/Editor unreal/asset_pipeline
