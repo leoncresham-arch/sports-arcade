@@ -199,6 +199,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                     PendingRestartLocation = FVector(SideX * (PitchHalfLengthCm - 500.f), SideY * 500.f, RestZ);
                 }
             }
+            PendingRestartTaker = FindRestartTaker(PendingRestartTeam, PendingRestartLocation);
             bBallOutOfPlay = true;
             MatchBall->StopMotion();
             bHasPreviousBallPosition = false;
@@ -291,7 +292,8 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
 {
     if (!bBallOutOfPlay || bHalfTime || bMatchFinished) return;
     if (PendingRestartType == ESportsArcadeRestartType::Undetermined ||
-        PendingRestartType == ESportsArcadeRestartType::None || !IsValid(MatchBall)) return;
+        PendingRestartType == ESportsArcadeRestartType::None || !IsValid(MatchBall) ||
+        !IsValid(PendingRestartTaker)) return;
     MatchBall->PlaceAtRest(PendingRestartLocation);
     bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
@@ -304,7 +306,31 @@ void ASportsArcadeGameMode::ClearPendingRestart()
     PendingRestartType = ESportsArcadeRestartType::None;
     PendingRestartTeam = INDEX_NONE;
     PendingRestartLocation = FVector::ZeroVector;
+    PendingRestartTaker = nullptr;
 }
+
+ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, const FVector& Location) const
+{
+    if (!GetWorld() || (Team != 0 && Team != 1)) return nullptr;
+    ASportsArcadeCharacter* Best = nullptr;
+    float BestDistance = TNumericLimits<float>::Max();
+    for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); It; ++It)
+    {
+        if (It->TeamIndex != Team) continue;
+        for (ASportsArcadeCharacter* Candidate : It->Players)
+        {
+            if (!IsValid(Candidate) || Candidate->TeamIndex != Team) continue;
+            const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Location);
+            if (Distance < BestDistance)
+            {
+                BestDistance = Distance;
+                Best = Candidate;
+            }
+        }
+    }
+    return Best;
+}
+
 
 float ASportsArcadeGameMode::GetMatchProgress() const
 {
