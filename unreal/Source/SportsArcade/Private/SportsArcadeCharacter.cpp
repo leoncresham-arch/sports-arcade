@@ -72,7 +72,8 @@ void ASportsArcadeCharacter::EndSprint()
 
 float ASportsArcadeCharacter::GetStaminaNormalized() const
 {
-    return FMath::Clamp(CurrentStamina / FMath::Max(MaxStamina, 1.f), 0.f, 1.f);
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
+    return FMath::Clamp(CurrentStamina / FMath::Max(MaxStamina * Factor, 1.f), 0.f, 1.f);
 }
 
 void ASportsArcadeCharacter::Tick(float DeltaSeconds)
@@ -104,12 +105,14 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
 
 void ASportsArcadeCharacter::PassBall()
 {
-    StrikeNearbyBall(PassImpulseKgCmPerSec);
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->ShortPassing) : 1.f;
+    StrikeNearbyBall(PassImpulseKgCmPerSec * Factor);
 }
 
 void ASportsArcadeCharacter::ShootBall()
 {
-    StrikeNearbyBall(ShotImpulseKgCmPerSec);
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Finishing) : 1.f;
+    StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor);
 }
 
 void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
