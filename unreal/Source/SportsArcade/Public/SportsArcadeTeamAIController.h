@@ -27,6 +27,16 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float GoalkeeperAdvanceCm = 350.f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float BallPredictionSeconds = 0.20f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float ContactRangeCm = 145.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float ActionCooldownSeconds = 0.9f;
+
 private:
     float DecisionCountdown = 0.f;
+    float ActionCooldownRemaining = 0.f;
 };
