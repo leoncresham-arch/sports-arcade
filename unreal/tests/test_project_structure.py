@@ -82,6 +82,16 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("TActorIterator<ASportsArcadeBall>", source)
         self.assertIn("NearestBall->Kick(Direction, ImpulseStrength)", source)
 
+    def test_native_footballer_ratings(self):
+        header = read("Source/SportsArcade/Public/SportsArcadePlayerAttributes.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        self.assertIn("int32 ShortPassing", header)
+        self.assertIn("int32 Finishing", header)
+        self.assertIn("PlayerAttributes->SprintSpeed", cpp)
+        self.assertIn("PlayerAttributes->Stamina", cpp)
+        self.assertIn("PlayerAttributes->ShortPassing", cpp)
+        self.assertIn("PlayerAttributes->Finishing", cpp)
+
     def test_character_stamina_system(self):
         header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
         source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
