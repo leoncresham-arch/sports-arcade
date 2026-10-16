@@ -105,3 +105,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - User explicitly requested conventional native PC development to continue without treating missing screenshots as a blocker. Native Unreal engine validation remains deferred, not development.
 - Repaired input configuration newline formatting and added J pass/K shoot bindings with range-limited ball impulses.
 - Added source regression test. Full UE compilation and realistic football animation remain outstanding.
+
+## 2026-10-15 continuation: PC player endurance
+- GitHub push permissions verified and commits resumed.
+- Implemented native per-character sprint stamina drain/recovery in Tick, exhaustion cooldown, tunable rates and Blueprint-readable normalized stamina; added source tests. Source-only, not compiled in Unreal. Modern Windows gaming PC remains target; graphics preview is not a development gate.
