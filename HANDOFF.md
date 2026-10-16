@@ -197,3 +197,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Guarded human controlled movement, dribble, shoot, pass and tackle against halftime/fulltime match phases.
 - Match now records a simplified own-goal flag based on last attributed touch team, exposes GetLastTouchTeamIndex on ball (unknown as INDEX_NONE), and emits BlueprintAssignable OnGoalScored / OnHalfTime / OnFullTime events. These are building blocks for presentation UI, not a rendered HUD or definitive referee adjudication.
 - Added source regression tests; code remains uncompiled by Unreal and must receive actual engine/network/physics tests when available. Hourly automation was disabled as explicitly requested. Keep work in existing project and undertake multiple successive scope tasks per turn.
+
+## October 15 continued implementation — match controls and phase stability
+- Preserved the existing Unreal 5.5 C++ architecture and repository. Wired H to `ResumeSecondHalf()` and R to `ResetMatch()` via Character input actions and `DefaultInput.ini`, enabling self-service offline match progression in a future native runtime.
+- Match GameMode now resets the ball at halftime and stops its velocity at full time. Added `SportsArcadeBall::StopMotion()` without changing its position or touch history; existing centre reset still clears touch history.
+- Added `unreal/tests/test_match_controls_and_phases.py` source regression coverage and updated Unreal docs. This is not a native UE build, runtime playtest, graphical preview or complete restart/football rules system.
+- Next: add robust referee out-of-bounds and restart states, input-aware manual passing/shot selection, goalkeeper save mechanics and real 11v11 native setup; validate UE compilation when actual Windows/UE GPU runner is available. Continue multiple independent roadmap tasks each active turn without waiting for approval, and never create hourly automations.
