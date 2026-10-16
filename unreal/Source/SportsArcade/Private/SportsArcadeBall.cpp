@@ -65,6 +65,19 @@ void ASportsArcadeBall::Kick(const FVector& Direction, float StrengthKgCmPerSec)
     CollisionSphere->AddImpulse(Direction.GetSafeNormal() * StrengthKgCmPerSec);
 }
 
+bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVector& Direction, float StrengthKgCmPerSec, float MaxContactDistanceCm)
+{
+    if (!IsValid(Player) || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
+        StrengthKgCmPerSec <= 0.f || Direction.IsNearlyZero() || MaxContactDistanceCm <= 0.f ||
+        FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxContactDistanceCm))
+    {
+        return false;
+    }
+    Kick(Direction, StrengthKgCmPerSec);
+    LastTouchPlayer = Player;
+    return true;
+}
+
 void ASportsArcadeBall::ResetToCentre()
 {
     if (!CollisionSphere)
