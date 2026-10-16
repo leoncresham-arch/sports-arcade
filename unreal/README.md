@@ -170,3 +170,8 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 - Added native H (resume second half) and R (reset exhibition match) keyboard controls through the existing player-character/GameMode pathway.
 - At halftime the ball resets to the centre; at full-time physics motion stops without moving the ball. Added source integration regression tests in `unreal/tests/test_match_controls_and_phases.py`.
 - These checks do not compile Unreal 5.5 or establish that play/controls work in the editor. Real build and playtest are still required.
+
+### Next original football mechanics batch (October 16)
+- Input-directed ground passing: current movement direction can guide pass impulses, otherwise player facing applies. Shots receive configurable modest lift (`ShotLiftRatio`, 0.16 default).
+- Provisional touchline/endline ball-out state broadcasts exit position and last-touch team, pauses clock and on-field play. `B` performs a temporary centre-ball restart; formal referee throw-ins/corners/goal kicks are outstanding.
+- Source regression tests are not Unreal compilation or field-tested simulation.
