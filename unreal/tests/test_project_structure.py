@@ -121,6 +121,17 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn('"AIModule"', build)
         self.assertIn('"NavigationSystem"', build)
 
+    def test_native_dribble_and_tackle_contract(self):
+        ball = read("Source/SportsArcade/Private/SportsArcadeBall.cpp")
+        footballer = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        mapping = read("Config/DefaultInput.ini")
+        self.assertIn("ApplyControlledTouch", ball)
+        self.assertIn("LastTouchPlayer = Player", ball)
+        self.assertIn("TouchCooldownRemaining", footballer)
+        self.assertIn("DribbleTouchRangeCm", footballer)
+        self.assertIn("TackleBall", footballer)
+        self.assertIn('ActionName="Tackle",Key=L', mapping)
+
     def test_team_roster_and_player_switching_contract(self):
         header = read("Source/SportsArcade/Public/SportsArcadeTeamRoster.h")
         source = read("Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp")
