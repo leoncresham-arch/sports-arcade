@@ -8,6 +8,12 @@ class ASportsArcadeBall;
 class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 
+UENUM(BlueprintType)
+enum class ESportsArcadeRestartType : uint8
+{
+    None, ThrowIn, CornerKick, GoalKick, Undetermined
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSportsArcadeMatchPhaseEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSportsArcadeBallOutEvent, FVector, ExitLocation, int32, LastTouchTeam);
