@@ -55,6 +55,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
     PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
+    PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
+    PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -198,6 +200,22 @@ void ASportsArcadeCharacter::SwitchPlayer()
     if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
     {
         Mode->SwitchToNearestTeammate(TeamIndex);
+    }
+}
+
+void ASportsArcadeCharacter::ResumeMatchAfterHalfTime()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->ResumeSecondHalf();
+    }
+}
+
+void ASportsArcadeCharacter::RestartExhibitionMatch()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->ResetMatch();
     }
 }
 
