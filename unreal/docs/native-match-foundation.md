@@ -12,3 +12,8 @@ This adds an initial **offline match loop** to the existing SportsArcadeGameMode
 ## Next steps
 
 Extract match clock and refereeing into testable game state for replication, add start/halftime/full-time phases, team ownership and configurable goal detectors, verify physics crossing under varying frame rates, then wire original scoreboard UI.
+
+## Later source updates
+- Added halftime pause and explicit ResumeSecondHalf, match reset and normalized HUD progress. These are game-mode methods, not yet a full referee-controlled kickoff or halftime UI.
+- Goal detection now interpolates the ball trajectory at the goal plane so diagonal shots are assessed at the crossing rather than at the last sampled endpoint. This is still sampled per frame (no Chaos continuous collision proof or ball-out event), assumes global-axis field orientation and fixed goal dimensions.
+- Footballers carry TeamIndex and ShirtNumber data, but team roster assignment, control switching and own-goal attribution are still pending.
