@@ -213,3 +213,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 follow-up fixes and CI
 - Source CI initially failed because an older source-contract assertion expected a direct Forward ball impulse; updated it to inspect the new computed StrikeDirection, then GitHub Python/static source checks passed on commit `cc46e3ac`. This does not validate C++ compilation.
 - Corrected aimed-strike contact: ball must be in front of footballer's facing, but movement input may direct the pass/shot independently. Disabled sprint stamina drain during all match stoppages. Source CI for the subsequent changes should be checked at latest HEAD.
+
+## October 16 — classified boundary restarts
+- Implemented typed restart classification in existing Unreal GameMode: throw-in, corner, goal kick, and Undetermined, with Blueprint-readable awarded team and target position. Improved corner-boundary classification using first sampled segment crossing. B now teleports the motionless ball to a provisional restart location through Ball.PlaceAtRest, resetting contact history.
+- No throw animation, set-piece player ownership, legal distance, authoritative referee, native UE compilation, or gameplay verification yet. Unknown last touch on an endline creates Undetermined and requires offline match reset rather than guessing.
+- Only mention the user-facing chat handoff when it is due. Do not create automations.
