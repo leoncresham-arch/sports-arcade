@@ -92,6 +92,18 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("PlayerAttributes->ShortPassing", cpp)
         self.assertIn("PlayerAttributes->Finishing", cpp)
 
+    def test_team_roster_and_player_switching_contract(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeTeamRoster.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp")
+        character = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        self.assertIn("Players.Num() >= 11", source)
+        self.assertIn("Player->TeamIndex != TeamIndex", source)
+        self.assertIn("GetClosestPlayer", header)
+        self.assertIn("ESportsArcadePosition", character)
+        self.assertIn("SwitchToNearestTeammate", mode)
+        self.assertIn("Controller->Possess(BestPlayer)", mode)
+
     def test_native_team_metadata(self):
         header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
         self.assertIn("int32 TeamIndex", header)
