@@ -157,13 +157,15 @@ bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
     for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); It; ++It)
     {
         if (It->TeamIndex != TeamIndex) continue;
-        ASportsArcadeCharacter* Candidate = It->GetClosestPlayer(Target);
-        if (!IsValid(Candidate) || Candidate == Controller->GetPawn()) continue;
-        const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Target);
-        if (Distance < BestDistance)
+        for (ASportsArcadeCharacter* Candidate : It->Players)
         {
-            BestPlayer = Candidate;
-            BestDistance = Distance;
+            if (!IsValid(Candidate) || Candidate == Controller->GetPawn() || Candidate->TeamIndex != TeamIndex) continue;
+            const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Target);
+            if (Distance < BestDistance)
+            {
+                BestPlayer = Candidate;
+                BestDistance = Distance;
+            }
         }
     }
     if (!IsValid(BestPlayer)) return false;
