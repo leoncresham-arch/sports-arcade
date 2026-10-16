@@ -81,7 +81,8 @@ void ASportsArcadeCharacter::BeginSprint()
 void ASportsArcadeCharacter::EndSprint()
 {
     bSprintHeld = false;
-    GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+    const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
+    GetCharacterMovement()->MaxWalkSpeed = JogSpeed * PaceFactor;
 }
 
 float ASportsArcadeCharacter::GetStaminaNormalized() const
