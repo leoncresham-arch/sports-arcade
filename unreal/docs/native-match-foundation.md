@@ -1,0 +1,14 @@
+# Native match scoring foundation (Unreal 5.5 source)
+
+This adds an initial **offline match loop** to the existing SportsArcadeGameMode.
+
+- Match clock advances in Tick and stops after two configurable half lengths (default 300 real seconds per half). There is **not yet a halftime pause or referee state**.
+- HomeGoals/AwayGoals and ElapsedMatchSeconds are Blueprint-readable. RecordGoal allows simple score updates while a match is running.
+- The first SportsArcadeBall found in the level is observed. Its center crossing beyond X = +/- (5250 cm + ball radius), while inside the 7.32 m goal mouth and under the 2.44 m crossbar, triggers a point and resets the ball.
+- The X-axis assumption uses the fixed 105 m construction pitch and default goal positions. Moving or resizing the field requires a proper authored goal-line volume/transform abstraction.
+- This is a **starter score detector, not official full-ball swept collision**: fast moving balls could pass between discrete samples, and rotated goals / own goals / restarts / halftime / out-of-bounds / networking are not handled. A robust future implementation will use per-goal sensors with continuous crossing logic, team orientation and event-driven referee state.
+- No automatic goalkeeper or 11v11 AI exists yet. The score system must be engine-compiled, played and validated before calling it functional gameplay.
+
+## Next steps
+
+Extract match clock and refereeing into testable game state for replication, add start/halftime/full-time phases, team ownership and configurable goal detectors, verify physics crossing under varying frame rates, then wire original scoreboard UI.
