@@ -12,6 +12,10 @@ This test-map generator is **not** a playable or verified 11v11 release. It has 
 ## Known incomplete systems
 - No Unreal Editor run or genuine rendered preview has occurred.
 - Actors have no realistic player art, animation, kit, collision tuning or legal production assets.
-- The script does not create navmesh, kickoff or complete referee restarts. GameMode now attempts to possess home roster slot 9 automatically, but this is uncompiled, unplaytested and may leave an additional default pawn in the level.
+- The script does not create navmesh, kickoff or complete referee restarts. GameMode now searches the home roster for a player explicitly assigned LineupSlot 9, then attempts to possess that actor, but this is uncompiled, unplaytested and may leave an additional unpossessed default pawn in the level; no existing actor is automatically deleted.
 - Formation slots are authored through existing roster C++ methods; actual UE Python reflection and property names remain unverified.
 - Existing match/AI code is still a provisional offline foundation, not working FIFA-like match play.
+
+## Preflight source tests
+- Mock editor checks enforce 22 players, unique per-team slot assignments 0-10, team indices, shirts 1-11, a non-overwriting map, and rejection when native class loading fails.
+- Native Unreal Python property reflection is not proven by mocks. The first authentic UE5.5 Editor run must inspect each `set_editor_property` and `get_formation_position` call.
