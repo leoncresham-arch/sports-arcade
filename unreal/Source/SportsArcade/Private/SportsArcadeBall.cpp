@@ -88,9 +88,9 @@ void ASportsArcadeBall::StopMotion()
 void ASportsArcadeBall::PlaceAtRest(const FVector& WorldPosition)
 {
     if (!CollisionSphere) return;
+    SetActorLocation(WorldPosition, false, nullptr, ETeleportType::TeleportPhysics);
     StopMotion();
     LastTouchPlayer.Reset();
-    SetActorLocation(WorldPosition, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
 void ASportsArcadeBall::ResetToCentre()
@@ -99,9 +99,9 @@ void ASportsArcadeBall::ResetToCentre()
     {
         return;
     }
-    LastTouchPlayer.Reset();
-    StopMotion();
     SetActorLocation(InitialSpawnLocation, false, nullptr, ETeleportType::TeleportPhysics);
+    StopMotion();
+    LastTouchPlayer.Reset();
 }
 
 bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, const FVector& DesiredVelocity, float MaxDistanceCm)
