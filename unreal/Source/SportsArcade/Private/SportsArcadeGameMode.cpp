@@ -320,7 +320,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
         FVector Direction = PendingRestartType == ESportsArcadeRestartType::ThrowIn
             ? FVector(0.f, -FMath::Sign(PendingRestartLocation.Y), 0.25f)
             : FVector(PendingRestartTeam == 0 ? 1.f : -1.f, -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
-        if (!MatchBall->KickByPlayer(PendingRestartTaker, Direction, 1500.f, 210.f))
+        if (!MatchBall->KickByPlayer(PendingRestartTaker, Direction, ProvisionalRestartImpulse, 210.f))
         {
             return;
         }
