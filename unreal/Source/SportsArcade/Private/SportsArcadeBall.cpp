@@ -85,6 +85,14 @@ void ASportsArcadeBall::StopMotion()
     CollisionSphere->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
 }
 
+void ASportsArcadeBall::PlaceAtRest(const FVector& WorldPosition)
+{
+    if (!CollisionSphere) return;
+    StopMotion();
+    LastTouchPlayer.Reset();
+    SetActorLocation(WorldPosition, false, nullptr, ETeleportType::TeleportPhysics);
+}
+
 void ASportsArcadeBall::ResetToCentre()
 {
     if (!CollisionSphere)
