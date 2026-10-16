@@ -218,3 +218,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Implemented typed restart classification in existing Unreal GameMode: throw-in, corner, goal kick, and Undetermined, with Blueprint-readable awarded team and target position. Improved corner-boundary classification using first sampled segment crossing. B now teleports the motionless ball to a provisional restart location through Ball.PlaceAtRest, resetting contact history.
 - No throw animation, set-piece player ownership, legal distance, authoritative referee, native UE compilation, or gameplay verification yet. Unknown last touch on an endline creates Undetermined and requires offline match reset rather than guessing.
 - Only mention the user-facing chat handoff when it is due. Do not create automations.
+
+## October 16 referee sequencing updates
+- Corrected negative-X goal processing so a scored ball cannot also trigger out-of-play detection; moved match-clock advancement after scoring and boundary review. Unknown-touch throw-ins now become Undetermined instead of invented possession.
+- Expanded Python source checks. Unreal C++ compilation and engine play remain unverified. User-facing handoff discussion only when actually due.
