@@ -87,7 +87,9 @@ private:
     float DribbleTouchInterval = 0.18f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float DribbleTouchRangeCm = 135.f;
-    void StrikeNearbyBall(float ImpulseStrength);
+    void StrikeNearbyBall(float ImpulseStrength, bool bIsShot);
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0", ClampMax="1.0"))
+    float ShotLiftRatio = 0.16f;
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float BallControlReachCm = 170.f;
