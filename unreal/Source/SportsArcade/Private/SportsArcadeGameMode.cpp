@@ -54,7 +54,7 @@ void ASportsArcadeGameMode::BeginPlay()
 void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if (bMatchFinished || bHalfTime || DeltaSeconds <= 0.f || !GetWorld()) return;
+    if (bMatchFinished || bHalfTime || bBallOutOfPlay || DeltaSeconds <= 0.f || !GetWorld()) return;
     ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
 
     if (!IsValid(MatchBall))
@@ -102,6 +102,16 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 bHasPreviousBallPosition = false;
             }
         }
+        // Prototype touchline/endline detection; scoring has precedence above.
+        if (FMath::Abs(Position.Y) - MatchBall->BallRadiusCm > 3400.f ||
+            FMath::Abs(Position.X) - MatchBall->BallRadiusCm > 5250.f)
+        {
+            bBallOutOfPlay = true;
+            MatchBall->StopMotion();
+            bHasPreviousBallPosition = false;
+            OnBallOutOfPlay.Broadcast(Position, MatchBall->GetLastTouchTeamIndex());
+            return;
+        }
         PreviousBallPosition = MatchBall->GetActorLocation();
         bHasPreviousBallPosition = true;
     }
@@ -132,7 +142,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 
 void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
 {
-    if (bMatchFinished || bHalfTime) return;
+    if (bMatchFinished || bHalfTime || bBallOutOfPlay) return;
     if (bHomeTeamScored) ++HomeGoals;
     else ++AwayGoals;
     OnGoalScored.Broadcast(HomeGoals, AwayGoals, bLastGoalWasOwnGoal);
@@ -142,6 +152,7 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
 {
     if (!bHalfTime || bMatchFinished) return;
     bHalfTime = false;
+    bBallOutOfPlay = false;
     bSecondHalfStarted = true;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
@@ -155,8 +166,17 @@ void ASportsArcadeGameMode::ResetMatch()
     LastGoalTouchPlayer = nullptr;
     bLastGoalWasOwnGoal = false;
     bHalfTime = false;
+    bBallOutOfPlay = false;
     bSecondHalfStarted = false;
     bMatchFinished = false;
+    bHasPreviousBallPosition = false;
+    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+}
+
+void ASportsArcadeGameMode::ResumeAfterBallOut()
+{
+    if (!bBallOutOfPlay || bHalfTime || bMatchFinished) return;
+    bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
 }
@@ -168,7 +188,7 @@ float ASportsArcadeGameMode::GetMatchProgress() const
 
 bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
 {
-    if (!GetWorld() || TeamIndex < 0 || TeamIndex > 1 || bMatchFinished || bHalfTime) return false;
+    if (!GetWorld() || TeamIndex < 0 || TeamIndex > 1 || bMatchFinished || bHalfTime || bBallOutOfPlay) return false;
     APlayerController* Controller = GetWorld()->GetFirstPlayerController();
     if (!IsValid(Controller)) return false;
 
