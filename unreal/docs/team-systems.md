@@ -38,3 +38,7 @@ Technical limitations:
 - AI kicks require a plausible vertical distance to the ball as well as horizontal proximity. Source regression checks updated; Unreal native compilation and gameplay balance remain unverified.
 
 - Added per-player LineupSlot (0 goalkeeper through 10) and an opt-in roster setting `bUseExplicitLineupSlots`, so teams can author deterministic positions instead of depending on automatically discovered roster order. This mode requires distinct slots to be configured manually; the default remains array order for compatibility.
+
+## October 16 roster discovery determinism
+- When a roster begins with an empty Players array, discovered matching footballers are ordered by shirt number then actor name to avoid actor-iterator-dependent formation indexing. Manually authored roster ordering is left unchanged. Duplicate shirt numbers still need squad-level validation; source checks are not UE runtime proof.
+- AI default formation targets now scale from the original 105x68 m pitch to GameMode's configurable match geometry; authored pitch/level and animations must still be updated consistently.
