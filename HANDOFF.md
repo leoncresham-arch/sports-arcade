@@ -264,3 +264,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 further match initialization and restart physics
 - Adjusted Ball.PlaceAtRest and ResetToCentre so the engine physics velocities are cleared after teleport, reducing residual movement across restarts.
 - Added roster HasCompleteLineup checking exactly 11 valid team members with unique formation slots 0-10. GameMode now emits a startup warning for any incomplete roster without blocking other test maps. Source regression updated. Native UE5.5 compile, physics and Windows playtests remain unverified.
+
+## October 16 exhibition reset positioning
+- Each native footballer now captures its initial placed transform on BeginPlay. ResetMatch restores all footballers to those positions, stops movement and clears current sprint/jockey intent and ball-action cooldowns. The football separately resets to its centre spawn. Added source tests.
+- AI navigation re-entry, ragdoll, authored animation sync, Unreal compilation and Windows gameplay have not been tested. Preserve existing Unreal architecture and work directly in original GitHub repo.
