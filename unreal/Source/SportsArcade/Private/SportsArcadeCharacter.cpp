@@ -31,6 +31,13 @@ ASportsArcadeCharacter::ASportsArcadeCharacter()
     FollowCamera->FieldOfView = 56.f;
 }
 
+void ASportsArcadeCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    const float StaminaFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
+    CurrentStamina = FMath::Max(MaxStamina * StaminaFactor, 1.f);
+}
+
 void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
