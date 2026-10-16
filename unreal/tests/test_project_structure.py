@@ -140,6 +140,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("DribbleTouchRangeCm", footballer)
         self.assertIn("TackleBall", footballer)
         self.assertIn("bPlayActive && TouchCooldownRemaining", footballer)
+        self.assertIn("GetCharacterMovement()->MaxWalkSpeed = JogSpeed * PaceFactor", footballer)
+        self.assertIn("Match->bHalfTime || Match->bMatchFinished", footballer)
         self.assertIn("MatchMode->bHalfTime || MatchMode->bMatchFinished", footballer)
         self.assertIn("TackleCooldownRemaining", footballer)
         self.assertIn("StrikeCooldownRemaining", footballer)
