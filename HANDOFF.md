@@ -244,3 +244,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 additional tactical statistics and animation readiness
 - Counted AI direct goalward contacts in the attacking third as shot attempts only when no viable forward pass was chosen; ordinary clears/passes are excluded. New source test and successful CI.
 - Added a BlueprintPure IsJockeying getter on Character for later animation UI integration. Animation instance binding itself is not implemented; no animation asset has been provided or rendered.
+
+## October 16 configurable pitch and team AI
+- GameMode's goal and boundary conditions now use editable pitch and goal geometry. Formation target scaling and AI field limits follow the selected match dimensions. Original default geometry remains unchanged. Native UE execution and custom-sized level compatibility are untested.
