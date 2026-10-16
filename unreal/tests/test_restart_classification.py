@@ -19,6 +19,15 @@ class RestartContracts(unittest.TestCase):
         self.assertIn("const int32 DefendingTeam = SideX > 0.f ? 1 : 0;", cpp)
         self.assertIn("ClearPendingRestart();", cpp)
 
+    def test_configurable_field_geometry(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        for field in ("PitchHalfLengthCm", "PitchHalfWidthCm", "GoalHalfWidthCm", "CrossbarHeightCm"):
+            self.assertIn(field, header)
+            self.assertIn(field, cpp)
+        self.assertIn("const float EdgeX = PitchHalfLengthCm + MatchBall->BallRadiusCm;", cpp)
+        self.assertIn("const float EdgeY = PitchHalfWidthCm + MatchBall->BallRadiusCm;", cpp)
+
     def test_goal_exits_before_boundary_restart(self):
         cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         pos = cpp.index("RecordGoal(false);")
