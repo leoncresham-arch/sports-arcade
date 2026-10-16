@@ -30,6 +30,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
     float GetStaminaNormalized() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
+    bool IsJockeying() const { return bJockeyHeld; }
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     int32 TeamIndex = 0;
 
