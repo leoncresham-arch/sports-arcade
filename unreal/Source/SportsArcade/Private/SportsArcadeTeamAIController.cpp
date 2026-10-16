@@ -52,6 +52,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
     if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10) return;
     FVector Target = Roster->GetFormationPosition(Slot);
+    const float HalfLength = IsValid(Match) ? Match->PitchHalfLengthCm : 5250.f;
+    const float HalfWidth = IsValid(Match) ? Match->PitchHalfWidthCm : 3400.f;
+    Target.X *= HalfLength / 5250.f;
+    Target.Y *= HalfWidth / 3400.f;
     bool bIsPrimaryPresser = false;
     if (IsValid(Ball) && Slot == 0)
     {
@@ -59,7 +63,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         const float AnticipatedY = Ball->GetActorLocation().Y + Ball->GetVelocity().Y * FMath::Clamp(GoalkeeperAnticipationSeconds, 0.f, 1.f);
         Target.Y = FMath::Clamp(AnticipatedY * 0.20f, -GoalkeeperLateralRangeCm, GoalkeeperLateralRangeCm);
         const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-        Target.X += TowardsPlay * FMath::Clamp((5250.f - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
+        Target.X += TowardsPlay * FMath::Clamp((HalfLength - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
         // Initial close-range keeper clearance; full diving/parry systems will replace this.
         const FVector BallVelocity = Ball->GetVelocity();
         const bool bIncomingShot = BallVelocity.X * TowardsPlay < -175.f;
@@ -113,7 +117,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             {
                 // Prefer a forward teammate with a clear passing lane; otherwise clear towards goal.
                 const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-                FVector Direction = FVector(AttackSign * 5250.f - Ball->GetActorLocation().X,
+                FVector Direction = FVector(AttackSign * HalfLength - Ball->GetActorLocation().X,
                     -Ball->GetActorLocation().Y, 0.f).GetSafeNormal();
                 float BestPassScore = -BIG_NUMBER;
                 for (ASportsArcadeCharacter* Teammate : Roster->Players)
@@ -182,7 +186,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 FMath::Clamp(MarkingInfluence, 0.f, 0.5f));
         }
     }
-    Target.X = FMath::Clamp(Target.X, -5100.f, 5100.f);
-    Target.Y = FMath::Clamp(Target.Y, -3250.f, 3250.f);
+    Target.X = FMath::Clamp(Target.X, -HalfLength + 150.f, HalfLength - 150.f);
+    Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 150.f, HalfWidth - 150.f);
     MoveToLocation(Target, 125.f, true, true, false, true, nullptr, true);
 }
