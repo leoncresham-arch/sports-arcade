@@ -59,6 +59,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 void ASportsArcadeCharacter::MoveForward(float Value)
 {
+    const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished)) return;
     if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
         AddMovementInput(FVector::ForwardVector, Value);
@@ -67,6 +69,8 @@ void ASportsArcadeCharacter::MoveForward(float Value)
 
 void ASportsArcadeCharacter::MoveRight(float Value)
 {
+    const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished)) return;
     if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
         AddMovementInput(FVector::RightVector, Value);
