@@ -26,3 +26,8 @@ Technical limitations:
 - Keeper now shifts laterally, advances within a configurable limit and attempts a basic contact clearance near goal. This is **not** a real keeper-save/dive/handling simulation.
 - AI respects match halftime/full-time; switching control back to another footballer attempts to restore AI possession of the former player.
 - Current behavior remains simplistic, incomplete, and uncompiled; it requires a working navigable pitch, authored rosters and real Unreal tests.
+
+## Further team gameplay foundations
+- Authored team rosters can optionally discover already placed matching-team footballer actors at BeginPlay, respecting the 11-player cap. Lineup order is not guaranteed and requires deterministic squad-slot assignment later.
+- Team AI adds simple bounded opponent shadow-marking near defenders, timed ball pursuit/contact, keeper positioning and clearance, and returns relinquished user-controlled pawns to AI when switching.
+- This does not yet constitute true opponent-aware possession, passing selection, goalkeeper saves or production tactical decision trees.
