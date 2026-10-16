@@ -19,6 +19,14 @@ class RestartContracts(unittest.TestCase):
         self.assertIn("const int32 DefendingTeam = SideX > 0.f ? 1 : 0;", cpp)
         self.assertIn("ClearPendingRestart();", cpp)
 
+    def test_goal_exits_before_boundary_restart(self):
+        cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        pos = cpp.index("RecordGoal(false);")
+        out = cpp.index("// Full-ball boundary crossing")
+        self.assertLess(pos, out)
+        self.assertIn("bHasPreviousBallPosition = false;\\n                return;", cpp[pos:out])
+        self.assertLess(cpp.index("// Full-ball boundary crossing"), cpp.index("ElapsedMatchSeconds = FMath::Min("))
+
     def test_boundary_and_ball_placement(self):
         cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         ball_h = read("Source/SportsArcade/Public/SportsArcadeBall.h")
