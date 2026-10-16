@@ -23,6 +23,17 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("Mode->ResumeSecondHalf();", cpp)
         self.assertIn("Mode->ResetMatch();", cpp)
 
+    def test_successful_shots_increment_team_stats(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        player = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for name in ("HomeShots", "AwayShots", "RecordShotAttempt"):
+            self.assertIn(name, header)
+            self.assertIn(name, game)
+        self.assertIn("if (bIsShot && IsValid(MatchMode)) MatchMode->RecordShotAttempt(TeamIndex);", player)
+        self.assertIn("if (ShootingTeam == 0) ++HomeShots;", game)
+        self.assertIn("else if (ShootingTeam == 1) ++AwayShots;", game)
+
     def test_reset_and_resume_signals(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
