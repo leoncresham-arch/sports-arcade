@@ -203,3 +203,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Match GameMode now resets the ball at halftime and stops its velocity at full time. Added `SportsArcadeBall::StopMotion()` without changing its position or touch history; existing centre reset still clears touch history.
 - Added `unreal/tests/test_match_controls_and_phases.py` source regression coverage and updated Unreal docs. This is not a native UE build, runtime playtest, graphical preview or complete restart/football rules system.
 - Next: add robust referee out-of-bounds and restart states, input-aware manual passing/shot selection, goalkeeper save mechanics and real 11v11 native setup; validate UE compilation when actual Windows/UE GPU runner is available. Continue multiple independent roadmap tasks each active turn without waiting for approval, and never create hourly automations.
+
+## October 16 continuation — aimed strikes and provisional ball-out state
+- Continued directly in the established Unreal PC source on `main`: manual passes aim using movement input where present (otherwise facing), while shots have a tuneable vertical lift ratio; added source regression coverage.
+- Added first-pass out-of-bounds match state and Blueprint `OnBallOutOfPlay` event carrying exit position and last-touch team; ball motion and match clock pause. Player and AI interactions are guarded against play during stoppage. `B` temporarily resets ball to centre and resumes — this is NOT an official throw-in/corner/goal kick.
+- Updated native match docs/README/tests. Crucial follow-on work: correct pitch/goal geometry handling, true restart classes/possession, compile and run inside UE 5.5 on Windows, authored full footballer assets and 11v11 level.
+- Do not create scheduled automations; the user explicitly disabled them. Continue directly with multiple changes each active turn.
