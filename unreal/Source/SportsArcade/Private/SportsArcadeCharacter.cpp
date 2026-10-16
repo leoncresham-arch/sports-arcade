@@ -130,7 +130,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         bSprintExhausted = false;
     }
     const bool bMoving = GetVelocity().SizeSquared2D() > FMath::Square(10.f);
-    const bool bSprinting = bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
+    const bool bSprinting = bPlayActive && bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
     if (bSprinting)
     {
         CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
