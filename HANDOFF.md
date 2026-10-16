@@ -240,3 +240,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 defensive manual control foundation
 - Added LeftAlt hold-to-jockey for existing controlled character. A configurable slower JockeySpeed suppresses sprint while jockey is held; release returns normal movement selection. Input/state static tests added. This is not full lateral defensive stance, body orientation, footwork animations, collisions or verified Unreal PC behavior.
+
+## October 16 additional tactical statistics and animation readiness
+- Counted AI direct goalward contacts in the attacking third as shot attempts only when no viable forward pass was chosen; ordinary clears/passes are excluded. New source test and successful CI.
+- Added a BlueprintPure IsJockeying getter on Character for later animation UI integration. Animation instance binding itself is not implemented; no animation asset has been provided or rendered.
