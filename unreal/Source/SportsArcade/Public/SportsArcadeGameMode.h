@@ -140,4 +140,7 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Visual Review")
     bool bTrackReferenceFootball = true;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Team")
+    bool bAutoPossessHomeRosterStarter = true;
 };
