@@ -31,3 +31,8 @@ Technical limitations:
 - Authored team rosters can optionally discover already placed matching-team footballer actors at BeginPlay, respecting the 11-player cap. Lineup order is not guaranteed and requires deterministic squad-slot assignment later.
 - Team AI adds simple bounded opponent shadow-marking near defenders, timed ball pursuit/contact, keeper positioning and clearance, and returns relinquished user-controlled pawns to AI when switching.
 - This does not yet constitute true opponent-aware possession, passing selection, goalkeeper saves or production tactical decision trees.
+
+## October 16 gameplay development — passing decisions and control quality
+- AI ball carrier now scores forward teammates within range, rejects passes whose two-dimensional lanes intersect opponents within a configurable fixed clearance, and falls back to a direct clearance when no lane qualifies. Uses basic impulses, not a polished possession or passing animation system.
+- Corrected Tab switching to search all roster players instead of failing when the nearest player is already user-controlled.
+- AI kicks require a plausible vertical distance to the ball as well as horizontal proximity. Source regression checks updated; Unreal native compilation and gameplay balance remain unverified.
