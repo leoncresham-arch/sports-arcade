@@ -10,6 +10,7 @@ class RestartTakerContracts(unittest.TestCase):
         self.assertIn('FindRestartTaker(PendingRestartTeam, PendingRestartLocation)', mode)
         self.assertIn('!IsValid(PendingRestartTaker)', mode)
         self.assertIn('PendingRestartTaker = nullptr;', mode)
+        self.assertIn('TActorIterator<ASportsArcadeCharacter> It(GetWorld())', mode)
 
 if __name__ == '__main__':
     unittest.main()
