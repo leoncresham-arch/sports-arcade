@@ -157,3 +157,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - AI kicks require a plausible vertical distance to the ball as well as horizontal proximity. Source regression checks updated; Unreal native compilation and gameplay balance remain unverified.
 
 - Added per-player LineupSlot (0 goalkeeper through 10) and an opt-in roster setting `bUseExplicitLineupSlots`, so teams can author deterministic positions instead of depending on automatically discovered roster order. This mode requires distinct slots to be configured manually; the default remains array order for compatibility.
+
+## Native ball contact and defensive input continuation
+- Added physics-driven controlled ball touches, dribble touch cooldown/range and movement-facing checks; last-touch pointer records controlled touches. L triggers an early standing tackle impulse with distance/height/facing guards.
+- These are foundations, not possession arbitration, collision-based steals, animation-matched footwork or referee-reviewed tackles. Unreal compilation and in-game validation are outstanding; source regression checks added.
