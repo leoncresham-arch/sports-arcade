@@ -97,6 +97,11 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     {
         return false;
     }
+    // Reject airborne balls and contacts far above/below the player's feet.
+    if (FMath::Abs(Player->GetActorLocation().Z - GetActorLocation().Z) > 115.f)
+    {
+        return false;
+    }
     const FVector HorizontalTarget(DesiredVelocity.X, DesiredVelocity.Y, 0.f);
     const FVector Current = CollisionSphere->GetPhysicsLinearVelocity();
     const FVector Correction = HorizontalTarget - FVector(Current.X, Current.Y, 0.f);
