@@ -76,9 +76,22 @@ void ASportsArcadeTeamRoster::BeginPlay()
 void ASportsArcadeTeamRoster::DiscoverPlacedPlayers()
 {
     if (!GetWorld()) return;
+    const bool bRosterWasEmpty = Players.IsEmpty();
     for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
     {
         if (Players.Num() >= 11) break;
         if (It->TeamIndex == TeamIndex) AddPlayer(*It);
+    }
+    if (bRosterWasEmpty)
+    {
+        // Stable discovery ordering: shirt number first, actor name for ties.
+        Players.Sort([](const TObjectPtr<ASportsArcadeCharacter>& A,
+                        const TObjectPtr<ASportsArcadeCharacter>& B)
+        {
+            if (!IsValid(A)) return false;
+            if (!IsValid(B)) return true;
+            if (A->ShirtNumber != B->ShirtNumber) return A->ShirtNumber < B->ShirtNumber;
+            return A->GetName() < B->GetName();
+        });
     }
 }
