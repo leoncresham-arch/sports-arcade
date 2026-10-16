@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "SportsArcadeCharacter.generated.h"
 
+class USportsArcadePlayerAttributes;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -31,6 +32,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<UCameraComponent> FollowCamera;
+
+    UPROPERTY(VisibleAnywhere, Category="Sports Arcade|Ratings")
+    TObjectPtr<USportsArcadePlayerAttributes> PlayerAttributes;
 
     bool bSprintHeld = false;
     bool bSprintExhausted = false;
