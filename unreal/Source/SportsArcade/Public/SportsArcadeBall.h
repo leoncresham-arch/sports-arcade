@@ -42,6 +42,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void Kick(const FVector& Direction, float StrengthKgCmPerSec);
 
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
+    bool KickByPlayer(ASportsArcadeCharacter* Player, const FVector& Direction, float StrengthKgCmPerSec, float MaxContactDistanceCm);
+
     /** Physics-based controlled touch, never attaches the ball to the player. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     bool ApplyControlledTouch(ASportsArcadeCharacter* Player, const FVector& DesiredVelocity, float MaxDistanceCm);
