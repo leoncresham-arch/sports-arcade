@@ -1,0 +1,38 @@
+"""Source integration checks only; these do NOT compile or execute Unreal Engine."""
+from pathlib import Path
+import unittest
+
+ROOT = Path(__file__).resolve().parents[1]
+
+def read(relative):
+    return (ROOT / relative).read_text(encoding="utf-8")
+
+class MatchControlsAndPhasesTest(unittest.TestCase):
+    def test_input_bindings_and_handlers(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for name, key, handler in (
+            ("ResumeSecondHalf", "H", "ResumeMatchAfterHalfTime"),
+            ("RestartMatch", "R", "RestartExhibitionMatch"),
+        ):
+            self.assertIn(f'ActionName="{name}",Key={key}', ini)
+            self.assertIn(f'BindAction(TEXT("{name}")', cpp)
+            self.assertIn(f'void {handler}();', header)
+            self.assertIn(f'void ASportsArcadeCharacter::{handler}()', cpp)
+        self.assertIn("Mode->ResumeSecondHalf();", cpp)
+        self.assertIn("Mode->ResetMatch();", cpp)
+
+    def test_ball_settles_at_match_boundaries(self):
+        mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        ball_h = read("Source/SportsArcade/Public/SportsArcadeBall.h")
+        ball_cpp = read("Source/SportsArcade/Private/SportsArcadeBall.cpp")
+        self.assertIn("MatchBall->ResetToCentre();", mode)
+        self.assertIn("MatchBall->StopMotion();", mode)
+        self.assertIn("void StopMotion();", ball_h)
+        self.assertIn("void ASportsArcadeBall::StopMotion()", ball_cpp)
+        self.assertIn("SetPhysicsLinearVelocity(FVector::ZeroVector)", ball_cpp)
+        self.assertIn("SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector)", ball_cpp)
+
+if __name__ == "__main__":
+    unittest.main()
