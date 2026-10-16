@@ -2,6 +2,8 @@
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeBall.h"
+#include "SportsArcadeGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
 
@@ -17,6 +19,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     ActionCooldownRemaining = FMath::Max(0.f, ActionCooldownRemaining - DeltaSeconds);
     if (DecisionCountdown > 0.f || !GetWorld()) return;
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
+
+    const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished))
+    {
+        StopMovement();
+        return;
+    }
 
     ASportsArcadeCharacter* Footballer = Cast<ASportsArcadeCharacter>(GetPawn());
     if (!IsValid(Footballer)) return;
