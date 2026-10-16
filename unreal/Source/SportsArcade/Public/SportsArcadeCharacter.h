@@ -19,6 +19,8 @@ class SPORTSARCADE_API ASportsArcadeCharacter : public ACharacter
 public:
     ASportsArcadeCharacter();
     virtual void Tick(float DeltaSeconds) override;
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
+    float GetStaminaNormalized() const;
 
 protected:
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -30,6 +32,18 @@ private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<UCameraComponent> FollowCamera;
 
+    bool bSprintHeld = false;
+    bool bSprintExhausted = false;
+    UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Sports Arcade|Movement", meta=(AllowPrivateAccess="true"))
+    float CurrentStamina = 100.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="1.0"))
+    float MaxStamina = 100.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
+    float SprintDrainPerSecond = 18.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
+    float StaminaRecoveryPerSecond = 12.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
+    float StaminaToResumeSprint = 15.f;
     void BeginSprint();
     void PassBall();
     void ShootBall();
