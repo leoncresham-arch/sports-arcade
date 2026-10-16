@@ -184,3 +184,5 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added human strike cooldown shared by pass and shot, consumed only after a successful physics contact. A short dribble-touch lockout after striking avoids immediate extra acceleration of the same ball.
 - Extended Python source regression contract test. UE native compile and playtest remain outstanding.
 - User specifically did NOT ask for hourly automation; it has been disabled. Do not recreate a schedule without an explicit request. Within each active development turn, proceed through approved backlog items without soliciting approval.
+
+- Match GameMode now stores LastGoalTouchPlayer from the attributed ball-contact record before the ball resets on a detected goal, clearing it on ResetMatch. This is informational only; not an official scorer/own-goal adjudication or player match statistics subsystem.
