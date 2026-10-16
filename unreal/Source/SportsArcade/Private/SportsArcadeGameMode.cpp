@@ -35,7 +35,13 @@ void ASportsArcadeGameMode::BeginPlay()
             }
             if (IsValid(Starter) && Starter->TeamIndex == 0)
             {
+                APawn* FormerPawn = PC->GetPawn();
                 PC->Possess(Starter);
+                if (PC->GetPawn() == Starter && IsValid(FormerPawn) && FormerPawn != Starter &&
+                    Cast<ASportsArcadeCharacter>(FormerPawn) && !FormerPawn->GetController())
+                {
+                    FormerPawn->Destroy();
+                }
             }
             break;
         }
