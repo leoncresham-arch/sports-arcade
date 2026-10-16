@@ -247,3 +247,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 configurable pitch and team AI
 - GameMode's goal and boundary conditions now use editable pitch and goal geometry. Formation target scaling and AI field limits follow the selected match dimensions. Original default geometry remains unchanged. Native UE execution and custom-sized level compatibility are untested.
+
+## October 16 roster initialization reliability
+- Empty automatically discovered rosters now sort by shirt number then actor name, stabilizing default formation assignment. Authored nonempty roster ordering is untouched. AI formation targets scale with GameMode field dimensions. Python contract tests exist; real UE5.5 compile, map spawn ordering, animations and playtests remain unverified.
