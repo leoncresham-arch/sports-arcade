@@ -5,6 +5,7 @@
 #include "SportsArcadeGameMode.generated.h"
 
 class ASportsArcadeBall;
+class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
@@ -28,6 +29,9 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     int32 AwayGoals = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    TObjectPtr<ASportsArcadeCharacter> LastGoalTouchPlayer;
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bMatchFinished = false;
