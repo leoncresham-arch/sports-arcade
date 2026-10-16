@@ -237,3 +237,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 attacking action extension
 - Added U-key chip shot via existing SportsArcadeCharacter; uses existing successful physics contact validation and shot stats, but lower configurable power and higher tunable elevation relative to standard shot. Added source-level regression tests. No native Unreal playtest or ball trajectory calibration yet.
+
+## October 16 defensive manual control foundation
+- Added LeftAlt hold-to-jockey for existing controlled character. A configurable slower JockeySpeed suppresses sprint while jockey is held; release returns normal movement selection. Input/state static tests added. This is not full lateral defensive stance, body orientation, footwork animations, collisions or verified Unreal PC behavior.
