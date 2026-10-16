@@ -109,8 +109,13 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
     {
         ElapsedMatchSeconds = HalfDurationSeconds;
         bHalfTime = true;
+        OnHalfTime.Broadcast();
     }
-    if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds) bMatchFinished = true;
+    if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds && !bMatchFinished)
+    {
+        bMatchFinished = true;
+        OnFullTime.Broadcast();
+    }
 }
 
 void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
