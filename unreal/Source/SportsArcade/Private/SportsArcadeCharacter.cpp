@@ -1,6 +1,8 @@
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeBall.h"
 #include "SportsArcadePlayerAttributes.h"
+#include "SportsArcadeGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
@@ -48,6 +50,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASportsArcadeCharacter::EndSprint);
     PlayerInputComponent->BindAction(TEXT("Pass"), IE_Pressed, this, &ASportsArcadeCharacter::PassBall);
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
+    PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -148,5 +151,13 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
         // Starter ground pass/shot: no aim assist, contact animation, or spin yet.
         const FVector Direction = GetActorForwardVector().GetSafeNormal2D();
         NearestBall->Kick(Direction, ImpulseStrength);
+    }
+}
+
+void ASportsArcadeCharacter::SwitchPlayer()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->SwitchToNearestTeammate(TeamIndex);
     }
 }
