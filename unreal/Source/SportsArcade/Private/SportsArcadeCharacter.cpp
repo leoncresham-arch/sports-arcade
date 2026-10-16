@@ -95,6 +95,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (DeltaSeconds <= 0.f) return;
     TouchCooldownRemaining = FMath::Max(0.f, TouchCooldownRemaining - DeltaSeconds);
+    TackleCooldownRemaining = FMath::Max(0.f, TackleCooldownRemaining - DeltaSeconds);
     if (TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
@@ -182,7 +183,7 @@ void ASportsArcadeCharacter::SwitchPlayer()
 
 void ASportsArcadeCharacter::TackleBall()
 {
-    if (!GetWorld()) return;
+    if (!GetWorld() || TackleCooldownRemaining > 0.f) return;
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
         const FVector Direction = It->GetActorLocation() - GetActorLocation();
@@ -190,7 +191,10 @@ void ASportsArcadeCharacter::TackleBall()
             FMath::Abs(Direction.Z) < 110.f &&
             FVector::DotProduct(GetActorForwardVector(), Direction.GetSafeNormal2D()) > 0.25f)
         {
+            ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
+            if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
             It->Kick(GetActorForwardVector().GetSafeNormal2D(), 850.f);
+            TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
             break;
         }
     }
