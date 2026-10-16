@@ -7,6 +7,7 @@ class TestKeeperSource(unittest.TestCase):
         source = path.read_text()
         self.assertIn('bIncomingShot = BallVelocity.X * TowardsPlay < -175.f', source)
         self.assertIn('const FVector Clearance = bIncomingShot', source)
+        self.assertIn('GoalkeeperAnticipationSeconds', source)
         self.assertIn('const float Impulse = bIncomingShot ? 2850.f : 2300.f', source)
 
 if __name__ == '__main__':
