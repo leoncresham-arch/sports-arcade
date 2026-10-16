@@ -73,6 +73,7 @@ private:
     void SwitchPlayer();
     void ResumeMatchAfterHalfTime();
     void RestartExhibitionMatch();
+    void RestartAfterBallOut();
     void PassBall();
     void ShootBall();
     void TackleBall();
