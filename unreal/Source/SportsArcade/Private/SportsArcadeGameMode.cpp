@@ -136,7 +136,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             const float RestZ = MatchBall->BallRadiusCm + 2.f;
             if (bTouchline)
             {
-                PendingRestartType = ESportsArcadeRestartType::ThrowIn;
+                PendingRestartType = LastTeam == INDEX_NONE
+                    ? ESportsArcadeRestartType::Undetermined : ESportsArcadeRestartType::ThrowIn;
                 const float CrossY = SideY * EdgeY;
                 const float Alpha = FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER
                     ? FMath::Clamp((CrossY - PreviousBallPosition.Y) / Travel.Y, 0.f, 1.f) : 1.f;
