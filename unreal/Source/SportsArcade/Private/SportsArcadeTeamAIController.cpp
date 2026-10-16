@@ -20,7 +20,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     if (DecisionCountdown > 0.f || !GetWorld()) return;
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
-    const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay))
     {
         StopMovement();
@@ -147,6 +147,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 }
                 if (Ball->KickByPlayer(Footballer, Direction, BestPassScore > -BIG_NUMBER ? 1400.f : 1700.f, ContactRangeCm + 25.f))
                 {
+                    // Count only an attacking-third direct goal attempt, not a
+                    // normal pass or deep defensive clearance.
+                    if (IsValid(Match) && BestPassScore <= -BIG_NUMBER &&
+                        Ball->GetActorLocation().X * AttackSign > 1500.f)
+                    {
+                        Match->RecordShotAttempt(Footballer->TeamIndex);
+                    }
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
                 }
             }
