@@ -1,4 +1,7 @@
 #include "SportsArcadeCharacter.h"
+#include "SportsArcadeBall.h"
+#include "EngineUtils.h"
+#include "Engine/World.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -34,6 +37,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ASportsArcadeCharacter::MoveRight);
     PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ASportsArcadeCharacter::BeginSprint);
     PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASportsArcadeCharacter::EndSprint);
+    PlayerInputComponent->BindAction(TEXT("Pass"), IE_Pressed, this, &ASportsArcadeCharacter::PassBall);
+    PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -60,4 +65,43 @@ void ASportsArcadeCharacter::BeginSprint()
 void ASportsArcadeCharacter::EndSprint()
 {
     GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+}
+
+void ASportsArcadeCharacter::PassBall()
+{
+    StrikeNearbyBall(PassImpulseKgCmPerSec);
+}
+
+void ASportsArcadeCharacter::ShootBall()
+{
+    StrikeNearbyBall(ShotImpulseKgCmPerSec);
+}
+
+void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
+{
+    UWorld* World = GetWorld();
+    if (!World || ImpulseStrength <= 0.f)
+    {
+        return;
+    }
+
+    ASportsArcadeBall* NearestBall = nullptr;
+    float NearestDistanceSquared = FMath::Square(BallControlReachCm);
+    const FVector PlayerLocation = GetActorLocation();
+    for (TActorIterator<ASportsArcadeBall> It(World); It; ++It)
+    {
+        const float DistanceSquared = FVector::DistSquared(PlayerLocation, It->GetActorLocation());
+        if (DistanceSquared <= NearestDistanceSquared)
+        {
+            NearestDistanceSquared = DistanceSquared;
+            NearestBall = *It;
+        }
+    }
+
+    if (IsValid(NearestBall))
+    {
+        // Starter ground pass/shot: no aim assist, contact animation, or spin yet.
+        const FVector Direction = GetActorForwardVector().GetSafeNormal2D();
+        NearestBall->Kick(Direction, ImpulseStrength);
+    }
 }
