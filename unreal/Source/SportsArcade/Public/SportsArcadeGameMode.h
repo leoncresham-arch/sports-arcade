@@ -40,6 +40,12 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     int32 AwayGoals = 0;
 
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match|Stats")
+    int32 HomeShots = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match|Stats")
+    int32 AwayShots = 0;
+
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeGoalScoredEvent OnGoalScored;
 
@@ -99,6 +105,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match|Stats")
+    void RecordShotAttempt(int32 ShootingTeam);
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
     bool SwitchToNearestTeammate(int32 TeamIndex);
