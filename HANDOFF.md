@@ -272,3 +272,5 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 continuing restarts and stamina
 - Match reset now restores rated stamina and clears sprint-exhaustion state. Provisional referee restart records PendingRestartTaker via closest valid roster footballer on awarded team, exposes it for Blueprint use and blocks B restart if that actor is missing. Assigned player is not yet transported, controlled or instructed to execute a legal restart; B still only places the ball, and this needs full restart animation/possession logic.
 - Added structural test for taker assignment. Native UE 5.5 compilation and gameplay still unverified.
+
+- Restart taker lookup now falls back to a matching placed footballer in rosterless prototype levels; a missing team still correctly blocks restarting. Regression contract updated. CI must be checked for latest code.
