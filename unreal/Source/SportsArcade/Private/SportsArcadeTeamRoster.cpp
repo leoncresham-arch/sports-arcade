@@ -1,5 +1,7 @@
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeCharacter.h"
+#include "EngineUtils.h"
+#include "Engine/World.h"
 
 bool ASportsArcadeTeamRoster::AddPlayer(ASportsArcadeCharacter* Player)
 {
@@ -63,4 +65,20 @@ FVector ASportsArcadeTeamRoster::GetFormationPosition(int32 PlayerSlot) const
         ? Slots442[PlayerSlot] : Slots433[PlayerSlot];
     const float Direction = TeamIndex == 0 ? 1.f : -1.f;
     return FVector(Point.X * Direction, Point.Y * Direction, 0.f);
+}
+
+void ASportsArcadeTeamRoster::BeginPlay()
+{
+    Super::BeginPlay();
+    if (bDiscoverPlacedPlayers) DiscoverPlacedPlayers();
+}
+
+void ASportsArcadeTeamRoster::DiscoverPlacedPlayers()
+{
+    if (!GetWorld()) return;
+    for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
+    {
+        if (Players.Num() >= 11) break;
+        if (It->TeamIndex == TeamIndex) AddPlayer(*It);
+    }
 }
