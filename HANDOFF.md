@@ -91,3 +91,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Fetch existing file and its blob SHA before updating; do not overwrite other changes.
 - Update `unreal/README.md` to reflect meaningful new native development.
 - Distinguish committed work, CI/static checks, actual Unreal compile, and authentic on-device rendered preview at all times.
+
+## Continued development — 2026-10-15 (new-chat continuation)
+- Hardened native `capture_visual_review.py`: explicit Unreal screenshot API rejection now raises an exception rather than leaving a misleading accepted-request record. Added simulated-editor regression and refreshed docs/README. This is NOT an actual captured render.
+- Researched official Adobe Mixamo and Epic Fab license terms; recorded concrete source links and safe integration boundaries in `unreal/docs/free-asset-candidates.md`. These are candidates only: no assets acquired or imported.
+- High-priority blocker unchanged: real UE 5.5 editor/Windows GPU and approved high-fidelity football artwork. No photorealistic screenshot has been delivered.
