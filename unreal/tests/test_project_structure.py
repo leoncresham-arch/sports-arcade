@@ -196,6 +196,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("MatchBall->BallRadiusCm", source)
         self.assertIn("RecordGoal(true)", source)
         self.assertIn("RecordGoal(false)", source)
+        self.assertIn("LastGoalTouchPlayer = MatchBall->GetLastTouchPlayer()", source)
+        self.assertIn("LastGoalTouchPlayer = nullptr", source)
         self.assertIn("MatchBall->ResetToCentre()", source)
         self.assertIn("if (bMatchFinished || bHalfTime) return;", source)
         self.assertIn("bMatchFinished || bHalfTime) return false", source)
