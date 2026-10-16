@@ -135,3 +135,5 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Implemented `SportsArcadeTeamRoster` C++ actor with 11-player capacity, team validation, nearest candidate lookup and 4-3-3/4-4-2 starting location slots.
 - Added original field-position enum to footballers and Blueprint-callable local team-member possession switching from GameMode. This is an initial, uncompiled foundation, not automated player input, complete AI, player spawning or online game state.
 - New documentation: `unreal/docs/team-systems.md`. Source regression tests cover roster and formation contracts. Continue larger development batches without user approval after every small commit.
+
+- Native keyboard Tab now requests closest eligible teammate possession through GameMode; still requires authored roster/player actors and UE editor testing. It does not yet support cycling direction, animation handoff, or multiplayer authority.
