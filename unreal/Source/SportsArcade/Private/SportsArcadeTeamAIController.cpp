@@ -47,6 +47,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     }
     if (!IsValid(Roster)) return;
 
+    // Match-phase movement should not inherit stale navigation requests from halftime.
     const int32 MembershipIndex = Roster->Players.IndexOfByKey(Footballer);
     const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
     if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10) return;
