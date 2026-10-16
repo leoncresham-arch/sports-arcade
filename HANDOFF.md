@@ -150,3 +150,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Extended AI with tunable pressure radius, short-term predicted ball interception, simple opponent marking influence, initial goalkeeper lateral positioning and close-range clearance; paused AI during halftime/fulltime; restored default AI controller to the old pawn after player switching.
 - Added optional runtime auto-discovery of authored player actors into each capped team roster, with source checks. Ordering requires later deterministic squad lineup design.
 - These are still original prototype tactics and uncompiled UE C++ (not evidence of full-quality FC-like behavior). No screenshot prerequisite.
+
+## October 16 gameplay development — passing decisions and control quality
+- AI ball carrier now scores forward teammates within range, rejects passes whose two-dimensional lanes intersect opponents within a configurable fixed clearance, and falls back to a direct clearance when no lane qualifies. Uses basic impulses, not a polished possession or passing animation system.
+- Corrected Tab switching to search all roster players instead of failing when the nearest player is already user-controlled.
+- AI kicks require a plausible vertical distance to the ball as well as horizontal proximity. Source regression checks updated; Unreal native compilation and gameplay balance remain unverified.
