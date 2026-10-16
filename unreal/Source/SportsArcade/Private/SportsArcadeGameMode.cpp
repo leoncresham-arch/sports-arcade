@@ -18,6 +18,17 @@ void ASportsArcadeGameMode::BeginPlay()
 {
     Super::BeginPlay();
 
+    if (GetWorld())
+    {
+        for (TActorIterator<ASportsArcadeTeamRoster> RosterIt(GetWorld()); RosterIt; ++RosterIt)
+        {
+            if (!RosterIt->HasCompleteLineup())
+            {
+                UE_LOG(LogTemp, Warning, TEXT("SportsArcade: team %d has an incomplete or invalid lineup"), RosterIt->TeamIndex);
+            }
+        }
+    }
+
     if (bAutoPossessHomeRosterStarter && GetWorld())
     {
         APlayerController* PC = GetWorld()->GetFirstPlayerController();
