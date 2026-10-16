@@ -161,7 +161,7 @@ void ASportsArcadeCharacter::ShootBall()
 void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsShot)
 {
     UWorld* World = GetWorld();
-    const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f ||
         (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished || MatchMode->bBallOutOfPlay)))
     {
@@ -193,6 +193,7 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
             const FVector StrikeDirection = bIsShot ? (Forward + FVector(0.f, 0.f, ShotLiftRatio)).GetSafeNormal() : Forward;
             if (NearestBall->KickByPlayer(this, StrikeDirection, ImpulseStrength, BallControlReachCm))
             {
+                if (bIsShot && IsValid(MatchMode)) MatchMode->RecordShotAttempt(TeamIndex);
                 StrikeCooldownRemaining = FMath::Max(StrikeCooldownSeconds, 0.08f);
                 TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.2f);
             }
