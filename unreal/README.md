@@ -175,3 +175,6 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 - Input-directed ground passing: current movement direction can guide pass impulses, otherwise player facing applies. Shots receive configurable modest lift (`ShotLiftRatio`, 0.16 default).
 - Provisional touchline/endline ball-out state broadcasts exit position and last-touch team, pauses clock and on-field play. `B` performs a temporary centre-ball restart; formal referee throw-ins/corners/goal kicks are outstanding.
 - Source regression tests are not Unreal compilation or field-tested simulation.
+
+### Boundary restart classification
+- Added provisional throw-in, corner and goal-kick types/team/location and physical in-pitch restart placement (B). Unknown endline last touch blocks B until proper adjudication; R still resets the prototype. Source tests do not verify Unreal compilation.
