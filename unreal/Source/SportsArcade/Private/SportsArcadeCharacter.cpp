@@ -39,8 +39,20 @@ ASportsArcadeCharacter::ASportsArcadeCharacter()
 void ASportsArcadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    InitialKickoffTransform = GetActorTransform();
     const float StaminaFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
     CurrentStamina = FMath::Max(MaxStamina * StaminaFactor, 1.f);
+}
+
+void ASportsArcadeCharacter::ResetToKickoffPosition()
+{
+    SetActorTransform(InitialKickoffTransform, false, nullptr, ETeleportType::TeleportPhysics);
+    GetCharacterMovement()->StopMovementImmediately();
+    bSprintHeld = false;
+    bJockeyHeld = false;
+    TouchCooldownRemaining = 0.f;
+    StrikeCooldownRemaining = 0.f;
+    TackleCooldownRemaining = 0.f;
 }
 
 void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
