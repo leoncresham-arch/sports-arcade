@@ -13,3 +13,10 @@ Technical limitations:
 - Source structural tests are not a UE build, level playtest, gameplay AI test, or rendering verification.
 
 - Native keyboard Tab now requests closest eligible teammate possession through GameMode; still requires authored roster/player actors and UE editor testing. It does not yet support cycling direction, animation handoff, or multiplayer authority.
+
+## Formation-aware off-ball AI (new source implementation)
+- New `SportsArcadeTeamAIController` (C++ `AAIController`) becomes the default controller for footballers without human control. It reevaluates a level-authored player's roster formation slot every 0.3 seconds and requests a pathing move toward it.
+- Non-goalkeepers shift their formation target toward the current ball position within capped X/Y distances, then clamp the target to pitch boundaries; keeper slot remains anchored.
+- Added Unreal `AIModule` and `NavigationSystem` dependencies.
+- **Editor requirements:** level must contain authored teams whose Players arrays point at placed footballers, sufficient navigation mesh covering the pitch, walkable pitch collision and proper player AI possession. This code does not spawn players, author NavMeshBoundsVolume, or manage tactical possession/phases.
+- **Limits:** no opponent avoidance strategy beyond engine nav, no player/ball contact decisions, no marking or goalkeeper saves, no confirmed runtime tests or compiled UE. Controlled-player switching needs explicit AI handoff tests.
