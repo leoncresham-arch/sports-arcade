@@ -20,3 +20,9 @@ Technical limitations:
 - Added Unreal `AIModule` and `NavigationSystem` dependencies.
 - **Editor requirements:** level must contain authored teams whose Players arrays point at placed footballers, sufficient navigation mesh covering the pitch, walkable pitch collision and proper player AI possession. This code does not spawn players, author NavMeshBoundsVolume, or manage tactical possession/phases.
 - **Limits:** no opponent avoidance strategy beyond engine nav, no player/ball contact decisions, no marking or goalkeeper saves, no confirmed runtime tests or compiled UE. Controlled-player switching needs explicit AI handoff tests.
+
+## Incremental AI behavior batch
+- One nearest eligible outfielder can pursue the ball when within a configurable radius, predicting short-range ball travel, while other players retain their shifted formation. On-close-contact AI may kick toward the opposition goal with a cooldown.
+- Keeper now shifts laterally, advances within a configurable limit and attempts a basic contact clearance near goal. This is **not** a real keeper-save/dive/handling simulation.
+- AI respects match halftime/full-time; switching control back to another footballer attempts to restore AI possession of the former player.
+- Current behavior remains simplistic, incomplete, and uncompiled; it requires a working navigable pitch, authored rosters and real Unreal tests.
