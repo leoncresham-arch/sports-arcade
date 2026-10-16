@@ -78,6 +78,13 @@ bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVect
     return true;
 }
 
+void ASportsArcadeBall::StopMotion()
+{
+    if (!CollisionSphere) return;
+    CollisionSphere->SetPhysicsLinearVelocity(FVector::ZeroVector);
+    CollisionSphere->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
+}
+
 void ASportsArcadeBall::ResetToCentre()
 {
     if (!CollisionSphere)
@@ -85,8 +92,7 @@ void ASportsArcadeBall::ResetToCentre()
         return;
     }
     LastTouchPlayer.Reset();
-    CollisionSphere->SetPhysicsLinearVelocity(FVector::ZeroVector);
-    CollisionSphere->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
+    StopMotion();
     SetActorLocation(InitialSpawnLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
