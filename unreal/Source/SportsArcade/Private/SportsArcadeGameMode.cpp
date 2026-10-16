@@ -54,7 +54,7 @@ void ASportsArcadeGameMode::BeginPlay()
 void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if (bMatchFinished || bHalfTime || DeltaSeconds <= 0.f) return;
+    if (bMatchFinished || bHalfTime || DeltaSeconds <= 0.f || !GetWorld()) return;
     ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
 
     if (!IsValid(MatchBall))
@@ -109,11 +109,23 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
     {
         ElapsedMatchSeconds = HalfDurationSeconds;
         bHalfTime = true;
+        // Prevent a loose ball from scoring during the intermission.
+        if (IsValid(MatchBall))
+        {
+            MatchBall->ResetToCentre();
+            bHasPreviousBallPosition = false;
+        }
         OnHalfTime.Broadcast();
     }
     if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds && !bMatchFinished)
     {
         bMatchFinished = true;
+        // A stationary ball keeps the final score presentation deterministic.
+        if (IsValid(MatchBall))
+        {
+            MatchBall->StopMotion();
+            bHasPreviousBallPosition = false;
+        }
         OnFullTime.Broadcast();
     }
 }
