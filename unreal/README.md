@@ -139,3 +139,8 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 ## Native football controls
 - J: pass; K: shoot. The character finds a nearby football and applies an impulse in its facing direction using the existing C++ ball actor. Tuning, foot-contact animations, targeting, match rules and native UE compilation remain outstanding.
 - Corrected input configuration newline formatting.
+
+## Native endurance system (uncompiled)
+
+- Footballer sprint input now requests sprinting, while a per-frame stamina system drains endurance when moving and sprinting, recovers otherwise, and requires recovery after exhaustion. Rates and endurance can be tuned per character class; normalized stamina is exposed for future UI/animation use.
+- Implemented in native C++; source checks cannot establish compiled behavior or gameplay balance.
