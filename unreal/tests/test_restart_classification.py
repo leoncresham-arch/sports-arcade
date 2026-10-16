@@ -15,7 +15,7 @@ class RestartContracts(unittest.TestCase):
         for name in ("ThrowIn", "CornerKick", "GoalKick", "Undetermined"):
             self.assertIn(name, header)
             self.assertIn("ESportsArcadeRestartType::" + name, cpp)
-        self.assertIn("PendingRestartTeam = LastTeam == INDEX_NONE ? INDEX_NONE : 1 - LastTeam", cpp)
+        self.assertIn("PendingRestartTeam = (LastTeam == 0 || LastTeam == 1) ? 1 - LastTeam : INDEX_NONE", cpp)
         self.assertIn("const int32 DefendingTeam = SideX > 0.f ? 1 : 0;", cpp)
         self.assertIn("ClearPendingRestart();", cpp)
 
