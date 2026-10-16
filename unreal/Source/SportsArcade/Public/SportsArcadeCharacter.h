@@ -23,6 +23,12 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
     float GetStaminaNormalized() const;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    int32 TeamIndex = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    int32 ShirtNumber = 1;
+
 protected:
     virtual void BeginPlay() override;
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
