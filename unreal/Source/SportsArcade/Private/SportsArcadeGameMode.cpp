@@ -118,6 +118,7 @@ void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
     if (bMatchFinished || bHalfTime) return;
     if (bHomeTeamScored) ++HomeGoals;
     else ++AwayGoals;
+    OnGoalScored.Broadcast(HomeGoals, AwayGoals, bLastGoalWasOwnGoal);
 }
 
 void ASportsArcadeGameMode::ResumeSecondHalf()
