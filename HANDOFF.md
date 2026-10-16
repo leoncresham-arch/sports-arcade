@@ -222,3 +222,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 referee sequencing updates
 - Corrected negative-X goal processing so a scored ball cannot also trigger out-of-play detection; moved match-clock advancement after scoring and boundary review. Unknown-touch throw-ins now become Undetermined instead of invented possession.
 - Expanded Python source checks. Unreal C++ compilation and engine play remain unverified. User-facing handoff discussion only when actually due.
+
+## October 16 goalkeeper progression
+- Existing AI goalkeeper now distinguishes an incoming ball travelling toward its own goal from routine close possession, applying a lateral parry impulse for incoming attempts and retaining a forward clearance for other contacts. Added structural regression test. This is still contact-range source code, not reliable diving/saves, interception prediction, animation or Unreal playtest.
