@@ -145,3 +145,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 15/16 consecutive AI batch
 - Off-ball controller now limits nearest eligible team-player pressure, predicts ball position for short pursuit, applies timed low-level directional ball impulse on contact, keeps goalkeeper inside bounded lateral/advance positions and lets keeper clear close ground/low aerial balls. These are preliminary mechanics, not authentic tactical AI or licensed animations.
 - AI movement pauses at halftime/full-time; player switch returns former human pawn to default team AI when possible. CI structural checks only; no Unreal compile or runtime/navmesh validation.
+
+## Consecutive development continuation — team systems
+- Extended AI with tunable pressure radius, short-term predicted ball interception, simple opponent marking influence, initial goalkeeper lateral positioning and close-range clearance; paused AI during halftime/fulltime; restored default AI controller to the old pawn after player switching.
+- Added optional runtime auto-discovery of authored player actors into each capped team roster, with source checks. Ordering requires later deterministic squad lineup design.
+- These are still original prototype tactics and uncompiled UE C++ (not evidence of full-quality FC-like behavior). No screenshot prerequisite.
