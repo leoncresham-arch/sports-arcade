@@ -9,7 +9,7 @@
 
 ASportsArcadeCharacter::ASportsArcadeCharacter()
 {
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;
     bUseControllerRotationYaw = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
@@ -59,12 +59,43 @@ void ASportsArcadeCharacter::MoveRight(float Value)
 
 void ASportsArcadeCharacter::BeginSprint()
 {
-    GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+    bSprintHeld = true;
 }
 
 void ASportsArcadeCharacter::EndSprint()
 {
+    bSprintHeld = false;
     GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+}
+
+float ASportsArcadeCharacter::GetStaminaNormalized() const
+{
+    return FMath::Clamp(CurrentStamina / FMath::Max(MaxStamina, 1.f), 0.f, 1.f);
+}
+
+void ASportsArcadeCharacter::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    if (DeltaSeconds <= 0.f) return;
+
+    const float Capacity = FMath::Max(MaxStamina, 1.f);
+    CurrentStamina = FMath::Clamp(CurrentStamina, 0.f, Capacity);
+    if (bSprintExhausted && CurrentStamina >= FMath::Min(StaminaToResumeSprint, Capacity))
+    {
+        bSprintExhausted = false;
+    }
+    const bool bMoving = GetVelocity().SizeSquared2D() > FMath::Square(10.f);
+    const bool bSprinting = bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
+    if (bSprinting)
+    {
+        CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
+        if (CurrentStamina <= 0.f) bSprintExhausted = true;
+    }
+    else
+    {
+        CurrentStamina = FMath::Min(Capacity, CurrentStamina + StaminaRecoveryPerSecond * DeltaSeconds);
+    }
+    GetCharacterMovement()->MaxWalkSpeed = bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed;
 }
 
 void ASportsArcadeCharacter::PassBall()
