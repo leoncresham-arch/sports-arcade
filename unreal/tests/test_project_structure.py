@@ -80,7 +80,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         self.assertIn("StrikeNearbyBall", source)
         self.assertIn("TActorIterator<ASportsArcadeBall>", source)
-        self.assertIn("NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm)", source)
+        self.assertIn("NearestBall->KickByPlayer(this, StrikeDirection, ImpulseStrength, BallControlReachCm)", source)
 
     def test_native_footballer_ratings(self):
         header = read("Source/SportsArcade/Public/SportsArcadePlayerAttributes.h")
