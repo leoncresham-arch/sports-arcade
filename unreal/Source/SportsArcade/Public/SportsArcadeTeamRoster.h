@@ -17,6 +17,11 @@ class SPORTSARCADE_API ASportsArcadeTeamRoster : public AActor
 {
     GENERATED_BODY()
 public:
+    virtual void BeginPlay() override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    bool bDiscoverPlacedPlayers = true;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team", meta=(ClampMin="0", ClampMax="1"))
     int32 TeamIndex = 0;
 
@@ -28,6 +33,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
     bool AddPlayer(ASportsArcadeCharacter* Player);
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
+    void DiscoverPlacedPlayers();
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     int32 GetPlayerCount() const;
