@@ -49,6 +49,12 @@ def capture_review(output_dir, width=1920, height=1080, approved_assets=False):
     result = unreal.AutomationLibrary.take_high_res_screenshot(
         width, height, filename, camera=camera
     )
+    if result is False:
+        raise RuntimeError(
+            "Unreal rejected the screenshot request; no capture was queued. "
+            "Check the running viewport, camera and output permissions."
+        )
+
     record = {
         "project": "Sports Arcade",
         "capture_kind": "Native Unreal Editor screenshot request",
@@ -57,6 +63,7 @@ def capture_review(output_dir, width=1920, height=1080, approved_assets=False):
         "camera_label": CAMERA_LABEL,
         "approved_assets_claimed_by_operator": bool(approved_assets),
         "screenshot_request_return": str(result),
+        "request_accepted": result is not False,
         "verification": "UNVERIFIED: open the actual screenshot in the editor host",
         "important": (
             "A screenshot request is not confirmation of a rendered image. "
