@@ -55,6 +55,45 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (bMatchFinished || DeltaSeconds <= 0.f) return;
     ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
+
+    if (!IsValid(MatchBall))
+    {
+        MatchBall = nullptr;
+        bHasPreviousBallPosition = false;
+        for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
+        {
+            MatchBall = *It;
+            break;
+        }
+    }
+    if (IsValid(MatchBall))
+    {
+        const FVector Position = MatchBall->GetActorLocation();
+        if (bHasPreviousBallPosition)
+        {
+            // Entire football must cross a 105 m pitch goal line between posts and below bar.
+            const float Threshold = 5250.f + MatchBall->BallRadiusCm;
+            const bool bInsideGoalMouth = FMath::Abs(Position.Y) < 366.f - MatchBall->BallRadiusCm &&
+                Position.Z > MatchBall->BallRadiusCm && Position.Z < 244.f - MatchBall->BallRadiusCm;
+            if (bInsideGoalMouth && PreviousBallPosition.X < Threshold && Position.X >= Threshold)
+            {
+                RecordGoal(true);
+                MatchBall->ResetToCentre();
+                bHasPreviousBallPosition = false;
+            }
+            else if (bInsideGoalMouth && PreviousBallPosition.X > -Threshold && Position.X <= -Threshold)
+            {
+                RecordGoal(false);
+                MatchBall->ResetToCentre();
+                bHasPreviousBallPosition = false;
+            }
+        }
+        if (bHasPreviousBallPosition || (FMath::Abs(Position.X) < 5250.f))
+        {
+            PreviousBallPosition = Position;
+            bHasPreviousBallPosition = true;
+        }
+    }
     if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds) bMatchFinished = true;
 }
 
