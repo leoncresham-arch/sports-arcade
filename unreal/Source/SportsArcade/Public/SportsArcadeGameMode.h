@@ -31,6 +31,18 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Match", meta=(ClampMin="1.0"))
     float HalfDurationSeconds = 300.f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="2000.0"))
+    float PitchHalfLengthCm = 5250.f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="1000.0"))
+    float PitchHalfWidthCm = 3400.f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="100.0"))
+    float GoalHalfWidthCm = 366.f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="100.0"))
+    float CrossbarHeightCm = 244.f;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     float ElapsedMatchSeconds = 0.f;
 
