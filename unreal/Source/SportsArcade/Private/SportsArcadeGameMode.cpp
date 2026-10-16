@@ -24,8 +24,15 @@ void ASportsArcadeGameMode::BeginPlay()
         for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); PC && It; ++It)
         {
             if (It->TeamIndex != 0) continue;
-            ASportsArcadeCharacter* Starter = It->Players.IsValidIndex(9)
-                ? It->Players[9].Get() : nullptr;
+            ASportsArcadeCharacter* Starter = nullptr;
+            for (ASportsArcadeCharacter* Candidate : It->Players)
+            {
+                if (IsValid(Candidate) && Candidate->TeamIndex == 0 && Candidate->LineupSlot == 9)
+                {
+                    Starter = Candidate;
+                    break;
+                }
+            }
             if (IsValid(Starter) && Starter->TeamIndex == 0)
             {
                 PC->Possess(Starter);
