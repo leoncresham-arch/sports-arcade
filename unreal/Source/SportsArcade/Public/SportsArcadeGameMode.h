@@ -50,6 +50,15 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bBallOutOfPlay = false;
 
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    ESportsArcadeRestartType PendingRestartType = ESportsArcadeRestartType::None;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    int32 PendingRestartTeam = INDEX_NONE;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    FVector PendingRestartLocation = FVector::ZeroVector;
+
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeMatchPhaseEvent OnHalfTime;
 
@@ -94,6 +103,7 @@ private:
     FVector PreviousBallPosition = FVector::ZeroVector;
     bool bHasPreviousBallPosition = false;
     bool bSecondHalfStarted = false;
+    void ClearPendingRestart();
 
     /** Use the placed TV camera in a visual review level when one exists. */
     virtual void BeginPlay() override;
