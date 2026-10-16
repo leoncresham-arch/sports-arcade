@@ -111,7 +111,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 
 void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
 {
-    if (bMatchFinished) return;
+    if (bMatchFinished || bHalfTime) return;
     if (bHomeTeamScored) ++HomeGoals;
     else ++AwayGoals;
 }
@@ -144,7 +144,7 @@ float ASportsArcadeGameMode::GetMatchProgress() const
 
 bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
 {
-    if (!GetWorld() || TeamIndex < 0 || TeamIndex > 1 || bMatchFinished) return false;
+    if (!GetWorld() || TeamIndex < 0 || TeamIndex > 1 || bMatchFinished || bHalfTime) return false;
     APlayerController* Controller = GetWorld()->GetFirstPlayerController();
     if (!IsValid(Controller)) return false;
 
