@@ -96,6 +96,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     if (DeltaSeconds <= 0.f) return;
     TouchCooldownRemaining = FMath::Max(0.f, TouchCooldownRemaining - DeltaSeconds);
     TackleCooldownRemaining = FMath::Max(0.f, TackleCooldownRemaining - DeltaSeconds);
+    StrikeCooldownRemaining = FMath::Max(0.f, StrikeCooldownRemaining - DeltaSeconds);
     if (TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
@@ -147,7 +148,7 @@ void ASportsArcadeCharacter::ShootBall()
 void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
 {
     UWorld* World = GetWorld();
-    if (!World || ImpulseStrength <= 0.f)
+    if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f)
     {
         return;
     }
@@ -171,7 +172,11 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
         const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
         if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(Forward, ToBall.GetSafeNormal2D()) > 0.15f)
         {
-            NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm);
+            if (NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm))
+            {
+                StrikeCooldownRemaining = FMath::Max(StrikeCooldownSeconds, 0.08f);
+                TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.2f);
+            }
         }
     }
 }
