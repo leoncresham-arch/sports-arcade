@@ -277,6 +277,13 @@ void ASportsArcadeGameMode::ResetMatch()
     bMatchFinished = false;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+    if (GetWorld())
+    {
+        for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
+        {
+            It->ResetToKickoffPosition();
+        }
+    }
     OnMatchReset.Broadcast();
 }
 
