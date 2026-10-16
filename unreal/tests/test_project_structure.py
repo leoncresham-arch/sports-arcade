@@ -92,6 +92,11 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("PlayerAttributes->ShortPassing", cpp)
         self.assertIn("PlayerAttributes->Finishing", cpp)
 
+    def test_native_team_metadata(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        self.assertIn("int32 TeamIndex", header)
+        self.assertIn("int32 ShirtNumber", header)
+
     def test_character_stamina_system(self):
         header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
         source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
@@ -112,6 +117,13 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("RecordGoal(true)", source)
         self.assertIn("RecordGoal(false)", source)
         self.assertIn("MatchBall->ResetToCentre()", source)
+        self.assertIn("ResumeSecondHalf", source)
+        self.assertIn("bHalfTime = true", source)
+        self.assertIn("CrossesGoal(Threshold)", source)
+        self.assertIn("CrossesGoal(-Threshold)", source)
+        self.assertIn("PreviousBallPosition + Travel * T", source)
+        self.assertIn("ResetMatch()", source)
+        self.assertIn("GetMatchProgress() const", source)
 
     def test_native_review_mode_activates_broadcast_camera(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
