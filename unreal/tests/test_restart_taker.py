@@ -7,6 +7,7 @@ class RestartTakerContracts(unittest.TestCase):
         mode = (root / 'Source/SportsArcade/Private/SportsArcadeGameMode.cpp').read_text()
         header = (root / 'Source/SportsArcade/Public/SportsArcadeGameMode.h').read_text()
         self.assertIn('PendingRestartTaker', header)
+        self.assertIn('float ProvisionalRestartImpulse = 1500.f;', header)
         self.assertIn('FindRestartTaker(PendingRestartTeam, PendingRestartLocation)', mode)
         self.assertIn('!IsValid(PendingRestartTaker)', mode)
         self.assertIn('PendingRestartTaker = nullptr;', mode)
