@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-class ASportsArcadeBall;
 #include "SportsArcadeGameMode.generated.h"
+
+class ASportsArcadeBall;
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
 UCLASS()
