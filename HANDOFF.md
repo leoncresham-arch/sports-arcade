@@ -231,3 +231,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 goalkeeper anticipation batch
 - Goalkeeper now predicts short-term ball lateral movement using its Y velocity and configurable GoalkeeperAnticipationSeconds before clamping the target inside its post area. This complements provisional incoming-shot parry. Added source regression. Unreal C++/animation gameplay remains unverified.
+
+## October 16 match statistics
+- Added HomeShots/AwayShots offline counters and guarded RecordShotAttempt API. Successful human shot contacts increment the relevant team's count; missed button presses do not. ResetMatch clears both. AI shooting and full match analytics remain outstanding. Added source contract test; no native Unreal compile or runtime verification.
