@@ -209,3 +209,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added first-pass out-of-bounds match state and Blueprint `OnBallOutOfPlay` event carrying exit position and last-touch team; ball motion and match clock pause. Player and AI interactions are guarded against play during stoppage. `B` temporarily resets ball to centre and resumes — this is NOT an official throw-in/corner/goal kick.
 - Updated native match docs/README/tests. Crucial follow-on work: correct pitch/goal geometry handling, true restart classes/possession, compile and run inside UE 5.5 on Windows, authored full footballer assets and 11v11 level.
 - Do not create scheduled automations; the user explicitly disabled them. Continue directly with multiple changes each active turn.
+
+## October 16 follow-up fixes and CI
+- Source CI initially failed because an older source-contract assertion expected a direct Forward ball impulse; updated it to inspect the new computed StrikeDirection, then GitHub Python/static source checks passed on commit `cc46e3ac`. This does not validate C++ compilation.
+- Corrected aimed-strike contact: ball must be in front of footballer's facing, but movement input may direct the pass/shot independently. Disabled sprint stamina drain during all match stoppages. Source CI for the subsequent changes should be checked at latest HEAD.
