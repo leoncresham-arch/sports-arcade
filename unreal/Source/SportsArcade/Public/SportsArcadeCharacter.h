@@ -66,6 +66,7 @@ private:
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
     float StaminaToResumeSprint = 15.f;
     void BeginSprint();
+    void SwitchPlayer();
     void PassBall();
     void ShootBall();
     void StrikeNearbyBall(float ImpulseStrength);
