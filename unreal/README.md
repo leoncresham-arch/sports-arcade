@@ -158,3 +158,6 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 
 ## Native team and formation foundations
 - Added `SportsArcadeTeamRoster` for 11-member validated level-authored teams, role metadata, 4-3-3 / 4-4-2 starting locations and a Blueprint-callable closest-teammate switch action. See [team systems](docs/team-systems.md). No player-spawning, team AI, full player switching input, UE compile or gameplay validation yet.
+
+## Native off-ball formation AI
+- New `SportsArcadeTeamAIController` requests navmesh movement for unpossessed footballers toward roster formation slots, with modest shifts toward ball location. Requires authored rosters/navmesh and native Unreal testing. See [team systems](docs/team-systems.md).
