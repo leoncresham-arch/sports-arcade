@@ -34,6 +34,12 @@ public:
     float ContactRangeCm = 145.f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float MarkingSearchRadiusCm = 950.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float MarkingInfluence = 0.25f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float ActionCooldownSeconds = 0.9f;
 
 private:
