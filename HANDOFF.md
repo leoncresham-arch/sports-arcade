@@ -260,3 +260,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 — read-only 11v11 diagnostics
 - Added Unreal Editor-only Tools/Editor/validate_offline_match.py to report missing/duplicate ball, rosters, players, wrong-team members and repeated/missing lineup slots without changing level data. Added CI structural test. Actual Unreal execution remains pending.
+
+## October 16 further match initialization and restart physics
+- Adjusted Ball.PlaceAtRest and ResetToCentre so the engine physics velocities are cleared after teleport, reducing residual movement across restarts.
+- Added roster HasCompleteLineup checking exactly 11 valid team members with unique formation slots 0-10. GameMode now emits a startup warning for any incomplete roster without blocking other test maps. Source regression updated. Native UE5.5 compile, physics and Windows playtests remain unverified.
