@@ -80,7 +80,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         self.assertIn("StrikeNearbyBall", source)
         self.assertIn("TActorIterator<ASportsArcadeBall>", source)
-        self.assertIn("NearestBall->KickByPlayer(this, Direction, ImpulseStrength, BallControlReachCm)", source)
+        self.assertIn("NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm)", source)
 
     def test_native_footballer_ratings(self):
         header = read("Source/SportsArcade/Public/SportsArcadePlayerAttributes.h")
@@ -132,6 +132,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("TackleBall", footballer)
         self.assertIn("TackleCooldownRemaining", footballer)
         self.assertIn("LastTouch->TeamIndex == TeamIndex", footballer)
+        self.assertIn("if (It->KickByPlayer(this", footballer)
+        self.assertIn("FMath::Abs(ToBall.Z) <= 120.f", footballer)
         self.assertIn("KickByPlayer(this", footballer)
         self.assertIn("LastTouchPlayer = Player", ball)
         self.assertIn('ActionName="Tackle",Key=L', mapping)
