@@ -34,6 +34,14 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("if (ShootingTeam == 0) ++HomeShots;", game)
         self.assertIn("else if (ShootingTeam == 1) ++AwayShots;", game)
 
+    def test_exhibition_reset_restores_player_positions(self):
+        player = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        self.assertIn("InitialKickoffTransform = GetActorTransform();", player)
+        self.assertIn("void ASportsArcadeCharacter::ResetToKickoffPosition()", player)
+        self.assertIn("GetCharacterMovement()->StopMovementImmediately();", player)
+        self.assertIn("It->ResetToKickoffPosition();", mode)
+
     def test_reset_and_resume_signals(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
