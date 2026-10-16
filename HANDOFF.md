@@ -253,3 +253,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 offline 11v11 map work
 - Added non-overwriting Unreal Editor Python map bootstrap, 22 authored footballers, home/away rosters, pitch, goals, ball and daylight. GameMode attempts to possess home slot-9 starter. Python mock tests and source checks are NOT a native Unreal engine build, editor execution, navmesh or gameplay proof. See unreal/docs/offline-11v11-bootstrap.md. Future Windows UE validation is essential.
+
+## October 16 — 11v11 map handoff reliability
+- GameMode now searches the authored home roster for LineupSlot 9 rather than assuming roster array index 9. Keeps all existing pawns intact on possession switch; avoids deleting potentially authored actors. Additional mock regression tests check 22 placed players, their lineup slots, shirt numbers, team metadata, missing-class preflight and existing-map preservation.
+- Unreal API reflection, native compile, map loading and gameplay still unverified; avoid claims of genuine playable 11v11.
