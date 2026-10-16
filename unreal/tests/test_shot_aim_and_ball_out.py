@@ -21,7 +21,7 @@ class ShootingAndStoppageTests(unittest.TestCase):
         header = source("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         player = source("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         config = source("Config/DefaultInput.ini")
-        self.assertIn("OnBallOutOfPlay.Broadcast(Position, MatchBall->GetLastTouchTeamIndex())", game)
+        self.assertIn("OnBallOutOfPlay.Broadcast(Position, LastTeam)", game)
         self.assertIn("void ASportsArcadeGameMode::ResumeAfterBallOut()", game)
         self.assertIn("bBallOutOfPlay = true;", game)
         self.assertIn("FSportsArcadeBallOutEvent OnBallOutOfPlay;", header)
