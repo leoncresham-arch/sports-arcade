@@ -187,3 +187,7 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 - Added U chip-shot input using reduced impulse and adjustable higher loft, LeftAlt defensive jockey movement at reduced speed (sprint disabled while held), and home/away shot-attempt counters.
 - Successful human shots increment team counters; AI direct attacking-third attempts count when a pass was not chosen. Regular AI passes and defensive clearances do not count. Resetting the exhibition resets these values.
 - Added Blueprint reset/play-resumed events to support eventual scoreboard and match UI wiring. Source CI is not UE compilation or on-device playtest.
+
+### Configurable match field geometry
+- GameMode now exposes pitch half-length/half-width, goal half-width and crossbar height as native Unreal editor settings. Goal-line evaluation, out-of-play classification and provisional restart coordinates use those values, preserving the previous 105 x 68 m default pitch.
+- Team tactical formation and AI boundary tuning are still authored against the default pitch and will require a shared pitch transform/schema. Source CI does not verify resized-field play in Unreal.
