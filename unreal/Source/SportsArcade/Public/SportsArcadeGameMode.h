@@ -147,4 +147,7 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Team")
     bool bAutoPossessHomeRosterStarter = true;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Match")
+    bool bAutoKickProvisionalRestart = true;
 };
