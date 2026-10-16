@@ -94,6 +94,14 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("MaximumLateralTravel", cpp)
         self.assertIn("VInterpTo", cpp)
 
+    def test_broadcast_camera_keeps_level_authored_starting_position(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeBroadcastCamera.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeBroadcastCamera.cpp")
+        self.assertIn("virtual void BeginPlay() override;", header)
+        self.assertIn("CameraOffset = GetActorLocation() - PitchCentre;", cpp)
+        self.assertIn("Target + CameraOffset", cpp)
+        self.assertNotIn("FVector(0.f, -8900.f, 3900.f)", header)
+
     def test_visual_asset_catalog_has_required_asset_slots(self):
         header = read("Source/SportsArcade/Public/SportsArcadeVisualAssetSet.h")
         source = read("Source/SportsArcade/Private/SportsArcadeVisualAssetSet.cpp")
