@@ -101,6 +101,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 RecordGoal(false);
                 MatchBall->ResetToCentre();
                 bHasPreviousBallPosition = false;
+                return;
             }
         }
         // Full-ball boundary crossing, classified by last attributed team.
