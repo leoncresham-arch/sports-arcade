@@ -169,7 +169,7 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
     {
         // Starter ground pass/shot: no aim assist, contact animation, or spin yet.
         const FVector Direction = GetActorForwardVector().GetSafeNormal2D();
-        NearestBall->Kick(Direction, ImpulseStrength);
+        NearestBall->KickByPlayer(this, Direction, ImpulseStrength, BallControlReachCm);
     }
 }
 
@@ -193,7 +193,7 @@ void ASportsArcadeCharacter::TackleBall()
         {
             ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
             if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
-            It->Kick(GetActorForwardVector().GetSafeNormal2D(), 850.f);
+            It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(), 850.f, 175.f);
             TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
             break;
         }
