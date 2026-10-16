@@ -82,6 +82,16 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("TActorIterator<ASportsArcadeBall>", source)
         self.assertIn("NearestBall->Kick(Direction, ImpulseStrength)", source)
 
+    def test_character_stamina_system(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for field in ("CurrentStamina", "MaxStamina", "SprintDrainPerSecond", "StaminaRecoveryPerSecond", "StaminaToResumeSprint"):
+            self.assertIn(field, header)
+            self.assertIn(field, source)
+        self.assertIn("void ASportsArcadeCharacter::Tick(float DeltaSeconds)", source)
+        self.assertIn("Super::Tick(DeltaSeconds)", source)
+        self.assertIn("GetStaminaNormalized", source)
+
     def test_native_review_mode_activates_broadcast_camera(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
