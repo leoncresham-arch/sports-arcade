@@ -170,3 +170,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - User authorized autonomous continuation of existing Sports Arcade work without repeated approvals; an hourly scheduled continuation task was configured in ChatGPT for substantive GitHub development batches. Continue reading this handoff before implementing.
 - Added native `KickByPlayer` API, attributing last player for pass, shot, tackles, goalkeeper clearances and AI kicks; controlled dribble touches were already attributed. Unattributed environmental bounces and base `Kick` do not identify a player. Adjusted tests and checked source CI (successful on implementation).
 - This improves possession attribution but does not implement a referee-verified possession system or native Unreal compile testing.
+
+## Latest gameplay fixes (October 16)
+- Continued successive scope items without waiting for a new approval: tackled-player cooldown is now consumed only after a successful attributed strike; human pass/shot requires the ball ahead and within 120 cm vertical reach; controlled dribble touches reject vertical differences greater than 115 cm.
+- Updated source regression tests. These are source-level protections only, not UE-compiled physics/contact validation. Preserve original repository and keep working through roadmap; use scheduled recurring continuation only as supported by ChatGPT.
