@@ -97,7 +97,9 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     TouchCooldownRemaining = FMath::Max(0.f, TouchCooldownRemaining - DeltaSeconds);
     TackleCooldownRemaining = FMath::Max(0.f, TackleCooldownRemaining - DeltaSeconds);
     StrikeCooldownRemaining = FMath::Max(0.f, StrikeCooldownRemaining - DeltaSeconds);
-    if (TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
+    const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    const bool bPlayActive = !IsValid(MatchMode) || (!MatchMode->bHalfTime && !MatchMode->bMatchFinished);
+    if (bPlayActive && TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
         {
@@ -148,7 +150,9 @@ void ASportsArcadeCharacter::ShootBall()
 void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
 {
     UWorld* World = GetWorld();
-    if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f)
+    const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f ||
+        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished)))
     {
         return;
     }
@@ -191,7 +195,9 @@ void ASportsArcadeCharacter::SwitchPlayer()
 
 void ASportsArcadeCharacter::TackleBall()
 {
-    if (!GetWorld() || TackleCooldownRemaining > 0.f) return;
+    const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (!GetWorld() || TackleCooldownRemaining > 0.f ||
+        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished))) return;
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
         const FVector Direction = It->GetActorLocation() - GetActorLocation();
