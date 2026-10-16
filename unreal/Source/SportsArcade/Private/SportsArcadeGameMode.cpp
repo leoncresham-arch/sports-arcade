@@ -210,6 +210,24 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 }
             }
             PendingRestartTaker = FindRestartTaker(PendingRestartTeam, PendingRestartLocation);
+            // Prefer the team's actual goalkeeper for an uncontested goal kick.
+            if (PendingRestartType == ESportsArcadeRestartType::GoalKick)
+            {
+                for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
+                {
+                    if (Roster->TeamIndex != PendingRestartTeam) continue;
+                    for (ASportsArcadeCharacter* Candidate : Roster->Players)
+                    {
+                        if (IsValid(Candidate) && Candidate->TeamIndex == PendingRestartTeam &&
+                            Candidate->LineupSlot == 0)
+                        {
+                            PendingRestartTaker = Candidate;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
             bBallOutOfPlay = true;
             MatchBall->StopMotion();
             bHasPreviousBallPosition = false;
