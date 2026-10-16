@@ -23,6 +23,14 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("Mode->ResumeSecondHalf();", cpp)
         self.assertIn("Mode->ResetMatch();", cpp)
 
+    def test_reset_and_resume_signals(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        self.assertIn("FSportsArcadeMatchPhaseEvent OnMatchReset;", header)
+        self.assertIn("FSportsArcadeMatchPhaseEvent OnPlayResumed;", header)
+        self.assertIn("OnMatchReset.Broadcast();", cpp)
+        self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 2)
+
     def test_ball_settles_at_match_boundaries(self):
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         ball_h = read("Source/SportsArcade/Public/SportsArcadeBall.h")
