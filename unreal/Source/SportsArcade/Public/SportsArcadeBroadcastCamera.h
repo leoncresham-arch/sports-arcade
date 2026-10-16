@@ -19,6 +19,7 @@ class SPORTSARCADE_API ASportsArcadeBroadcastCamera : public ACameraActor
 public:
     ASportsArcadeBroadcastCamera();
 
+    virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
 
     /** Track the active ball or a manually positioned focus target. */
@@ -47,6 +48,6 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<AActor> FocusActor;
 
-    /** Offset from centre spot to a touchline camera, looking across the pitch. */
-    FVector CameraOffset = FVector(0.f, -8900.f, 3900.f);
+    /** Captured at BeginPlay from the level-authored camera placement. */
+    FVector CameraOffset = FVector::ZeroVector;
 };
