@@ -73,6 +73,15 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn('ActionName="Sprint"', mapping)
         self.assertIn('Key=LeftShift', mapping)
 
+    def test_pass_and_shoot_input_contract(self):
+        mapping = read("Config/DefaultInput.ini")
+        self.assertIn('ActionName="Pass",Key=J', mapping)
+        self.assertIn('ActionName="Shoot",Key=K', mapping)
+        source = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        self.assertIn("StrikeNearbyBall", source)
+        self.assertIn("TActorIterator<ASportsArcadeBall>", source)
+        self.assertIn("NearestBall->Kick(Direction, ImpulseStrength)", source)
+
     def test_native_review_mode_activates_broadcast_camera(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
