@@ -76,6 +76,7 @@ private:
     void RestartAfterBallOut();
     void PassBall();
     void ShootBall();
+    void ChipBall();
     void TackleBall();
     float TackleCooldownRemaining = 0.f;
     float StrikeCooldownRemaining = 0.f;
@@ -88,9 +89,15 @@ private:
     float DribbleTouchInterval = 0.18f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float DribbleTouchRangeCm = 135.f;
-    void StrikeNearbyBall(float ImpulseStrength, bool bIsShot);
+    void StrikeNearbyBall(float ImpulseStrength, bool bIsShot, float LiftRatio = 0.f);
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0", ClampMax="1.0"))
     float ShotLiftRatio = 0.16f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0", ClampMax="2.0"))
+    float ChipLiftRatio = 0.85f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.1", ClampMax="1.0"))
+    float ChipPowerFactor = 0.60f;
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float BallControlReachCm = 170.f;
