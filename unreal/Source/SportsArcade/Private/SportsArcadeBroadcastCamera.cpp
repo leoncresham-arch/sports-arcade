@@ -14,6 +14,14 @@ ASportsArcadeBroadcastCamera::ASportsArcadeBroadcastCamera()
     }
 }
 
+void ASportsArcadeBroadcastCamera::BeginPlay()
+{
+    Super::BeginPlay();
+    // Honour the camera location saved in the actual review map instead of
+    // snapping to a hard-coded offset on the first tracking tick.
+    CameraOffset = GetActorLocation() - PitchCentre;
+}
+
 void ASportsArcadeBroadcastCamera::SetFocusActor(AActor* NewFocusActor)
 {
     FocusActor = NewFocusActor;
