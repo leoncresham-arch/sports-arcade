@@ -94,11 +94,41 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target = FVector(Predicted.X, Predicted.Y, 0.f);
             if (BestDistance <= FMath::Square(ContactRangeCm) && ActionCooldownRemaining <= 0.f)
             {
-                // Minimal autonomous clearance/attack: kick towards the opponent goal.
+                // Prefer a forward teammate with a clear passing lane; otherwise clear towards goal.
                 const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-                const FVector Direction = FVector(AttackSign * 5250.f - Ball->GetActorLocation().X,
+                FVector Direction = FVector(AttackSign * 5250.f - Ball->GetActorLocation().X,
                     -Ball->GetActorLocation().Y, 0.f).GetSafeNormal();
-                Ball->Kick(Direction, 1700.f);
+                float BestPassScore = -BIG_NUMBER;
+                for (ASportsArcadeCharacter* Teammate : Roster->Players)
+                {
+                    if (!IsValid(Teammate) || Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex) continue;
+                    const FVector Delta = Teammate->GetActorLocation() - Ball->GetActorLocation();
+                    const float Distance = Delta.Size2D();
+                    if (Distance < 300.f || Distance > 3300.f || Delta.X * AttackSign < 150.f) continue;
+                    bool bBlocked = false;
+                    for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+                    {
+                        if (Opp->TeamIndex == Footballer->TeamIndex) continue;
+                        const FVector2D Start(Ball->GetActorLocation());
+                        const FVector2D End(Teammate->GetActorLocation());
+                        const FVector2D Segment = End - Start;
+                        const float Alpha = FMath::Clamp(FVector2D::DotProduct(FVector2D(Opp->GetActorLocation()) - Start, Segment) /
+                            FMath::Max(Segment.SizeSquared(), 1.f), 0.f, 1.f);
+                        if (FVector2D::DistSquared(FVector2D(Opp->GetActorLocation()), Start + Segment * Alpha) < FMath::Square(170.f))
+                        {
+                            bBlocked = true;
+                            break;
+                        }
+                    }
+                    if (bBlocked) continue;
+                    const float Score = Delta.X * AttackSign - Distance * 0.25f;
+                    if (Score > BestPassScore)
+                    {
+                        BestPassScore = Score;
+                        Direction = Delta.GetSafeNormal2D();
+                    }
+                }
+                Ball->Kick(Direction, BestPassScore > -BIG_NUMBER ? 1400.f : 1700.f);
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
         }
