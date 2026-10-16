@@ -72,7 +72,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
         if (bHasPreviousBallPosition)
         {
             // Entire football must cross a 105 m pitch goal line between posts and below bar.
-            const float Threshold = 5250.f + MatchBall->BallRadiusCm;
+            const float Threshold = PitchHalfLengthCm + MatchBall->BallRadiusCm;
             // Interpolate at the actual crossed X plane; endpoint alone can miss a fast diagonal shot.
             const FVector Travel = Position - PreviousBallPosition;
             const auto CrossesGoal = [&](float PlaneX) -> bool
@@ -81,8 +81,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 const float T = (PlaneX - PreviousBallPosition.X) / Travel.X;
                 if (T < 0.f || T > 1.f) return false;
                 const FVector Crossing = PreviousBallPosition + Travel * T;
-                return FMath::Abs(Crossing.Y) + MatchBall->BallRadiusCm < 366.f &&
-                    Crossing.Z >= MatchBall->BallRadiusCm && Crossing.Z + MatchBall->BallRadiusCm < 244.f;
+                return FMath::Abs(Crossing.Y) + MatchBall->BallRadiusCm < GoalHalfWidthCm &&
+                    Crossing.Z >= MatchBall->BallRadiusCm && Crossing.Z + MatchBall->BallRadiusCm < CrossbarHeightCm;
             };
             if (CrossesGoal(Threshold) && PreviousBallPosition.X < Threshold && Position.X >= Threshold)
             {
@@ -106,8 +106,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
         // Full-ball boundary crossing, classified by last attributed team.
         // Compare segment crossing fractions so a corner exit is assigned to
         // the first crossed boundary rather than the furthest endpoint.
-        const float EdgeX = 5250.f + MatchBall->BallRadiusCm;
-        const float EdgeY = 3400.f + MatchBall->BallRadiusCm;
+        const float EdgeX = PitchHalfLengthCm + MatchBall->BallRadiusCm;
+        const float EdgeY = PitchHalfWidthCm + MatchBall->BallRadiusCm;
         if (FMath::Abs(Position.Y) > EdgeY || FMath::Abs(Position.X) > EdgeX)
         {
             const FVector Travel = Position - PreviousBallPosition;
@@ -141,8 +141,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 const float CrossY = SideY * EdgeY;
                 const float Alpha = FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER
                     ? FMath::Clamp((CrossY - PreviousBallPosition.Y) / Travel.Y, 0.f, 1.f) : 1.f;
-                const float CrossX = FMath::Clamp(PreviousBallPosition.X + Travel.X * Alpha, -5150.f, 5150.f);
-                PendingRestartLocation = FVector(CrossX, SideY * 3360.f, RestZ);
+                const float CrossX = FMath::Clamp(PreviousBallPosition.X + Travel.X * Alpha, -PitchHalfLengthCm + 100.f, PitchHalfLengthCm - 100.f);
+                PendingRestartLocation = FVector(CrossX, SideY * (PitchHalfWidthCm - 40.f), RestZ);
             }
             else
             {
@@ -150,19 +150,19 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 if (PendingRestartTeam == INDEX_NONE)
                 {
                     PendingRestartType = ESportsArcadeRestartType::Undetermined;
-                    PendingRestartLocation = FVector(SideX * 4700.f, 0.f, RestZ);
+                    PendingRestartLocation = FVector(SideX * (PitchHalfLengthCm - 550.f), 0.f, RestZ);
                 }
                 else if (LastTeam == DefendingTeam)
                 {
                     PendingRestartType = ESportsArcadeRestartType::CornerKick;
                     PendingRestartTeam = 1 - DefendingTeam;
-                    PendingRestartLocation = FVector(SideX * 5190.f, SideY * 3340.f, RestZ);
+                    PendingRestartLocation = FVector(SideX * (PitchHalfLengthCm - 60.f), SideY * (PitchHalfWidthCm - 60.f), RestZ);
                 }
                 else
                 {
                     PendingRestartType = ESportsArcadeRestartType::GoalKick;
                     PendingRestartTeam = DefendingTeam;
-                    PendingRestartLocation = FVector(SideX * 4750.f, SideY * 500.f, RestZ);
+                    PendingRestartLocation = FVector(SideX * (PitchHalfLengthCm - 500.f), SideY * 500.f, RestZ);
                 }
             }
             bBallOutOfPlay = true;
