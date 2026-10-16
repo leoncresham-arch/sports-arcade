@@ -149,3 +149,6 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 
 - [Researched capability blueprint](docs/football-capabilities-blueprint.md) inventories player movement, dribbling and skills, attacking and defending, keeper mechanics, 11v11 team AI, match rules, attributes, animation, PC controls, presentation and game modes; includes staged implementation priorities.
 - It sets development scope only. The capabilities in that document are not yet implemented unless separately documented and tested.
+
+## Footballer attributes (native source)
+The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. Sprint pace, stamina, passing and finishing currently alter player movement or ball impulse strength. Acceleration, ball control and tackling ratings are reserved for future systems. The default 65 rating has a neutral 1x multiplier. No engine compilation or gameplay balancing has yet been performed.
