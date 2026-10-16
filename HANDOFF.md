@@ -155,3 +155,5 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - AI ball carrier now scores forward teammates within range, rejects passes whose two-dimensional lanes intersect opponents within a configurable fixed clearance, and falls back to a direct clearance when no lane qualifies. Uses basic impulses, not a polished possession or passing animation system.
 - Corrected Tab switching to search all roster players instead of failing when the nearest player is already user-controlled.
 - AI kicks require a plausible vertical distance to the ball as well as horizontal proximity. Source regression checks updated; Unreal native compilation and gameplay balance remain unverified.
+
+- Added per-player LineupSlot (0 goalkeeper through 10) and an opt-in roster setting `bUseExplicitLineupSlots`, so teams can author deterministic positions instead of depending on automatically discovered roster order. This mode requires distinct slots to be configured manually; the default remains array order for compatibility.
