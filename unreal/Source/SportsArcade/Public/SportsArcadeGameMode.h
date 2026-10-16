@@ -12,6 +12,25 @@ class SPORTSARCADE_API ASportsArcadeGameMode : public AGameModeBase
 
 public:
     ASportsArcadeGameMode();
+    virtual void Tick(float DeltaSeconds) override;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Match", meta=(ClampMin="1.0"))
+    float HalfDurationSeconds = 300.f;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    float ElapsedMatchSeconds = 0.f;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    int32 HomeGoals = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    int32 AwayGoals = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    bool bMatchFinished = false;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
+    void RecordGoal(bool bHomeTeamScored);
 
     /** Use the placed TV camera in a visual review level when one exists. */
     virtual void BeginPlay() override;
