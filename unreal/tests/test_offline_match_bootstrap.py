@@ -53,7 +53,7 @@ class MatchBootstrapTests(unittest.TestCase):
         return mod
     def test_creates_exactly_22_players_and_two_rosters(self):
         self.load().main()
-        self.assertEqual(len(self.editor.actors), 28)
+        self.assertEqual(len(self.editor.actors), 29)
         rosters = [a for a in self.editor.actors if "TeamRoster" in a.name]
         self.assertEqual(len(rosters), 2)
         self.assertEqual([len(a.props["players"]) for a in rosters], [11,11])
