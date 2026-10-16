@@ -56,6 +56,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         Target.Y = FMath::Clamp(Ball->GetActorLocation().Y * 0.20f, -GoalkeeperLateralRangeCm, GoalkeeperLateralRangeCm);
         const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         Target.X += TowardsPlay * FMath::Clamp((5250.f - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
+        // Initial close-range keeper clearance; full diving/parry systems will replace this.
+        if (ActionCooldownRemaining <= 0.f &&
+            FVector::DistSquared2D(Footballer->GetActorLocation(), Ball->GetActorLocation()) < FMath::Square(ContactRangeCm + 75.f) &&
+            Ball->GetActorLocation().Z < 200.f)
+        {
+            const FVector Clearance = FVector(TowardsPlay, (Ball->GetActorLocation().Y >= 0.f ? 0.4f : -0.4f), 0.25f);
+            Ball->Kick(Clearance, 2300.f);
+            ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
+        }
     }
     else if (IsValid(Ball))
     {
