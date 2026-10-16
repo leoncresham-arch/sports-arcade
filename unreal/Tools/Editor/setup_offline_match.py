@@ -5,7 +5,8 @@ MAP = "/Game/Maps/SA_Offline11v11"
 
 def main():
     names = ["SportsArcadePitch", "SportsArcadeGoal", "SportsArcadeBall",
-             "SportsArcadeTeamRoster", "SportsArcadeCharacter"]
+             "SportsArcadeTeamRoster", "SportsArcadeCharacter",
+             "SportsArcadeLightingRig"]
     classes = {name: unreal.load_class(None, "/Script/SportsArcade." + name)
                for name in names}
     if any(klass is None for klass in classes.values()):
@@ -30,6 +31,7 @@ def main():
 
     spawn("SportsArcadePitch", "Match Pitch", unreal.Vector(0, 0, 0))
     spawn("SportsArcadeBall", "Match Football", unreal.Vector(0, 0, 11))
+    spawn("SportsArcadeLightingRig", "Match Daylight", unreal.Vector(0, 0, 0))
     for x in (-5250, 5250):
         spawn("SportsArcadeGoal", "Goal " + str(x), unreal.Vector(x, 0, 0))
     for team in (0, 1):
