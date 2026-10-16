@@ -29,6 +29,8 @@ public:
     virtual void Tick(float DeltaSeconds) override;
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
     float GetStaminaNormalized() const;
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
+    void ResetToKickoffPosition();
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
     bool IsJockeying() const { return bJockeyHeld; }
@@ -60,6 +62,7 @@ private:
     UPROPERTY(VisibleAnywhere, Category="Sports Arcade|Ratings")
     TObjectPtr<USportsArcadePlayerAttributes> PlayerAttributes;
 
+    FTransform InitialKickoffTransform = FTransform::Identity;
     bool bSprintHeld = false;
     bool bSprintExhausted = false;
     bool bJockeyHeld = false;
