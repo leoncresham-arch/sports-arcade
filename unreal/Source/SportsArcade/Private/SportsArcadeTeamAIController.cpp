@@ -103,6 +103,29 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             }
         }
     }
+    // A conservative defensive shadow towards the closest nearby opponent.
+    // Pressing footballer already has the ball as target and must not be pulled away.
+    if (Slot != 0 && IsValid(Ball) && FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
+    {
+        ASportsArcadeCharacter* Opponent = nullptr;
+        float NearestOpponentDistance = FMath::Square(FMath::Max(0.f, MarkingSearchRadiusCm));
+        for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
+        {
+            if (It->TeamIndex == Footballer->TeamIndex) continue;
+            const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
+            if (Distance < NearestOpponentDistance)
+            {
+                Opponent = *It;
+                NearestOpponentDistance = Distance;
+            }
+        }
+        if (IsValid(Opponent))
+        {
+            const FVector MarkingPoint = Opponent->GetActorLocation();
+            Target = FMath::Lerp(Target, FVector(MarkingPoint.X, MarkingPoint.Y, 0.f),
+                FMath::Clamp(MarkingInfluence, 0.f, 0.5f));
+        }
+    }
     Target.X = FMath::Clamp(Target.X, -5100.f, 5100.f);
     Target.Y = FMath::Clamp(Target.Y, -3250.f, 3250.f);
     MoveToLocation(Target, 125.f, true, true, false, true, nullptr, true);
