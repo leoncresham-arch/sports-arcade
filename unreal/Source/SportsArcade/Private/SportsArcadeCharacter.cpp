@@ -193,9 +193,11 @@ void ASportsArcadeCharacter::TackleBall()
         {
             ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
             if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
-            It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(), 850.f, 175.f);
-            TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
-            break;
+            if (It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(), 850.f, 175.f))
+            {
+                TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
+                break;
+            }
         }
     }
 }
