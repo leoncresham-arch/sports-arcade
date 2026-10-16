@@ -18,6 +18,15 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float FormationAdvanceFactor = 0.25f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float PressureRadiusCm = 2100.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float GoalkeeperLateralRangeCm = 280.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
+    float GoalkeeperAdvanceCm = 350.f;
+
 private:
     float DecisionCountdown = 0.f;
 };
