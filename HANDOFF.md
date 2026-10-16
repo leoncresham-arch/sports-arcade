@@ -120,3 +120,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Integrated pace, stamina, pass and shot scaling in SportsArcadeCharacter, initialized full stamina in BeginPlay; neutral rating 65 is exactly 1x.
 - Other ratings are not active yet. Python source checks are not Unreal compilation or in-game simulation.
 - User wants substantial conventional high-end Windows PC game implementation without waiting for screenshot preview.
+
+## October 15 continuation: native offline match foundation
+- Added native GameMode match clock, score, goal line check and reset after goal, plus source regression test and `unreal/docs/native-match-foundation.md`.
+- This detector assumes fixed world-axis pitch positions and discrete ball sampling. It is NOT an official referee system, reliable swept goal collision, halftime implementation or multiplayer game state.
+- Continue Unreal PC development without waiting for screenshot. Unreal compilation/playtest remain outstanding.
