@@ -64,7 +64,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 175.f)
         {
             const FVector Clearance = FVector(TowardsPlay, (Ball->GetActorLocation().Y >= 0.f ? 0.4f : -0.4f), 0.25f);
-            Ball->Kick(Clearance, 2300.f);
+            Ball->KickByPlayer(Footballer, Clearance, 2300.f, ContactRangeCm + 75.f);
             ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
         }
     }
@@ -131,7 +131,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                         Direction = Delta.GetSafeNormal2D();
                     }
                 }
-                Ball->Kick(Direction, BestPassScore > -BIG_NUMBER ? 1400.f : 1700.f);
+                Ball->KickByPlayer(Footballer, Direction, BestPassScore > -BIG_NUMBER ? 1400.f : 1700.f, ContactRangeCm + 25.f);
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
         }
