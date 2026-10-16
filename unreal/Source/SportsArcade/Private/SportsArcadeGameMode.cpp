@@ -130,13 +130,13 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             }
             const bool bTouchline = Ty < Tx || (Tx >= 2.f && FMath::Abs(Position.Y) > EdgeY);
             const int32 LastTeam = MatchBall->GetLastTouchTeamIndex();
-            PendingRestartTeam = LastTeam == INDEX_NONE ? INDEX_NONE : 1 - LastTeam;
+            PendingRestartTeam = (LastTeam == 0 || LastTeam == 1) ? 1 - LastTeam : INDEX_NONE;
             const float SideX = Position.X >= 0.f ? 1.f : -1.f;
             const float SideY = Position.Y >= 0.f ? 1.f : -1.f;
             const float RestZ = MatchBall->BallRadiusCm + 2.f;
             if (bTouchline)
             {
-                PendingRestartType = LastTeam == INDEX_NONE
+                PendingRestartType = PendingRestartTeam == INDEX_NONE
                     ? ESportsArcadeRestartType::Undetermined : ESportsArcadeRestartType::ThrowIn;
                 const float CrossY = SideY * EdgeY;
                 const float Alpha = FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER
@@ -147,7 +147,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             else
             {
                 const int32 DefendingTeam = SideX > 0.f ? 1 : 0;
-                if (LastTeam == INDEX_NONE)
+                if (PendingRestartTeam == INDEX_NONE)
                 {
                     PendingRestartType = ESportsArcadeRestartType::Undetermined;
                     PendingRestartLocation = FVector(SideX * 4700.f, 0.f, RestZ);
