@@ -62,6 +62,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void StopMotion();
 
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
+    void PlaceAtRest(const FVector& WorldPosition);
+
     virtual void OnConstruction(const FTransform& Transform) override;
 
 private:
