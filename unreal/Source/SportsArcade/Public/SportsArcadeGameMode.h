@@ -31,6 +31,12 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bMatchFinished = false;
 
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    bool bHalfTime = false;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
+    void ResumeSecondHalf();
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
@@ -39,6 +45,7 @@ private:
     TObjectPtr<ASportsArcadeBall> MatchBall;
     FVector PreviousBallPosition = FVector::ZeroVector;
     bool bHasPreviousBallPosition = false;
+    bool bSecondHalfStarted = false;
 
     /** Use the placed TV camera in a visual review level when one exists. */
     virtual void BeginPlay() override;
