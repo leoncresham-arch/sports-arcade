@@ -15,6 +15,8 @@ class RosterOrderChecks(unittest.TestCase):
         self.assertIn('bool ASportsArcadeTeamRoster::HasCompleteLineup() const', src)
         self.assertIn('Players.Num() != 11', src)
         self.assertIn('Slots[Player->LineupSlot]', src)
+        game = (Path(__file__).resolve().parents[1] / 'Source/SportsArcade/Private/SportsArcadeGameMode.cpp').read_text()
+        self.assertIn('RosterIt->HasCompleteLineup()', game)
 
 if __name__ == '__main__':
     unittest.main()
