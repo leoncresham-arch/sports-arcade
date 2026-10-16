@@ -19,3 +19,7 @@ This test-map generator is **not** a playable or verified 11v11 release. It has 
 ## Preflight source tests
 - Mock editor checks enforce 22 players, unique per-team slot assignments 0-10, team indices, shirts 1-11, a non-overwriting map, and rejection when native class loading fails.
 - Native Unreal Python property reflection is not proven by mocks. The first authentic UE5.5 Editor run must inspect each `set_editor_property` and `get_formation_position` call.
+
+## Read-only level diagnostics
+- Run Tools/Editor/validate_offline_match.py inside the UE Editor after opening the test level. It inspects native actor counts (1 ball, 2 rosters, 22 footballers), team roster membership and distinct lineup slots 0-10, logging validation errors without modifying a level.
+- Python source checks do not establish that class names or reflected properties resolve correctly in UE 5.5; verify on a real editor host.
