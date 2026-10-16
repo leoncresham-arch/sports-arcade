@@ -38,6 +38,12 @@ public:
     void ResumeSecondHalf();
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
+    void ResetMatch();
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
+    float GetMatchProgress() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
 private:
