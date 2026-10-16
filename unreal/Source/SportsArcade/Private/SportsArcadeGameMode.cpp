@@ -123,3 +123,20 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
 }
+
+void ASportsArcadeGameMode::ResetMatch()
+{
+    ElapsedMatchSeconds = 0.f;
+    HomeGoals = 0;
+    AwayGoals = 0;
+    bHalfTime = false;
+    bSecondHalfStarted = false;
+    bMatchFinished = false;
+    bHasPreviousBallPosition = false;
+    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+}
+
+float ASportsArcadeGameMode::GetMatchProgress() const
+{
+    return FMath::Clamp(ElapsedMatchSeconds / FMath::Max(2.f * HalfDurationSeconds, 1.f), 0.f, 1.f);
+}
