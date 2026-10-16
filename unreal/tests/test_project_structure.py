@@ -102,6 +102,17 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("Super::Tick(DeltaSeconds)", source)
         self.assertIn("GetStaminaNormalized", source)
 
+    def test_match_clock_score_and_goal_line_contract(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        for field in ("HalfDurationSeconds", "ElapsedMatchSeconds", "HomeGoals", "AwayGoals", "bMatchFinished", "RecordGoal"):
+            self.assertIn(field, header)
+        self.assertIn("ASportsArcadeGameMode::Tick(float DeltaSeconds)", source)
+        self.assertIn("MatchBall->BallRadiusCm", source)
+        self.assertIn("RecordGoal(true)", source)
+        self.assertIn("RecordGoal(false)", source)
+        self.assertIn("MatchBall->ResetToCentre()", source)
+
     def test_native_review_mode_activates_broadcast_camera(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
