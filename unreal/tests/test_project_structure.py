@@ -103,6 +103,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("ESportsArcadePosition", character)
         self.assertIn("SwitchToNearestTeammate", mode)
         self.assertIn("Controller->Possess(BestPlayer)", mode)
+        self.assertIn('ActionName="SwitchPlayer",Key=Tab', read("Config/DefaultInput.ini"))
+        self.assertIn("BindAction(TEXT(\"SwitchPlayer\")", read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp"))
         self.assertIn("ESportsArcadeFormation", header)
         self.assertIn("GetFormationPosition", source)
         self.assertIn("Slots433[11]", source)
