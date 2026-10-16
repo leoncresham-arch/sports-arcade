@@ -167,9 +167,12 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
 
     if (IsValid(NearestBall))
     {
-        // Starter ground pass/shot: no aim assist, contact animation, or spin yet.
-        const FVector Direction = GetActorForwardVector().GetSafeNormal2D();
-        NearestBall->KickByPlayer(this, Direction, ImpulseStrength, BallControlReachCm);
+        const FVector ToBall = NearestBall->GetActorLocation() - PlayerLocation;
+        const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
+        if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(Forward, ToBall.GetSafeNormal2D()) > 0.15f)
+        {
+            NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm);
+        }
     }
 }
 
