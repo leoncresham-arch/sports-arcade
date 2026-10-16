@@ -2,6 +2,7 @@
 #include "SportsArcadeBall.h"
 #include "SportsArcadePlayerAttributes.h"
 #include "SportsArcadeGameMode.h"
+#include "SportsArcadeTeamAIController.h"
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
@@ -13,6 +14,8 @@
 ASportsArcadeCharacter::ASportsArcadeCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+    AIControllerClass = ASportsArcadeTeamAIController::StaticClass();
+    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
     PlayerAttributes = CreateDefaultSubobject<USportsArcadePlayerAttributes>(TEXT("PlayerAttributes"));
     bUseControllerRotationYaw = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
