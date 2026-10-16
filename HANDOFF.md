@@ -137,3 +137,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - New documentation: `unreal/docs/team-systems.md`. Source regression tests cover roster and formation contracts. Continue larger development batches without user approval after every small commit.
 
 - Native keyboard Tab now requests closest eligible teammate possession through GameMode; still requires authored roster/player actors and UE editor testing. It does not yet support cycling direction, animation handoff, or multiplayer authority.
+
+## New native off-ball AI source (October 15/16)
+- Added ASportsArcadeTeamAIController class, Unreal AI/navigation dependencies and default AI possession for unpossessed footballers. Periodically requests movement toward roster formation positions, shifted toward live ball locations. Tests cover source wiring; real navmesh/editor behavior remains unverified.
+- Requires correctly authored 11-player rosters and pitch navigation volume; no 11v11 simulation, goalkeeper intelligence or animations yet. Updated `unreal/docs/team-systems.md`.
