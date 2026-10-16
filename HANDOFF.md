@@ -165,3 +165,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 continuous-work correction
 - User explicitly reiterates: do not end a development turn after every small task while approved work remains. Progress narration is not a substitute for implementing the next item.
 - Implemented a native standing-tackle cooldown and an early teammate-last-touch exclusion, with source regression coverage. Note that `GetLastTouchPlayer` currently records controlled dribble touches only, not every ball kick; therefore teammate protection is incomplete. Full referee possession tracking, native UE compile, collision realism and playtesting remain outstanding.
+
+## October 16: persistent continuation and complete attributed ball touches
+- User authorized autonomous continuation of existing Sports Arcade work without repeated approvals; an hourly scheduled continuation task was configured in ChatGPT for substantive GitHub development batches. Continue reading this handoff before implementing.
+- Added native `KickByPlayer` API, attributing last player for pass, shot, tackles, goalkeeper clearances and AI kicks; controlled dribble touches were already attributed. Unattributed environmental bounces and base `Kick` do not identify a player. Adjusted tests and checked source CI (successful on implementation).
+- This improves possession attribution but does not implement a referee-verified possession system or native Unreal compile testing.
