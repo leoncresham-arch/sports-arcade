@@ -24,7 +24,7 @@ class RestartContracts(unittest.TestCase):
         pos = cpp.index("RecordGoal(false);")
         out = cpp.index("// Full-ball boundary crossing")
         self.assertLess(pos, out)
-        self.assertIn("bHasPreviousBallPosition = false;\\n                return;", cpp[pos:out])
+        self.assertIn("bHasPreviousBallPosition = false;\n                return;", cpp[pos:out])
         self.assertLess(cpp.index("// Full-ball boundary crossing"), cpp.index("ElapsedMatchSeconds = FMath::Min("))
 
     def test_boundary_and_ball_placement(self):
