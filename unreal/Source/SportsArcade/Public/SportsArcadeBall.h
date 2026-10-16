@@ -58,6 +58,10 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void ResetToCentre();
 
+    /** Zeroes ball motion without altering its position or touch history. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
+    void StopMotion();
+
     virtual void OnConstruction(const FTransform& Transform) override;
 
 private:
