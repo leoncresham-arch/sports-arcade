@@ -92,6 +92,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 RecordGoal(true);
                 MatchBall->ResetToCentre();
                 bHasPreviousBallPosition = false;
+                return;
             }
             else if (CrossesGoal(-Threshold) && PreviousBallPosition.X > -Threshold && Position.X <= -Threshold)
             {
@@ -102,14 +103,71 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 bHasPreviousBallPosition = false;
             }
         }
-        // Prototype touchline/endline detection; scoring has precedence above.
-        if (FMath::Abs(Position.Y) - MatchBall->BallRadiusCm > 3400.f ||
-            FMath::Abs(Position.X) - MatchBall->BallRadiusCm > 5250.f)
+        // Full-ball boundary crossing, classified by last attributed team.
+        // Compare segment crossing fractions so a corner exit is assigned to
+        // the first crossed boundary rather than the furthest endpoint.
+        const float EdgeX = 5250.f + MatchBall->BallRadiusCm;
+        const float EdgeY = 3400.f + MatchBall->BallRadiusCm;
+        if (FMath::Abs(Position.Y) > EdgeY || FMath::Abs(Position.X) > EdgeX)
         {
+            const FVector Travel = Position - PreviousBallPosition;
+            float Tx = 2.f;
+            float Ty = 2.f;
+            if (bHasPreviousBallPosition)
+            {
+                if (FMath::Abs(Travel.X) > KINDA_SMALL_NUMBER)
+                {
+                    const float Line = Position.X >= 0.f ? EdgeX : -EdgeX;
+                    Tx = (Line - PreviousBallPosition.X) / Travel.X;
+                    if (Tx < 0.f || Tx > 1.f) Tx = 2.f;
+                }
+                if (FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER)
+                {
+                    const float Line = Position.Y >= 0.f ? EdgeY : -EdgeY;
+                    Ty = (Line - PreviousBallPosition.Y) / Travel.Y;
+                    if (Ty < 0.f || Ty > 1.f) Ty = 2.f;
+                }
+            }
+            const bool bTouchline = Ty < Tx || (Tx >= 2.f && FMath::Abs(Position.Y) > EdgeY);
+            const int32 LastTeam = MatchBall->GetLastTouchTeamIndex();
+            PendingRestartTeam = LastTeam == INDEX_NONE ? INDEX_NONE : 1 - LastTeam;
+            const float SideX = Position.X >= 0.f ? 1.f : -1.f;
+            const float SideY = Position.Y >= 0.f ? 1.f : -1.f;
+            const float RestZ = MatchBall->BallRadiusCm + 2.f;
+            if (bTouchline)
+            {
+                PendingRestartType = ESportsArcadeRestartType::ThrowIn;
+                const float CrossY = SideY * EdgeY;
+                const float Alpha = FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER
+                    ? FMath::Clamp((CrossY - PreviousBallPosition.Y) / Travel.Y, 0.f, 1.f) : 1.f;
+                const float CrossX = FMath::Clamp(PreviousBallPosition.X + Travel.X * Alpha, -5150.f, 5150.f);
+                PendingRestartLocation = FVector(CrossX, SideY * 3360.f, RestZ);
+            }
+            else
+            {
+                const int32 DefendingTeam = SideX > 0.f ? 1 : 0;
+                if (LastTeam == INDEX_NONE)
+                {
+                    PendingRestartType = ESportsArcadeRestartType::Undetermined;
+                    PendingRestartLocation = FVector(SideX * 4700.f, 0.f, RestZ);
+                }
+                else if (LastTeam == DefendingTeam)
+                {
+                    PendingRestartType = ESportsArcadeRestartType::CornerKick;
+                    PendingRestartTeam = 1 - DefendingTeam;
+                    PendingRestartLocation = FVector(SideX * 5190.f, SideY * 3340.f, RestZ);
+                }
+                else
+                {
+                    PendingRestartType = ESportsArcadeRestartType::GoalKick;
+                    PendingRestartTeam = DefendingTeam;
+                    PendingRestartLocation = FVector(SideX * 4750.f, SideY * 500.f, RestZ);
+                }
+            }
             bBallOutOfPlay = true;
             MatchBall->StopMotion();
             bHasPreviousBallPosition = false;
-            OnBallOutOfPlay.Broadcast(Position, MatchBall->GetLastTouchTeamIndex());
+            OnBallOutOfPlay.Broadcast(Position, LastTeam);
             return;
         }
         PreviousBallPosition = MatchBall->GetActorLocation();
@@ -153,6 +211,7 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
     if (!bHalfTime || bMatchFinished) return;
     bHalfTime = false;
     bBallOutOfPlay = false;
+    ClearPendingRestart();
     bSecondHalfStarted = true;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
@@ -167,6 +226,7 @@ void ASportsArcadeGameMode::ResetMatch()
     bLastGoalWasOwnGoal = false;
     bHalfTime = false;
     bBallOutOfPlay = false;
+    ClearPendingRestart();
     bSecondHalfStarted = false;
     bMatchFinished = false;
     bHasPreviousBallPosition = false;
@@ -176,9 +236,19 @@ void ASportsArcadeGameMode::ResetMatch()
 void ASportsArcadeGameMode::ResumeAfterBallOut()
 {
     if (!bBallOutOfPlay || bHalfTime || bMatchFinished) return;
+    if (PendingRestartType == ESportsArcadeRestartType::Undetermined ||
+        PendingRestartType == ESportsArcadeRestartType::None || !IsValid(MatchBall)) return;
+    MatchBall->PlaceAtRest(PendingRestartLocation);
     bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
-    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+    ClearPendingRestart();
+}
+
+void ASportsArcadeGameMode::ClearPendingRestart()
+{
+    PendingRestartType = ESportsArcadeRestartType::None;
+    PendingRestartTeam = INDEX_NONE;
+    PendingRestartLocation = FVector::ZeroVector;
 }
 
 float ASportsArcadeGameMode::GetMatchProgress() const
