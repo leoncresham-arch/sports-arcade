@@ -11,3 +11,5 @@ Technical limitations:
 - Only authored level roster instances participate, and none are automatically generated. 22 actual player instances, goalkeeper behavior, substitutions, tactics, off-ball AI and player-selection polish remain pending.
 - Fixed field orientation and idealized normalized locations are temporary. Improve to formation data assets and team-relative pitch transforms.
 - Source structural tests are not a UE build, level playtest, gameplay AI test, or rendering verification.
+
+- Native keyboard Tab now requests closest eligible teammate possession through GameMode; still requires authored roster/player actors and UE editor testing. It does not yet support cycling direction, animation handoff, or multiplayer authority.
