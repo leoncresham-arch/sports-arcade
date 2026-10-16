@@ -161,3 +161,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## Native ball contact and defensive input continuation
 - Added physics-driven controlled ball touches, dribble touch cooldown/range and movement-facing checks; last-touch pointer records controlled touches. L triggers an early standing tackle impulse with distance/height/facing guards.
 - These are foundations, not possession arbitration, collision-based steals, animation-matched footwork or referee-reviewed tackles. Unreal compilation and in-game validation are outstanding; source regression checks added.
+
+## October 16 continuous-work correction
+- User explicitly reiterates: do not end a development turn after every small task while approved work remains. Progress narration is not a substitute for implementing the next item.
+- Implemented a native standing-tackle cooldown and an early teammate-last-touch exclusion, with source regression coverage. Note that `GetLastTouchPlayer` currently records controlled dribble touches only, not every ball kick; therefore teammate protection is incomplete. Full referee possession tracking, native UE compile, collision realism and playtesting remain outstanding.
