@@ -182,3 +182,8 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 ### Goalkeeper reaction foundation (October 16)
 - An AI goalkeeper near the ball now checks whether horizontal ball velocity is moving toward its defended goal. Incoming contacts use a stronger side-directed parry impulse; slower/routine contacts retain a forward clearance.
 - Still no simulated diving, handling/catches, save animations or gameplay balancing. Source checks are not Unreal validation.
+
+### October 16 — further controls and match data
+- Added U chip-shot input using reduced impulse and adjustable higher loft, LeftAlt defensive jockey movement at reduced speed (sprint disabled while held), and home/away shot-attempt counters.
+- Successful human shots increment team counters; AI direct attacking-third attempts count when a pass was not chosen. Regular AI passes and defensive clearances do not count. Resetting the exhibition resets these values.
+- Added Blueprint reset/play-resumed events to support eventual scoreboard and match UI wiring. Source CI is not UE compilation or on-device playtest.
