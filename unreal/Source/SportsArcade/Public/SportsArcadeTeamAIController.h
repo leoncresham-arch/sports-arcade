@@ -27,6 +27,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float GoalkeeperAdvanceCm = 350.f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI", meta=(ClampMin="0.0", ClampMax="1.0"))
+    float GoalkeeperAnticipationSeconds = 0.35f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float BallPredictionSeconds = 0.20f;
 
