@@ -109,3 +109,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## 2026-10-15 continuation: PC player endurance
 - GitHub push permissions verified and commits resumed.
 - Implemented native per-character sprint stamina drain/recovery in Tick, exhaustion cooldown, tunable rates and Blueprint-readable normalized stamina; added source tests. Source-only, not compiled in Unreal. Modern Windows gaming PC remains target; graphics preview is not a development gate.
+
+## Research expansion — complete football gameplay capabilities, 2026-10-15
+- User requested research into broad FIFA/EA Sports FC-like player skills and game systems, with original implementation rather than copying source/art/IP.
+- Added `unreal/docs/football-capabilities-blueprint.md`, a researched and prioritized catalogue of movement, first touch, dribbling, skill moves, attack, defending, goalkeeping, AI, player attributes, match rules, controls, modes and technical architecture, citing official FC 26/27 materials.
+- Blueprint is scope documentation, NOT completed mechanics. Continue implementation in substantial native PC batches without waiting for screenshots.
