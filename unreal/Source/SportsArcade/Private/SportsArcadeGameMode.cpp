@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ASportsArcadeGameMode::ASportsArcadeGameMode()
 {
@@ -294,6 +295,14 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     if (PendingRestartType == ESportsArcadeRestartType::Undetermined ||
         PendingRestartType == ESportsArcadeRestartType::None || !IsValid(MatchBall) ||
         !IsValid(PendingRestartTaker)) return;
+    // Provisional in-field set-piece setup; official throw mechanics remain TODO.
+    const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
+    const float InwardY = PendingRestartLocation.Y >= 0.f ? -1.f : 1.f;
+    const FVector TakerPosition(PendingRestartLocation.X + InwardX * 85.f,
+        PendingRestartLocation.Y + InwardY * 55.f,
+        PendingRestartTaker->GetActorLocation().Z);
+    PendingRestartTaker->SetActorLocation(TakerPosition, false, nullptr, ETeleportType::TeleportPhysics);
+    PendingRestartTaker->GetCharacterMovement()->StopMovementImmediately();
     MatchBall->PlaceAtRest(PendingRestartLocation);
     bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
