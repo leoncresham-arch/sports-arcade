@@ -150,4 +150,7 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Match")
     bool bAutoKickProvisionalRestart = true;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Match", meta=(ClampMin="100.0"))
+    float ProvisionalRestartImpulse = 1500.f;
 };
