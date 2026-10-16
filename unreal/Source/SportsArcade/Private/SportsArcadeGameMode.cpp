@@ -53,7 +53,7 @@ void ASportsArcadeGameMode::BeginPlay()
 void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if (bMatchFinished || DeltaSeconds <= 0.f) return;
+    if (bMatchFinished || bHalfTime || DeltaSeconds <= 0.f) return;
     ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
 
     if (!IsValid(MatchBall))
@@ -94,6 +94,11 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             bHasPreviousBallPosition = true;
         }
     }
+    if (!bSecondHalfStarted && ElapsedMatchSeconds >= HalfDurationSeconds)
+    {
+        ElapsedMatchSeconds = HalfDurationSeconds;
+        bHalfTime = true;
+    }
     if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds) bMatchFinished = true;
 }
 
@@ -102,4 +107,13 @@ void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
     if (bMatchFinished) return;
     if (bHomeTeamScored) ++HomeGoals;
     else ++AwayGoals;
+}
+
+void ASportsArcadeGameMode::ResumeSecondHalf()
+{
+    if (!bHalfTime || bMatchFinished) return;
+    bHalfTime = false;
+    bSecondHalfStarted = true;
+    bHasPreviousBallPosition = false;
+    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
 }
