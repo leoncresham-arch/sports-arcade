@@ -59,7 +59,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // Initial close-range keeper clearance; full diving/parry systems will replace this.
         if (ActionCooldownRemaining <= 0.f &&
             FVector::DistSquared2D(Footballer->GetActorLocation(), Ball->GetActorLocation()) < FMath::Square(ContactRangeCm + 75.f) &&
-            Ball->GetActorLocation().Z < 200.f)
+            Ball->GetActorLocation().Z < 200.f &&
+            FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 175.f)
         {
             const FVector Clearance = FVector(TowardsPlay, (Ball->GetActorLocation().Y >= 0.f ? 0.4f : -0.4f), 0.25f);
             Ball->Kick(Clearance, 2300.f);
@@ -92,7 +93,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Lead moving balls slightly for more credible interception movement.
             FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f);
             Target = FVector(Predicted.X, Predicted.Y, 0.f);
-            if (BestDistance <= FMath::Square(ContactRangeCm) && ActionCooldownRemaining <= 0.f)
+            if (BestDistance <= FMath::Square(ContactRangeCm) && ActionCooldownRemaining <= 0.f &&
+                FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 135.f)
             {
                 // Prefer a forward teammate with a clear passing lane; otherwise clear towards goal.
                 const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
