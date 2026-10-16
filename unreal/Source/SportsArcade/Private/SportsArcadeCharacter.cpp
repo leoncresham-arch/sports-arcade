@@ -57,12 +57,13 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
     PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
     PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
+    PlayerInputComponent->BindAction(TEXT("RestartBallOut"), IE_Pressed, this, &ASportsArcadeCharacter::RestartAfterBallOut);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
 {
     const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
-    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished)) return;
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay)) return;
     if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
         AddMovementInput(FVector::ForwardVector, Value);
@@ -72,7 +73,7 @@ void ASportsArcadeCharacter::MoveForward(float Value)
 void ASportsArcadeCharacter::MoveRight(float Value)
 {
     const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
-    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished)) return;
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay)) return;
     if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
         AddMovementInput(FVector::RightVector, Value);
@@ -162,7 +163,7 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
     UWorld* World = GetWorld();
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f ||
-        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished)))
+        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished || MatchMode->bBallOutOfPlay)))
     {
         return;
     }
@@ -223,11 +224,19 @@ void ASportsArcadeCharacter::RestartExhibitionMatch()
     }
 }
 
+void ASportsArcadeCharacter::RestartAfterBallOut()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->ResumeAfterBallOut();
+    }
+}
+
 void ASportsArcadeCharacter::TackleBall()
 {
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (!GetWorld() || TackleCooldownRemaining > 0.f ||
-        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished))) return;
+        (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished || MatchMode->bBallOutOfPlay))) return;
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
         const FVector Direction = It->GetActorLocation() - GetActorLocation();
