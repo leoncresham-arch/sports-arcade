@@ -31,3 +31,20 @@ Search results for specific realistic stadium kits on Fab include many **paid** 
 - Never commit marketplace assets publicly without checking the precise redistribution terms; a game license often does **not** permit distributing its editable source models publicly.
 - An asset's product image is not an in-game Sports Arcade screenshot.
 - First finished visual target: one footballer, original kit, properly lit pitch, and a genuine Unreal render.
+
+## Additional verified provider options (researched 2026-10-15)
+
+### Adobe Mixamo — first character/motion evaluation
+- Official FAQ: https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html
+- Cost: Adobe says Mixamo is free with an Adobe ID, without Creative Cloud subscription.
+- Permitted uses: Adobe says characters and animations may be incorporated royalty-free in commercial video games.
+- Integration caveat: stock biped locomotion is not football-specific, nor automatically photorealistic. Confirm selected character topology/rig, animation quality, import format and retargeting in an actual UE 5.5 session.
+- Redistribution: do not publish raw downloaded character/animation files as part of this public code repository. Keep third-party raw files in access-controlled asset storage subject to current provider terms.
+
+### Fab — individually licensed free 3D materials, turf and stadium components
+- License: https://www.fab.com/eula
+- Free-content acquisition: https://dev.epicgames.com/documentation/fab/purchasing-and-downloading-assets-in-fab
+- The Fab Standard License supports incorporation into commercial game projects, but **prohibits standalone asset redistribution**. Specific products can have different licenses (including Creative Commons or legacy Epic terms): inspect each listing and its license before acquiring.
+- A free-category search is not a verified footballer/stadium asset or proof of UE 5.5 compatibility. Select and document individual products before import.
+
+**Status:** official provider licensing researched; no files acquired, no assets imported, no footage captured, and no editor host verified. These are candidates, not delivered game art.
