@@ -75,6 +75,9 @@ private:
     void ShootBall();
     void TackleBall();
     float TackleCooldownRemaining = 0.f;
+    float StrikeCooldownRemaining = 0.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float StrikeCooldownSeconds = 0.28f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float TackleCooldownSeconds = 0.85f;
     float TouchCooldownRemaining = 0.f;
