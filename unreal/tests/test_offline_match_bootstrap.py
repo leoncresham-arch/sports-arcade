@@ -60,7 +60,7 @@ class MatchBootstrapTests(unittest.TestCase):
     def test_native_game_mode_player_handoff_contract(self):
         source = (SCRIPT.parents[2] / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
         self.assertIn("bAutoPossessHomeRosterStarter", source)
-        self.assertIn("It->Players.IsValidIndex(9)", source)
+        self.assertIn("Candidate->LineupSlot == 9", source)
         self.assertIn("PC->Possess(Starter);", source)
 
     def test_existing_level_not_overwritten(self):
