@@ -58,6 +58,14 @@ class CaptureRequestTests(unittest.TestCase):
             log = json.loads((Path(folder) / "sports-arcade-capture-request.json").read_text())
             self.assertEqual(log["camera_label"], "SA | Broadcast Camera")
 
+    def test_rejected_screenshot_request_does_not_write_success_log(self):
+        self.fake.AutomationLibrary.take_high_res_screenshot = lambda *a, **kw: False
+        mod = self.load()
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(RuntimeError, "rejected the screenshot request"):
+                mod.capture_review(folder, approved_assets=True)
+            self.assertEqual(list(Path(folder).iterdir()), [])
+
     def test_rejects_missing_broadcast_camera(self):
         self.fake.get_editor_subsystem = lambda _: types.SimpleNamespace(
             get_all_level_actors=lambda: [Actor("Unrelated")])
