@@ -108,6 +108,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("BallPredictionSeconds", source)
         self.assertIn("ActionCooldownRemaining", source)
         self.assertIn("Ball->Kick(Clearance, 2300.f)", source)
+        self.assertIn("MarkingSearchRadiusCm", source)
+        self.assertIn("MarkingInfluence", source)
         self.assertIn("Ball->Kick(Direction, 1700.f)", source)
         self.assertIn("Match->bHalfTime || Match->bMatchFinished", source)
         self.assertIn("AIControllerClass = ASportsArcadeTeamAIController::StaticClass()", footballer)
