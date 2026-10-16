@@ -116,6 +116,15 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 const float T = (PlaneX - PreviousBallPosition.X) / Travel.X;
                 if (T < 0.f || T > 1.f) return false;
                 const FVector Crossing = PreviousBallPosition + Travel * T;
+                // A touchline exit earlier in this frame invalidates a later goal-plane crossing.
+                const float TouchEdge = PitchHalfWidthCm + MatchBall->BallRadiusCm;
+                if (FMath::Abs(PreviousBallPosition.Y) > TouchEdge) return false;
+                if (FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER)
+                {
+                    const float TouchPlane = Travel.Y > 0.f ? TouchEdge : -TouchEdge;
+                    const float TouchT = (TouchPlane - PreviousBallPosition.Y) / Travel.Y;
+                    if (TouchT >= 0.f && TouchT < T) return false;
+                }
                 return FMath::Abs(Crossing.Y) + MatchBall->BallRadiusCm < GoalHalfWidthCm &&
                     Crossing.Z >= MatchBall->BallRadiusCm && Crossing.Z + MatchBall->BallRadiusCm < CrossbarHeightCm;
             };
