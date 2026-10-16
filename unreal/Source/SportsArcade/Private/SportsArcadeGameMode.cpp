@@ -328,6 +328,20 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, cons
             }
         }
     }
+    if (!IsValid(Best))
+    {
+        // Single-footballer prototype maps may have no authored team roster.
+        for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
+        {
+            if (It->TeamIndex != Team) continue;
+            const float Distance = FVector::DistSquared2D(It->GetActorLocation(), Location);
+            if (Distance < BestDistance)
+            {
+                BestDistance = Distance;
+                Best = *It;
+            }
+        }
+    }
     return Best;
 }
 
