@@ -161,3 +161,7 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 
 ## Native off-ball formation AI
 - New `SportsArcadeTeamAIController` requests navmesh movement for unpossessed footballers toward roster formation slots, with modest shifts toward ball location. Requires authored rosters/navmesh and native Unreal testing. See [team systems](docs/team-systems.md).
+
+## Native ball contact and defensive input continuation
+- Added physics-driven controlled ball touches, dribble touch cooldown/range and movement-facing checks; last-touch pointer records controlled touches. L triggers an early standing tackle impulse with distance/height/facing guards.
+- These are foundations, not possession arbitration, collision-based steals, animation-matched footwork or referee-reviewed tackles. Unreal compilation and in-game validation are outstanding; source regression checks added.
