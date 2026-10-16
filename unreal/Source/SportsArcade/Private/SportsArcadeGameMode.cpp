@@ -2,6 +2,7 @@
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeBroadcastCamera.h"
 #include "SportsArcadeBall.h"
+#include "SportsArcadeTeamRoster.h"
 
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -139,4 +140,33 @@ void ASportsArcadeGameMode::ResetMatch()
 float ASportsArcadeGameMode::GetMatchProgress() const
 {
     return FMath::Clamp(ElapsedMatchSeconds / FMath::Max(2.f * HalfDurationSeconds, 1.f), 0.f, 1.f);
+}
+
+bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
+{
+    if (!GetWorld() || TeamIndex < 0 || TeamIndex > 1 || bMatchFinished) return false;
+    APlayerController* Controller = GetWorld()->GetFirstPlayerController();
+    if (!IsValid(Controller)) return false;
+
+    const FVector Target = IsValid(MatchBall)
+        ? MatchBall->GetActorLocation()
+        : Controller->GetPawn() ? Controller->GetPawn()->GetActorLocation() : FVector::ZeroVector;
+
+    ASportsArcadeCharacter* BestPlayer = nullptr;
+    float BestDistance = TNumericLimits<float>::Max();
+    for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); It; ++It)
+    {
+        if (It->TeamIndex != TeamIndex) continue;
+        ASportsArcadeCharacter* Candidate = It->GetClosestPlayer(Target);
+        if (!IsValid(Candidate) || Candidate == Controller->GetPawn()) continue;
+        const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Target);
+        if (Distance < BestDistance)
+        {
+            BestPlayer = Candidate;
+            BestDistance = Distance;
+        }
+    }
+    if (!IsValid(BestPlayer)) return false;
+    Controller->Possess(BestPlayer);
+    return Controller->GetPawn() == BestPlayer;
 }
