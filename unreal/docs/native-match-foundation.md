@@ -36,3 +36,7 @@ Extract match clock and refereeing into testable game state for replication, add
 ## Typed boundary restarts (October 16)
 - Touchline crossings award provisional throw-ins; endline crossings classify corners and goal kicks by last attributed team and defending side. Unknown last-touch endline exits become Undetermined rather than fabricating possession.
 - B positions the ball at the recorded in-pitch restart point, clearing motion and contact history. It does not implement a lawful throw animation, assigned taker, defending distance or live set-piece procedure. Fixed world-axis geometry and frame sampling remain provisional.
+
+## October 16 match-stoppage refinements
+- Scored goals on both goal lines immediately exit the detector, preventing a second out-of-bounds event for a valid goal. Boundary/goal decisions now precede advancing the match clock for that frame.
+- Awarded restart team is restricted to known home/away attribution; otherwise restart stays Undetermined. A goalkeeper AI first-pass parry recognizes incoming ball velocity and redirects near-contact shots laterally. These require Unreal playtesting and remain far short of fully animated/refereed saves.
