@@ -152,3 +152,6 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 
 ## Footballer attributes (native source)
 The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. Sprint pace, stamina, passing and finishing currently alter player movement or ball impulse strength. Acceleration, ball control and tackling ratings are reserved for future systems. The default 65 rating has a neutral 1x multiplier. No engine compilation or gameplay balancing has yet been performed.
+
+## Native match foundation
+- [Offline match clock and score](docs/native-match-foundation.md): GameMode records a running match clock, home/away goals and early center-crossing detection for the existing construction pitch. Known limitations include no halftime state, fixed geometry assumptions, discrete ball sampling and no complete refereeing or team handling. This is uncompiled source, not a finished match.
