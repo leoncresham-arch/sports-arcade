@@ -130,3 +130,8 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 - Cinematic lighting, natural color grading, and convincing shadows.
 - Stable performance on a named minimum-spec PC, measured rather than assumed.
 - User approval of actual rendered footage or an interactive build before expanding gameplay scope.
+
+## Broadcast camera placement correction
+
+- At native BeginPlay, the review camera now uses the saved map placement to establish its tracking offset, rather than snapping back to a hard-coded position. A source regression test covers the intended contract.
+- This is uncompiled UE C++ pending validation in a real 5.5 editor.
