@@ -179,3 +179,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Fixed AI goalkeeper/outfield action cooldowns to start only after KickByPlayer succeeds, avoiding missed-ball action lockout.
 - Rejected scoring and local player switching during halftime, consistent with paused match phase. Regression source contract tests updated.
 - User requires continuous transition to next approved item, not repeated conversational summaries; preserve work in same repository. Source checks are not UE compilation.
+
+## October 16 pass/shot gameplay continuity
+- Added human strike cooldown shared by pass and shot, consumed only after a successful physics contact. A short dribble-touch lockout after striking avoids immediate extra acceleration of the same ball.
+- Extended Python source regression contract test. UE native compile and playtest remain outstanding.
+- User specifically did NOT ask for hourly automation; it has been disabled. Do not recreate a schedule without an explicit request. Within each active development turn, proceed through approved backlog items without soliciting approval.
