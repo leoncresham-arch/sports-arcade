@@ -10,6 +10,7 @@ class RestartTakerContracts(unittest.TestCase):
         self.assertIn('FindRestartTaker(PendingRestartTeam, PendingRestartLocation)', mode)
         self.assertIn('!IsValid(PendingRestartTaker)', mode)
         self.assertIn('PendingRestartTaker = nullptr;', mode)
+        self.assertIn('PendingRestartTaker->TeamIndex != PendingRestartTeam', mode)
         self.assertIn('PendingRestartTaker->SetActorLocation(TakerPosition', mode)
         self.assertIn('TActorIterator<ASportsArcadeCharacter> It(GetWorld())', mode)
 
