@@ -282,3 +282,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 — temporary executed restarts
 - Restart B now teleports the awarded taker close to the staged ball, stops their movement, checks the taker's team and optionally executes a KickByPlayer impulse with simple inward/forward direction. bAutoKickProvisionalRestart defaults true and can be disabled in editor. A failed kick leaves the stoppage active.
 - This is NOT an officially valid throw-in, corner, or goal kick: lacks animations, referee waiting position, legal set-piece enforcement and UE runtime validation. Source regression tests added.
+
+## October 16 — next restart refinements
+- Provisional restart impulse is now configurable in GameMode; valid goal kicks prefer the roster player assigned goalkeeper slot 0, falling back to closest eligible player. Source assertions updated and checked in GitHub Actions.
+- Still a temporary referee/restart approximation without legal throw animation or engine verification. Continue development in existing UE 5.5 C++ architecture and original repo.
