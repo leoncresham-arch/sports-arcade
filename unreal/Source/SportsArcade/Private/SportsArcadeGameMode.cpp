@@ -167,6 +167,13 @@ bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
         }
     }
     if (!IsValid(BestPlayer)) return false;
+    APawn* PreviouslyControlled = Controller->GetPawn();
     Controller->Possess(BestPlayer);
-    return Controller->GetPawn() == BestPlayer;
+    if (Controller->GetPawn() != BestPlayer) return false;
+    if (IsValid(PreviouslyControlled) && PreviouslyControlled != BestPlayer && !PreviouslyControlled->GetController())
+    {
+        // Return the former user-controlled footballer to formation AI.
+        PreviouslyControlled->SpawnDefaultController();
+    }
+    return true;
 }
