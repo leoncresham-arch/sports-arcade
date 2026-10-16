@@ -42,3 +42,6 @@ Technical limitations:
 ## October 16 roster discovery determinism
 - When a roster begins with an empty Players array, discovered matching footballers are ordered by shirt number then actor name to avoid actor-iterator-dependent formation indexing. Manually authored roster ordering is left unchanged. Duplicate shirt numbers still need squad-level validation; source checks are not UE runtime proof.
 - AI default formation targets now scale from the original 105x68 m pitch to GameMode's configurable match geometry; authored pitch/level and animations must still be updated consistently.
+
+## Native lineup validation
+- SportsArcadeTeamRoster now exposes HasCompleteLineup(). It requires exactly eleven valid players belonging to that roster's team, each assigned a unique LineupSlot from 0 through 10. The query does not automatically block or repair a match, and native Unreal compile/play remains pending.
