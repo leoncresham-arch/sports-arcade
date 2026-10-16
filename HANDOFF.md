@@ -125,3 +125,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added native GameMode match clock, score, goal line check and reset after goal, plus source regression test and `unreal/docs/native-match-foundation.md`.
 - This detector assumes fixed world-axis pitch positions and discrete ball sampling. It is NOT an official referee system, reliable swept goal collision, halftime implementation or multiplayer game state.
 - Continue Unreal PC development without waiting for screenshot. Unreal compilation/playtest remain outstanding.
+
+## October 15/16 continuation — match simulation batch
+- Added halftime pause, explicit second-half resume, match reset, normalized clock progress and per-character team index/shirt number.
+- Improved goal check with interpolated trajectory position at the goal line, instead of judging only the end-of-frame ball position. Assumes fixed pitch axes and does not replace engine collision verification.
+- Added source-level regression tests. Native C++ Unreal compile and gameplay remain unverified. User requests larger development batches without pausing after every minor change.
