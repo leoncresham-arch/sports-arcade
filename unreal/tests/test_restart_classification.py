@@ -28,6 +28,11 @@ class RestartContracts(unittest.TestCase):
         self.assertIn("const float EdgeX = PitchHalfLengthCm + MatchBall->BallRadiusCm;", cpp)
         self.assertIn("const float EdgeY = PitchHalfWidthCm + MatchBall->BallRadiusCm;", cpp)
 
+    def test_diagonal_goal_requires_in_bounds_trajectory(self):
+        cpp = read('Source/SportsArcade/Private/SportsArcadeGameMode.cpp')
+        self.assertIn('const float TouchEdge = PitchHalfWidthCm + MatchBall->BallRadiusCm;', cpp)
+        self.assertIn('if (TouchT >= 0.f && TouchT < T) return false;', cpp)
+
     def test_goal_exits_before_boundary_restart(self):
         cpp = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         pos = cpp.index("RecordGoal(false);")
