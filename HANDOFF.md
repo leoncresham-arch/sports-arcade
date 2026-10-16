@@ -228,3 +228,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 match presentation event hooks
 - Added BlueprintAssignable OnMatchReset and OnPlayResumed events from existing GameMode, broadcast on offline reset, second-half resume and completed provisional ball-out restart. Added source regression. These are UI integration signals only; no widget rendering or UE build verified.
+
+## October 16 goalkeeper anticipation batch
+- Goalkeeper now predicts short-term ball lateral movement using its Y velocity and configurable GoalkeeperAnticipationSeconds before clamping the target inside its post area. This complements provisional incoming-shot parry. Added source regression. Unreal C++/animation gameplay remains unverified.
