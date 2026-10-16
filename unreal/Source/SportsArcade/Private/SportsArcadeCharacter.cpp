@@ -105,7 +105,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         {
             const FVector ToBall = It->GetActorLocation() - GetActorLocation();
             if (FVector::DotProduct(GetActorForwardVector(), ToBall.GetSafeNormal2D()) > 0.35f &&
-                It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() * 240.f, DribbleTouchRangeCm))
+                It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
+                    (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
             {
                 TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
                 break;
@@ -207,7 +208,8 @@ void ASportsArcadeCharacter::TackleBall()
         {
             ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
             if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
-            if (It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(), 850.f, 175.f))
+            if (It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(),
+                850.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f), 175.f))
             {
                 TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
                 break;
