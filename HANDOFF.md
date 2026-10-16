@@ -141,3 +141,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## New native off-ball AI source (October 15/16)
 - Added ASportsArcadeTeamAIController class, Unreal AI/navigation dependencies and default AI possession for unpossessed footballers. Periodically requests movement toward roster formation positions, shifted toward live ball locations. Tests cover source wiring; real navmesh/editor behavior remains unverified.
 - Requires correctly authored 11-player rosters and pitch navigation volume; no 11v11 simulation, goalkeeper intelligence or animations yet. Updated `unreal/docs/team-systems.md`.
+
+## October 15/16 consecutive AI batch
+- Off-ball controller now limits nearest eligible team-player pressure, predicts ball position for short pursuit, applies timed low-level directional ball impulse on contact, keeps goalkeeper inside bounded lateral/advance positions and lets keeper clear close ground/low aerial balls. These are preliminary mechanics, not authentic tactical AI or licensed animations.
+- AI movement pauses at halftime/full-time; player switch returns former human pawn to default team AI when possible. CI structural checks only; no Unreal compile or runtime/navmesh validation.
