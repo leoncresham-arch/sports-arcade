@@ -114,3 +114,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - User requested research into broad FIFA/EA Sports FC-like player skills and game systems, with original implementation rather than copying source/art/IP.
 - Added `unreal/docs/football-capabilities-blueprint.md`, a researched and prioritized catalogue of movement, first touch, dribbling, skill moves, attack, defending, goalkeeping, AI, player attributes, match rules, controls, modes and technical architecture, citing official FC 26/27 materials.
 - Blueprint is scope documentation, NOT completed mechanics. Continue implementation in substantial native PC batches without waiting for screenshots.
+
+## Player rating implementation continuation (October 15, 2026)
+- Added native USportsArcadePlayerAttributes UActorComponent with 1-99 ratings for pace, stamina, passing, finishing, acceleration, ball control and tackling.
+- Integrated pace, stamina, pass and shot scaling in SportsArcadeCharacter, initialized full stamina in BeginPlay; neutral rating 65 is exactly 1x.
+- Other ratings are not active yet. Python source checks are not Unreal compilation or in-game simulation.
+- User wants substantial conventional high-end Windows PC game implementation without waiting for screenshot preview.
