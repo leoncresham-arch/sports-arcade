@@ -59,6 +59,7 @@ private:
 
     bool bSprintHeld = false;
     bool bSprintExhausted = false;
+    bool bJockeyHeld = false;
     UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Sports Arcade|Movement", meta=(AllowPrivateAccess="true"))
     float CurrentStamina = 100.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="1.0"))
@@ -78,6 +79,8 @@ private:
     void ShootBall();
     void ChipBall();
     void TackleBall();
+    void BeginJockey();
+    void EndJockey();
     float TackleCooldownRemaining = 0.f;
     float StrikeCooldownRemaining = 0.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
@@ -115,6 +118,9 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0"))
     float SprintSpeed = 650.f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
+    float JockeySpeed = 275.f;
 
     void MoveForward(float Value);
     void MoveRight(float Value);
