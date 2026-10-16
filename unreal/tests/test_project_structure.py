@@ -126,6 +126,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         footballer = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         mapping = read("Config/DefaultInput.ini")
         self.assertIn("ApplyControlledTouch", ball)
+        self.assertIn("Player->GetActorLocation().Z - GetActorLocation().Z", ball)
         self.assertIn("LastTouchPlayer = Player", ball)
         self.assertIn("TouchCooldownRemaining", footballer)
         self.assertIn("DribbleTouchRangeCm", footballer)
