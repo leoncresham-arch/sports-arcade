@@ -5,6 +5,7 @@
 #include "SportsArcadeGameMode.generated.h"
 
 class ASportsArcadeBall;
+class ASportsArcadeTeamRoster;
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
 UCLASS()
@@ -45,6 +46,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
+    bool SwitchToNearestTeammate(int32 TeamIndex);
 
 private:
     UPROPERTY(Transient)
