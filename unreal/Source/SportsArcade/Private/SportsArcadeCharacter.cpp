@@ -80,7 +80,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (DeltaSeconds <= 0.f) return;
 
-    const float Capacity = FMath::Max(MaxStamina, 1.f);
+    const float StaminaFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
+    const float Capacity = FMath::Max(MaxStamina * StaminaFactor, 1.f);
     CurrentStamina = FMath::Clamp(CurrentStamina, 0.f, Capacity);
     if (bSprintExhausted && CurrentStamina >= FMath::Min(StaminaToResumeSprint, Capacity))
     {
@@ -97,7 +98,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     {
         CurrentStamina = FMath::Min(Capacity, CurrentStamina + StaminaRecoveryPerSecond * DeltaSeconds);
     }
-    GetCharacterMovement()->MaxWalkSpeed = bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed;
+    const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
+    GetCharacterMovement()->MaxWalkSpeed = (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed) * PaceFactor;
 }
 
 void ASportsArcadeCharacter::PassBall()
