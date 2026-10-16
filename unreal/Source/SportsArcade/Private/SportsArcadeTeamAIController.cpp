@@ -21,7 +21,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
     const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
-    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished))
+    if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay))
     {
         StopMovement();
         return;
