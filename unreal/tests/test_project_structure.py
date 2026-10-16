@@ -91,6 +91,10 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("PlayerAttributes->Stamina", cpp)
         self.assertIn("PlayerAttributes->ShortPassing", cpp)
         self.assertIn("PlayerAttributes->Finishing", cpp)
+        self.assertIn("PlayerAttributes->BallControl", cpp)
+        self.assertIn("PlayerAttributes->Tackling", cpp)
+        self.assertIn("PlayerAttributes->Acceleration", cpp)
+        self.assertIn("GetCharacterMovement()->MaxAcceleration", cpp)
 
     def test_formation_ai_is_connected(self):
         header = read("Source/SportsArcade/Public/SportsArcadeTeamAIController.h")
