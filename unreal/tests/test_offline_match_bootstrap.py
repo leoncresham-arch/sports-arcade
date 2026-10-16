@@ -57,6 +57,12 @@ class MatchBootstrapTests(unittest.TestCase):
         rosters = [a for a in self.editor.actors if "TeamRoster" in a.name]
         self.assertEqual(len(rosters), 2)
         self.assertEqual([len(a.props["players"]) for a in rosters], [11,11])
+    def test_native_game_mode_player_handoff_contract(self):
+        source = (SCRIPT.parents[2] / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
+        self.assertIn("bAutoPossessHomeRosterStarter", source)
+        self.assertIn("It->Players.IsValidIndex(9)", source)
+        self.assertIn("PC->Possess(Starter);", source)
+
     def test_existing_level_not_overwritten(self):
         self.assets.does_asset_exist = lambda path: True
         with self.assertRaisesRegex(RuntimeError, "Refusing to overwrite"):
