@@ -53,6 +53,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASportsArcadeCharacter::EndSprint);
     PlayerInputComponent->BindAction(TEXT("Pass"), IE_Pressed, this, &ASportsArcadeCharacter::PassBall);
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
+    PlayerInputComponent->BindAction(TEXT("Chip"), IE_Pressed, this, &ASportsArcadeCharacter::ChipBall);
     PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
     PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
@@ -158,7 +159,13 @@ void ASportsArcadeCharacter::ShootBall()
     StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor, true);
 }
 
-void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsShot)
+void ASportsArcadeCharacter::ChipBall()
+{
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Finishing) : 1.f;
+    StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor * ChipPowerFactor, true, ChipLiftRatio);
+}
+
+void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsShot, float LiftRatio)
 {
     UWorld* World = GetWorld();
     ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
@@ -190,7 +197,8 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
         if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(GetActorForwardVector().GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.15f)
         {
             // A shot gains moderate lift; a ground pass stays flat.
-            const FVector StrikeDirection = bIsShot ? (Forward + FVector(0.f, 0.f, ShotLiftRatio)).GetSafeNormal() : Forward;
+            const float AppliedLift = LiftRatio > 0.f ? LiftRatio : ShotLiftRatio;
+            const FVector StrikeDirection = bIsShot ? (Forward + FVector(0.f, 0.f, AppliedLift)).GetSafeNormal() : Forward;
             if (NearestBall->KickByPlayer(this, StrikeDirection, ImpulseStrength, BallControlReachCm))
             {
                 if (bIsShot && IsValid(MatchMode)) MatchMode->RecordShotAttempt(TeamIndex);
