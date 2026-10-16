@@ -130,6 +130,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("TouchCooldownRemaining", footballer)
         self.assertIn("DribbleTouchRangeCm", footballer)
         self.assertIn("TackleBall", footballer)
+        self.assertIn("TackleCooldownRemaining", footballer)
+        self.assertIn("LastTouch->TeamIndex == TeamIndex", footballer)
         self.assertIn('ActionName="Tackle",Key=L', mapping)
 
     def test_team_roster_and_player_switching_contract(self):
