@@ -135,6 +135,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("TouchCooldownRemaining", footballer)
         self.assertIn("DribbleTouchRangeCm", footballer)
         self.assertIn("TackleBall", footballer)
+        self.assertIn("bPlayActive && TouchCooldownRemaining", footballer)
+        self.assertIn("MatchMode->bHalfTime || MatchMode->bMatchFinished", footballer)
         self.assertIn("TackleCooldownRemaining", footballer)
         self.assertIn("StrikeCooldownRemaining", footballer)
         self.assertIn("if (NearestBall->KickByPlayer(this", footballer)
