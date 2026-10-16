@@ -11,10 +11,20 @@ class ShootingAndStoppageTests(unittest.TestCase):
         cpp = source("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         header = source("Source/SportsArcade/Public/SportsArcadeCharacter.h")
         self.assertIn("GetLastMovementInputVector().GetSafeNormal2D()", cpp)
-        self.assertIn("bIsShot ? (Forward + FVector(0.f, 0.f, ShotLiftRatio))", cpp)
+        self.assertIn("bIsShot ? (Forward + FVector(0.f, 0.f, AppliedLift))", cpp)
         self.assertIn("float ShotLiftRatio = 0.16f;", header)
         self.assertIn("StrikeNearbyBall(PassImpulseKgCmPerSec * Factor, false)", cpp)
         self.assertIn("StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor, true)", cpp)
+
+    def test_chip_control(self):
+        cpp = source("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        header = source("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        ini = source("Config/DefaultInput.ini")
+        self.assertIn('ActionName="Chip",Key=U', ini)
+        self.assertIn('void ASportsArcadeCharacter::ChipBall()', cpp)
+        self.assertIn('ChipPowerFactor', cpp)
+        self.assertIn('ChipLiftRatio', cpp)
+        self.assertIn('float ChipLiftRatio = 0.85f', header)
 
     def test_out_of_play(self):
         game = source("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
