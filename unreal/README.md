@@ -165,3 +165,8 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 ## Native ball contact and defensive input continuation
 - Added physics-driven controlled ball touches, dribble touch cooldown/range and movement-facing checks; last-touch pointer records controlled touches. L triggers an early standing tackle impulse with distance/height/facing guards.
 - These are foundations, not possession arbitration, collision-based steals, animation-matched footwork or referee-reviewed tackles. Unreal compilation and in-game validation are outstanding; source regression checks added.
+
+### October 15 match interaction continuation
+- Added native H (resume second half) and R (reset exhibition match) keyboard controls through the existing player-character/GameMode pathway.
+- At halftime the ball resets to the centre; at full-time physics motion stops without moving the ball. Added source integration regression tests in `unreal/tests/test_match_controls_and_phases.py`.
+- These checks do not compile Unreal 5.5 or establish that play/controls work in the editor. Real build and playtest are still required.
