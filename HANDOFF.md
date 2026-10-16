@@ -225,3 +225,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 goalkeeper progression
 - Existing AI goalkeeper now distinguishes an incoming ball travelling toward its own goal from routine close possession, applying a lateral parry impulse for incoming attempts and retaining a forward clearance for other contacts. Added structural regression test. This is still contact-range source code, not reliable diving/saves, interception prediction, animation or Unreal playtest.
+
+## October 16 match presentation event hooks
+- Added BlueprintAssignable OnMatchReset and OnPlayResumed events from existing GameMode, broadcast on offline reset, second-half resume and completed provisional ball-out restart. Added source regression. These are UI integration signals only; no widget rendering or UE build verified.
