@@ -51,6 +51,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
     if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10) return;
     FVector Target = Roster->GetFormationPosition(Slot);
+    bool bIsPrimaryPresser = false;
     if (IsValid(Ball) && Slot == 0)
     {
         // Sweeper-keeper starter positioning: lateral tracking and bounded advance.
@@ -93,6 +94,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         if (Nearest == Footballer && BestDistance <= FMath::Square(PressureRadiusCm))
         {
+            bIsPrimaryPresser = true;
             // Lead moving balls slightly for more credible interception movement.
             FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f);
             Target = FVector(Predicted.X, Predicted.Y, 0.f);
@@ -142,7 +144,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     }
     // A conservative defensive shadow towards the closest nearby opponent.
     // Pressing footballer already has the ball as target and must not be pulled away.
-    if (Slot != 0 && IsValid(Ball) && FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
+    if (Slot != 0 && !bIsPrimaryPresser && IsValid(Ball) && FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
     {
         ASportsArcadeCharacter* Opponent = nullptr;
         float NearestOpponentDistance = FMath::Square(FMath::Max(0.f, MarkingSearchRadiusCm));
