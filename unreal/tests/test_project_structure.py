@@ -108,6 +108,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("BallPredictionSeconds", source)
         self.assertIn("ActionCooldownRemaining", source)
         self.assertIn("Ball->Kick(Clearance, 2300.f)", source)
+        self.assertIn("Ball->GetActorLocation().Z) < 135.f", source)
+        self.assertIn("Ball->GetActorLocation().Z) < 175.f", source)
         self.assertIn("MarkingSearchRadiusCm", source)
         self.assertIn("MarkingInfluence", source)
         self.assertIn("BestPassScore", source)
