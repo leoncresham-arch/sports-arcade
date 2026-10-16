@@ -217,6 +217,7 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
     bSecondHalfStarted = true;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+    OnPlayResumed.Broadcast();
 }
 
 void ASportsArcadeGameMode::ResetMatch()
@@ -233,6 +234,7 @@ void ASportsArcadeGameMode::ResetMatch()
     bMatchFinished = false;
     bHasPreviousBallPosition = false;
     if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+    OnMatchReset.Broadcast();
 }
 
 void ASportsArcadeGameMode::ResumeAfterBallOut()
@@ -244,6 +246,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
     ClearPendingRestart();
+    OnPlayResumed.Broadcast();
 }
 
 void ASportsArcadeGameMode::ClearPendingRestart()
