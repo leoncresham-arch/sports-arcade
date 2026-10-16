@@ -100,3 +100,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Follow-up fix: broadcast camera now derives its tracking offset from the level-authored world position in BeginPlay, preventing a fixed-offset jump on first tick; added CI source regression. Native Unreal behavior remains uncompiled/unverified.
 
 - Hardware investigation (same continuation): documented official Unreal host specifications and inability to verify genuinely free UE GPU hosting in `unreal/docs/pc-renderer-baseline.md`. Source CI passed for camera placement correction, but no native compile or renderer verification has occurred.
+
+## Development continuation
+- User explicitly requested conventional native PC development to continue without treating missing screenshots as a blocker. Native Unreal engine validation remains deferred, not development.
+- Repaired input configuration newline formatting and added J pass/K shoot bindings with range-limited ball impulses.
+- Added source regression test. Full UE compilation and realistic football animation remain outstanding.
