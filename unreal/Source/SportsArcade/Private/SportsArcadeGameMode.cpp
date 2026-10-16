@@ -55,7 +55,6 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (bMatchFinished || bHalfTime || bBallOutOfPlay || DeltaSeconds <= 0.f || !GetWorld()) return;
-    ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
 
     if (!IsValid(MatchBall))
     {
@@ -174,6 +173,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
         PreviousBallPosition = MatchBall->GetActorLocation();
         bHasPreviousBallPosition = true;
     }
+    ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
     if (!bSecondHalfStarted && ElapsedMatchSeconds >= HalfDurationSeconds)
     {
         ElapsedMatchSeconds = HalfDurationSeconds;
