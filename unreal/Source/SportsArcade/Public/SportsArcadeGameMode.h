@@ -77,6 +77,9 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     FVector PendingRestartLocation = FVector::ZeroVector;
 
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    TObjectPtr<ASportsArcadeCharacter> PendingRestartTaker;
+
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeMatchPhaseEvent OnHalfTime;
 
@@ -131,6 +134,7 @@ private:
     bool bHasPreviousBallPosition = false;
     bool bSecondHalfStarted = false;
     void ClearPendingRestart();
+    ASportsArcadeCharacter* FindRestartTaker(int32 Team, const FVector& Location) const;
 
     /** Use the placed TV camera in a visual review level when one exists. */
     virtual void BeginPlay() override;
