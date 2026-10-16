@@ -6,7 +6,7 @@
 - Script: [`capture_visual_review.py`](../Tools/Editor/capture_visual_review.py)
 - It looks for the broadcast camera in the live Unreal Editor scene and requests a high-resolution screenshot using Unreal's `AutomationLibrary.take_high_res_screenshot` API.
 - The operator must explicitly set `approved_assets=True`; this is an acknowledgment, **not automated license proof**.
-- It saves a **capture request record** locally. A request log is **not** evidence that a screenshot was produced.
+- If Unreal explicitly rejects the screenshot request, the helper now raises an error and does not write a misleading request record. If accepted, it saves a **capture request record** locally. A request log is **not** evidence that a screenshot was produced.
 - The screenshot itself is managed by Unreal's screenshot system. Its actual output path, camera framing, resolution and completeness must be checked on the PC.
 - The screenshot helper is deliberately not wired into ordinary GitHub Actions, which have no Unreal Editor or GPU.
 
