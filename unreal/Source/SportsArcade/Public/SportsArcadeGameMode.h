@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+class ASportsArcadeBall;
 #include "SportsArcadeGameMode.generated.h"
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
@@ -31,6 +32,12 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
+
+private:
+    UPROPERTY(Transient)
+    TObjectPtr<ASportsArcadeBall> MatchBall;
+    FVector PreviousBallPosition = FVector::ZeroVector;
+    bool bHasPreviousBallPosition = false;
 
     /** Use the placed TV camera in a visual review level when one exists. */
     virtual void BeginPlay() override;
