@@ -113,7 +113,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("ActionCooldownRemaining", source)
         self.assertIn("if (Ball->KickByPlayer(Footballer, Direction", source)
         self.assertIn("if (Ball->KickByPlayer(Footballer, Clearance", source)
-        self.assertIn("Ball->KickByPlayer(Footballer, Clearance, 2300.f", source)
+        self.assertIn("Ball->KickByPlayer(Footballer, Clearance, Impulse", source)
         self.assertIn("Ball->GetActorLocation().Z) < 135.f", source)
         self.assertIn("Ball->GetActorLocation().Z) < 175.f", source)
         self.assertIn("MarkingSearchRadiusCm", source)
