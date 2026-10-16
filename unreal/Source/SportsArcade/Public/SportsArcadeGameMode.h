@@ -8,6 +8,8 @@ class ASportsArcadeBall;
 class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
+
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
 UCLASS()
 class SPORTSARCADE_API ASportsArcadeGameMode : public AGameModeBase
@@ -29,6 +31,9 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     int32 AwayGoals = 0;
+
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
+    FSportsArcadeGoalScoredEvent OnGoalScored;
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     TObjectPtr<ASportsArcadeCharacter> LastGoalTouchPlayer;
