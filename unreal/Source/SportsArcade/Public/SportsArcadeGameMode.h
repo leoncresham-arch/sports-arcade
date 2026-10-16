@@ -33,6 +33,10 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     TObjectPtr<ASportsArcadeCharacter> LastGoalTouchPlayer;
 
+    /** Simplified attribution: a known player last touched the ball for the opposing scoring side. */
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    bool bLastGoalWasOwnGoal = false;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bMatchFinished = false;
 
