@@ -22,3 +22,9 @@ These may increase load and shader compilation on PC hardware. Do **not** treat 
 
 ## Source
 Epic's Unreal Engine console-variable documentation describes the Lumen global-illumination setting and other rendering controls. Verify the active values in Unreal 5.5 before finalizing.
+
+## Verified engine-host requirements (research update 2026-10-15)
+
+Epic's published Unreal Engine hardware guidance recommends 32 GB system RAM, 8 GB graphics memory and a DX12-compatible GPU for Windows development: https://dev.epicgames.com/documentation/en-us/unreal-engine/hardware-and-software-specifications-for-unreal-engine . The documentation is updated for newer UE versions; confirm the pinned 5.5 release's particular compiler/GPU compatibility on the actual host. Software Lumen and virtual shadow maps still require appropriate hardware, drivers and shader feature support.
+
+**Free host investigation:** An ordinary GitHub Actions Ubuntu runner cannot be treated as an accessible Windows Unreal Editor GPU workstation. No working, unrestricted, genuinely free hosted UE 5.5 GPU environment was verified in this investigation. Do not describe one as available or upload proprietary assets to an unreviewed third-party host. A real GPU/editor host remains required for the first authentic screenshot.
