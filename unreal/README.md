@@ -191,3 +191,6 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 ### Configurable match field geometry
 - GameMode now exposes pitch half-length/half-width, goal half-width and crossbar height as native Unreal editor settings. Goal-line evaluation, out-of-play classification and provisional restart coordinates use those values, preserving the previous 105 x 68 m default pitch.
 - Team tactical formation and AI boundary tuning are still authored against the default pitch and will require a shared pitch transform/schema. Source CI does not verify resized-field play in Unreal.
+
+### Offline 11v11 scene bootstrap
+- An Unreal Editor-only script at Tools/Editor/setup_offline_match.py generates a new level with two team rosters and 22 placed native footballers, plus field, goal and ball actors. The GameMode attempts home roster player possession. Editor API, native C++ compile and gameplay are not verified. See docs/offline-11v11-bootstrap.md.
