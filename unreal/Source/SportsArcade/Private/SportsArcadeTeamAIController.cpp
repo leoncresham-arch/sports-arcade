@@ -47,8 +47,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     }
     if (!IsValid(Roster)) return;
 
-    const int32 Slot = Roster->Players.IndexOfByKey(Footballer);
-    if (Slot == INDEX_NONE) return;
+    const int32 MembershipIndex = Roster->Players.IndexOfByKey(Footballer);
+    const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
+    if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10) return;
     FVector Target = Roster->GetFormationPosition(Slot);
     if (IsValid(Ball) && Slot == 0)
     {
