@@ -45,6 +45,9 @@ public:
     int32 GetPlayerCount() const;
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
+    bool HasCompleteLineup() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     FVector GetFormationPosition(int32 PlayerSlot) const;
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
