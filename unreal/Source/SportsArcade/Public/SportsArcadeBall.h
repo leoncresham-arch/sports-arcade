@@ -52,6 +52,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Ball")
     ASportsArcadeCharacter* GetLastTouchPlayer() const { return LastTouchPlayer.Get(); }
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Ball")
+    int32 GetLastTouchTeamIndex() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void ResetToCentre();
 
