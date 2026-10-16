@@ -10,6 +10,7 @@ class ASportsArcadeTeamRoster;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSportsArcadeMatchPhaseEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSportsArcadeBallOutEvent, FVector, ExitLocation, int32, LastTouchTeam);
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
 UCLASS()
@@ -37,6 +38,13 @@ public:
     FSportsArcadeGoalScoredEvent OnGoalScored;
 
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
+    FSportsArcadeBallOutEvent OnBallOutOfPlay;
+
+    /** Prototype stoppage: requires a referee restart implementation. */
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
+    bool bBallOutOfPlay = false;
+
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeMatchPhaseEvent OnHalfTime;
 
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
@@ -60,6 +68,10 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void ResetMatch();
+
+    /** Temporary offline restart from centre; not a throw-in/corner/goal-kick. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
+    void ResumeAfterBallOut();
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     float GetMatchProgress() const;
