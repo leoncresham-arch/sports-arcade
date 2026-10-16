@@ -110,3 +110,10 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     LastTouchPlayer = Player;
     return true;
 }
+
+int32 ASportsArcadeBall::GetLastTouchTeamIndex() const
+{
+    const ASportsArcadeCharacter* Player = LastTouchPlayer.Get();
+    return IsValid(Player) && (Player->TeamIndex == 0 || Player->TeamIndex == 1)
+        ? Player->TeamIndex : INDEX_NONE;
+}
