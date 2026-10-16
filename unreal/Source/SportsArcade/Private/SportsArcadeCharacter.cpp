@@ -134,6 +134,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     }
     const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
     GetCharacterMovement()->MaxWalkSpeed = (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed) * PaceFactor;
+    const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
+    GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor;
 }
 
 void ASportsArcadeCharacter::PassBall()
