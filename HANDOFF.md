@@ -130,3 +130,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added halftime pause, explicit second-half resume, match reset, normalized clock progress and per-character team index/shirt number.
 - Improved goal check with interpolated trajectory position at the goal line, instead of judging only the end-of-frame ball position. Assumes fixed pitch axes and does not replace engine collision verification.
 - Added source-level regression tests. Native C++ Unreal compile and gameplay remain unverified. User requests larger development batches without pausing after every minor change.
+
+## Team systems implementation — 2026-10-15/16
+- Implemented `SportsArcadeTeamRoster` C++ actor with 11-player capacity, team validation, nearest candidate lookup and 4-3-3/4-4-2 starting location slots.
+- Added original field-position enum to footballers and Blueprint-callable local team-member possession switching from GameMode. This is an initial, uncompiled foundation, not automated player input, complete AI, player spawning or online game state.
+- New documentation: `unreal/docs/team-systems.md`. Source regression tests cover roster and formation contracts. Continue larger development batches without user approval after every small commit.
