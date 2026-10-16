@@ -257,3 +257,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 — 11v11 map handoff reliability
 - GameMode now searches the authored home roster for LineupSlot 9 rather than assuming roster array index 9. Keeps all existing pawns intact on possession switch; avoids deleting potentially authored actors. Additional mock regression tests check 22 placed players, their lineup slots, shirt numbers, team metadata, missing-class preflight and existing-map preservation.
 - Unreal API reflection, native compile, map loading and gameplay still unverified; avoid claims of genuine playable 11v11.
+
+## October 16 — read-only 11v11 diagnostics
+- Added Unreal Editor-only Tools/Editor/validate_offline_match.py to report missing/duplicate ball, rosters, players, wrong-team members and repeated/missing lineup slots without changing level data. Added CI structural test. Actual Unreal execution remains pending.
