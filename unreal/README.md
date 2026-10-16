@@ -135,3 +135,7 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 
 - At native BeginPlay, the review camera now uses the saved map placement to establish its tracking offset, rather than snapping back to a hard-coded position. A source regression test covers the intended contract.
 - This is uncompiled UE C++ pending validation in a real 5.5 editor.
+
+## Native football controls
+- J: pass; K: shoot. The character finds a nearby football and applies an impulse in its facing direction using the existing C++ ball actor. Tuning, foot-contact animations, targeting, match rules and native UE compilation remain outstanding.
+- Corrected input configuration newline formatting.
