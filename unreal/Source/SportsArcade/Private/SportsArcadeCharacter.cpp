@@ -1,5 +1,6 @@
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeBall.h"
+#include "SportsArcadePlayerAttributes.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
@@ -10,6 +11,7 @@
 ASportsArcadeCharacter::ASportsArcadeCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+    PlayerAttributes = CreateDefaultSubobject<USportsArcadePlayerAttributes>(TEXT("PlayerAttributes"));
     bUseControllerRotationYaw = false;
     GetCharacterMovement()->bOrientRotationToMovement = true;
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
