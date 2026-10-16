@@ -73,6 +73,12 @@ private:
     void SwitchPlayer();
     void PassBall();
     void ShootBall();
+    void TackleBall();
+    float TouchCooldownRemaining = 0.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float DribbleTouchInterval = 0.18f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float DribbleTouchRangeCm = 135.f;
     void StrikeNearbyBall(float ImpulseStrength);
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
