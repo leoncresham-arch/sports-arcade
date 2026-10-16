@@ -71,6 +71,8 @@ private:
     float StaminaToResumeSprint = 15.f;
     void BeginSprint();
     void SwitchPlayer();
+    void ResumeMatchAfterHalfTime();
+    void RestartExhibitionMatch();
     void PassBall();
     void ShootBall();
     void TackleBall();
