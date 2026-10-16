@@ -148,16 +148,16 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
 void ASportsArcadeCharacter::PassBall()
 {
     const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->ShortPassing) : 1.f;
-    StrikeNearbyBall(PassImpulseKgCmPerSec * Factor);
+    StrikeNearbyBall(PassImpulseKgCmPerSec * Factor, false);
 }
 
 void ASportsArcadeCharacter::ShootBall()
 {
     const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Finishing) : 1.f;
-    StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor);
+    StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor, true);
 }
 
-void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
+void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsShot)
 {
     UWorld* World = GetWorld();
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
@@ -183,10 +183,14 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength)
     if (IsValid(NearestBall))
     {
         const FVector ToBall = NearestBall->GetActorLocation() - PlayerLocation;
-        const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
+        // Aim with the current movement input when available; standing players use facing.
+        const FVector InputAim = GetLastMovementInputVector().GetSafeNormal2D();
+        const FVector Forward = InputAim.IsNearlyZero() ? GetActorForwardVector().GetSafeNormal2D() : InputAim;
         if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(Forward, ToBall.GetSafeNormal2D()) > 0.15f)
         {
-            if (NearestBall->KickByPlayer(this, Forward, ImpulseStrength, BallControlReachCm))
+            // A shot gains moderate lift; a ground pass stays flat.
+            const FVector StrikeDirection = bIsShot ? (Forward + FVector(0.f, 0.f, ShotLiftRatio)).GetSafeNormal() : Forward;
+            if (NearestBall->KickByPlayer(this, StrikeDirection, ImpulseStrength, BallControlReachCm))
             {
                 StrikeCooldownRemaining = FMath::Max(StrikeCooldownSeconds, 0.08f);
                 TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.2f);
