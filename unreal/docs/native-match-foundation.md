@@ -17,3 +17,8 @@ Extract match clock and refereeing into testable game state for replication, add
 - Added halftime pause and explicit ResumeSecondHalf, match reset and normalized HUD progress. These are game-mode methods, not yet a full referee-controlled kickoff or halftime UI.
 - Goal detection now interpolates the ball trajectory at the goal plane so diagonal shots are assessed at the crossing rather than at the last sampled endpoint. This is still sampled per frame (no Chaos continuous collision proof or ball-out event), assumes global-axis field orientation and fixed goal dimensions.
 - Footballers carry TeamIndex and ShirtNumber data, but team roster assignment, control switching and own-goal attribution are still pending.
+
+## October 16 source integration
+- Match emits OnGoalScored (home score, away score, simple own-goal flag) for future Blueprint scoreboards and presentation. LastGoalTouchPlayer records the last attributed player contact; bLastGoalWasOwnGoal assumes home scores on positive X and away on negative X, with last-touch team 0/1.
+- Ball exposes GetLastTouchTeamIndex (INDEX_NONE when unknown). Last touch means most recent **attributed** kick or controlled touch, not proof of possession, assist, scorer or foul attribution. The goal event is source-tested but no Blueprint widget/UE runtime event test exists.
+- Controlled human input, dribble and ball striking are blocked at halftime and full time; seven player ratings now modulate acceleration, pace, stamina, pass/shot power, dribble target speed and standing tackle impulse. All balance remains provisional.
