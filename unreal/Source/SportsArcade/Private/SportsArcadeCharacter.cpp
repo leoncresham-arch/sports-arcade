@@ -187,7 +187,7 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
         // Aim with the current movement input when available; standing players use facing.
         const FVector InputAim = GetLastMovementInputVector().GetSafeNormal2D();
         const FVector Forward = InputAim.IsNearlyZero() ? GetActorForwardVector().GetSafeNormal2D() : InputAim;
-        if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(Forward, ToBall.GetSafeNormal2D()) > 0.15f)
+        if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(GetActorForwardVector().GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.15f)
         {
             // A shot gains moderate lift; a ground pass stays flat.
             const FVector StrikeDirection = bIsShot ? (Forward + FVector(0.f, 0.f, ShotLiftRatio)).GetSafeNormal() : Forward;
