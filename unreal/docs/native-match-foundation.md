@@ -32,3 +32,7 @@ Extract match clock and refereeing into testable game state for replication, add
 - After evaluating goals, GameMode detects a ball fully beyond the fixed 105x68 m pitch bounds and broadcasts `OnBallOutOfPlay(ExitLocation, LastTouchTeam)`; it stops ball velocity and match clock while awaiting a restart.
 - `B` invokes `ResumeAfterBallOut`, resetting the ball to centre temporarily. This is deliberately NOT a legal throw-in, corner, goal kick or referee restart, and diagonal boundary sampling is provisional.
 - Human and team AI actions are guarded by the ball-out state; native Unreal playtest remains pending.
+
+## Typed boundary restarts (October 16)
+- Touchline crossings award provisional throw-ins; endline crossings classify corners and goal kicks by last attributed team and defending side. Unknown last-touch endline exits become Undetermined rather than fabricating possession.
+- B positions the ball at the recorded in-pitch restart point, clearing motion and contact history. It does not implement a lawful throw animation, assigned taker, defending distance or live set-piece procedure. Fixed world-axis geometry and frame sampling remain provisional.
