@@ -65,6 +65,12 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeMatchPhaseEvent OnFullTime;
 
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
+    FSportsArcadeMatchPhaseEvent OnMatchReset;
+
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
+    FSportsArcadeMatchPhaseEvent OnPlayResumed;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     TObjectPtr<ASportsArcadeCharacter> LastGoalTouchPlayer;
 
