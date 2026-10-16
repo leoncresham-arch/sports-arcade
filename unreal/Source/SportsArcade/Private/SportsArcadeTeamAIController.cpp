@@ -60,13 +60,21 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         Target.X += TowardsPlay * FMath::Clamp((5250.f - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
         // Initial close-range keeper clearance; full diving/parry systems will replace this.
+        const FVector BallVelocity = Ball->GetVelocity();
+        const bool bIncomingShot = BallVelocity.X * TowardsPlay < -175.f;
         if (ActionCooldownRemaining <= 0.f &&
             FVector::DistSquared2D(Footballer->GetActorLocation(), Ball->GetActorLocation()) < FMath::Square(ContactRangeCm + 75.f) &&
             Ball->GetActorLocation().Z < 200.f &&
             FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 175.f)
         {
-            const FVector Clearance = FVector(TowardsPlay, (Ball->GetActorLocation().Y >= 0.f ? 0.4f : -0.4f), 0.25f);
-            if (Ball->KickByPlayer(Footballer, Clearance, 2300.f, ContactRangeCm + 75.f))
+            // Near-goal incoming attempts get a stronger lateral parry; low-speed
+            // contacts retain the existing forward clearance behavior.
+            const float ParryY = Ball->GetActorLocation().Y >= 0.f ? 0.85f : -0.85f;
+            const FVector Clearance = bIncomingShot
+                ? FVector(TowardsPlay * 0.35f, ParryY, 0.35f)
+                : FVector(TowardsPlay, ParryY * 0.45f, 0.25f);
+            const float Impulse = bIncomingShot ? 2850.f : 2300.f;
+            if (Ball->KickByPlayer(Footballer, Clearance, Impulse, ContactRangeCm + 75.f))
             {
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
