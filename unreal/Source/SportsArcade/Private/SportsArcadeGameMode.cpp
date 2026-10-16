@@ -10,6 +10,7 @@
 ASportsArcadeGameMode::ASportsArcadeGameMode()
 {
     DefaultPawnClass = ASportsArcadeCharacter::StaticClass();
+    PrimaryActorTick.bCanEverTick = true;
 }
 
 void ASportsArcadeGameMode::BeginPlay()
@@ -47,4 +48,19 @@ void ASportsArcadeGameMode::BeginPlay()
     {
         Controller->SetViewTargetWithBlend(ReviewCamera, 0.0f);
     }
+}
+
+void ASportsArcadeGameMode::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    if (bMatchFinished || DeltaSeconds <= 0.f) return;
+    ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
+    if (ElapsedMatchSeconds >= 2.f * HalfDurationSeconds) bMatchFinished = true;
+}
+
+void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
+{
+    if (bMatchFinished) return;
+    if (bHomeTeamScored) ++HomeGoals;
+    else ++AwayGoals;
 }
