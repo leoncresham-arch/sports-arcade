@@ -63,6 +63,21 @@ class MatchBootstrapTests(unittest.TestCase):
         self.assertIn("Candidate->LineupSlot == 9", source)
         self.assertIn("PC->Possess(Starter);", source)
 
+    def test_missing_cpp_actor_class_aborts_without_level_creation(self):
+        self.fake.load_class = lambda _, path: None if path.endswith("SportsArcadeCharacter") else path
+        with self.assertRaisesRegex(RuntimeError, "Compile all native"):
+            self.load().main()
+        self.assertEqual(self.editor.actors, [])
+
+    def test_starting_positions_and_team_slots(self):
+        self.load().main()
+        rosters = [a for a in self.editor.actors if "TeamRoster" in a.name]
+        for team, roster in enumerate(rosters):
+            self.assertEqual(roster.props["team_index"], team)
+            self.assertEqual([player.props["lineup_slot"] for player in roster.props["players"]], list(range(11)))
+            self.assertTrue(all(player.props["team_index"] == team for player in roster.props["players"]))
+            self.assertEqual([player.props["shirt_number"] for player in roster.props["players"]], list(range(1, 12)))
+
     def test_existing_level_not_overwritten(self):
         self.assets.does_asset_exist = lambda path: True
         with self.assertRaisesRegex(RuntimeError, "Refusing to overwrite"):
