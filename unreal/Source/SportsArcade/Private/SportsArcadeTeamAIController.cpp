@@ -56,7 +56,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     if (IsValid(Ball) && Slot == 0)
     {
         // Sweeper-keeper starter positioning: lateral tracking and bounded advance.
-        Target.Y = FMath::Clamp(Ball->GetActorLocation().Y * 0.20f, -GoalkeeperLateralRangeCm, GoalkeeperLateralRangeCm);
+        const float AnticipatedY = Ball->GetActorLocation().Y + Ball->GetVelocity().Y * FMath::Clamp(GoalkeeperAnticipationSeconds, 0.f, 1.f);
+        Target.Y = FMath::Clamp(AnticipatedY * 0.20f, -GoalkeeperLateralRangeCm, GoalkeeperLateralRangeCm);
         const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         Target.X += TowardsPlay * FMath::Clamp((5250.f - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
         // Initial close-range keeper clearance; full diving/parry systems will replace this.
