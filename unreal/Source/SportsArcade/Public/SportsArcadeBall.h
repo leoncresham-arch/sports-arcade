@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "SportsArcadeBall.generated.h"
 
+class ASportsArcadeCharacter;
 class USphereComponent;
 class UStaticMeshComponent;
 class UMaterialInterface;
@@ -41,6 +42,13 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void Kick(const FVector& Direction, float StrengthKgCmPerSec);
 
+    /** Physics-based controlled touch, never attaches the ball to the player. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
+    bool ApplyControlledTouch(ASportsArcadeCharacter* Player, const FVector& DesiredVelocity, float MaxDistanceCm);
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Ball")
+    ASportsArcadeCharacter* GetLastTouchPlayer() const { return LastTouchPlayer.Get(); }
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void ResetToCentre();
 
@@ -48,5 +56,6 @@ public:
 
 private:
     FVector InitialSpawnLocation = FVector::ZeroVector;
+    TWeakObjectPtr<ASportsArcadeCharacter> LastTouchPlayer;
     virtual void BeginPlay() override;
 };
