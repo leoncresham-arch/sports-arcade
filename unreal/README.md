@@ -155,3 +155,6 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 
 ## Native match foundation
 - [Offline match clock and score](docs/native-match-foundation.md): GameMode records a running match clock, home/away goals and early center-crossing detection for the existing construction pitch. Known limitations include no halftime state, fixed geometry assumptions, discrete ball sampling and no complete refereeing or team handling. This is uncompiled source, not a finished match.
+
+## Native team and formation foundations
+- Added `SportsArcadeTeamRoster` for 11-member validated level-authored teams, role metadata, 4-3-3 / 4-4-2 starting locations and a Blueprint-callable closest-teammate switch action. See [team systems](docs/team-systems.md). No player-spawning, team AI, full player switching input, UE compile or gameplay validation yet.
