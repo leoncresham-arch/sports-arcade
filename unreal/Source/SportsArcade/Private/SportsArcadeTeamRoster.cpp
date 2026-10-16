@@ -38,3 +38,29 @@ ASportsArcadeCharacter* ASportsArcadeTeamRoster::GetClosestPlayer(const FVector&
     }
     return Closest;
 }
+
+FVector ASportsArcadeTeamRoster::GetFormationPosition(int32 PlayerSlot) const
+{
+    // Lineup order: keeper, four defenders, midfielders, attackers.
+    // Values are pitch-relative centimetres, suitable for spawn targets;
+    // no players are moved automatically by this method.
+    static const FVector2D Slots433[11] = {
+        {-4750.f, 0.f}, {-3100.f, -2600.f}, {-3300.f, -850.f},
+        {-3300.f, 850.f}, {-3100.f, 2600.f}, {-850.f, -1800.f},
+        {-1200.f, 0.f}, {-850.f, 1800.f}, {2200.f, -2350.f},
+        {2700.f, 0.f}, {2200.f, 2350.f}
+    };
+    static const FVector2D Slots442[11] = {
+        {-4750.f, 0.f}, {-3100.f, -2600.f}, {-3300.f, -850.f},
+        {-3300.f, 850.f}, {-3100.f, 2600.f}, {-850.f, -2600.f},
+        {-1100.f, -850.f}, {-1100.f, 850.f}, {-850.f, 2600.f},
+        {2500.f, -850.f}, {2500.f, 850.f}
+    };
+    if (PlayerSlot < 0 || PlayerSlot >= 11 || TeamIndex < 0 || TeamIndex > 1)
+        return FVector::ZeroVector;
+
+    const FVector2D Point = Formation == ESportsArcadeFormation::Formation442
+        ? Slots442[PlayerSlot] : Slots433[PlayerSlot];
+    const float Direction = TeamIndex == 0 ? 1.f : -1.f;
+    return FVector(Point.X * Direction, Point.Y * Direction, 0.f);
+}
