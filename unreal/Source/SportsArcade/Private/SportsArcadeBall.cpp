@@ -1,4 +1,5 @@
 #include "SportsArcadeBall.h"
+#include "SportsArcadeCharacter.h"
 
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -50,6 +51,7 @@ void ASportsArcadeBall::BeginPlay()
 {
     Super::BeginPlay();
     InitialSpawnLocation = GetActorLocation();
+    LastTouchPlayer.Reset();
 }
 
 void ASportsArcadeBall::Kick(const FVector& Direction, float StrengthKgCmPerSec)
@@ -69,7 +71,24 @@ void ASportsArcadeBall::ResetToCentre()
     {
         return;
     }
+    LastTouchPlayer.Reset();
     CollisionSphere->SetPhysicsLinearVelocity(FVector::ZeroVector);
     CollisionSphere->SetPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
     SetActorLocation(InitialSpawnLocation, false, nullptr, ETeleportType::TeleportPhysics);
+}
+
+bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, const FVector& DesiredVelocity, float MaxDistanceCm)
+{
+    if (!IsValid(Player) || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
+        MaxDistanceCm <= 0.f || FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxDistanceCm))
+    {
+        return false;
+    }
+    const FVector HorizontalTarget(DesiredVelocity.X, DesiredVelocity.Y, 0.f);
+    const FVector Current = CollisionSphere->GetPhysicsLinearVelocity();
+    const FVector Correction = HorizontalTarget - FVector(Current.X, Current.Y, 0.f);
+    // Controlled touches accelerate the rolling ball; they do not teleport it.
+    CollisionSphere->AddImpulse(Correction.GetClampedToMaxSize(280.f) * BallMassKg);
+    LastTouchPlayer = Player;
+    return true;
 }
