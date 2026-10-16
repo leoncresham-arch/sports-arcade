@@ -313,6 +313,18 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     PendingRestartTaker->SetActorLocation(TakerPosition, false, nullptr, ETeleportType::TeleportPhysics);
     PendingRestartTaker->GetCharacterMovement()->StopMovementImmediately();
     MatchBall->PlaceAtRest(PendingRestartLocation);
+    if (bAutoKickProvisionalRestart)
+    {
+        // Offline only: approximates putting the ball back into play.
+        // A real throw-in needs hands, animations and set-piece positioning.
+        FVector Direction = PendingRestartType == ESportsArcadeRestartType::ThrowIn
+            ? FVector(0.f, -FMath::Sign(PendingRestartLocation.Y), 0.25f)
+            : FVector(PendingRestartTeam == 0 ? 1.f : -1.f, -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
+        if (!MatchBall->KickByPlayer(PendingRestartTaker, Direction, 1500.f, 210.f))
+        {
+            return;
+        }
+    }
     bBallOutOfPlay = false;
     bHasPreviousBallPosition = false;
     ClearPendingRestart();
