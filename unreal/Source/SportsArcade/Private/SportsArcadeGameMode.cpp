@@ -331,7 +331,6 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, cons
     return Best;
 }
 
-
 float ASportsArcadeGameMode::GetMatchProgress() const
 {
     return FMath::Clamp(ElapsedMatchSeconds / FMath::Max(2.f * HalfDurationSeconds, 1.f), 0.f, 1.f);
