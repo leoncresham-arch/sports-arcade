@@ -303,7 +303,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     if (!bBallOutOfPlay || bHalfTime || bMatchFinished) return;
     if (PendingRestartType == ESportsArcadeRestartType::Undetermined ||
         PendingRestartType == ESportsArcadeRestartType::None || !IsValid(MatchBall) ||
-        !IsValid(PendingRestartTaker)) return;
+        !IsValid(PendingRestartTaker) || PendingRestartTaker->TeamIndex != PendingRestartTeam) return;
     // Provisional in-field set-piece setup; official throw mechanics remain TODO.
     const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
     const float InwardY = PendingRestartLocation.Y >= 0.f ? -1.f : 1.f;
