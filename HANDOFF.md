@@ -268,3 +268,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 exhibition reset positioning
 - Each native footballer now captures its initial placed transform on BeginPlay. ResetMatch restores all footballers to those positions, stops movement and clears current sprint/jockey intent and ball-action cooldowns. The football separately resets to its centre spawn. Added source tests.
 - AI navigation re-entry, ragdoll, authored animation sync, Unreal compilation and Windows gameplay have not been tested. Preserve existing Unreal architecture and work directly in original GitHub repo.
+
+## October 16 continuing restarts and stamina
+- Match reset now restores rated stamina and clears sprint-exhaustion state. Provisional referee restart records PendingRestartTaker via closest valid roster footballer on awarded team, exposes it for Blueprint use and blocks B restart if that actor is missing. Assigned player is not yet transported, controlled or instructed to execute a legal restart; B still only places the ball, and this needs full restart animation/possession logic.
+- Added structural test for taker assignment. Native UE 5.5 compilation and gameplay still unverified.
