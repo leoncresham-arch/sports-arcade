@@ -22,3 +22,8 @@ Extract match clock and refereeing into testable game state for replication, add
 - Match emits OnGoalScored (home score, away score, simple own-goal flag) for future Blueprint scoreboards and presentation. LastGoalTouchPlayer records the last attributed player contact; bLastGoalWasOwnGoal assumes home scores on positive X and away on negative X, with last-touch team 0/1.
 - Ball exposes GetLastTouchTeamIndex (INDEX_NONE when unknown). Last touch means most recent **attributed** kick or controlled touch, not proof of possession, assist, scorer or foul attribution. The goal event is source-tested but no Blueprint widget/UE runtime event test exists.
 - Controlled human input, dribble and ball striking are blocked at halftime and full time; seven player ratings now modulate acceleration, pace, stamina, pass/shot power, dribble target speed and standing tackle impulse. All balance remains provisional.
+
+## October 15 continued controls and phase handling
+- H resumes play from halftime using `ResumeSecondHalf`; R resets the offline exhibition using `ResetMatch`. These use the existing native Character input bindings and existing GameMode, not new architecture.
+- On entering halftime the match ball resets to the centre, clearing its touch record and velocity; at full-time the ball stays in place but its linear/angular velocity is zeroed through `StopMotion`.
+- These are preliminary intermission and result handling; no authentic kickoff/restarts, referee checks, UI or native engine validation. The reset command is deliberately available during play for prototype testing.
