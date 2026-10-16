@@ -174,3 +174,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## Latest gameplay fixes (October 16)
 - Continued successive scope items without waiting for a new approval: tackled-player cooldown is now consumed only after a successful attributed strike; human pass/shot requires the ball ahead and within 120 cm vertical reach; controlled dribble touches reject vertical differences greater than 115 cm.
 - Updated source regression tests. These are source-level protections only, not UE-compiled physics/contact validation. Preserve original repository and keep working through roadmap; use scheduled recurring continuation only as supported by ChatGPT.
+
+## October 16 additional scope integration
+- Fixed AI goalkeeper/outfield action cooldowns to start only after KickByPlayer succeeds, avoiding missed-ball action lockout.
+- Rejected scoring and local player switching during halftime, consistent with paused match phase. Regression source contract tests updated.
+- User requires continuous transition to next approved item, not repeated conversational summaries; preserve work in same repository. Source checks are not UE compilation.
