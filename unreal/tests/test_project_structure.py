@@ -92,6 +92,20 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("PlayerAttributes->ShortPassing", cpp)
         self.assertIn("PlayerAttributes->Finishing", cpp)
 
+    def test_formation_ai_is_connected(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeTeamAIController.h")
+        source = read("Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp")
+        footballer = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        build = read("Source/SportsArcade/SportsArcade.Build.cs")
+        self.assertIn("AAIController", header)
+        self.assertIn("MoveToLocation(Target", source)
+        self.assertIn("GetFormationPosition(Slot)", source)
+        self.assertIn("FormationAdvanceFactor", source)
+        self.assertIn("AIControllerClass = ASportsArcadeTeamAIController::StaticClass()", footballer)
+        self.assertIn("PlacedInWorldOrSpawned", footballer)
+        self.assertIn('"AIModule"', build)
+        self.assertIn('"NavigationSystem"', build)
+
     def test_team_roster_and_player_switching_contract(self):
         header = read("Source/SportsArcade/Public/SportsArcadeTeamRoster.h")
         source = read("Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp")
