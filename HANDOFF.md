@@ -186,3 +186,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - User specifically did NOT ask for hourly automation; it has been disabled. Do not recreate a schedule without an explicit request. Within each active development turn, proceed through approved backlog items without soliciting approval.
 
 - Match GameMode now stores LastGoalTouchPlayer from the attributed ball-contact record before the ball resets on a detected goal, clearing it on ResetMatch. This is informational only; not an official scorer/own-goal adjudication or player match statistics subsystem.
+
+## October 16 continued gameplay scope
+- Added player movement and ball-action phase guards (halftime/full-time) to match existing AI and score pauses.
+- Activated the previously data-only acceleration, ball-control and tackling ratings: acceleration scales CharacterMovement MaxAcceleration; ball control scales dribble touch target speed; tackling scales standing tackle impulse. All seven original ratings now influence some native behavior, but balancing is not validated.
+- Corrected sprint release to preserve rated jog speed; added source regression checks. No Unreal Engine compile/playtest yet. Do not treat periodic status prose as a completed gameplay milestone.
