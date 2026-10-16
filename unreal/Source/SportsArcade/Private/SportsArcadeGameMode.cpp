@@ -208,6 +208,13 @@ void ASportsArcadeGameMode::RecordGoal(bool bHomeTeamScored)
     OnGoalScored.Broadcast(HomeGoals, AwayGoals, bLastGoalWasOwnGoal);
 }
 
+void ASportsArcadeGameMode::RecordShotAttempt(int32 ShootingTeam)
+{
+    if (bMatchFinished || bHalfTime || bBallOutOfPlay) return;
+    if (ShootingTeam == 0) ++HomeShots;
+    else if (ShootingTeam == 1) ++AwayShots;
+}
+
 void ASportsArcadeGameMode::ResumeSecondHalf()
 {
     if (!bHalfTime || bMatchFinished) return;
@@ -225,6 +232,8 @@ void ASportsArcadeGameMode::ResetMatch()
     ElapsedMatchSeconds = 0.f;
     HomeGoals = 0;
     AwayGoals = 0;
+    HomeShots = 0;
+    AwayShots = 0;
     LastGoalTouchPlayer = nullptr;
     bLastGoalWasOwnGoal = false;
     bHalfTime = false;
