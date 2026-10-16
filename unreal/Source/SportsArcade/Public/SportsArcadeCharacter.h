@@ -36,6 +36,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     int32 ShirtNumber = 1;
 
+    /** Zero-based formation slot; 0 goalkeeper, 1-10 outfield. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team", meta=(ClampMin="0", ClampMax="10"))
+    int32 LineupSlot = 5;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     ESportsArcadePosition FieldPosition = ESportsArcadePosition::CentralMidfielder;
 
