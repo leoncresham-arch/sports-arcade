@@ -98,3 +98,5 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - High-priority blocker unchanged: real UE 5.5 editor/Windows GPU and approved high-fidelity football artwork. No photorealistic screenshot has been delivered.
 
 - Follow-up fix: broadcast camera now derives its tracking offset from the level-authored world position in BeginPlay, preventing a fixed-offset jump on first tick; added CI source regression. Native Unreal behavior remains uncompiled/unverified.
+
+- Hardware investigation (same continuation): documented official Unreal host specifications and inability to verify genuinely free UE GPU hosting in `unreal/docs/pc-renderer-baseline.md`. Source CI passed for camera placement correction, but no native compile or renderer verification has occurred.
