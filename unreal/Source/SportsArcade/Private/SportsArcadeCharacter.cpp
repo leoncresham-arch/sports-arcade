@@ -53,6 +53,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASportsArcadeCharacter::EndSprint);
     PlayerInputComponent->BindAction(TEXT("Pass"), IE_Pressed, this, &ASportsArcadeCharacter::PassBall);
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
+    PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
 }
 
@@ -93,6 +94,20 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (DeltaSeconds <= 0.f) return;
+    TouchCooldownRemaining = FMath::Max(0.f, TouchCooldownRemaining - DeltaSeconds);
+    if (TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
+    {
+        for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
+        {
+            const FVector ToBall = It->GetActorLocation() - GetActorLocation();
+            if (FVector::DotProduct(GetActorForwardVector(), ToBall.GetSafeNormal2D()) > 0.35f &&
+                It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() * 240.f, DribbleTouchRangeCm))
+            {
+                TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
+                break;
+            }
+        }
+    }
 
     const float StaminaFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
     const float Capacity = FMath::Max(MaxStamina * StaminaFactor, 1.f);
@@ -162,5 +177,21 @@ void ASportsArcadeCharacter::SwitchPlayer()
     if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
     {
         Mode->SwitchToNearestTeammate(TeamIndex);
+    }
+}
+
+void ASportsArcadeCharacter::TackleBall()
+{
+    if (!GetWorld()) return;
+    for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
+    {
+        const FVector Direction = It->GetActorLocation() - GetActorLocation();
+        if (Direction.SizeSquared2D() < FMath::Square(150.f) &&
+            FMath::Abs(Direction.Z) < 110.f &&
+            FVector::DotProduct(GetActorForwardVector(), Direction.GetSafeNormal2D()) > 0.25f)
+        {
+            It->Kick(GetActorForwardVector().GetSafeNormal2D(), 850.f);
+            break;
+        }
     }
 }
