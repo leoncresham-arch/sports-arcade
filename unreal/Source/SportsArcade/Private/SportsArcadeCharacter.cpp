@@ -50,6 +50,8 @@ void ASportsArcadeCharacter::ResetToKickoffPosition()
     GetCharacterMovement()->StopMovementImmediately();
     bSprintHeld = false;
     bJockeyHeld = false;
+    bSprintExhausted = false;
+    CurrentStamina = FMath::Max(MaxStamina * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
     TouchCooldownRemaining = 0.f;
     StrikeCooldownRemaining = 0.f;
     TackleCooldownRemaining = 0.f;
