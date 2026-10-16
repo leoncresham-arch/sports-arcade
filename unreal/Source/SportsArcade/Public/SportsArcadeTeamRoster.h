@@ -22,6 +22,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     bool bDiscoverPlacedPlayers = true;
 
+    /** Use each player's authored LineupSlot instead of roster array order. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    bool bUseExplicitLineupSlots = false;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team", meta=(ClampMin="0", ClampMax="1"))
     int32 TeamIndex = 0;
 
