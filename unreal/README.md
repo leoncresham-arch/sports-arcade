@@ -178,3 +178,7 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 
 ### Boundary restart classification
 - Added provisional throw-in, corner and goal-kick types/team/location and physical in-pitch restart placement (B). Unknown endline last touch blocks B until proper adjudication; R still resets the prototype. Source tests do not verify Unreal compilation.
+
+### Goalkeeper reaction foundation (October 16)
+- An AI goalkeeper near the ball now checks whether horizontal ball velocity is moving toward its defended goal. Incoming contacts use a stronger side-directed parry impulse; slower/routine contacts retain a forward clearance.
+- Still no simulated diving, handling/catches, save animations or gameplay balancing. Source checks are not Unreal validation.
