@@ -103,6 +103,10 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("ESportsArcadePosition", character)
         self.assertIn("SwitchToNearestTeammate", mode)
         self.assertIn("Controller->Possess(BestPlayer)", mode)
+        self.assertIn("ESportsArcadeFormation", header)
+        self.assertIn("GetFormationPosition", source)
+        self.assertIn("Slots433[11]", source)
+        self.assertIn("Slots442[11]", source)
 
     def test_native_team_metadata(self):
         header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
