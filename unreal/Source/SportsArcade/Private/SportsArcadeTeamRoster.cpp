@@ -14,6 +14,19 @@ bool ASportsArcadeTeamRoster::AddPlayer(ASportsArcadeCharacter* Player)
     return true;
 }
 
+bool ASportsArcadeTeamRoster::HasCompleteLineup() const
+{
+    if (TeamIndex < 0 || TeamIndex > 1 || Players.Num() != 11) return false;
+    bool Slots[11] = {};
+    for (const ASportsArcadeCharacter* Player : Players)
+    {
+        if (!IsValid(Player) || Player->TeamIndex != TeamIndex ||
+            Player->LineupSlot < 0 || Player->LineupSlot >= 11 || Slots[Player->LineupSlot]) return false;
+        Slots[Player->LineupSlot] = true;
+    }
+    return true;
+}
+
 int32 ASportsArcadeTeamRoster::GetPlayerCount() const
 {
     int32 ValidPlayers = 0;
