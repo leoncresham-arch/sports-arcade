@@ -4,6 +4,13 @@
 #include "GameFramework/Character.h"
 #include "SportsArcadeCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class ESportsArcadePosition : uint8
+{
+    Goalkeeper, LeftBack, CentreBack, RightBack, DefensiveMidfielder,
+    CentralMidfielder, AttackingMidfielder, LeftWinger, RightWinger, Striker
+};
+
 class USportsArcadePlayerAttributes;
 class UCameraComponent;
 class USpringArmComponent;
@@ -28,6 +35,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     int32 ShirtNumber = 1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    ESportsArcadePosition FieldPosition = ESportsArcadePosition::CentralMidfielder;
 
 protected:
     virtual void BeginPlay() override;
