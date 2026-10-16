@@ -55,6 +55,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
     PlayerInputComponent->BindAction(TEXT("Chip"), IE_Pressed, this, &ASportsArcadeCharacter::ChipBall);
     PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
+    PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Pressed, this, &ASportsArcadeCharacter::BeginJockey);
+    PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Released, this, &ASportsArcadeCharacter::EndJockey);
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
     PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
     PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
@@ -84,6 +86,16 @@ void ASportsArcadeCharacter::MoveRight(float Value)
 void ASportsArcadeCharacter::BeginSprint()
 {
     bSprintHeld = true;
+}
+
+void ASportsArcadeCharacter::BeginJockey()
+{
+    bJockeyHeld = true;
+}
+
+void ASportsArcadeCharacter::EndJockey()
+{
+    bJockeyHeld = false;
 }
 
 void ASportsArcadeCharacter::EndSprint()
@@ -131,7 +143,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         bSprintExhausted = false;
     }
     const bool bMoving = GetVelocity().SizeSquared2D() > FMath::Square(10.f);
-    const bool bSprinting = bPlayActive && bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
+    const bool bSprinting = bPlayActive && !bJockeyHeld && bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
     if (bSprinting)
     {
         CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
@@ -142,7 +154,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         CurrentStamina = FMath::Min(Capacity, CurrentStamina + StaminaRecoveryPerSecond * DeltaSeconds);
     }
     const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
-    GetCharacterMovement()->MaxWalkSpeed = (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed) * PaceFactor;
+    GetCharacterMovement()->MaxWalkSpeed = (bJockeyHeld && bPlayActive ? JockeySpeed :
+        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed)) * PaceFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor;
 }
