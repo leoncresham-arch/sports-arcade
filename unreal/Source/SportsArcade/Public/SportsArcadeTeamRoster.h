@@ -5,6 +5,12 @@
 
 class ASportsArcadeCharacter;
 
+UENUM(BlueprintType)
+enum class ESportsArcadeFormation : uint8
+{
+    Formation433, Formation442
+};
+
 /** Level-authored team roster; does not automatically spawn or license players. */
 UCLASS(Blueprintable)
 class SPORTSARCADE_API ASportsArcadeTeamRoster : public AActor
@@ -15,6 +21,9 @@ public:
     int32 TeamIndex = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    ESportsArcadeFormation Formation = ESportsArcadeFormation::Formation433;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     TArray<TObjectPtr<ASportsArcadeCharacter>> Players;
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
@@ -22,6 +31,9 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     int32 GetPlayerCount() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
+    FVector GetFormationPosition(int32 PlayerSlot) const;
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     ASportsArcadeCharacter* GetClosestPlayer(const FVector& Location) const;
