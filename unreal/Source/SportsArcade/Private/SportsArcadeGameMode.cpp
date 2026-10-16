@@ -88,6 +88,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             if (CrossesGoal(Threshold) && PreviousBallPosition.X < Threshold && Position.X >= Threshold)
             {
                 LastGoalTouchPlayer = MatchBall->GetLastTouchPlayer();
+                bLastGoalWasOwnGoal = IsValid(LastGoalTouchPlayer) && LastGoalTouchPlayer->TeamIndex == 1;
                 RecordGoal(true);
                 MatchBall->ResetToCentre();
                 bHasPreviousBallPosition = false;
@@ -95,6 +96,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             else if (CrossesGoal(-Threshold) && PreviousBallPosition.X > -Threshold && Position.X <= -Threshold)
             {
                 LastGoalTouchPlayer = MatchBall->GetLastTouchPlayer();
+                bLastGoalWasOwnGoal = IsValid(LastGoalTouchPlayer) && LastGoalTouchPlayer->TeamIndex == 0;
                 RecordGoal(false);
                 MatchBall->ResetToCentre();
                 bHasPreviousBallPosition = false;
@@ -133,6 +135,7 @@ void ASportsArcadeGameMode::ResetMatch()
     HomeGoals = 0;
     AwayGoals = 0;
     LastGoalTouchPlayer = nullptr;
+    bLastGoalWasOwnGoal = false;
     bHalfTime = false;
     bSecondHalfStarted = false;
     bMatchFinished = false;
