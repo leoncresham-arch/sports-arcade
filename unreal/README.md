@@ -144,3 +144,8 @@ No Unreal editor or cloud GPU is available from the current iPad-only free workf
 
 - Footballer sprint input now requests sprinting, while a per-frame stamina system drains endurance when moving and sprinting, recovers otherwise, and requires recovery after exhaustion. Rates and endurance can be tuned per character class; normalized stamina is exposed for future UI/animation use.
 - Implemented in native C++; source checks cannot establish compiled behavior or gameplay balance.
+
+## Full football functionality blueprint
+
+- [Researched capability blueprint](docs/football-capabilities-blueprint.md) inventories player movement, dribbling and skills, attacking and defending, keeper mechanics, 11v11 team AI, match rules, attributes, animation, PC controls, presentation and game modes; includes staged implementation priorities.
+- It sets development scope only. The capabilities in that document are not yet implemented unless separately documented and tested.
