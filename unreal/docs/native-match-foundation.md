@@ -27,3 +27,8 @@ Extract match clock and refereeing into testable game state for replication, add
 - H resumes play from halftime using `ResumeSecondHalf`; R resets the offline exhibition using `ResetMatch`. These use the existing native Character input bindings and existing GameMode, not new architecture.
 - On entering halftime the match ball resets to the centre, clearing its touch record and velocity; at full-time the ball stays in place but its linear/angular velocity is zeroed through `StopMotion`.
 - These are preliminary intermission and result handling; no authentic kickoff/restarts, referee checks, UI or native engine validation. The reset command is deliberately available during play for prototype testing.
+
+## October 16 — preliminary ball-out stoppage
+- After evaluating goals, GameMode detects a ball fully beyond the fixed 105x68 m pitch bounds and broadcasts `OnBallOutOfPlay(ExitLocation, LastTouchTeam)`; it stops ball velocity and match clock while awaiting a restart.
+- `B` invokes `ResumeAfterBallOut`, resetting the ball to centre temporarily. This is deliberately NOT a legal throw-in, corner, goal kick or referee restart, and diagonal boundary sampling is provisional.
+- Human and team AI actions are guarded by the ball-out state; native Unreal playtest remains pending.
