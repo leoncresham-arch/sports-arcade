@@ -14,6 +14,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     DecisionCountdown -= DeltaSeconds;
+    ActionCooldownRemaining = FMath::Max(0.f, ActionCooldownRemaining - DeltaSeconds);
     if (DecisionCountdown > 0.f || !GetWorld()) return;
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
@@ -70,8 +71,18 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         if (Nearest == Footballer && BestDistance <= FMath::Square(PressureRadiusCm))
         {
-            const FVector BallPosition = Ball->GetActorLocation();
-            Target = FVector(BallPosition.X, BallPosition.Y, 0.f);
+            // Lead moving balls slightly for more credible interception movement.
+            FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f);
+            Target = FVector(Predicted.X, Predicted.Y, 0.f);
+            if (BestDistance <= FMath::Square(ContactRangeCm) && ActionCooldownRemaining <= 0.f)
+            {
+                // Minimal autonomous clearance/attack: kick towards the opponent goal.
+                const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
+                const FVector Direction = FVector(AttackSign * 5250.f - Ball->GetActorLocation().X,
+                    -Ball->GetActorLocation().Y, 0.f).GetSafeNormal();
+                Ball->Kick(Direction, 1700.f);
+                ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
+            }
         }
     }
     Target.X = FMath::Clamp(Target.X, -5100.f, 5100.f);
