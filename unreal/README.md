@@ -46,7 +46,7 @@ This directory is a **PC-first Unreal Engine 5.5 C++ scaffold**, not a playable 
 ## Authentic Unreal screenshot preparation
 
 - Added [native render capture helper](Tools/Editor/capture_visual_review.py) and [review procedure](docs/authentic-render-capture.md).
-- It requests a high-resolution screenshot from the **actual Unreal Editor camera** and writes an *unverified request log* for review. No screenshot has been generated, inspected or uploaded yet.
+- It requests a high-resolution screenshot from the **actual Unreal Editor camera**, refuses an explicit failed request, and writes an *unverified request log* only when Unreal does not reject the request. No screenshot has been generated, inspected or uploaded yet.
 - CI includes simulated-editor tests for approval gating, camera lookup and capture-request metadata. No native Unreal editor is connected.
 
 ## Native visual review scene preparation
