@@ -30,6 +30,19 @@ private:
     TObjectPtr<UCameraComponent> FollowCamera;
 
     void BeginSprint();
+    void PassBall();
+    void ShootBall();
+    void StrikeNearbyBall(float ImpulseStrength);
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float BallControlReachCm = 170.f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float PassImpulseKgCmPerSec = 1400.f;
+
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float ShotImpulseKgCmPerSec = 3200.f;
+
     void EndSprint();
 
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0"))
