@@ -234,3 +234,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## October 16 match statistics
 - Added HomeShots/AwayShots offline counters and guarded RecordShotAttempt API. Successful human shot contacts increment the relevant team's count; missed button presses do not. ResetMatch clears both. AI shooting and full match analytics remain outstanding. Added source contract test; no native Unreal compile or runtime verification.
+
+## October 16 attacking action extension
+- Added U-key chip shot via existing SportsArcadeCharacter; uses existing successful physics contact validation and shot stats, but lower configurable power and higher tunable elevation relative to standard shot. Added source-level regression tests. No native Unreal playtest or ball trajectory calibration yet.
