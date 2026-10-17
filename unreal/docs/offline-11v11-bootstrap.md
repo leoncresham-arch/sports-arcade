@@ -23,3 +23,6 @@ This test-map generator is **not** a playable or verified 11v11 release. It has 
 ## Read-only level diagnostics
 - Run Tools/Editor/validate_offline_match.py inside the UE Editor after opening the test level. It inspects native actor counts (1 ball, 2 rosters, 22 footballers), team roster membership and distinct lineup slots 0-10, logging validation errors without modifying a level.
 - Python source checks do not establish that class names or reflected properties resolve correctly in UE 5.5; verify on a real editor host.
+
+## Match television camera
+The non-overwriting Editor map generator now places an authored native broadcast camera at a high sideline location and aims it at centre pitch. The GameMode already selects a placed broadcast camera when enabled. Unreal Editor Python camera rotation/reflection and viewport composition remain to be validated on Windows.
