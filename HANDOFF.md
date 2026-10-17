@@ -286,3 +286,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 16 — next restart refinements
 - Provisional restart impulse is now configurable in GameMode; valid goal kicks prefer the roster player assigned goalkeeper slot 0, falling back to closest eligible player. Source assertions updated and checked in GitHub Actions.
 - Still a temporary referee/restart approximation without legal throw animation or engine verification. Continue development in existing UE 5.5 C++ architecture and original repo.
+
+## October 17 11v11 camera and restart safeguards
+- Provisional restart now rejects invalid awarded team indices and aborts if SetActorLocation fails; neither error clears the stoppage. Added source test guards.
+- The 11v11 Editor bootstrap now places an aimed native broadcast camera. Updated mock test actor count from 29 to 30 and camera reflection mock. Native editor and actual camera look still unverified.
