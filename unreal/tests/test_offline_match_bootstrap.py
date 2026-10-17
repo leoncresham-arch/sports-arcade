@@ -11,6 +11,10 @@ SCRIPT = Path(__file__).resolve().parents[1] / "Tools/Editor/setup_offline_match
 class Actor:
     def __init__(self, name, where):
         self.name, self.location, self.props = name, where, {}
+    def get_actor_location(self):
+        return self.location
+    def set_actor_rotation(self, rotation, sweep):
+        self.rotation = rotation
     def set_actor_label(self, label):
         self.label = label
     def set_editor_property(self, key, value):
@@ -45,6 +49,7 @@ class MatchBootstrapTests(unittest.TestCase):
         self.fake.EditorAssetLibrary = self.assets
         self.fake.Vector = lambda x,y,z: types.SimpleNamespace(x=x,y=y,z=z)
         self.fake.Rotator = lambda *args: args
+        self.fake.MathLibrary = types.SimpleNamespace(find_look_at_rotation=lambda start, end: (start, end))
     def load(self):
         spec = importlib.util.spec_from_file_location("match_bootstrap", SCRIPT)
         mod = importlib.util.module_from_spec(spec)
@@ -53,7 +58,7 @@ class MatchBootstrapTests(unittest.TestCase):
         return mod
     def test_creates_exactly_22_players_and_two_rosters(self):
         self.load().main()
-        self.assertEqual(len(self.editor.actors), 29)
+        self.assertEqual(len(self.editor.actors), 30)
         rosters = [a for a in self.editor.actors if "TeamRoster" in a.name]
         self.assertEqual(len(rosters), 2)
         self.assertEqual([len(a.props["players"]) for a in rosters], [11,11])
