@@ -16,7 +16,8 @@ class RestartTakerContracts(unittest.TestCase):
         self.assertIn('PendingRestartTaker->TeamIndex != PendingRestartTeam', mode)
         self.assertIn('bAutoKickProvisionalRestart', mode)
         self.assertIn('MatchBall->KickByPlayer(PendingRestartTaker, Direction, ProvisionalRestartImpulse, 210.f)', mode)
-        self.assertIn('PendingRestartTaker->SetActorLocation(TakerPosition', mode)
+        self.assertIn('if (!PendingRestartTaker->SetActorLocation(TakerPosition', mode)
+        self.assertIn('const FVector Direction = PendingRestartType', mode)
         self.assertIn('TActorIterator<ASportsArcadeCharacter> It(GetWorld())', mode)
 
 if __name__ == '__main__':
