@@ -14,6 +14,7 @@ class RestartTakerContracts(unittest.TestCase):
         self.assertIn('PendingRestartType == ESportsArcadeRestartType::GoalKick', mode)
         self.assertIn('Candidate->LineupSlot == 0', mode)
         self.assertIn('PendingRestartTaker->TeamIndex != PendingRestartTeam', mode)
+        self.assertIn('(PendingRestartTeam != 0 && PendingRestartTeam != 1)', mode)
         self.assertIn('bAutoKickProvisionalRestart', mode)
         self.assertIn('MatchBall->KickByPlayer(PendingRestartTaker, Direction, ProvisionalRestartImpulse, 210.f)', mode)
         self.assertIn('if (!PendingRestartTaker->SetActorLocation(TakerPosition', mode)
