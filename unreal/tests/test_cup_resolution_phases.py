@@ -28,6 +28,15 @@ class KnockoutPresentationPhaseTests(unittest.TestCase):
         self.assertIn("!bCupResultRecorded && HomeGoals == AwayGoals", method)
         self.assertIn("if (IsValid(ActivePenaltyShootout))", method)
 
+    def test_normalized_regulation_and_extra_time_clock(self):
+        self.assertIn("float GetMatchClockMinutes() const;", HEADER)
+        clock = SOURCE.split("float ASportsArcadeGameMode::GetMatchClockMinutes() const", 1)[1].split("\n}", 1)[0]
+        self.assertIn("90.f * FMath::Clamp(", clock)
+        self.assertIn("ElapsedMatchSeconds / FMath::Max(2.f * HalfDurationSeconds", clock)
+        self.assertIn("if (!bCupExtraTimePlayed) return RegulationMinutes;", clock)
+        self.assertIn("30.f * FMath::Clamp(", clock)
+        self.assertIn("ExtraTimeElapsedSeconds / FMath::Max(2.f * ExtraTimeHalfDurationSeconds", clock)
+
     def test_extra_time_interval_precedes_generic_halftime(self):
         method = SOURCE.split(
             "ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const", 1
