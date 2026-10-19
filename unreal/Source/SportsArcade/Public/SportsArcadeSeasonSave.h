@@ -35,6 +35,10 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool RecordFixtureResult(int32 FixtureIndex, int32 HomeGoals, int32 AwayGoals);
 
+    /** Validate saved fixture identifiers and each recorded result before saving. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool ValidateProgress() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool GetCurrentStandings(TArray<FSportsArcadeLeagueStanding>& OutStandings) const;
 
