@@ -35,6 +35,7 @@ class RestartOwnershipTests(unittest.TestCase):
         availability = SOURCE.split("bool ASportsArcadeGameMode::CanTakeManualRestart() const", 1)[1].split("\n}", 1)[0]
         self.assertIn("!bAutoKickProvisionalRestart && bManualRestartStaged", availability)
         self.assertIn("CanResumePendingRestart()", availability)
+        self.assertIn("FVector::DistSquared2D(MatchBall->GetActorLocation(), PendingRestartLocation)", availability)
         self.assertIn("KickDirection.IsNearlyZero()", method)
         self.assertIn("KickDirection.ContainsNaN()", method)
         self.assertIn("MatchBall->KickByPlayer(", method)
