@@ -22,6 +22,10 @@ class SeasonCatalogContracts(unittest.TestCase):
         self.assertIn("HomeRoster->AssignFootballerRecords(FootballCatalog)", game)
         self.assertIn("AwayRoster->AssignFootballerRecords(FootballCatalog)", game)
 
+    def test_missing_catalog_mapping_clears_stale_player_ids(self):
+        self.assertIn("HomeRoster->ClearFootballerRecordIds()", game)
+        self.assertIn("AwayRoster->ClearFootballerRecordIds()", game)
+
     def test_season_match_catalog_check(self):
         self.assertIn("TObjectPtr<USportsArcadeFootballDatabase> FootballCatalog;", header)
         self.assertIn("FootballCatalog->FindClubById(Fixture.HomeClubId, HomeClub)", game)
