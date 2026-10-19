@@ -26,7 +26,13 @@ enum class ESportsArcadeMatchPhase : uint8
     Playing,
     Stoppage,
     HalfTime,
-    FullTime
+    FullTime,
+    AwaitingExtraTime,
+    ExtraTimeFirstHalf,
+    ExtraTimeInterval,
+    ExtraTimeSecondHalf,
+    AwaitingPenalties,
+    PenaltyShootout
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
