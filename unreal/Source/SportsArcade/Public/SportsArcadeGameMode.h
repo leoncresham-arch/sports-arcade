@@ -138,6 +138,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     bool IsBoundSeasonResultRecorded() const;
 
+    /** After full time, advance to the next fixture in the bound season. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool AdvanceToNextSeasonFixture();
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
 
