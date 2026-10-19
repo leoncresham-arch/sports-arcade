@@ -11,7 +11,7 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertNotIn('for (int32 Index = 1; Index < Roster->Players.Num(); ++Index)', code)
     def test_invalid_lineup_stops_navigation(self):
         code = AI.read_text()
-        self.assertIn('if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10)', code)
+        self.assertIn('if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10 ||', code)
         self.assertIn('StopMovement();\n        return;', code)
     def test_invalid_opponents_not_marked(self):
         code = AI.read_text()
