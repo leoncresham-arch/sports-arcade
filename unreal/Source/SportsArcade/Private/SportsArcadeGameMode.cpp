@@ -371,7 +371,8 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     if (PendingRestartType == ESportsArcadeRestartType::Undetermined ||
         PendingRestartType == ESportsArcadeRestartType::None ||
         (PendingRestartTeam != 0 && PendingRestartTeam != 1) || !IsValid(MatchBall) ||
-        !IsValid(PendingRestartTaker) || PendingRestartTaker->TeamIndex != PendingRestartTeam) return;
+        !IsValid(PendingRestartTaker) || PendingRestartTaker->TeamIndex != PendingRestartTeam ||
+        PendingRestartTaker->GetWorld() != GetWorld()) return;
     // Provisional in-field set-piece setup; official throw mechanics remain TODO.
     const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
     const float InwardY = PendingRestartLocation.Y >= 0.f ? -1.f : 1.f;
@@ -383,6 +384,8 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
         return;
     }
     PendingRestartTaker->GetCharacterMovement()->StopMovementImmediately();
+    // A failed or missing restart taker must not release the paused referee state.
+    if (!IsValid(PendingRestartTaker) || !IsValid(MatchBall)) return;
     MatchBall->PlaceAtRest(PendingRestartLocation);
     if (bAutoKickProvisionalRestart)
     {
