@@ -105,6 +105,8 @@ bool USportsArcadeCupSave::ValidateProgress() const
             (Winner != Fixture.HomeClubId && Winner != Fixture.AwayClubId)) return false;
         WinnersSeen.Add(Winner);
     }
+    if (CurrentRoundFixtures.Num() == 1 && CurrentRoundWinners.Num() == 1 &&
+        ChampionId.IsNone()) return false;
     if (!ChampionId.IsNone() &&
         (CurrentRoundFixtures.Num() != 1 || CurrentRoundWinners.Num() != 1 ||
          ChampionId != CurrentRoundWinners[0])) return false;
