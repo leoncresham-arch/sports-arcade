@@ -367,3 +367,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Blueprint methods SaveBoundSeasonToSlot and IsBoundSeasonResultRecorded expose season saving and result status.
 - AdvanceToNextSeasonFixture selects the next pending fixture after a committed full-time result.
 - Source tests added to existing kickoff and season integration suites. Native Unreal compilation still outstanding.
+
+## October 19 — competition-based season creation
+- Added native BlueprintCallable USportsArcadeSeasonFactory::CreateLeagueSeason: validates authored catalog, selects a league competition by stable ID and starts a round-robin season using its club IDs. Cup formats are intentionally rejected until knockout gameplay exists.
+- Added source-contract test unreal/tests/test_season_factory.py. Native engine build and menu binding remain pending.
