@@ -384,3 +384,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added Blueprint progress API: GetCompletedFixtureCount, GetSeasonProgress and GetNextUnplayedFixture. Source CI passed at 0dd5f0d2 (run 39201485059).
 - Added another reference fixture-order regression test. Latest tested source SHA f6852212 passed CI (run 39201530287).
 - Next approved scope: connect season UI to these Blueprint interfaces, add native Unreal automation and engine build validation; keep moving into independent match/rules tasks while Windows native hardware unavailable.
+
+## October 19 — midmatch league guards and Blueprint match UI contract
+- GameMode now prevents rebinding a different fixture during an already-bound match and blocks resetting an already recorded league fixture; exhibitions still permit reset.
+- Added native ESportsArcadeMatchPhase with Kickoff, Playing, Stoppage, HalfTime and FullTime; GetCurrentMatchPhase lets HUD consume one consistent authoritative phase.
+- GameMode exposes read-only GetBoundSeason and GetBoundFixtureIndex Blueprint methods for league UI and result screens.
+- Updated test_season_match_integration.py and test_match_controls_and_phases.py with source assertions. CI passed implementation commits, check latest regression HEAD. No Unreal native compilation yet.
