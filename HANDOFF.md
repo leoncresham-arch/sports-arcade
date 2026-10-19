@@ -416,3 +416,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Cup match result attribution now checks selected tie index and both club IDs, preventing a previously completed tie from being reset or an old score assigned to a new cup tie.
 - Added regressions to test_cup_match_integration.py and test_native_automation_presence.py. GitHub source CI succeeded at runner implementation commit db6a98e6; verify latest test HEAD.
 - Continue approved scope: extra time and penalty resolution, match referee state machine, authored UI/menu integration, native Windows build and engine automation execution.
+
+## October 19 — final native match automation refinements
+- Native league automation test now passes an explicitly constructed TArray for fixture results instead of implicit initializer-list conversion; reduces UE C++ compile ambiguity.
+- GameMode exposes IsCupTieBreakRequired() for knockout matches finishing level after regulation: no arbitrary winner is assigned. Actual extra-time/shootout implementation remains open.
+- Added test_cup_match_integration.py regression coverage. Source CI passed implementation commit 955a29b4; verify newest test head on Actions before concluding.
