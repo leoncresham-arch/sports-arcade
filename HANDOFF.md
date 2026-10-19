@@ -485,3 +485,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - Native CupSaveIntegrity test additionally rejects a wrong current round number before restoring a legitimate bracket and completing the cup.
 - Cup UI GetCupProgress and GetNextCupFixture now verify bracket progress rather than displaying inconsistent saved state; Python source regression checks added.
 - Source CI passed at eaf5571e and a33f10a0; verify latest HEAD workflow separately. Actual Unreal engine compilation and Automation RunTests are still pending on UE 5.5 Windows.
+
+
+## October 19 — manual set-piece continuation
+- Fixed a premature referee release: with automatic restarts disabled, staging the taker/ball no longer resumes match play without a kick.
+- Added `TakeManualRestart(KickDirection)` Blueprint-callable native method to kick with the awarded player and resume only after successful physics contact. A transient `bManualRestartStaged` guard prevents a kick before positioning, and `CanTakeManualRestart()` provides a Blueprint HUD eligibility query.
+- Invalid zero/nonfinite kick directions are rejected. Source regression coverage in `test_restart_taker_world.py` and updated play-resume event contract in `test_match_controls_and_phases.py`. GitHub Actions source tests passed for implementation updates; still no actual UE 5.5 runtime validation.
+- Continue actual physically animated set pieces and team referee AI, no restart or separate project.
