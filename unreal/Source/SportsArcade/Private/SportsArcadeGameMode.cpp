@@ -657,6 +657,15 @@ bool ASportsArcadeGameMode::AdvanceToNextSeasonFixture()
     return BindSeasonFixture(BoundSeason, NextIndex);
 }
 
+float ASportsArcadeGameMode::GetMatchClockMinutes() const
+{
+    const float RegulationMinutes = 90.f * FMath::Clamp(
+        ElapsedMatchSeconds / FMath::Max(2.f * HalfDurationSeconds, 1.f), 0.f, 1.f);
+    if (!bCupExtraTimePlayed) return RegulationMinutes;
+    return RegulationMinutes + 30.f * FMath::Clamp(
+        ExtraTimeElapsedSeconds / FMath::Max(2.f * ExtraTimeHalfDurationSeconds, 1.f), 0.f, 1.f);
+}
+
 ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const
 {
     // Cup tie-break presentation must not masquerade as a completed fixture.
