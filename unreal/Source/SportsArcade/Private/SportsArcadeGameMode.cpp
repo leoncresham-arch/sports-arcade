@@ -3,6 +3,7 @@
 #include "SportsArcadeBroadcastCamera.h"
 #include "SportsArcadeBall.h"
 #include "SportsArcadeTeamRoster.h"
+#include "SportsArcadeSeasonSave.h"
 
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -257,6 +258,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             MatchBall->StopMotion();
             bHasPreviousBallPosition = false;
         }
+        CommitSeasonResult();
         OnFullTime.Broadcast();
     }
 }
@@ -311,6 +313,7 @@ void ASportsArcadeGameMode::ResetMatch()
             It->ResetToKickoffPosition();
         }
     }
+    bSeasonResultRecorded = false;
     OnMatchReset.Broadcast();
 }
 
@@ -485,4 +488,40 @@ bool ASportsArcadeGameMode::SwitchToNearestTeammate(int32 TeamIndex)
         PreviouslyControlled->SpawnDefaultController();
     }
     return true;
+}
+
+bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, int32 FixtureIndex)
+{
+    if (!IsValid(Season) || !Season->Fixtures.IsValidIndex(FixtureIndex) ||
+        Season->CompletedFixtureIndices.Contains(FixtureIndex))
+        return false;
+
+    const FSportsArcadeLeagueFixture& Fixture = Season->Fixtures[FixtureIndex];
+    if (Fixture.HomeClubId.IsNone() || Fixture.AwayClubId.IsNone() ||
+        Fixture.HomeClubId == Fixture.AwayClubId ||
+        !Season->ClubIds.Contains(Fixture.HomeClubId) ||
+        !Season->ClubIds.Contains(Fixture.AwayClubId))
+        return false;
+
+    // Do not replace a match in progress or a result already recorded.
+    if (ElapsedMatchSeconds > 0.f && !bMatchFinished) return false;
+    BoundSeason = Season;
+    BoundFixtureIndex = FixtureIndex;
+    SelectedHomeClubId = Fixture.HomeClubId;
+    SelectedAwayClubId = Fixture.AwayClubId;
+    ResetMatch();
+    return true;
+}
+
+void ASportsArcadeGameMode::CommitSeasonResult()
+{
+    if (bSeasonResultRecorded || !IsValid(BoundSeason) ||
+        !BoundSeason->Fixtures.IsValidIndex(BoundFixtureIndex))
+        return;
+    bSeasonResultRecorded = BoundSeason->RecordFixtureResult(
+        BoundFixtureIndex, HomeGoals, AwayGoals);
+    if (!bSeasonResultRecorded)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SportsArcade: league result could not be recorded for fixture %d"), BoundFixtureIndex);
+    }
 }
