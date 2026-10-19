@@ -20,3 +20,9 @@ On a Windows PC with Unreal Engine 5.5, first build the existing project using `
 Inspect the output log for each test's pass/fail status, even if Unreal exits with code zero. Do not mark any UE test validated solely from a successful process exit. If Unreal's automation CLI behavior differs for the installed build, adapt the test launcher based on the actual log instead of suppressing failures.
 
 Further work: add in-engine match actor tests, startup/kickoff coverage, SaveGame round-trip tests and UI interaction tests. Never treat the Python source contracts as a replacement for native compilation and runtime verification.
+
+
+## October 19 cup save integrity extension
+- Native CupSaveIntegrity automation checks a four-team cup, rejects incorrect completed-tie counts and round indices, then completes a valid final and checks champion identity.
+- Cup save/load, winner mutations, next-fixture UI and progress now use ValidateProgress to avoid accepting or displaying corrupt brackets. The 2–64-team bracket invariant determines expected completed ties and current round.
+- Python CI tests source wiring; running the native automation still requires a local Unreal Engine 5.5 Editor build.
