@@ -423,7 +423,9 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
 bool ASportsArcadeGameMode::CanTakeManualRestart() const
 {
     return !bAutoKickProvisionalRestart && bManualRestartStaged &&
-        CanResumePendingRestart();
+        CanResumePendingRestart() &&
+        FVector::DistSquared2D(MatchBall->GetActorLocation(), PendingRestartLocation) <=
+            FMath::Square(60.f);
 }
 
 bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
