@@ -14,6 +14,12 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn('Candidate->GetWorld() != GetWorld()', code)
         self.assertIn('!Cast<ASportsArcadeTeamAIController>(Candidate->GetController())', code)
 
+    def test_pass_receiver_pressure_is_evaluated(self):
+        code = AI.read_text()
+        self.assertIn("ReceiverSeparation < 210.f", code)
+        self.assertIn("ReceiverPressurePenalty = FMath::Max(", code)
+        self.assertIn("Distance * 0.25f - ReceiverPressurePenalty", code)
+
     def test_invalid_lineup_stops_navigation(self):
         code = AI.read_text()
         self.assertIn('if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10 ||', code)
