@@ -24,6 +24,13 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("Cup->ValidateProgress()", CPP)
         self.assertIn("if (SlotName.IsEmpty() || UserIndex < 0 || !ValidateProgress())", CPP)
 
+    def test_cup_progress_and_next_pending_tie(self):
+        self.assertIn("GetCupProgress() const", HEADER)
+        self.assertIn("GetNextCupFixture(FSportsArcadeCupFixture& OutFixture)", HEADER)
+        self.assertIn("++CompletedTies;", CPP)
+        self.assertIn("OpeningClubCount = ClubIds.Num();", CPP)
+        self.assertIn("OutFixture = CurrentRoundFixtures[CurrentRoundWinners.Num()]", CPP)
+
     def test_next_round_requires_every_winner(self):
         self.assertIn("CurrentRoundWinners.Num() != CurrentRoundFixtures.Num()", CPP)
         self.assertIn("GenerateNextRound(", CPP)
