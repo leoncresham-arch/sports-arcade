@@ -136,6 +136,10 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void ResumeAfterBallOut();
 
+    /** Completes a staged manual set-piece using the awarded taker. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match|Restart")
+    bool TakeManualRestart(const FVector& KickDirection);
+
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     float GetMatchProgress() const;
 
