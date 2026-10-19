@@ -692,3 +692,11 @@ bool ASportsArcadeGameMode::IsCupResultRecorded() const
 {
     return IsValid(BoundCup) && bMatchFinished && bCupResultRecorded;
 }
+
+bool ASportsArcadeGameMode::AdvanceBoundCupRound()
+{
+    if (!IsValid(BoundCup) || !bMatchFinished || !bCupResultRecorded ||
+        BoundCup->IsCupComplete()) return false;
+    if (!BoundCup->AdvanceRound()) return false;
+    return BindNextCupFixture(BoundCup);
+}
