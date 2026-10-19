@@ -11,6 +11,8 @@ bool USportsArcadeCupSave::StartCup(FName InCompetitionId, const TArray<FName>& 
     CurrentRoundFixtures = MoveTemp(OpeningRound);
     CurrentRoundWinners.Reset();
     ChampionId = NAME_None;
+    OpeningClubCount = ClubIds.Num();
+    CompletedTies = 0;
     return true;
 }
 
@@ -23,6 +25,7 @@ bool USportsArcadeCupSave::RecordWinner(FName WinningClubId)
     if (WinningClubId != Fixture.HomeClubId && WinningClubId != Fixture.AwayClubId)
         return false;
     CurrentRoundWinners.Add(WinningClubId);
+    ++CompletedTies;
     if (CurrentRoundWinners.Num() == 1 && CurrentRoundFixtures.Num() == 1)
         ChampionId = WinningClubId;
     return true;
@@ -67,7 +70,9 @@ USportsArcadeCupSave* USportsArcadeCupSave::LoadCupFromSlot(
 bool USportsArcadeCupSave::ValidateProgress() const
 {
     if (CompetitionId.IsNone() || CurrentRoundFixtures.IsEmpty() ||
-        CurrentRoundWinners.Num() > CurrentRoundFixtures.Num()) return false;
+        CurrentRoundWinners.Num() > CurrentRoundFixtures.Num() ||
+        OpeningClubCount < 2 || CompletedTies < CurrentRoundWinners.Num() ||
+        CompletedTies > OpeningClubCount - 1) return false;
     const int32 Round = CurrentRoundFixtures[0].Round;
     if (Round < 1) return false;
     TSet<FName> SeenTeams;
@@ -92,5 +97,20 @@ bool USportsArcadeCupSave::ValidateProgress() const
     if (!ChampionId.IsNone() &&
         (CurrentRoundFixtures.Num() != 1 || CurrentRoundWinners.Num() != 1 ||
          ChampionId != CurrentRoundWinners[0])) return false;
+    return true;
+}
+
+float USportsArcadeCupSave::GetCupProgress() const
+{
+    return OpeningClubCount < 2 ? 0.f :
+        FMath::Clamp(static_cast<float>(CompletedTies) /
+            static_cast<float>(OpeningClubCount - 1), 0.f, 1.f);
+}
+
+bool USportsArcadeCupSave::GetNextCupFixture(FSportsArcadeCupFixture& OutFixture) const
+{
+    if (IsCupComplete() ||
+        !CurrentRoundFixtures.IsValidIndex(CurrentRoundWinners.Num())) return false;
+    OutFixture = CurrentRoundFixtures[CurrentRoundWinners.Num()];
     return true;
 }
