@@ -420,9 +420,15 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     OnPlayResumed.Broadcast();
 }
 
+bool ASportsArcadeGameMode::CanTakeManualRestart() const
+{
+    return !bAutoKickProvisionalRestart && bManualRestartStaged &&
+        CanResumePendingRestart();
+}
+
 bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
 {
-    if (bAutoKickProvisionalRestart || !bManualRestartStaged || !CanResumePendingRestart() ||
+    if (!CanTakeManualRestart() ||
         KickDirection.IsNearlyZero() || !IsValid(MatchBall)) return false;
     if (!MatchBall->KickByPlayer(
         PendingRestartTaker, KickDirection.GetSafeNormal(), ProvisionalRestartImpulse, 210.f))
