@@ -27,3 +27,5 @@ class NativeUnrealAutomationContracts(unittest.TestCase):
         self.assertIn("USportsArcadeCupFixtures::GenerateNextRound", SOURCE)
         self.assertIn("USportsArcadeLeagueTable::CalculateTable", SOURCE)
         self.assertIn("Shootout->RecordAttempt", SOURCE)
+        self.assertIn("Invalid attempt ordering cannot choose a kicker", SOURCE)
+        self.assertIn("Goals cannot exceed attempts", SOURCE)
