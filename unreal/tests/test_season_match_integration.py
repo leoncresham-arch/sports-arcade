@@ -33,6 +33,10 @@ class SeasonMatchIntegrationTests(unittest.TestCase):
         self.assertIn("BoundSeason->GetNextUnplayedFixtureIndex()", SOURCE)
         self.assertIn("BindSeasonFixture(BoundSeason, NextIndex)", SOURCE)
 
+    def test_completed_fixture_cannot_be_reset_or_rebound_mid_match(self):
+        self.assertIn("BoundSeason->CompletedFixtureIndices.Contains(BoundFixtureIndex)", SOURCE)
+        self.assertIn("!bMatchFinished && BoundFixtureIndex != INDEX_NONE", SOURCE)
+
     def test_result_only_submitted_at_full_time(self):
         self.assertIn("CommitSeasonResult();\n        OnFullTime.Broadcast();", SOURCE)
         self.assertIn("bSeasonResultRecorded || !IsValid(BoundSeason)", SOURCE)
