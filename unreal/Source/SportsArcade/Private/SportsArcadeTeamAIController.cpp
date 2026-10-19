@@ -108,8 +108,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         float BestDistance = TNumericLimits<float>::Max();
         for (ASportsArcadeCharacter* Candidate : Roster->Players)
         {
-            if (!IsValid(Candidate) || Candidate->TeamIndex != Footballer->TeamIndex ||
-                Candidate->LineupSlot == 0) continue;
+            // A human-controlled footballer is not an available autonomous
+            // presser; otherwise every nearby AI teammate could stay passive.
+            if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld() ||
+                Candidate->TeamIndex != Footballer->TeamIndex || Candidate->LineupSlot == 0 ||
+                !Cast<ASportsArcadeTeamAIController>(Candidate->GetController())) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
             if (Distance < BestDistance)
             {
