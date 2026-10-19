@@ -43,6 +43,12 @@ class SeasonSaveTests(unittest.TestCase):
         self.assertIn("return INDEX_NONE;", SOURCE)
         self.assertIn("GetNextUnplayedFixtureIndex() == INDEX_NONE", SOURCE)
 
+    def test_normalized_season_progress(self):
+        self.assertIn("GetCompletedFixtureCount() const", HEADER)
+        self.assertIn("GetSeasonProgress() const", HEADER)
+        self.assertIn("CompletedFixtureIndices.Num()", SOURCE)
+        self.assertIn("Fixtures.IsEmpty() ? 0.f", SOURCE)
+
     def test_standings_derive_from_saved_results(self):
         self.assertIn("CalculateTable(ClubIds, Results, OutStandings)", SOURCE)
 
