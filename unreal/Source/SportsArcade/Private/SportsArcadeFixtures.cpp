@@ -33,19 +33,26 @@ bool USportsArcadeFixtures::GenerateLeagueFixtures(const TArray<FName>& ClubIds,
             Fixture.HomeClubId = bSwap ? Right : Left;
             Fixture.AwayClubId = bSwap ? Left : Right;
             Fixtures.Add(Fixture);
-            if (bHomeAndAway)
-            {
-                FSportsArcadeLeagueFixture ReturnFixture;
-                ReturnFixture.Round = RoundIndex + 1 + Rounds;
-                ReturnFixture.HomeClubId = Fixture.AwayClubId;
-                ReturnFixture.AwayClubId = Fixture.HomeClubId;
-                Fixtures.Add(ReturnFixture);
-            }
+
         }
 
         // Fixed first entry: classic circle method for all even-sized rotations.
         const FName Last = Rotation.Pop(EAllowShrinking::No);
         Rotation.Insert(Last, 1);
+    }
+    // The second leg must follow ALL first-leg rounds, not alternate match by match.
+    if (bHomeAndAway)
+    {
+        const int32 FirstLegCount = Fixtures.Num();
+        for (int32 Index = 0; Index < FirstLegCount; ++Index)
+        {
+            const FSportsArcadeLeagueFixture& FirstLeg = Fixtures[Index];
+            FSportsArcadeLeagueFixture ReturnFixture;
+            ReturnFixture.Round = FirstLeg.Round + Rounds;
+            ReturnFixture.HomeClubId = FirstLeg.AwayClubId;
+            ReturnFixture.AwayClubId = FirstLeg.HomeClubId;
+            Fixtures.Add(ReturnFixture);
+        }
     }
     return true;
 }
