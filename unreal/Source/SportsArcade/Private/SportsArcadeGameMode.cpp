@@ -543,10 +543,15 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
     AwayRoster->ClubId = Fixture.AwayClubId;
     if (IsValid(FootballCatalog))
     {
-        if (!HomeRoster->AssignFootballerRecords(FootballCatalog) ||
-            !AwayRoster->AssignFootballerRecords(FootballCatalog))
+        if (HomeRoster->CanAssignFootballerRecords(FootballCatalog) &&
+            AwayRoster->CanAssignFootballerRecords(FootballCatalog))
         {
-            UE_LOG(LogTemp, Warning, TEXT("SportsArcade: fixture selected but a full catalog player mapping is not yet available"));
+            HomeRoster->AssignFootballerRecords(FootballCatalog);
+            AwayRoster->AssignFootballerRecords(FootballCatalog);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("SportsArcade: fixture selected without complete catalog player mapping"));
         }
     }
     BoundSeason = Season;
