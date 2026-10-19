@@ -82,3 +82,18 @@ USportsArcadeSeasonSave* USportsArcadeSeasonSave::LoadSeasonFromSlot(const UObje
     TArray<FSportsArcadeLeagueStanding> ValidatedTable;
     return Season->GetCurrentStandings(ValidatedTable) ? Season : nullptr;
 }
+
+int32 USportsArcadeSeasonSave::GetNextUnplayedFixtureIndex() const
+{
+    for (int32 Index = 0; Index < Fixtures.Num(); ++Index)
+    {
+        if (!CompletedFixtureIndices.Contains(Index))
+            return Index;
+    }
+    return INDEX_NONE;
+}
+
+bool USportsArcadeSeasonSave::IsSeasonComplete() const
+{
+    return !Fixtures.IsEmpty() && GetNextUnplayedFixtureIndex() == INDEX_NONE;
+}
