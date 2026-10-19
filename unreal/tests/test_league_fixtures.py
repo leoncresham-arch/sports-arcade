@@ -23,7 +23,7 @@ def reference_schedule(ids, double_leg):
             if double_leg:
                 fixtures.append((round_index + 1 + rounds, away, home))
         rotation.insert(1, rotation.pop())
-    return fixtures
+    return sorted(fixtures, key=lambda fixture: fixture[0])
 
 
 class LeagueFixtureTests(unittest.TestCase):
@@ -31,6 +31,7 @@ class LeagueFixtureTests(unittest.TestCase):
         self.assertIn("public UBlueprintFunctionLibrary", HEADER)
         self.assertIn("GenerateLeagueFixtures(", HEADER)
         self.assertIn("Rotation.Insert(Last, 1);", SOURCE)
+        self.assertIn("const int32 FirstLegCount = Fixtures.Num();", SOURCE)
         self.assertIn("Seen.Contains(Id)", SOURCE)
         self.assertIn("ReturnFixture.HomeClubId = Fixture.AwayClubId", SOURCE)
 
