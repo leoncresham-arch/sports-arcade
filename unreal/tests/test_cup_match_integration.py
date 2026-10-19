@@ -12,6 +12,11 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("HomeGoals == AwayGoals", cpp)
         self.assertIn("BoundCup->RecordWinner(", cpp)
         self.assertIn("CommitCupResult();", cpp)
+    def test_completed_round_progression(self):
+        self.assertIn("AdvanceBoundCupRound()", header)
+        self.assertIn("BoundCup->AdvanceRound()", cpp)
+        self.assertIn("return BindNextCupFixture(BoundCup);", cpp)
+
     def test_post_match_result(self):
         self.assertIn("IsCupResultRecorded() const", header)
         self.assertIn("bMatchFinished && bCupResultRecorded", cpp)
