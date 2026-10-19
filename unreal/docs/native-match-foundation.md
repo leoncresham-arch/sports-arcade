@@ -78,3 +78,5 @@ Extract match clock and refereeing into testable game state for replication, add
 - This is a defensive C++ integrity change, covered by source tests; actual ball movement and engine API compatibility must still be confirmed in UE 5.5.
 
 - Manual restart eligibility also checks that the staged ball remains within 60 cm horizontally of the official restart mark. Drifting balls must be restaged rather than kicked from an incorrect location.
+
+- If the prepared dead ball drifts more than 60 cm, pressing B again restages it at the restart mark; otherwise repeated B presses leave a correctly staged ball alone. An invalid drifted ball cannot be struck by M until it has been restaged.
