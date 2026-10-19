@@ -429,7 +429,7 @@ bool ASportsArcadeGameMode::CanTakeManualRestart() const
 bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
 {
     if (!CanTakeManualRestart() ||
-        KickDirection.IsNearlyZero() || !IsValid(MatchBall)) return false;
+        KickDirection.ContainsNaN() || KickDirection.IsNearlyZero() || !IsValid(MatchBall)) return false;
     if (!MatchBall->KickByPlayer(
         PendingRestartTaker, KickDirection.GetSafeNormal(), ProvisionalRestartImpulse, 210.f))
         return false;
