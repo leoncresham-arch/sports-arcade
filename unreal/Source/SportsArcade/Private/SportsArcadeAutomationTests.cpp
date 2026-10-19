@@ -104,6 +104,17 @@ bool FSportsArcadePenaltyShootoutAutomation::RunTest(const FString& Parameters)
     TestTrue(TEXT("Away third miss"), Shootout->RecordAttempt(1, false));
     TestEqual(TEXT("Insurmountable three-goal lead wins shootout"), Shootout->WinningTeam, 0);
     TestFalse(TEXT("No additional kicks once decided"), Shootout->RecordAttempt(0, true));
+    Shootout->ResetShootout();
+    Shootout->HomeAttempts = 0;
+    Shootout->AwayAttempts = 1;
+    TestEqual(TEXT("Invalid attempt ordering cannot choose a kicker"),
+        Shootout->GetNextKickingTeam(), INDEX_NONE);
+    TestFalse(TEXT("Invalid ordering cannot record a kick"),
+        Shootout->RecordAttempt(0, true));
+    Shootout->ResetShootout();
+    Shootout->HomeScored = 1;
+    TestEqual(TEXT("Goals cannot exceed attempts"),
+        Shootout->GetNextKickingTeam(), INDEX_NONE);
     return true;
 }
 
