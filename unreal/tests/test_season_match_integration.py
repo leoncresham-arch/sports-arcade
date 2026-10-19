@@ -21,6 +21,12 @@ class SeasonMatchIntegrationTests(unittest.TestCase):
         self.assertIn("Fixture.HomeClubId == Fixture.AwayClubId", SOURCE)
         self.assertIn("ElapsedMatchSeconds > 0.f && !bMatchFinished", SOURCE)
 
+    def test_explicit_slot_save_from_match_mode(self):
+        self.assertIn("SaveBoundSeasonToSlot", HEADER)
+        self.assertIn("IsBoundSeasonResultRecorded", HEADER)
+        self.assertIn("BoundSeason->SaveSeasonToSlot(SlotName, UserIndex)", SOURCE)
+        self.assertIn("bMatchFinished && bSeasonResultRecorded", SOURCE)
+
     def test_result_only_submitted_at_full_time(self):
         self.assertIn("CommitSeasonResult();\n        OnFullTime.Broadcast();", SOURCE)
         self.assertIn("bSeasonResultRecorded || !IsValid(BoundSeason)", SOURCE)
