@@ -419,6 +419,20 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     OnPlayResumed.Broadcast();
 }
 
+bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
+{
+    if (bAutoKickProvisionalRestart || !CanResumePendingRestart() ||
+        KickDirection.IsNearlyZero() || !IsValid(MatchBall)) return false;
+    if (!MatchBall->KickByPlayer(
+        PendingRestartTaker, KickDirection.GetSafeNormal(), ProvisionalRestartImpulse, 210.f))
+        return false;
+    bBallOutOfPlay = false;
+    bHasPreviousBallPosition = false;
+    ClearPendingRestart();
+    OnPlayResumed.Broadcast();
+    return true;
+}
+
 void ASportsArcadeGameMode::StageKickoff(int32 TakingTeam)
 {
     if (TakingTeam != 0 && TakingTeam != 1) return;
