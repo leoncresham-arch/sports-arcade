@@ -130,6 +130,14 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool BindSeasonFixture(USportsArcadeSeasonSave* Season, int32 FixtureIndex);
 
+    /** Explicitly persist the bound season in the requested local slot. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool SaveBoundSeasonToSlot(const FString& SlotName, int32 UserIndex = 0) const;
+
+    /** Returns false unless the latest match result was recorded in the bound season. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    bool IsBoundSeasonResultRecorded() const;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
 
