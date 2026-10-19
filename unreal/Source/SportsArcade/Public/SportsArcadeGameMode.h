@@ -11,7 +11,7 @@ class ASportsArcadeTeamRoster;
 UENUM(BlueprintType)
 enum class ESportsArcadeRestartType : uint8
 {
-    None, ThrowIn, CornerKick, GoalKick, Undetermined
+    None, ThrowIn, CornerKick, GoalKick, Kickoff, Undetermined
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
@@ -134,6 +134,7 @@ private:
     bool bHasPreviousBallPosition = false;
     bool bSecondHalfStarted = false;
     void ClearPendingRestart();
+    void StageKickoff(int32 TakingTeam);
     ASportsArcadeCharacter* FindRestartTaker(int32 Team, const FVector& Location) const;
 
     /** Use the placed TV camera in a visual review level when one exists. */
