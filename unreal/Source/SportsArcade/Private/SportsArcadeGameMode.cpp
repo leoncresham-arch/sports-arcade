@@ -659,13 +659,28 @@ bool ASportsArcadeGameMode::AdvanceToNextSeasonFixture()
 
 ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const
 {
+    // Cup tie-break presentation must not masquerade as a completed fixture.
+    if (IsValid(BoundCup) && bMatchFinished && !bCupResultRecorded && HomeGoals == AwayGoals)
+    {
+        if (IsValid(ActivePenaltyShootout)) return ESportsArcadeMatchPhase::PenaltyShootout;
+        return bCupExtraTimePlayed
+            ? ESportsArcadeMatchPhase::AwaitingPenalties
+            : ESportsArcadeMatchPhase::AwaitingExtraTime;
+    }
     if (bMatchFinished) return ESportsArcadeMatchPhase::FullTime;
+    if (bExtraTimeActive && bHalfTime) return ESportsArcadeMatchPhase::ExtraTimeInterval;
     if (bHalfTime) return ESportsArcadeMatchPhase::HalfTime;
     if (bBallOutOfPlay)
     {
         return PendingRestartType == ESportsArcadeRestartType::Kickoff
             ? ESportsArcadeMatchPhase::Kickoff
             : ESportsArcadeMatchPhase::Stoppage;
+    }
+    if (bExtraTimeActive)
+    {
+        return bExtraTimeSecondHalf
+            ? ESportsArcadeMatchPhase::ExtraTimeSecondHalf
+            : ESportsArcadeMatchPhase::ExtraTimeFirstHalf;
     }
     return ESportsArcadeMatchPhase::Playing;
 }
