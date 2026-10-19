@@ -316,3 +316,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 
 ## Current dated handoff — October 19, 2026
 - The canonical concise new-chat handoff is [HANDOFF_2026-10-19.md](HANDOFF_2026-10-19.md). Read it alongside this permanent history before resuming development.
+
+## October 19 — current chat implementation batch (kickoffs and season foundations)
+- Match GameMode now stages an explicit `Kickoff` after either goal and after second-half resumption, reusing the provisional B set-piece flow. Clock/character actions stay stopped until the restart succeeds, and `OnPlayResumed` fires after it. Kickoff staging restores authored player positions, prefers the assigned striker slot 9 and points the impulse toward the correct half. This remains an uncompiled UE source implementation; not a fully officiated restart.
+- Native `USportsArcadeFootballDatabase` DataAsset added under `unreal/Source/SportsArcade`: stable FName keys for nations, clubs, footballers and competitions; squad category/competition format and referential checks. No unlicensed data or art bundled. See `unreal/docs/football-database.md`.
+- Native `USportsArcadeFixtures` Blueprint function library added to generate round-robin league schedules (single or double round, odd-sized leagues with byes). Initial Python tests cover scheduling pairs/rounds; real UE compilation and game-mode connection are still required.
+- Regression suites: `test_kickoff_phase.py`, `test_football_database.py`, `test_league_fixtures.py`; older phase/restart test expectations aligned to explicit kickoff. GitHub source-check Actions completed successfully after kickoff and catalog updates; verify latest HEAD Actions before reporting final CI.
+- Next work: integrate database club IDs into match selection and lineup creation, make season standings/save-game state, refine kickoff action flow and add engine-level tests. Existing main/UE project preserved.
