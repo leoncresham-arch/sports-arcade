@@ -337,3 +337,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 19 — native season save slots
 - `USportsArcadeSeasonSave` now exposes `SaveSeasonToSlot` and static `LoadSeasonFromSlot` using Unreal's `UGameplayStatics` local slot API. Loading checks saved fixture indices for duplicates/out-of-range values, matches recorded home/away teams to fixtures, and recomputes valid standings before accepting a file.
 - New source contract checks appended to `unreal/tests/test_season_save.py`. Full Unreal serialization and Windows save/load remain to be tested in engine. Connect the save class to season menus and match results next.
+
+## October 19 — continued season-to-match integration
+- `ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave*, int32)` now validates the selected fixture's home/away club IDs, rejects previously completed fixtures and binds one season fixture to the native exhibition. Selected club IDs are Blueprint-readable.
+- Native full-time invokes `CommitSeasonResult()` to submit match goals to the existing season SaveGame once; `ResetMatch()` resets that local submission state. This is source integration and still requires a real UE5.5 end-to-end playtest and frontend menu.
+- `USportsArcadeSeasonSave` now provides `GetNextUnplayedFixtureIndex()` and `IsSeasonComplete()` for progression UI, in addition to previously implemented SaveGame slot operations.
+- New `unreal/tests/test_season_match_integration.py` and added season progression assertions. Source checks have succeeded for the integration commits; verify final HEAD Actions after this note.
+- Next tasks: connect gameplay mode selection and club IDs to roster actors; explicit UI controllers for fixture selection/results; ensure duplicate match completion and restart transitions are engine tested; add automatic save-on-result if approved by design. No paid or proprietary assets added.
