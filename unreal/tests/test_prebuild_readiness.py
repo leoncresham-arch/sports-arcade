@@ -45,6 +45,15 @@ class PrebuildReadiness(unittest.TestCase):
         self.assertIn("MoveToLocation(Target", ai)
         self.assertIn("ETeleportType::TeleportPhysics", mode)
 
+    def test_07_windows_build_script_present(self):
+        script = ROOT / "Tools" / "Windows" / "Build-SportsArcade.ps1"
+        self.assertTrue(script.is_file())
+        source = script.read_text()
+        self.assertIn("SportsArcadeEditor", source)
+        self.assertIn("Win64", source)
+        self.assertIn("Build.bat", source)
+        self.assertIn("UnrealVersionSelector", source)
+
     def test_06_generated_headers_last(self):
         for header in sorted((MODULE / "Public").glob("*.h")):
             content = header.read_text()
