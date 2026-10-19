@@ -1,5 +1,6 @@
 #include "SportsArcadeFixtures.h"
 #include "SportsArcadeCupFixtures.h"
+#include "SportsArcadeCupSave.h"
 #include "SportsArcadeLeagueTable.h"
 #include "SportsArcadePenaltyShootout.h"
 
@@ -103,6 +104,34 @@ bool FSportsArcadePenaltyShootoutAutomation::RunTest(const FString& Parameters)
     TestTrue(TEXT("Away third miss"), Shootout->RecordAttempt(1, false));
     TestEqual(TEXT("Insurmountable three-goal lead wins shootout"), Shootout->WinningTeam, 0);
     TestFalse(TEXT("No additional kicks once decided"), Shootout->RecordAttempt(0, true));
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadeCupSaveIntegrityAutomation,
+    "SportsArcade.Seasons.CupSaveIntegrity",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadeCupSaveIntegrityAutomation::RunTest(const FString& Parameters)
+{
+    USportsArcadeCupSave* Cup = NewObject<USportsArcadeCupSave>(GetTransientPackage());
+    TestNotNull(TEXT("Cup progress object"), Cup);
+    if (!Cup) return false;
+    const TArray<FName> Clubs = {FName(TEXT("a")), FName(TEXT("b")),
+        FName(TEXT("c")), FName(TEXT("d"))};
+    TestTrue(TEXT("Create four-team cup"), Cup->StartCup(FName(TEXT("test_cup")), Clubs));
+    TestTrue(TEXT("Opening state validates"), Cup->ValidateProgress());
+    TestTrue(TEXT("First tie result"), Cup->RecordWinner(Clubs[0]));
+    TestTrue(TEXT("Second tie result"), Cup->RecordWinner(Clubs[2]));
+    TestTrue(TEXT("Completed opening round validates"), Cup->ValidateProgress());
+    Cup->CompletedTies = 99;
+    TestFalse(TEXT("Impossible completed-tie count is rejected"), Cup->ValidateProgress());
+    TestFalse(TEXT("Corrupt cup cannot advance"), Cup->AdvanceRound());
+    Cup->CompletedTies = 2;
+    TestTrue(TEXT("Valid cup advances"), Cup->AdvanceRound());
+    TestTrue(TEXT("Final state validates"), Cup->ValidateProgress());
+    TestTrue(TEXT("Champion crowned"), Cup->RecordWinner(Clubs[0]));
+    TestTrue(TEXT("Completed tournament validates"), Cup->ValidateProgress());
+    TestEqual(TEXT("Champion identity"), Cup->ChampionId, Clubs[0]);
     return true;
 }
 
