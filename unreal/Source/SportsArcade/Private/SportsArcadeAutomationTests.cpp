@@ -127,6 +127,9 @@ bool FSportsArcadeCupSaveIntegrityAutomation::RunTest(const FString& Parameters)
     TestFalse(TEXT("Impossible completed-tie count is rejected"), Cup->ValidateProgress());
     TestFalse(TEXT("Corrupt cup cannot advance"), Cup->AdvanceRound());
     Cup->CompletedTies = 2;
+    Cup->CurrentRoundFixtures[0].Round = 9;
+    TestFalse(TEXT("Incorrect round index rejected"), Cup->ValidateProgress());
+    Cup->CurrentRoundFixtures[0].Round = 1;
     TestTrue(TEXT("Valid cup advances"), Cup->AdvanceRound());
     TestTrue(TEXT("Final state validates"), Cup->ValidateProgress());
     TestTrue(TEXT("Champion crowned"), Cup->RecordWinner(Clubs[0]));
