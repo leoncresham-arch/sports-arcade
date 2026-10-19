@@ -329,3 +329,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added native `USportsArcadeLeagueTable::CalculateTable`: validates match club IDs and scorelines, tracks played/won/drawn/lost, GF/GA and 3-1-0 points, ranks by points, goal difference, goals for, then stable club ID. Neither is wired into persistent career mode yet.
 - Regression source and reference tests are at `unreal/tests/test_league_fixtures.py` and `test_league_table.py`. Check CI for current HEAD; only source tests run in GitHub Actions.
 - Next independent mode work: seasonal SaveGame records (club IDs, fixture IDs, results, round index) and load/validation routines, match-select integration into authored catalog.
+
+## October 19 — offline season save progression
+- Added native `USportsArcadeSeasonSave : USaveGame`, holding a competition ID, club IDs, generated league fixture schedule, completed fixture indices and scored results. `StartSeason` validates/generates a new schedule; `RecordFixtureResult` rejects duplicate/invalid fixture entries and validates candidate standings before writing; `GetCurrentStandings` derives the table from recorded results.
+- Added `unreal/tests/test_season_save.py`. Next is UI/menu exposure, slot-based `UGameplayStatics::SaveGameToSlot` integration, actual GameMode match-result wiring and native editor tests. No claim of end-to-end save/load gameplay.
