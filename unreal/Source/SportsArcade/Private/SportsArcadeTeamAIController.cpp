@@ -133,7 +133,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     bool bBlocked = false;
                     for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
                     {
-                        if (Opp->TeamIndex == Footballer->TeamIndex) continue;
+                        if (!IsValid(*Opp) || Opp->TeamIndex == Footballer->TeamIndex) continue;
                         const FVector2D Start(Ball->GetActorLocation());
                         const FVector2D End(Teammate->GetActorLocation());
                         const FVector2D Segment = End - Start;
@@ -175,7 +175,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         float NearestOpponentDistance = FMath::Square(FMath::Max(0.f, MarkingSearchRadiusCm));
         for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
         {
-            if (It->TeamIndex == Footballer->TeamIndex) continue;
+            if (!IsValid(*It) || It->TeamIndex == Footballer->TeamIndex) continue;
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
             if (Distance < NearestOpponentDistance)
             {
