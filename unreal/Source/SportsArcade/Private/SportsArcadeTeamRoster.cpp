@@ -110,7 +110,7 @@ void ASportsArcadeTeamRoster::DiscoverPlacedPlayers()
     }
 }
 
-bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog)
+bool ASportsArcadeTeamRoster::CanAssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog) const
 {
     if (!IsValid(Catalog) || ClubId.IsNone() || !HasCompleteLineup()) return false;
     TMap<int32, FName> SquadByShirt;
@@ -128,6 +128,17 @@ bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootbal
         if (!IsValid(Player) || !SquadByShirt.Contains(Player->ShirtNumber) ||
             UsedShirts.Contains(Player->ShirtNumber)) return false;
         UsedShirts.Add(Player->ShirtNumber);
+    }
+    return true;
+}
+
+bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog)
+{
+    if (!CanAssignFootballerRecords(Catalog)) return false;
+    TMap<int32, FName> SquadByShirt;
+    for (const FSportsArcadeFootballerRecord& Record : Catalog->Footballers)
+    {
+        if (Record.ClubId == ClubId) SquadByShirt.Add(Record.ShirtNumber, Record.Id);
     }
     for (ASportsArcadeCharacter* Player : Players)
     {
