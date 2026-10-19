@@ -21,6 +21,11 @@ class SeasonMatchIntegrationTests(unittest.TestCase):
         self.assertIn("Fixture.HomeClubId == Fixture.AwayClubId", SOURCE)
         self.assertIn("ElapsedMatchSeconds > 0.f && !bMatchFinished", SOURCE)
 
+    def test_league_standings_available_to_post_match_ui(self):
+        self.assertIn("GetBoundSeasonStandings", HEADER)
+        self.assertIn("BoundSeason->GetCurrentStandings(OutStandings)", SOURCE)
+        self.assertIn("OutStandings.Reset();", SOURCE)
+
     def test_read_only_bound_season_ui_accessors(self):
         self.assertIn("GetBoundSeason() const", HEADER)
         self.assertIn("GetBoundFixtureIndex() const", HEADER)
