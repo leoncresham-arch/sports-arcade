@@ -65,3 +65,9 @@ Extract match clock and refereeing into testable game state for replication, add
 - A new BlueprintCallable `TakeManualRestart(KickDirection)` is available after staging. It requires a valid awarded taker, same-world contact, a nonzero kick direction and successful physics impulse before clearing stoppage and broadcasting the resume event.
 - The internal `bManualRestartStaged` flag prevents taking a manual restart before the ball is placed; cleared with the pending restart state. These remain provisional offline kicks, not a complete licensed referee/set-piece animation system.
 - Python source regression tests cover manual/automatic paths, action ordering and failure handling. Runtime Unreal 5.5 validation is still needed.
+
+
+## October 19 — keyboard-accessible manual restarts
+- For levels configured with `bAutoKickProvisionalRestart=false`, press **B** to stage the awarded taker and ball while maintaining the referee stoppage, then **M** to take the restart using the taker's current facing direction. Alternatively, UI Blueprint calls `CanTakeManualRestart` and `TakeManualRestart(FVector)` can supply a deliberate direction.
+- A repeated B cannot reposition an already-staged manual ball. Invalid zero/nonfinite vectors are rejected; successful attributed physics contact is required before match play resumes.
+- Default automatic mode still works with B only. Neither option substitutes for legal throw-in hand animations, player separation or full referee review.
