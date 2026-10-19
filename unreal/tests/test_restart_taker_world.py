@@ -27,6 +27,17 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertLess(method.index("if (!bAutoKickProvisionalRestart)"),
                         method.index("bBallOutOfPlay = false;"))
 
+    def test_manual_restarts_require_staging_and_valid_strike(self):
+        self.assertIn("bool TakeManualRestart(const FVector& KickDirection);", HEADER)
+        method = SOURCE.split("bool ASportsArcadeGameMode::TakeManualRestart(", 1)[1].split("\n}", 1)[0]
+        self.assertIn("!bManualRestartStaged", method)
+        self.assertIn("!CanResumePendingRestart()", method)
+        self.assertIn("KickDirection.IsNearlyZero()", method)
+        self.assertIn("MatchBall->KickByPlayer(", method)
+        self.assertLess(method.index("MatchBall->KickByPlayer("), method.index("bBallOutOfPlay = false;"))
+        self.assertIn("bManualRestartStaged = !bAutoKickProvisionalRestart;", SOURCE)
+        self.assertIn("bManualRestartStaged = false;", SOURCE)
+
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
         self.assertIn("if (!CanResumePendingRestart()) return;", method)
