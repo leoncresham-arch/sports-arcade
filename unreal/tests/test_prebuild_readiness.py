@@ -53,6 +53,8 @@ class PrebuildReadiness(unittest.TestCase):
         self.assertIn("Win64", source)
         self.assertIn("Build.bat", source)
         self.assertIn("UnrealVersionSelector", source)
+        self.assertIn("Tee-Object -FilePath $LogPath", source)
+        self.assertIn("$BuildExitCode = $LASTEXITCODE", source)
 
     def test_06_generated_headers_last(self):
         for header in sorted((MODULE / "Public").glob("*.h")):
