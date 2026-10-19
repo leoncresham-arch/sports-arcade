@@ -541,6 +541,8 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         return false;
     // Do not replace a match in progress or a result already recorded.
     if (ElapsedMatchSeconds > 0.f && !bMatchFinished) return false;
+    // Never allow an already-recorded match to be rebound as a new match.
+    if (IsValid(BoundSeason) && !bMatchFinished && BoundFixtureIndex != INDEX_NONE) return false;
     // Bind club identities only after all match prerequisites pass.
     // An authored catalog can optionally assign stable player identities;
     // incomplete squad data must not prevent the prototype from running.
