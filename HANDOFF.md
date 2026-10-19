@@ -459,3 +459,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - Shootout startup now prevalidates bound fixture index, winner advancement and club identity, matching per-kick safeguards.
 - Added Blueprint-friendly GetMatchClockMinutes() (0–90 / 0–120 game minutes) and GetMatchPeriodNumber() (1–4); added corresponding CI source regressions.
 - Further unfinished gameplay scope remains: match official rules, set pieces, UI wiring and authentic native UE validation. Continue without pausing after individual commits.
+
+
+## October 19 — sustained referee restart hardening batch
+- Provisional referee restarts now reject a restart taker owned by another Unreal world, and `CanResumePendingRestart()` centralizes match stoppage, restart type, team award, ball validity, taker and world checks for Blueprint UI and match actions.
+- FindRestartTaker skips roster members from unrelated worlds. Source regression `test_restart_taker_world.py` covers eligibility, ordering and roster selection.
+- An older source assertion was updated after the new centralized check; temporary source CI failures were diagnosed from Actions job logs and repaired. The C++ source still needs native UE 5.5 build/play validation.
+- Continue match officiating and authored UI, physical penalty and set-piece execution without creating alternate architecture or requiring routine authorization.
