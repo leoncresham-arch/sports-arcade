@@ -14,6 +14,14 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("CurrentRoundFixtures.IsValidIndex(CurrentRoundWinners.Num())", CPP)
         self.assertIn("WinningClubId != Fixture.HomeClubId", CPP)
         self.assertIn("WinningClubId != Fixture.AwayClubId", CPP)
+    def test_slot_persistence_and_load_validation(self):
+        self.assertIn("SaveCupToSlot", HEADER)
+        self.assertIn("LoadCupFromSlot", HEADER)
+        self.assertIn("UGameplayStatics::SaveGameToSlot", CPP)
+        self.assertIn("UGameplayStatics::LoadGameFromSlot", CPP)
+        self.assertIn("Winner != Fixture.HomeClubId", CPP)
+        self.assertIn("Cup->ChampionId != Cup->CurrentRoundWinners[0]", CPP)
+
     def test_next_round_requires_every_winner(self):
         self.assertIn("CurrentRoundWinners.Num() != CurrentRoundFixtures.Num()", CPP)
         self.assertIn("GenerateNextRound(", CPP)
