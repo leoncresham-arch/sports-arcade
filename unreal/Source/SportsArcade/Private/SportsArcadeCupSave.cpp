@@ -18,7 +18,7 @@ bool USportsArcadeCupSave::StartCup(FName InCompetitionId, const TArray<FName>& 
 
 bool USportsArcadeCupSave::RecordWinner(FName WinningClubId)
 {
-    if (IsCupComplete() || WinningClubId.IsNone() ||
+    if (!ValidateProgress() || IsCupComplete() || WinningClubId.IsNone() ||
         !CurrentRoundFixtures.IsValidIndex(CurrentRoundWinners.Num()))
         return false;
     const FSportsArcadeCupFixture& Fixture = CurrentRoundFixtures[CurrentRoundWinners.Num()];
@@ -33,7 +33,7 @@ bool USportsArcadeCupSave::RecordWinner(FName WinningClubId)
 
 bool USportsArcadeCupSave::AdvanceRound()
 {
-    if (IsCupComplete() || CurrentRoundFixtures.Num() < 2 ||
+    if (!ValidateProgress() || IsCupComplete() || CurrentRoundFixtures.Num() < 2 ||
         CurrentRoundWinners.Num() != CurrentRoundFixtures.Num())
         return false;
     TArray<FSportsArcadeCupFixture> NextFixtures;
