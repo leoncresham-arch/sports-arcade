@@ -565,8 +565,15 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         }
         else
         {
+            HomeRoster->ClearFootballerRecordIds();
+            AwayRoster->ClearFootballerRecordIds();
             UE_LOG(LogTemp, Warning, TEXT("SportsArcade: fixture selected without complete catalog player mapping"));
         }
+    }
+    else
+    {
+        HomeRoster->ClearFootballerRecordIds();
+        AwayRoster->ClearFootballerRecordIds();
     }
     BoundSeason = Season;
     BoundFixtureIndex = FixtureIndex;
@@ -687,6 +694,11 @@ bool ASportsArcadeGameMode::BindNextCupFixture(USportsArcadeCupSave* Cup)
     {
         Home->AssignFootballerRecords(FootballCatalog);
         Away->AssignFootballerRecords(FootballCatalog);
+    }
+    else
+    {
+        Home->ClearFootballerRecordIds();
+        Away->ClearFootballerRecordIds();
     }
     BoundCup = Cup;
     BoundCupFixtureIndex = Cup->CurrentRoundWinners.Num();
