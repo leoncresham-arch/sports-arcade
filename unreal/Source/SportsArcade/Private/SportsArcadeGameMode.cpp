@@ -733,3 +733,9 @@ bool ASportsArcadeGameMode::SaveBoundCupToSlot(const FString& SlotName, int32 Us
 {
     return IsValid(BoundCup) && BoundCup->SaveCupToSlot(SlotName, UserIndex);
 }
+
+bool ASportsArcadeGameMode::IsCupTieBreakRequired() const
+{
+    return IsValid(BoundCup) && bMatchFinished &&
+        !bCupResultRecorded && HomeGoals == AwayGoals;
+}
