@@ -45,3 +45,9 @@ Technical limitations:
 
 ## Native lineup validation
 - SportsArcadeTeamRoster now exposes HasCompleteLineup(). It requires exactly eleven valid players belonging to that roster's team, each assigned a unique LineupSlot from 0 through 10. The query does not automatically block or repair a match, and native Unreal compile/play remains pending.
+
+
+## October 19 — AI team pressing and pass receiver safety
+- Nearest automatic team presser excludes footballers currently possessed by a human player controller; this stops human movement from suppressing all team AI pressure. Foreign-world roster candidates are also excluded.
+- AI passing decisions now reject tightly marked receivers (within 210 cm of an opponent), with a graduated scoring penalty when an opponent is closer than 450 cm to the intended receiver. Existing pass lane interception checks remain in place.
+- Both changes have Python source regression coverage and source CI. True gameplay balance and Unreal navigation behavior remain unverified in-editor.
