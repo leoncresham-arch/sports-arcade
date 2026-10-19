@@ -7,8 +7,13 @@ class LineupSafetyTests(unittest.TestCase):
     def test_outfielder_selection_ignores_goalkeeper_slot(self):
         code = AI.read_text()
         self.assertIn('for (ASportsArcadeCharacter* Candidate : Roster->Players)', code)
-        self.assertIn('Candidate->LineupSlot == 0) continue;', code)
+        self.assertIn('Candidate->LineupSlot == 0 ||', code)
         self.assertNotIn('for (int32 Index = 1; Index < Roster->Players.Num(); ++Index)', code)
+    def test_human_controlled_player_does_not_suppress_ai_pressing(self):
+        code = AI.read_text()
+        self.assertIn('Candidate->GetWorld() != GetWorld()', code)
+        self.assertIn('!Cast<ASportsArcadeTeamAIController>(Candidate->GetController())', code)
+
     def test_invalid_lineup_stops_navigation(self):
         code = AI.read_text()
         self.assertIn('if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10 ||', code)
