@@ -421,3 +421,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Native league automation test now passes an explicitly constructed TArray for fixture results instead of implicit initializer-list conversion; reduces UE C++ compile ambiguity.
 - GameMode exposes IsCupTieBreakRequired() for knockout matches finishing level after regulation: no arbitrary winner is assigned. Actual extra-time/shootout implementation remains open.
 - Added test_cup_match_integration.py regression coverage. Source CI passed implementation commit 955a29b4; verify newest test head on Actions before concluding.
+
+## October 19 — cup progression, identity integrity and provisional penalty shootout
+- Cup SaveGame now tracks opening club count and completed ties, exposes normalized GetCupProgress and GetNextCupFixture for frontend UI.
+- Team roster ClearFootballerRecordIds clears stale identities when a newly selected league/cup matchup has no complete catalog mapping.
+- Added native USportsArcadePenaltyShootout: alternating home-first attempts, impossible-comeback early conclusion within five rounds, and sudden-death decision after paired attempts. GameMode StartCupPenaltyShootout / RecordCupPenaltyAttempt / GetCupPenaltyShootout connect a level full-time cup draw to explicit scored/missed attempt records and cup winner advancement.
+- These are provisional data/referee APIs only; not physically executed kicks, player-controlled penalty animations, extra time, or complete IFAB officiating. Presently drawn cup match enters penalty setup without a modeled 30-minute extra-time period; implement genuine extra-time path next.
+- Added/updated Python source and reference algorithm tests for shooter order, early win and sudden death. The implementation source checks passed at 146c6ef8 (run 39203082226); check latest test head.
