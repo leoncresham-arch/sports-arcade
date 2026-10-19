@@ -44,8 +44,8 @@ class RestartOwnershipTests(unittest.TestCase):
 
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
-        self.assertIn("if (!CanResumePendingRestart()) return;", method)
-        self.assertLess(method.index("if (!CanResumePendingRestart()) return;"),
+        self.assertIn("if (bManualRestartStaged || !CanResumePendingRestart()) return;", method)
+        self.assertLess(method.index("if (bManualRestartStaged || !CanResumePendingRestart()) return;"),
                         method.index("SetActorLocation(TakerPosition"))
         self.assertLess(method.index("if (!MatchBall->KickByPlayer("),
                         method.index("bBallOutOfPlay = false;"))
