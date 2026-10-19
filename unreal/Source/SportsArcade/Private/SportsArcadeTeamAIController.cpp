@@ -139,7 +139,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     if (!IsValid(Teammate) || Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex) continue;
                     const FVector Delta = Teammate->GetActorLocation() - Ball->GetActorLocation();
                     const float Distance = Delta.Size2D();
-                    if (Distance < 300.f || Distance > 3300.f || Delta.X * AttackSign < 150.f) continue;
+                    // Support lateral circulation and bounded back-passes when no
+                    // progressive lane is available; score still favours forward play.
+                    if (Distance < 300.f || Distance > 3300.f ||
+                        Delta.X * AttackSign < -650.f) continue;
                     bool bBlocked = false;
                     float ReceiverPressurePenalty = 0.f;
                     for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
