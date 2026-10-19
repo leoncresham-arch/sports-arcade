@@ -60,5 +60,8 @@ public:
     bool AssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog);
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
+    bool CanAssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog) const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     ASportsArcadeCharacter* GetClosestPlayer(const FVector& Location) const;
 };
