@@ -21,6 +21,7 @@ class NativeUnrealAutomationContracts(unittest.TestCase):
         self.assertIn("FSportsArcadeTableAutomation", SOURCE)
         self.assertIn("FSportsArcadePenaltyShootoutAutomation", SOURCE)
         self.assertIn("FSportsArcadeCupSaveIntegrityAutomation", SOURCE)
+        self.assertIn("Incorrect round index rejected", SOURCE)
     def test_native_tests_invoke_domain_logic(self):
         self.assertIn("USportsArcadeFixtures::GenerateLeagueFixtures", SOURCE)
         self.assertIn("USportsArcadeCupFixtures::GenerateNextRound", SOURCE)
