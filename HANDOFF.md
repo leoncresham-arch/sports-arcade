@@ -492,3 +492,11 @@ The user strongly insists on sustained autonomous development **within each acti
 - Added `TakeManualRestart(KickDirection)` Blueprint-callable native method to kick with the awarded player and resume only after successful physics contact. A transient `bManualRestartStaged` guard prevents a kick before positioning, and `CanTakeManualRestart()` provides a Blueprint HUD eligibility query.
 - Invalid zero/nonfinite kick directions are rejected. Source regression coverage in `test_restart_taker_world.py` and updated play-resume event contract in `test_match_controls_and_phases.py`. GitHub Actions source tests passed for implementation updates; still no actual UE 5.5 runtime validation.
 - Continue actual physically animated set pieces and team referee AI, no restart or separate project.
+
+
+## October 19 — continued native match, AI, ball and penalty gameplay
+- Added staged manual restart mode when automatic restarts are disabled: B positions the ball/taker, M kicks it with the selected taker's direction, and Blueprint CanTakeManualRestart/TakeManualRestart share eligibility guards. Repeated staging and invalid kick vectors are rejected; play resumes only after successful attributed contact.
+- Hardened penalty shootout next-kicker state against impossible score/attempt combinations and added native Unreal automation corruption scenarios.
+- Ball physics now rejects nonfinite force, velocity and range values, preventing invalid impulses and false attributed touches.
+- AI nearest-presser selection excludes the human-controlled teammate; receiver-pressure and lane-aware passing prefers less marked players and supports bounded lateral/backward options. Receiver candidates from unrelated worlds are ignored.
+- Python source regressions were added/updated and existing failing source expectations repaired. Actual UE 5.5 compile/playtest and real animation integration remain outstanding. Continue directly through approved items; no new repository or alternate engine.
