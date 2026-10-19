@@ -20,3 +20,6 @@ Scope: source-level checks only. Passing Python/GitHub CI is **not** an Unreal H
 3. Build the SportsArcadeEditor Win64 Development target; capture the first UHT/compiler error and resolve all failures.
 4. Launch the editor, run the 11v11 map bootstrap in a test project, validate level, controllers, physics and camera, then package and run a local Windows development build.
 5. Commit corrections alongside proof: engine version, target, compiler exit status and tested map, without falsely labeling source-only CI a native build.
+
+## Repeatable Windows build command
+A checked-in PowerShell launcher is available at `unreal/Tools/Windows/Build-SportsArcade.ps1`. From a Windows PowerShell terminal, invoke `powershell -ExecutionPolicy Bypass -File unreal/Tools/Windows/Build-SportsArcade.ps1 -EngineRoot "C:\\Program Files\\Epic Games\\UE_5.5" -GenerateProjectFiles -LaunchEditor`. It fails on missing engine tooling, generation failures and nonzero compiler exit codes; the editor launch is optional. This script is not a substitute for actual compile evidence.
