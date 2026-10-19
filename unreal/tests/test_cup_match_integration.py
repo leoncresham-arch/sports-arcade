@@ -8,6 +8,11 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("BindNextCupFixture(USportsArcadeCupSave* Cup)", header)
         self.assertIn("Cup->CurrentRoundFixtures[Cup->CurrentRoundWinners.Num()]", cpp)
         self.assertIn("BoundCup = Cup;", cpp)
+    def test_cup_teams_use_validated_catalog(self):
+        self.assertIn("HomeClub.Category != AwayClub.Category", cpp)
+        self.assertIn("Home->CanAssignFootballerRecords(FootballCatalog)", cpp)
+        self.assertIn("Away->CanAssignFootballerRecords(FootballCatalog)", cpp)
+
     def test_draw_does_not_pick_winner(self):
         self.assertIn("HomeGoals == AwayGoals", cpp)
         self.assertIn("BoundCup->RecordWinner(", cpp)
