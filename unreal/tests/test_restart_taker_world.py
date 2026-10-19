@@ -18,6 +18,7 @@ class RestartOwnershipTests(unittest.TestCase):
     def test_roster_taker_selection_rejects_foreign_world(self):
         method = SOURCE.split("ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(", 1)[1].split("\n}", 1)[0]
         self.assertIn("Candidate->GetWorld() != GetWorld()", method)
+        self.assertIn("Candidate->TeamIndex == TakingTeam && Candidate->GetWorld() == GetWorld()", SOURCE)
         self.assertIn("!IsValid(*It) || It->TeamIndex != Team || It->GetWorld() != GetWorld()", method)
 
     def test_referee_stoppage_only_clears_after_restart(self):
