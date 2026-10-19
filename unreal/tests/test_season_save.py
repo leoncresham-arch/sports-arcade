@@ -33,7 +33,8 @@ class SeasonSaveTests(unittest.TestCase):
         self.assertIn("UGameplayStatics::LoadGameFromSlot", SOURCE)
         self.assertIn("SeenIndices.Contains(FixtureIndex)", SOURCE)
         self.assertIn("Result.HomeClubId != Fixture.HomeClubId", SOURCE)
-        self.assertIn("Season->GetCurrentStandings(ValidatedTable)", SOURCE)
+        self.assertIn("return Season->ValidateProgress() ? Season : nullptr;", SOURCE)
+        self.assertIn("if (!ValidateProgress()) return false;", SOURCE)
 
     def test_next_match_selection_and_season_end(self):
         self.assertIn("GetNextUnplayedFixtureIndex() const", HEADER)
