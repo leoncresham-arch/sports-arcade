@@ -38,6 +38,8 @@ class SeasonSaveTests(unittest.TestCase):
 
     def test_next_match_selection_and_season_end(self):
         self.assertIn("GetNextUnplayedFixtureIndex() const", HEADER)
+        self.assertIn("GetNextUnplayedFixture(FSportsArcadeLeagueFixture& OutFixture)", HEADER)
+        self.assertIn("OutFixture = Fixtures[Index];", SOURCE)
         self.assertIn("IsSeasonComplete() const", HEADER)
         self.assertIn("!CompletedFixtureIndices.Contains(Index)", SOURCE)
         self.assertIn("return INDEX_NONE;", SOURCE)
