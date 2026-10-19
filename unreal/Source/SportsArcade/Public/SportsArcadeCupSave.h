@@ -38,6 +38,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupComplete() const;
 
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
+    bool ValidateProgress() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Save")
     bool SaveCupToSlot(const FString& SlotName, int32 UserIndex = 0) const;
 
