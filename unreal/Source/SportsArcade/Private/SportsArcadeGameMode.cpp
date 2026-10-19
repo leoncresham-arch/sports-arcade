@@ -4,6 +4,7 @@
 #include "SportsArcadeBall.h"
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeSeasonSave.h"
+#include "SportsArcadeFootballDatabase.h"
 
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -503,6 +504,15 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         !Season->ClubIds.Contains(Fixture.AwayClubId))
         return false;
 
+    if (IsValid(FootballCatalog))
+    {
+        FSportsArcadeClubRecord HomeClub;
+        FSportsArcadeClubRecord AwayClub;
+        if (!FootballCatalog->FindClubById(Fixture.HomeClubId, HomeClub) ||
+            !FootballCatalog->FindClubById(Fixture.AwayClubId, AwayClub) ||
+            HomeClub.Category != AwayClub.Category)
+            return false;
+    }
     // Season matches use the existing authored 11v11 teams, not shadow rosters.
     // Validate both before modifying either actor or the bound fixture.
     ASportsArcadeTeamRoster* HomeRoster = nullptr;
