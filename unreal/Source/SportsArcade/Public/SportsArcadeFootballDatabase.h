@@ -120,4 +120,7 @@ public:
     /** Refuses duplicate/empty ids, missing references and mismatched squad categories. */
     UFUNCTION(BlueprintCallable, Category="Football Database")
     bool ValidateDatabase(TArray<FString>& Errors) const;
+
+    UFUNCTION(BlueprintCallable, Category="Football Database")
+    bool FindClubById(FName ClubId, FSportsArcadeClubRecord& OutClub) const;
 };
