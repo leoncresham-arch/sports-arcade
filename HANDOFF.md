@@ -466,3 +466,9 @@ The user strongly insists on sustained autonomous development **within each acti
 - FindRestartTaker skips roster members from unrelated worlds. Source regression `test_restart_taker_world.py` covers eligibility, ordering and roster selection.
 - An older source assertion was updated after the new centralized check; temporary source CI failures were diagnosed from Actions job logs and repaired. The C++ source still needs native UE 5.5 build/play validation.
 - Continue match officiating and authored UI, physical penalty and set-piece execution without creating alternate architecture or requiring routine authorization.
+
+
+## October 19 — referee and ball safety continuation
+- Restart taker selection rejects foreign-world roster, goalkeeper and kickoff actors.
+- Ball kicks, controlled touches and team attribution reject cross-world player references.
+- Added Python static regressions. Native UE 5.5 build and runtime tests remain outstanding.
