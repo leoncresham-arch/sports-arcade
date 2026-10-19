@@ -2,7 +2,8 @@
 param(
     [Parameter(Mandatory=$true)][string]$EngineRoot,
     [switch]$GenerateProjectFiles,
-    [switch]$LaunchEditor
+    [switch]$LaunchEditor,
+    [string]$LogPath = ''
 )
 $ErrorActionPreference = 'Stop'
 $Project = (Resolve-Path (Join-Path $PSScriptRoot '..\..\SportsArcade.uproject')).Path
@@ -23,8 +24,14 @@ if ($GenerateProjectFiles) {
     }
     if ($LASTEXITCODE -ne 0) { throw "Project generation failed: $LASTEXITCODE" }
 }
-& $Build SportsArcadeEditor Win64 Development "-Project=$Project" -WaitMutex
-if ($LASTEXITCODE -ne 0) { throw "SportsArcadeEditor build failed: $LASTEXITCODE" }
+if ($LogPath) {
+    $LogPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($LogPath)
+    & $Build SportsArcadeEditor Win64 Development "-Project=$Project" -WaitMutex 2>&1 | Tee-Object -FilePath $LogPath
+} else {
+    & $Build SportsArcadeEditor Win64 Development "-Project=$Project" -WaitMutex
+}
+$BuildExitCode = $LASTEXITCODE
+if ($BuildExitCode -ne 0) { throw "SportsArcadeEditor build failed: $BuildExitCode" }
 if ($LaunchEditor) {
     if (-not (Test-Path $Editor)) { throw "UnrealEditor.exe missing: $Editor" }
     Start-Process -FilePath $Editor -ArgumentList ('"' + $Project + '"')
