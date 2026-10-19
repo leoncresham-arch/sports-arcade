@@ -396,3 +396,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added native USportsArcadeCupFixtures and FSportsArcadeCupFixture: deterministic opening round for 2-64 teams (power of two only), validated single-elimination winner progression to subsequent rounds. No full cup SaveGame, extra-time/tiebreak rules or authored UI yet. Added test_cup_fixtures.py.
 - Tested implementation commits passed Python source CI; verify latest HEAD source tests after documentation change. Unreal native compilation remains unverified.
 - Continue approved cup persistence and match result linkage, training and rules systems, native interface integrations.
+
+## October 19 — new cup mode and match integration
+- Added native knockout cup fixture generator and USportsArcadeCupSave with explicit winner selection, elimination rounds, champion identification and local slot persistence. A draw cannot be silently converted to a cup win; extra-time and penalties still need implementation.
+- Extended authored competition factory to create knockout cups from catalog entries marked Knockout.
+- GameMode can bind the next cup fixture to authored 11v11 roster actors, record a non-drawn winner at full-time, query the result, and advance a fully completed round to its next tie.
+- Added test_cup_fixtures.py, test_cup_save.py, test_cup_match_integration.py and updated test_season_factory.py. Regression in full-time event source contract was independently fixed. Source CI succeeded on implementation revision 44090fbb; verify latest test HEAD.
+- Existing native Unreal source remains uncompiled in UE 5.5. Immediate unfinished scope: cup tie resolution (extra time/penalties), team catalog mapping in cup fixtures, cup UI/save exposure and engine tests. Avoid claims that modes are production playable yet.
