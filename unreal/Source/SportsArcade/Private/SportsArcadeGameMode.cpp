@@ -478,7 +478,7 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, cons
         if (It->TeamIndex != Team) continue;
         for (ASportsArcadeCharacter* Candidate : It->Players)
         {
-            if (!IsValid(Candidate) || Candidate->TeamIndex != Team) continue;
+            if (!IsValid(Candidate) || Candidate->TeamIndex != Team || Candidate->GetWorld() != GetWorld()) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Location);
             if (Distance < BestDistance)
             {
