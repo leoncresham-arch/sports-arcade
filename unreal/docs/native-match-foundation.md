@@ -40,3 +40,9 @@ Extract match clock and refereeing into testable game state for replication, add
 ## October 16 match-stoppage refinements
 - Scored goals on both goal lines immediately exit the detector, preventing a second out-of-bounds event for a valid goal. Boundary/goal decisions now precede advancing the match clock for that frame.
 - Awarded restart team is restricted to known home/away attribution; otherwise restart stays Undetermined. A goalkeeper AI first-pass parry recognizes incoming ball velocity and redirects near-contact shots laterally. These require Unreal playtesting and remain far short of fully animated/refereed saves.
+
+
+## October 19 — knockout phase presentation and penalty preflight
+- `GetCurrentMatchPhase` now distinguishes a drawn cup awaiting extra time, the two extra-time periods and interval, a draw awaiting penalties and an active shootout. Kickoff/stoppage phases retain priority while a period is live; a recorded winner returns FullTime.
+- Penalty attempts now prevalidate the bound knockout fixture index and both selected club identities before consuming a kick, preventing stale bracket references from progressing a shootout.
+- Regression coverage: `test_cup_resolution_phases.py` and `test_cup_match_integration.py`. These remain source-contract checks, not compiled Unreal runtime coverage.
