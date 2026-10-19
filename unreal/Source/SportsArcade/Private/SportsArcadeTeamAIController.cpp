@@ -50,7 +50,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // Match-phase movement should not inherit stale navigation requests from halftime.
     const int32 MembershipIndex = Roster->Players.IndexOfByKey(Footballer);
     const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
-    if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10) return;
+    if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10)
+    {
+        StopMovement();
+        return;
+    }
     FVector Target = Roster->GetFormationPosition(Slot);
     const float HalfLength = IsValid(Match) ? Match->PitchHalfLengthCm : 5250.f;
     const float HalfWidth = IsValid(Match) ? Match->PitchHalfWidthCm : 3400.f;
