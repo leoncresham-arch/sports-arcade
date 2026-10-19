@@ -37,4 +37,13 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool GetCurrentStandings(TArray<FSportsArcadeLeagueStanding>& OutStandings) const;
+
+    /** Persist this season using Unreal's standard local save-slot system. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season|Save")
+    bool SaveSeasonToSlot(const FString& SlotName, int32 UserIndex = 0) const;
+
+    /** Returns nullptr for a missing slot or incompatible save-game class. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season|Save", meta=(WorldContext="WorldContextObject"))
+    static USportsArcadeSeasonSave* LoadSeasonFromSlot(const UObject* WorldContextObject,
+        const FString& SlotName, int32 UserIndex = 0);
 };
