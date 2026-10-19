@@ -52,3 +52,9 @@ Extract match clock and refereeing into testable game state for replication, add
 - `GetMatchClockMinutes()` reports 0–90 normalized football minutes from configurable regulation duration, then 90–120 during extra time. Stoppages and interval preserve the recorded elapsed counters.
 - `GetMatchPeriodNumber()` reports first/second regulation (1/2) and first/second extra-time (3/4) based on the authoritative period state. The HUD should use the separate match-phase enum for restarts, shootouts and finished results.
 - Cup shootout creation now validates fixture position and club identities before creating a shootout, complementing per-attempt preflight. Python source contracts run in CI; UE runtime remains untested.
+
+
+## October 19 — restart taker ownership and UI readiness
+- The existing provisional restart now refuses to teleport a footballer owned by a different world. Eligibility checking is consolidated in `CanResumePendingRestart()`, shared by gameplay and future Blueprint match HUD interactions. It checks match stoppage, restart classification, award team, valid ball and taker, taker team and world ownership.
+- Added `test_restart_taker_world.py`; updated the older `test_restart_taker.py` source contract to assert the same guard. The current restart remains provisional and not an officiated throw-in/corner/goal kick.
+- This does not prove native Unreal gameplay behavior; verify movement, possession and set-piece locations in Editor when available.
