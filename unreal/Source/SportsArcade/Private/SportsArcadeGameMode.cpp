@@ -503,8 +503,31 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         !Season->ClubIds.Contains(Fixture.AwayClubId))
         return false;
 
+    // Season matches use the existing authored 11v11 teams, not shadow rosters.
+    // Validate both before modifying either actor or the bound fixture.
+    ASportsArcadeTeamRoster* HomeRoster = nullptr;
+    ASportsArcadeTeamRoster* AwayRoster = nullptr;
+    if (!GetWorld()) return false;
+    for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); It; ++It)
+    {
+        if (It->TeamIndex == 0)
+        {
+            if (HomeRoster) return false;
+            HomeRoster = *It;
+        }
+        else if (It->TeamIndex == 1)
+        {
+            if (AwayRoster) return false;
+            AwayRoster = *It;
+        }
+    }
+    if (!IsValid(HomeRoster) || !IsValid(AwayRoster) ||
+        !HomeRoster->HasCompleteLineup() || !AwayRoster->HasCompleteLineup())
+        return false;
     // Do not replace a match in progress or a result already recorded.
     if (ElapsedMatchSeconds > 0.f && !bMatchFinished) return false;
+    HomeRoster->ClubId = Fixture.HomeClubId;
+    AwayRoster->ClubId = Fixture.AwayClubId;
     BoundSeason = Season;
     BoundFixtureIndex = FixtureIndex;
     SelectedHomeClubId = Fixture.HomeClubId;
