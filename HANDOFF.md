@@ -377,3 +377,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added shared `USportsArcadeSeasonSave::ValidateProgress` for both SaveGameToSlot and LoadGameFromSlot paths, checking completed fixture indices and club identities before accepting persisted progression. Updated `test_season_save.py`; static CI passed at `df32e62a`.
 - Exposed `GetCompletedFixtureCount` and normalized `GetSeasonProgress` for season HUD/menu bindings, with regression checks. Implementation commit `501c266b` passed source CI; verify latest test revision `489791e3`.
 - Still needs Unreal Engine 5.5 compilation and in-engine fixture/save UI tests. Continue next approved item without asking for routine permission.
+
+## October 19 — continued fixture repair and season progression batch
+- Fixed the earlier failed league fixture test and maintained correct first-leg-before-second-leg generation. Source CI success: 39201323344 at 7ed01c33.
+- Centralized save/load validation via USportsArcadeSeasonSave::ValidateProgress, rejecting invalid completed indices, duplicate indices, and fixture/result team mismatches before local save or load.
+- Added Blueprint progress API: GetCompletedFixtureCount, GetSeasonProgress and GetNextUnplayedFixture. Source CI passed at 0dd5f0d2 (run 39201485059).
+- Added another reference fixture-order regression test. Latest tested source SHA f6852212 passed CI (run 39201530287).
+- Next approved scope: connect season UI to these Blueprint interfaces, add native Unreal automation and engine build validation; keep moving into independent match/rules tasks while Windows native hardware unavailable.
