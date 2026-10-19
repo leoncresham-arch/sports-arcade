@@ -500,3 +500,9 @@ The user strongly insists on sustained autonomous development **within each acti
 - Ball physics now rejects nonfinite force, velocity and range values, preventing invalid impulses and false attributed touches.
 - AI nearest-presser selection excludes the human-controlled teammate; receiver-pressure and lane-aware passing prefers less marked players and supports bounded lateral/backward options. Receiver candidates from unrelated worlds are ignored.
 - Python source regressions were added/updated and existing failing source expectations repaired. Actual UE 5.5 compile/playtest and real animation integration remain outstanding. Continue directly through approved items; no new repository or alternate engine.
+
+
+## October 19 — manual set-piece dead-ball drift recovery
+- CanTakeManualRestart now prevents manually taking a restarter when ball physics has moved the staged ball more than 60 cm from the assigned mark.
+- ResumeAfterBallOut leaves an already valid setup unchanged, but B can restage a drifted dead ball. This fixes a deadlock risk introduced by ball-location enforcement.
+- Source checks for recovery passed at 3087177a. Continue native Unreal rules and actual match gameplay testing when UE hardware is available.
