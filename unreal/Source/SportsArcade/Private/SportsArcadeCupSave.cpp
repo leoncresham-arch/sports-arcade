@@ -73,8 +73,19 @@ bool USportsArcadeCupSave::ValidateProgress() const
         CurrentRoundWinners.Num() > CurrentRoundFixtures.Num() ||
         OpeningClubCount < 2 || CompletedTies < CurrentRoundWinners.Num() ||
         CompletedTies > OpeningClubCount - 1) return false;
+    const int32 FixtureCount = CurrentRoundFixtures.Num();
+    if (OpeningClubCount > 64 || (OpeningClubCount & (OpeningClubCount - 1)) != 0 ||
+        (FixtureCount & (FixtureCount - 1)) != 0 ||
+        FixtureCount > OpeningClubCount / 2) return false;
+    // Every completed round eliminates exactly half its entrants.
+    const int32 PreviousCompletedTies = OpeningClubCount - 2 * FixtureCount;
+    if (CompletedTies != PreviousCompletedTies + CurrentRoundWinners.Num())
+        return false;
+    int32 ExpectedRound = 1;
+    for (int32 Teams = OpeningClubCount; Teams > 2 * FixtureCount; Teams /= 2)
+        ++ExpectedRound;
     const int32 Round = CurrentRoundFixtures[0].Round;
-    if (Round < 1) return false;
+    if (Round != ExpectedRound) return false;
     TSet<FName> SeenTeams;
     for (const FSportsArcadeCupFixture& Fixture : CurrentRoundFixtures)
     {
