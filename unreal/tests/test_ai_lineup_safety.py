@@ -18,5 +18,16 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn('if (!IsValid(*Opp)', code)
         self.assertIn('if (!IsValid(*It) || It->TeamIndex', code)
 
+    def test_roster_absence_and_invalid_team_stop_navigation(self):
+        code = AI.read_text()
+        self.assertIn('if (!IsValid(Roster))', code)
+        self.assertIn('Footballer->TeamIndex < 0 || Footballer->TeamIndex > 1', code)
+
+    def test_destination_arrival_suppresses_path_spam(self):
+        code = AI.read_text()
+        self.assertIn('FVector::DistSquared2D(Footballer->GetActorLocation(), Target)', code)
+        self.assertIn('FMath::Square(125.f)', code)
+        self.assertIn('MoveToLocation(Target, 125.f', code)
+
 if __name__ == '__main__':
     unittest.main()
