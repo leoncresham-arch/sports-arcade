@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "SportsArcadeLeagueTable.h"
 #include "SportsArcadeGameMode.generated.h"
 
 class ASportsArcadeBall;
@@ -157,6 +158,9 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     int32 GetBoundFixtureIndex() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool GetBoundSeasonStandings(TArray<FSportsArcadeLeagueStanding>& OutStandings) const;
 
     /** After full time, advance to the next fixture in the bound season. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
