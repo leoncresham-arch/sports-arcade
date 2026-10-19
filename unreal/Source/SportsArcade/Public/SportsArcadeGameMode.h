@@ -177,6 +177,12 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
     bool AdvanceBoundCupRound();
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
+    USportsArcadeCupSave* GetBoundCup() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
+    bool SaveBoundCupToSlot(const FString& SlotName, int32 UserIndex = 0) const;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
 
