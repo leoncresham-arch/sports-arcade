@@ -174,6 +174,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupResultRecorded() const;
 
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
+    bool AdvanceBoundCupRound();
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
 
