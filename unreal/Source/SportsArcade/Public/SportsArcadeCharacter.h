@@ -41,6 +41,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     int32 ShirtNumber = 1;
 
+    /** Optional stable identity assigned by an authored football database. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    FName FootballerRecordId;
+
     /** Zero-based formation slot; 0 goalkeeper, 1-10 outfield. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team", meta=(ClampMin="0", ClampMax="10"))
     int32 LineupSlot = 5;
