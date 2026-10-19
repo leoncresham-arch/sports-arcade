@@ -153,6 +153,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match|Restart")
     bool CanResumePendingRestart() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match|Restart")
+    ESportsArcadeRestartType GetPendingRestartType() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
