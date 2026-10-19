@@ -809,7 +809,12 @@ bool ASportsArcadeGameMode::IsCupTieBreakRequired() const
 bool ASportsArcadeGameMode::StartCupPenaltyShootout()
 {
     if (!IsCupTieBreakRequired() || !bCupExtraTimePlayed ||
-        bExtraTimeActive || IsValid(ActivePenaltyShootout)) return false;
+        bExtraTimeActive || IsValid(ActivePenaltyShootout) ||
+        !BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) ||
+        BoundCup->CurrentRoundWinners.Num() != BoundCupFixtureIndex) return false;
+    const FSportsArcadeCupFixture& Tie = BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex];
+    if (Tie.HomeClubId != SelectedHomeClubId || Tie.AwayClubId != SelectedAwayClubId)
+        return false;
     ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
     return IsValid(ActivePenaltyShootout);
 }
