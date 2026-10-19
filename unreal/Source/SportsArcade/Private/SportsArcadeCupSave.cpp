@@ -49,10 +49,7 @@ bool USportsArcadeCupSave::IsCupComplete() const
 
 bool USportsArcadeCupSave::SaveCupToSlot(const FString& SlotName, int32 UserIndex) const
 {
-    if (SlotName.IsEmpty() || UserIndex < 0 || CompetitionId.IsNone() ||
-        CurrentRoundFixtures.IsEmpty() ||
-        CurrentRoundWinners.Num() > CurrentRoundFixtures.Num())
-        return false;
+    if (SlotName.IsEmpty() || UserIndex < 0 || !ValidateProgress()) return false;
     return UGameplayStatics::SaveGameToSlot(const_cast<USportsArcadeCupSave*>(this), SlotName, UserIndex);
 }
 
@@ -63,21 +60,37 @@ USportsArcadeCupSave* USportsArcadeCupSave::LoadCupFromSlot(
         return nullptr;
     USportsArcadeCupSave* Cup = Cast<USportsArcadeCupSave>(
         UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
-    if (!IsValid(Cup) || Cup->CompetitionId.IsNone() ||
-        Cup->CurrentRoundFixtures.IsEmpty() ||
-        Cup->CurrentRoundWinners.Num() > Cup->CurrentRoundFixtures.Num())
-        return nullptr;
-    for (int32 Index = 0; Index < Cup->CurrentRoundWinners.Num(); ++Index)
-    {
-        const FSportsArcadeCupFixture& Fixture = Cup->CurrentRoundFixtures[Index];
-        const FName Winner = Cup->CurrentRoundWinners[Index];
-        if (Winner != Fixture.HomeClubId && Winner != Fixture.AwayClubId)
-            return nullptr;
-    }
-    if (!Cup->ChampionId.IsNone() &&
-        (Cup->CurrentRoundFixtures.Num() != 1 ||
-         Cup->CurrentRoundWinners.Num() != 1 ||
-         Cup->ChampionId != Cup->CurrentRoundWinners[0]))
-        return nullptr;
+    if (!IsValid(Cup) || !Cup->ValidateProgress()) return nullptr;
     return Cup;
+}
+
+bool USportsArcadeCupSave::ValidateProgress() const
+{
+    if (CompetitionId.IsNone() || CurrentRoundFixtures.IsEmpty() ||
+        CurrentRoundWinners.Num() > CurrentRoundFixtures.Num()) return false;
+    const int32 Round = CurrentRoundFixtures[0].Round;
+    if (Round < 1) return false;
+    TSet<FName> SeenTeams;
+    for (const FSportsArcadeCupFixture& Fixture : CurrentRoundFixtures)
+    {
+        if (Fixture.Round != Round || Fixture.HomeClubId.IsNone() ||
+            Fixture.AwayClubId.IsNone() || Fixture.HomeClubId == Fixture.AwayClubId ||
+            SeenTeams.Contains(Fixture.HomeClubId) ||
+            SeenTeams.Contains(Fixture.AwayClubId)) return false;
+        SeenTeams.Add(Fixture.HomeClubId);
+        SeenTeams.Add(Fixture.AwayClubId);
+    }
+    TSet<FName> WinnersSeen;
+    for (int32 Index = 0; Index < CurrentRoundWinners.Num(); ++Index)
+    {
+        const FName Winner = CurrentRoundWinners[Index];
+        const FSportsArcadeCupFixture& Fixture = CurrentRoundFixtures[Index];
+        if (WinnersSeen.Contains(Winner) ||
+            (Winner != Fixture.HomeClubId && Winner != Fixture.AwayClubId)) return false;
+        WinnersSeen.Add(Winner);
+    }
+    if (!ChampionId.IsNone() &&
+        (CurrentRoundFixtures.Num() != 1 || CurrentRoundWinners.Num() != 1 ||
+         ChampionId != CurrentRoundWinners[0])) return false;
+    return true;
 }
