@@ -46,6 +46,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     int32 GetNextUnplayedFixtureIndex() const;
 
+    /** Retrieve the upcoming match without exposing invalid fixture indices to UI. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool GetNextUnplayedFixture(FSportsArcadeLeagueFixture& OutFixture) const;
+
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     bool IsSeasonComplete() const;
 
