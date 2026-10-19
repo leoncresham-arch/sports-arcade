@@ -591,3 +591,13 @@ bool ASportsArcadeGameMode::IsBoundSeasonResultRecorded() const
 {
     return IsValid(BoundSeason) && bMatchFinished && bSeasonResultRecorded;
 }
+
+bool ASportsArcadeGameMode::AdvanceToNextSeasonFixture()
+{
+    if (!IsValid(BoundSeason) || !bMatchFinished || !bSeasonResultRecorded)
+        return false;
+    const int32 NextIndex = BoundSeason->GetNextUnplayedFixtureIndex();
+    if (NextIndex == INDEX_NONE || NextIndex == BoundFixtureIndex)
+        return false;
+    return BindSeasonFixture(BoundSeason, NextIndex);
+}
