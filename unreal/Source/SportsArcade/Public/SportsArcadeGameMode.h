@@ -8,6 +8,7 @@ class ASportsArcadeBall;
 class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 class USportsArcadeSeasonSave;
+class USportsArcadeFootballDatabase;
 
 UENUM(BlueprintType)
 enum class ESportsArcadeRestartType : uint8
@@ -131,6 +132,9 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sports Arcade|Season")
+    TObjectPtr<USportsArcadeFootballDatabase> FootballCatalog;
 
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedAwayClubId;
