@@ -393,6 +393,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     // A failed or missing restart taker must not release the paused referee state.
     if (!IsValid(PendingRestartTaker) || !IsValid(MatchBall)) return;
     MatchBall->PlaceAtRest(PendingRestartLocation);
+    bManualRestartStaged = !bAutoKickProvisionalRestart;
     if (!bAutoKickProvisionalRestart)
     {
         // A staged manual set piece is not yet a taken restart. Keep the clock
@@ -421,7 +422,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
 
 bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
 {
-    if (bAutoKickProvisionalRestart || !CanResumePendingRestart() ||
+    if (bAutoKickProvisionalRestart || !bManualRestartStaged || !CanResumePendingRestart() ||
         KickDirection.IsNearlyZero() || !IsValid(MatchBall)) return false;
     if (!MatchBall->KickByPlayer(
         PendingRestartTaker, KickDirection.GetSafeNormal(), ProvisionalRestartImpulse, 210.f))
@@ -486,6 +487,7 @@ void ASportsArcadeGameMode::ClearPendingRestart()
     PendingRestartTeam = INDEX_NONE;
     PendingRestartLocation = FVector::ZeroVector;
     PendingRestartTaker = nullptr;
+    bManualRestartStaged = false;
 }
 
 ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, const FVector& Location) const
