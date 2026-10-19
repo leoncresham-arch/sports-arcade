@@ -76,3 +76,5 @@ Extract match clock and refereeing into testable game state for replication, add
 ## October 19 — finite-impulse ball physics guards
 - Native ball kick, player-attributed kick and controlled dribble APIs now reject nonfinite force, range and velocity inputs before requesting Chaos physics impulses. Failed attributed kicks must not assign a last-touch player.
 - This is a defensive C++ integrity change, covered by source tests; actual ball movement and engine API compatibility must still be confirmed in UE 5.5.
+
+- Manual restart eligibility also checks that the staged ball remains within 60 cm horizontally of the official restart mark. Drifting balls must be restaged rather than kicked from an incorrect location.
