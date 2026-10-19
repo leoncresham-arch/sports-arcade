@@ -1,5 +1,6 @@
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeCharacter.h"
+#include "SportsArcadeFootballDatabase.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
 
@@ -107,4 +108,30 @@ void ASportsArcadeTeamRoster::DiscoverPlacedPlayers()
             return A->GetName() < B->GetName();
         });
     }
+}
+
+bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog)
+{
+    if (!IsValid(Catalog) || ClubId.IsNone() || !HasCompleteLineup()) return false;
+    TMap<int32, FName> SquadByShirt;
+    for (const FSportsArcadeFootballerRecord& Record : Catalog->Footballers)
+    {
+        if (Record.ClubId != ClubId) continue;
+        if (Record.Id.IsNone() || Record.ShirtNumber < 1 || Record.ShirtNumber > 99 ||
+            SquadByShirt.Contains(Record.ShirtNumber)) return false;
+        SquadByShirt.Add(Record.ShirtNumber, Record.Id);
+    }
+    // Check all assignments before changing any live player.
+    TSet<int32> UsedShirts;
+    for (const ASportsArcadeCharacter* Player : Players)
+    {
+        if (!IsValid(Player) || !SquadByShirt.Contains(Player->ShirtNumber) ||
+            UsedShirts.Contains(Player->ShirtNumber)) return false;
+        UsedShirts.Add(Player->ShirtNumber);
+    }
+    for (ASportsArcadeCharacter* Player : Players)
+    {
+        Player->FootballerRecordId = SquadByShirt[Player->ShirtNumber];
+    }
+    return true;
 }
