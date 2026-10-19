@@ -409,3 +409,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added GetBoundCup and SaveBoundCupToSlot for menu integration. Existing cup match result remains a provisional offline score check, not referee-enforced extra-time/penalties.
 - Cup SaveGame uses shared ValidateProgress on both save and load, guarding round consistency, duplicate team/winner IDs, winner participation and champion consistency.
 - New and extended source test assertions pass on GitHub Actions revision 791d8cbd (run 39202466460); follow-up Unreal native compilation remains outstanding.
+
+## October 19 — native Unreal validation scaffolding and knockout replay protection
+- Added Unreal C++ Automation Tests (LeagueSchedule, CupBracket, LeagueTable) in SportsArcadeAutomationTests.cpp, protected by WITH_DEV_AUTOMATION_TESTS. These have not been compiled or run in Unreal yet.
+- Added Tools/Windows/Run-SportsArcadeTests.ps1 for command-line execution on a local UE5.5 Windows installation. Native test execution instructions and limitations are in unreal/docs/native-automation.md.
+- Cup match result attribution now checks selected tie index and both club IDs, preventing a previously completed tie from being reset or an old score assigned to a new cup tie.
+- Added regressions to test_cup_match_integration.py and test_native_automation_presence.py. GitHub source CI succeeded at runner implementation commit db6a98e6; verify latest test HEAD.
+- Continue approved scope: extra time and penalty resolution, match referee state machine, authored UI/menu integration, native Windows build and engine automation execution.
