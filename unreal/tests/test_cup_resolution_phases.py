@@ -37,6 +37,14 @@ class KnockoutPresentationPhaseTests(unittest.TestCase):
         self.assertIn("30.f * FMath::Clamp(", clock)
         self.assertIn("ExtraTimeElapsedSeconds / FMath::Max(2.f * ExtraTimeHalfDurationSeconds", clock)
 
+    def test_period_number_tracks_regulation_and_extra_time(self):
+        self.assertIn("int32 GetMatchPeriodNumber() const;", HEADER)
+        method = SOURCE.split("int32 ASportsArcadeGameMode::GetMatchPeriodNumber() const", 1)[1].split("\n}", 1)[0]
+        for field in ("bCupExtraTimePlayed", "bExtraTimeSecondHalf", "ExtraTimeElapsedSeconds", "bSecondHalfStarted", "ElapsedMatchSeconds"):
+            self.assertIn(field, method)
+        self.assertIn("? 4 : 3", method)
+        self.assertIn("? 2 : 1", method)
+
     def test_extra_time_interval_precedes_generic_halftime(self):
         method = SOURCE.split(
             "ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const", 1
