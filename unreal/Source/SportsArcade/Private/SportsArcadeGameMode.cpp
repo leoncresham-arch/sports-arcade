@@ -224,7 +224,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                     if (Roster->TeamIndex != PendingRestartTeam) continue;
                     for (ASportsArcadeCharacter* Candidate : Roster->Players)
                     {
-                        if (IsValid(Candidate) && Candidate->TeamIndex == PendingRestartTeam &&
+                        if (IsValid(Candidate) && Candidate->TeamIndex == PendingRestartTeam && Candidate->GetWorld() == GetWorld() &&
                             Candidate->LineupSlot == 0)
                         {
                             PendingRestartTaker = Candidate;
@@ -447,7 +447,7 @@ void ASportsArcadeGameMode::StageKickoff(int32 TakingTeam)
             if (Roster->TeamIndex != TakingTeam) continue;
             for (ASportsArcadeCharacter* Candidate : Roster->Players)
             {
-                if (IsValid(Candidate) && Candidate->TeamIndex == TakingTeam && Candidate->LineupSlot == 9)
+                if (IsValid(Candidate) && Candidate->TeamIndex == TakingTeam && Candidate->GetWorld() == GetWorld() && Candidate->LineupSlot == 9)
                 {
                     PendingRestartTaker = Candidate;
                     break;
