@@ -140,6 +140,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match|Restart")
     bool TakeManualRestart(const FVector& KickDirection);
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match|Restart")
+    bool CanTakeManualRestart() const;
+
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     float GetMatchProgress() const;
 
