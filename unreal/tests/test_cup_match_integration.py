@@ -36,6 +36,15 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("SaveBoundCupToSlot", header)
         self.assertIn("BoundCup->SaveCupToSlot(SlotName, UserIndex)", cpp)
 
+    def test_two_extra_time_halves_before_penalties(self):
+        self.assertIn("StartCupExtraTime()", header)
+        self.assertIn("ResumeCupExtraTimeSecondHalf()", header)
+        self.assertIn("IsCupExtraTimeRequired() const", header)
+        self.assertIn("ExtraTimeElapsedSeconds + DeltaSeconds", cpp)
+        self.assertIn("bExtraTimeSecondHalf = true;", cpp)
+        self.assertIn("!bCupExtraTimePlayed", cpp)
+        self.assertIn("if (bExtraTimeActive)", cpp)
+
     def test_penalty_winner_resolves_draw(self):
         self.assertIn("StartCupPenaltyShootout", header)
         self.assertIn("RecordCupPenaltyAttempt", header)
