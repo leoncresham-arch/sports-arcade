@@ -715,3 +715,13 @@ bool ASportsArcadeGameMode::AdvanceBoundCupRound()
     if (!BoundCup->AdvanceRound()) return false;
     return BindNextCupFixture(BoundCup);
 }
+
+USportsArcadeCupSave* ASportsArcadeGameMode::GetBoundCup() const
+{
+    return IsValid(BoundCup) ? BoundCup.Get() : nullptr;
+}
+
+bool ASportsArcadeGameMode::SaveBoundCupToSlot(const FString& SlotName, int32 UserIndex) const
+{
+    return IsValid(BoundCup) && BoundCup->SaveCupToSlot(SlotName, UserIndex);
+}
