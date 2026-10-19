@@ -23,6 +23,17 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("Mode->ResumeSecondHalf();", cpp)
         self.assertIn("Mode->ResetMatch();", cpp)
 
+    def test_keyboard_manual_restart_uses_awarded_taker(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        self.assertIn('ActionName="TakeManualRestart",Key=M', ini)
+        self.assertIn("void TakeStagedRestart();", header)
+        self.assertIn('BindAction(TEXT("TakeManualRestart")', cpp)
+        self.assertIn("Mode->CanTakeManualRestart()", cpp)
+        self.assertIn("Mode->PendingRestartTaker->GetActorForwardVector()", cpp)
+        self.assertIn("Mode->TakeManualRestart(", cpp)
+
     def test_successful_shots_increment_team_stats(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
