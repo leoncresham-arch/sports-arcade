@@ -151,6 +151,13 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     bool IsBoundSeasonResultRecorded() const;
 
+    /** Read-only selection data for season menus and post-match screens. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    USportsArcadeSeasonSave* GetBoundSeason() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    int32 GetBoundFixtureIndex() const;
+
     /** After full time, advance to the next fixture in the bound season. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool AdvanceToNextSeasonFixture();
