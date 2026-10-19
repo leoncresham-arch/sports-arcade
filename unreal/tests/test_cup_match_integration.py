@@ -32,6 +32,10 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("SaveBoundCupToSlot", header)
         self.assertIn("BoundCup->SaveCupToSlot(SlotName, UserIndex)", cpp)
 
+    def test_unresolved_draw_is_exposed_for_tie_break_ui(self):
+        self.assertIn("IsCupTieBreakRequired() const", header)
+        self.assertIn("!bCupResultRecorded && HomeGoals == AwayGoals", cpp)
+
     def test_post_match_result(self):
         self.assertIn("IsCupResultRecorded() const", header)
         self.assertIn("bMatchFinished && bCupResultRecorded", cpp)
