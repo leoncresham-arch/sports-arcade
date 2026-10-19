@@ -378,7 +378,7 @@ bool ASportsArcadeGameMode::CanResumePendingRestart() const
 
 void ASportsArcadeGameMode::ResumeAfterBallOut()
 {
-    if (!CanResumePendingRestart()) return;
+    if (bManualRestartStaged || !CanResumePendingRestart()) return;
     // Provisional in-field set-piece setup; official throw mechanics remain TODO.
     const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
     const float InwardY = PendingRestartLocation.Y >= 0.f ? -1.f : 1.f;
