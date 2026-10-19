@@ -35,6 +35,16 @@ class LeagueFixtureTests(unittest.TestCase):
         self.assertIn("Seen.Contains(Id)", SOURCE)
         self.assertIn("ReturnFixture.HomeClubId = Fixture.AwayClubId", SOURCE)
 
+    def test_second_leg_starts_after_first_leg_schedule(self):
+        for number_of_clubs in range(2, 13):
+            fixtures = reference_schedule(list(range(number_of_clubs)), True)
+            rounds = (number_of_clubs if number_of_clubs % 2 else number_of_clubs - 1)
+            first = [match for match in fixtures if match[0] <= rounds]
+            second = [match for match in fixtures if match[0] > rounds]
+            self.assertEqual(len(first), len(second))
+            self.assertTrue(all(match[0] <= rounds for match in first))
+            self.assertTrue(all(match[0] > rounds for match in second))
+
     def test_every_pair_once_or_twice_and_odd_byes(self):
         for count in range(2, 13):
             ids = list(range(count))
