@@ -9,6 +9,7 @@ class ASportsArcadeBall;
 class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 class USportsArcadeSeasonSave;
+class USportsArcadeCupSave;
 class USportsArcadeFootballDatabase;
 
 UENUM(BlueprintType)
@@ -166,6 +167,13 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool AdvanceToNextSeasonFixture();
 
+    /** Starts the next knockout tie; drawn scores require external tie resolution. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
+    bool BindNextCupFixture(USportsArcadeCupSave* Cup);
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
+    bool IsCupResultRecorded() const;
+
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
     FName SelectedHomeClubId;
 
@@ -188,6 +196,10 @@ private:
     TObjectPtr<USportsArcadeSeasonSave> BoundSeason;
     int32 BoundFixtureIndex = INDEX_NONE;
     bool bSeasonResultRecorded = false;
+    UPROPERTY(Transient)
+    TObjectPtr<USportsArcadeCupSave> BoundCup;
+    bool bCupResultRecorded = false;
+    void CommitCupResult();
     void CommitSeasonResult();
     void ClearPendingRestart();
     void StageKickoff(int32 TakingTeam);
