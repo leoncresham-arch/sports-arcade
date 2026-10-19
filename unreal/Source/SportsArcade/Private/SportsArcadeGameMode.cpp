@@ -301,6 +301,8 @@ void ASportsArcadeGameMode::ResetMatch()
 {
     // A completed league fixture must not be replayed by the exhibition reset key.
     if (IsValid(BoundSeason) && BoundSeason->CompletedFixtureIndices.Contains(BoundFixtureIndex)) return;
+    if (IsValid(BoundCup) && BoundCupFixtureIndex != INDEX_NONE &&
+        BoundCup->CurrentRoundWinners.Num() > BoundCupFixtureIndex) return;
     ElapsedMatchSeconds = 0.f;
     HomeGoals = 0;
     AwayGoals = 0;
@@ -687,6 +689,7 @@ bool ASportsArcadeGameMode::BindNextCupFixture(USportsArcadeCupSave* Cup)
         Away->AssignFootballerRecords(FootballCatalog);
     }
     BoundCup = Cup;
+    BoundCupFixtureIndex = Cup->CurrentRoundWinners.Num();
     BoundSeason = nullptr;
     BoundFixtureIndex = INDEX_NONE;
     SelectedHomeClubId = Fixture.HomeClubId;
@@ -699,6 +702,11 @@ void ASportsArcadeGameMode::CommitCupResult()
 {
     if (!IsValid(BoundCup) || bCupResultRecorded || HomeGoals == AwayGoals)
         return; // Cup ties need extra time or penalties, not an invented winner.
+    if (!BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) ||
+        BoundCupFixtureIndex != BoundCup->CurrentRoundWinners.Num()) return;
+    const FSportsArcadeCupFixture& Fixture = BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex];
+    if (Fixture.HomeClubId != SelectedHomeClubId ||
+        Fixture.AwayClubId != SelectedAwayClubId) return;
     bCupResultRecorded = BoundCup->RecordWinner(
         HomeGoals > AwayGoals ? SelectedHomeClubId : SelectedAwayClubId);
 }
