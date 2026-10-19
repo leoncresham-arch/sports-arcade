@@ -46,11 +46,11 @@ bool USportsArcadeFixtures::GenerateLeagueFixtures(const TArray<FName>& ClubIds,
         const int32 FirstLegCount = Fixtures.Num();
         for (int32 Index = 0; Index < FirstLegCount; ++Index)
         {
-            const FSportsArcadeLeagueFixture& FirstLeg = Fixtures[Index];
+            const FSportsArcadeLeagueFixture& Fixture = Fixtures[Index];
             FSportsArcadeLeagueFixture ReturnFixture;
-            ReturnFixture.Round = FirstLeg.Round + Rounds;
-            ReturnFixture.HomeClubId = FirstLeg.AwayClubId;
-            ReturnFixture.AwayClubId = FirstLeg.HomeClubId;
+            ReturnFixture.Round = Fixture.Round + Rounds;
+            ReturnFixture.HomeClubId = Fixture.AwayClubId;
+            ReturnFixture.AwayClubId = Fixture.HomeClubId;
             Fixtures.Add(ReturnFixture);
         }
     }
