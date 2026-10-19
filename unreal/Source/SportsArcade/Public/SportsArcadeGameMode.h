@@ -150,6 +150,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     int32 GetMatchPeriodNumber() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match|Restart")
+    bool CanResumePendingRestart() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
