@@ -577,6 +577,10 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         HomeRoster->ClearFootballerRecordIds();
         AwayRoster->ClearFootballerRecordIds();
     }
+    // Match modes are mutually exclusive: never submit a league result to a stale cup.
+    BoundCup = nullptr;
+    BoundCupFixtureIndex = INDEX_NONE;
+    ActivePenaltyShootout = nullptr;
     BoundSeason = Season;
     BoundFixtureIndex = FixtureIndex;
     SelectedHomeClubId = Fixture.HomeClubId;
