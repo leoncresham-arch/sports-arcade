@@ -136,7 +136,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 float BestPassScore = -BIG_NUMBER;
                 for (ASportsArcadeCharacter* Teammate : Roster->Players)
                 {
-                    if (!IsValid(Teammate) || Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex) continue;
+                    if (!IsValid(Teammate) || Teammate->GetWorld() != GetWorld() ||
+                        Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex) continue;
                     const FVector Delta = Teammate->GetActorLocation() - Ball->GetActorLocation();
                     const float Distance = Delta.Size2D();
                     // Support lateral circulation and bounded back-passes when no
