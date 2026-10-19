@@ -10,6 +10,15 @@ class BallOwnershipContract(unittest.TestCase):
         body = SOURCE.split("int32 ASportsArcadeBall::GetLastTouchTeamIndex() const", 1)[1].split("\n}", 1)[0]
         self.assertIn("Player->GetWorld() == GetWorld()", body)
 
+    def test_physics_contacts_reject_nonfinite_values(self):
+        for fragment in (
+            "Direction.ContainsNaN()", "DesiredVelocity.ContainsNaN()",
+            "!FMath::IsFinite(StrengthKgCmPerSec)",
+            "!FMath::IsFinite(MaxContactDistanceCm)",
+            "!FMath::IsFinite(MaxDistanceCm)",
+        ):
+            self.assertIn(fragment, SOURCE)
+
     def test_player_contacts_reject_cross_world_actors(self):
         for signature in (
             "bool ASportsArcadeBall::KickByPlayer(",
