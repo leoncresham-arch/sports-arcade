@@ -188,6 +188,12 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Extra Time")
     bool IsCupExtraTimeRequired() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Extra Time")
+    bool IsCupExtraTimeActive() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Extra Time")
+    float GetExtraTimeProgress() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Extra Time")
     bool StartCupExtraTime();
 
