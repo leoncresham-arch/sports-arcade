@@ -71,3 +71,8 @@ Extract match clock and refereeing into testable game state for replication, add
 - For levels configured with `bAutoKickProvisionalRestart=false`, press **B** to stage the awarded taker and ball while maintaining the referee stoppage, then **M** to take the restart using the taker's current facing direction. Alternatively, UI Blueprint calls `CanTakeManualRestart` and `TakeManualRestart(FVector)` can supply a deliberate direction.
 - A repeated B cannot reposition an already-staged manual ball. Invalid zero/nonfinite vectors are rejected; successful attributed physics contact is required before match play resumes.
 - Default automatic mode still works with B only. Neither option substitutes for legal throw-in hand animations, player separation or full referee review.
+
+
+## October 19 — finite-impulse ball physics guards
+- Native ball kick, player-attributed kick and controlled dribble APIs now reject nonfinite force, range and velocity inputs before requesting Chaos physics impulses. Failed attributed kicks must not assign a last-touch player.
+- This is a defensive C++ integrity change, covered by source tests; actual ball movement and engine API compatibility must still be confirmed in UE 5.5.
