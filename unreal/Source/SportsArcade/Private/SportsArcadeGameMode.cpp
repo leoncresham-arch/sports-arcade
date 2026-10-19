@@ -243,6 +243,30 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
         PreviousBallPosition = MatchBall->GetActorLocation();
         bHasPreviousBallPosition = true;
     }
+    if (bExtraTimeActive)
+    {
+        ExtraTimeElapsedSeconds = FMath::Min(
+            ExtraTimeElapsedSeconds + DeltaSeconds, 2.f * ExtraTimeHalfDurationSeconds);
+        if (!bExtraTimeSecondHalf && ExtraTimeElapsedSeconds >= ExtraTimeHalfDurationSeconds)
+        {
+            ExtraTimeElapsedSeconds = ExtraTimeHalfDurationSeconds;
+            bHalfTime = true;
+            if (IsValid(MatchBall)) MatchBall->StopMotion();
+            bHasPreviousBallPosition = false;
+            OnHalfTime.Broadcast();
+            return;
+        }
+        if (ExtraTimeElapsedSeconds >= 2.f * ExtraTimeHalfDurationSeconds)
+        {
+            bExtraTimeActive = false;
+            bMatchFinished = true;
+            if (IsValid(MatchBall)) MatchBall->StopMotion();
+            bHasPreviousBallPosition = false;
+            CommitCupResult();
+            OnFullTime.Broadcast();
+        }
+        return;
+    }
     ElapsedMatchSeconds = FMath::Min(ElapsedMatchSeconds + DeltaSeconds, 2.f * HalfDurationSeconds);
     if (!bSecondHalfStarted && ElapsedMatchSeconds >= HalfDurationSeconds)
     {
@@ -327,6 +351,10 @@ void ASportsArcadeGameMode::ResetMatch()
     }
     bSeasonResultRecorded = false;
     bCupResultRecorded = false;
+    bCupExtraTimePlayed = false;
+    bExtraTimeActive = false;
+    bExtraTimeSecondHalf = false;
+    ExtraTimeElapsedSeconds = 0.f;
     ActivePenaltyShootout = nullptr;
     StageKickoff(0);
     OnMatchReset.Broadcast();
@@ -760,7 +788,8 @@ bool ASportsArcadeGameMode::IsCupTieBreakRequired() const
 
 bool ASportsArcadeGameMode::StartCupPenaltyShootout()
 {
-    if (!IsCupTieBreakRequired() || IsValid(ActivePenaltyShootout)) return false;
+    if (!IsCupTieBreakRequired() || !bCupExtraTimePlayed ||
+        bExtraTimeActive || IsValid(ActivePenaltyShootout)) return false;
     ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
     return IsValid(ActivePenaltyShootout);
 }
@@ -782,4 +811,31 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
 USportsArcadePenaltyShootout* ASportsArcadeGameMode::GetCupPenaltyShootout() const
 {
     return IsValid(ActivePenaltyShootout) ? ActivePenaltyShootout.Get() : nullptr;
+}
+
+bool ASportsArcadeGameMode::IsCupExtraTimeRequired() const
+{
+    return IsCupTieBreakRequired() && !bCupExtraTimePlayed;
+}
+
+bool ASportsArcadeGameMode::StartCupExtraTime()
+{
+    if (!IsCupExtraTimeRequired()) return false;
+    bCupExtraTimePlayed = true;
+    bExtraTimeActive = true;
+    bExtraTimeSecondHalf = false;
+    ExtraTimeElapsedSeconds = 0.f;
+    bMatchFinished = false;
+    bHalfTime = false;
+    StageKickoff(0);
+    return true;
+}
+
+bool ASportsArcadeGameMode::ResumeCupExtraTimeSecondHalf()
+{
+    if (!bExtraTimeActive || !bHalfTime || bExtraTimeSecondHalf) return false;
+    bExtraTimeSecondHalf = true;
+    bHalfTime = false;
+    StageKickoff(1);
+    return true;
 }
