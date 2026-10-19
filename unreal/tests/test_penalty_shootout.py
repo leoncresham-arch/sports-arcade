@@ -31,6 +31,16 @@ class PenaltyShootoutTests(unittest.TestCase):
         for fragment in ("GetNextKickingTeam()", "HomeAttempts == AwayAttempts", "WinningTeam = 0",
                          "WinningTeam = 1", "HomeAttempts >= 5", "HomeAttempts == AwayAttempts"):
             self.assertIn(fragment, CPP)
+    def test_invalid_shootout_state_cannot_select_next_kicker(self):
+        for fragment in (
+            "HomeAttempts < AwayAttempts",
+            "HomeAttempts > AwayAttempts + 1",
+            "HomeScored > HomeAttempts",
+            "AwayScored > AwayAttempts",
+            "return INDEX_NONE;",
+        ):
+            self.assertIn(fragment, CPP)
+
     def test_sudden_death_only_after_both_kicks(self):
         tied = [(x % 2, True) for x in range(10)]
         valid, champion = simulate(tied + [(0, True)])
