@@ -479,3 +479,9 @@ The user strongly insists on sustained autonomous development **within each acti
 - Winner recording and round advancement prevalidate bracket state rather than mutating inconsistent in-memory progression.
 - Added source regressions in test_cup_save.py and fifth native UE automation test SportsArcade.Seasons.CupSaveIntegrity (authored but not executed in Unreal).
 - Source CI recovery required updating existing native test count from four to five; follow-on regression passed at 744b96e5. Continue independently through approved gameplay tasks.
+
+
+## October 19 — cup integrity continuation after native-test addition
+- Native CupSaveIntegrity test additionally rejects a wrong current round number before restoring a legitimate bracket and completing the cup.
+- Cup UI GetCupProgress and GetNextCupFixture now verify bracket progress rather than displaying inconsistent saved state; Python source regression checks added.
+- Source CI passed at eaf5571e and a33f10a0; verify latest HEAD workflow separately. Actual Unreal engine compilation and Automation RunTests are still pending on UE 5.5 Windows.
