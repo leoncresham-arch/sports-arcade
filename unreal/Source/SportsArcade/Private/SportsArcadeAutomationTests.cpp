@@ -68,8 +68,10 @@ bool FSportsArcadeTableAutomation::RunTest(const FString& Parameters)
     Result.HomeGoals = 2;
     Result.AwayGoals = 1;
     TArray<FSportsArcadeLeagueStanding> Table;
+    TArray<FSportsArcadeLeagueResult> Results;
+    Results.Add(Result);
     TestTrue(TEXT("Calculate a match table"),
-        USportsArcadeLeagueTable::CalculateTable(Clubs, {Result}, Table));
+        USportsArcadeLeagueTable::CalculateTable(Clubs, Results, Table));
     TestEqual(TEXT("Both clubs have standings"), Table.Num(), 2);
     if (Table.Num() == 2)
     {
