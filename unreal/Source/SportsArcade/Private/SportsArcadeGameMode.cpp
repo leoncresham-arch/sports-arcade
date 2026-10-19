@@ -368,7 +368,34 @@ void ASportsArcadeGameMode::StageKickoff(int32 TakingTeam)
     PendingRestartType = ESportsArcadeRestartType::Kickoff;
     PendingRestartTeam = TakingTeam;
     PendingRestartLocation = FVector(0.f, 0.f, IsValid(MatchBall) ? MatchBall->BallRadiusCm + 2.f : 14.f);
+    // Reset all on-field footballers to their authored kickoff layout.
+    // The restart taker is selected after repositioning, never from a stale
+    // post-goal chase location. Keep authored formations intact.
+    if (GetWorld())
+    {
+        for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
+        {
+            It->ResetToKickoffPosition();
+        }
+    }
     PendingRestartTaker = FindRestartTaker(TakingTeam, PendingRestartLocation);
+    // Prefer an assigned striker over the nearest midfielder or goalkeeper.
+    if (GetWorld())
+    {
+        for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
+        {
+            if (Roster->TeamIndex != TakingTeam) continue;
+            for (ASportsArcadeCharacter* Candidate : Roster->Players)
+            {
+                if (IsValid(Candidate) && Candidate->TeamIndex == TakingTeam && Candidate->LineupSlot == 9)
+                {
+                    PendingRestartTaker = Candidate;
+                    break;
+                }
+            }
+            break;
+        }
+    }
     bBallOutOfPlay = true;
     bHasPreviousBallPosition = false;
 }
