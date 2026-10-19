@@ -78,3 +78,6 @@ Required modes beyond the initial offline match foundation:
 11. Original squad-building mode as a later expansion, without assuming paid packs, gambling mechanisms or licensed cards.
 
 Make each country's league depth configurable; don't promise every real-world club in the first release. Keep the initial milestone as authentic Unreal native compile and playable exhibition, with shared data contracts that support expanded modes without rewriting core gameplay.
+
+### Personal-use real-world names clarification (October 2026)
+The user intends Sports Arcade for private personal play, not resale, and wants real footballer, national-team, club and league names in the personal game. Plan for factual real-world names and statistics in the data model rather than forcing fictional names. Names and bare facts differ from licensed photographic images, crests, kits, player facial scans and scraped proprietary datasets; these must still have rights assessed before distribution. The GitHub repository is currently public, so do not upload unlicensed artistic material or proprietary datasets. Keep personal-only data separate from publicly distributed game assets. If game distribution plans change, re-evaluate trademarks, publicity rights and licensing before release.
