@@ -146,3 +146,11 @@ bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootbal
     }
     return true;
 }
+
+void ASportsArcadeTeamRoster::ClearFootballerRecordIds()
+{
+    for (ASportsArcadeCharacter* Player : Players)
+    {
+        if (IsValid(Player)) Player->FootballerRecordId = NAME_None;
+    }
+}
