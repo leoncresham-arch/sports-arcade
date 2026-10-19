@@ -16,6 +16,16 @@ enum class ESportsArcadeRestartType : uint8
     None, ThrowIn, CornerKick, GoalKick, Kickoff, Undetermined
 };
 
+UENUM(BlueprintType)
+enum class ESportsArcadeMatchPhase : uint8
+{
+    Kickoff,
+    Playing,
+    Stoppage,
+    HalfTime,
+    FullTime
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSportsArcadeMatchPhaseEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSportsArcadeBallOutEvent, FVector, ExitLocation, int32, LastTouchTeam);
@@ -119,6 +129,9 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     float GetMatchProgress() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
+    ESportsArcadeMatchPhase GetCurrentMatchPhase() const;
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
