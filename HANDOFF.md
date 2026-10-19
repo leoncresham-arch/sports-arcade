@@ -438,3 +438,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Switching from knockout mode back to a league fixture now clears BoundCup, its fixture index and any previous penalty shootout state before binding the league. Prevents a league full-time score from also being submitted to a stale cup.
 - Updated test_season_match_integration.py with cross-mode reset assertion. Implementation source CI passed on b6f1ea3e (run 39203263106); check the latest regression test revision.
 - User's standing instruction remains to continue independent approved scope work without routine approval prompts. The next match rules scope is proper two-period extra time and fully driven penalty taking, while maintaining offline native UE5.5 architecture.
+
+## October 19 — native cup extra-time match phases
+- Added configurable two-period extra-time flow to SportsArcadeGameMode. A knockout draw after regulation can StartCupExtraTime; it stages a kickoff, runs two timed periods, pauses for an extra-time halftime and resumes via existing H halftime control. At extra-time full time it tries to record any newly decisive score.
+- StartCupPenaltyShootout now requires extra time to have been played and ended unresolved; drawn cup matches do not skip directly to penalties.
+- IsCupExtraTimeRequired, IsCupExtraTimeActive, ExtraTimeElapsedSeconds and GetExtraTimeProgress expose phase and timing for future UI.
+- Source test_season and test_cup_match_integration.py assertions updated. Implementation source CI passed at f8b23884; check latest test revision. Actual gameplay, animations, match rules and UE5.5 native compile remain unverified.
