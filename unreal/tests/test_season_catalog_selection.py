@@ -13,6 +13,10 @@ class SeasonCatalogContracts(unittest.TestCase):
         self.assertIn("FindClubById(FName ClubId", catalog_h)
         self.assertIn("Club.Id == ClubId", catalog_cpp)
 
+    def test_catalog_player_mapping_on_fixture_selection(self):
+        self.assertIn("HomeRoster->AssignFootballerRecords(FootballCatalog)", game)
+        self.assertIn("AwayRoster->AssignFootballerRecords(FootballCatalog)", game)
+
     def test_season_match_catalog_check(self):
         self.assertIn("TObjectPtr<USportsArcadeFootballDatabase> FootballCatalog;", header)
         self.assertIn("FootballCatalog->FindClubById(Fixture.HomeClubId, HomeClub)", game)
