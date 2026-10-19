@@ -657,6 +657,14 @@ bool ASportsArcadeGameMode::AdvanceToNextSeasonFixture()
     return BindSeasonFixture(BoundSeason, NextIndex);
 }
 
+int32 ASportsArcadeGameMode::GetMatchPeriodNumber() const
+{
+    if (bCupExtraTimePlayed)
+        return bExtraTimeSecondHalf || (!bExtraTimeActive && ExtraTimeElapsedSeconds >= 2.f * ExtraTimeHalfDurationSeconds)
+            ? 4 : 3;
+    return bSecondHalfStarted || ElapsedMatchSeconds >= 2.f * HalfDurationSeconds ? 2 : 1;
+}
+
 float ASportsArcadeGameMode::GetMatchClockMinutes() const
 {
     const float RegulationMinutes = 90.f * FMath::Clamp(
