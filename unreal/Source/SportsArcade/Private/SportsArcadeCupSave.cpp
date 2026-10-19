@@ -115,14 +115,14 @@ bool USportsArcadeCupSave::ValidateProgress() const
 
 float USportsArcadeCupSave::GetCupProgress() const
 {
-    return OpeningClubCount < 2 ? 0.f :
+    return !ValidateProgress() ? 0.f :
         FMath::Clamp(static_cast<float>(CompletedTies) /
             static_cast<float>(OpeningClubCount - 1), 0.f, 1.f);
 }
 
 bool USportsArcadeCupSave::GetNextCupFixture(FSportsArcadeCupFixture& OutFixture) const
 {
-    if (IsCupComplete() ||
+    if (!ValidateProgress() || IsCupComplete() ||
         !CurrentRoundFixtures.IsValidIndex(CurrentRoundWinners.Num())) return false;
     OutFixture = CurrentRoundFixtures[CurrentRoundWinners.Num()];
     return true;
