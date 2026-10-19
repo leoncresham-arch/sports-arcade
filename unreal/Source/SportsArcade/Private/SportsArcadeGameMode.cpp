@@ -393,6 +393,12 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     // A failed or missing restart taker must not release the paused referee state.
     if (!IsValid(PendingRestartTaker) || !IsValid(MatchBall)) return;
     MatchBall->PlaceAtRest(PendingRestartLocation);
+    if (!bAutoKickProvisionalRestart)
+    {
+        // A staged manual set piece is not yet a taken restart. Keep the clock
+        // and AI paused until an explicit completion path is implemented.
+        return;
+    }
     if (bAutoKickProvisionalRestart)
     {
         // Offline only: approximates putting the ball back into play.
