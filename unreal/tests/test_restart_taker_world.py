@@ -36,6 +36,7 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("!bAutoKickProvisionalRestart && bManualRestartStaged", availability)
         self.assertIn("CanResumePendingRestart()", availability)
         self.assertIn("KickDirection.IsNearlyZero()", method)
+        self.assertIn("KickDirection.ContainsNaN()", method)
         self.assertIn("MatchBall->KickByPlayer(", method)
         self.assertLess(method.index("MatchBall->KickByPlayer("), method.index("bBallOutOfPlay = false;"))
         self.assertIn("bManualRestartStaged = !bAutoKickProvisionalRestart;", SOURCE)
