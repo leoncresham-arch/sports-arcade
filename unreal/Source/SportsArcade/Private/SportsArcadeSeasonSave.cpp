@@ -103,3 +103,14 @@ bool USportsArcadeSeasonSave::ValidateProgress() const
     TArray<FSportsArcadeLeagueStanding> Standings;
     return GetCurrentStandings(Standings);
 }
+
+int32 USportsArcadeSeasonSave::GetCompletedFixtureCount() const
+{
+    return CompletedFixtureIndices.Num();
+}
+
+float USportsArcadeSeasonSave::GetSeasonProgress() const
+{
+    return Fixtures.IsEmpty() ? 0.f : FMath::Clamp(
+        static_cast<float>(CompletedFixtureIndices.Num()) / static_cast<float>(Fixtures.Num()), 0.f, 1.f);
+}
