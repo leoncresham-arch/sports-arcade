@@ -49,6 +49,12 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
     bool IsSeasonComplete() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    int32 GetCompletedFixtureCount() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    float GetSeasonProgress() const;
+
     /** Persist this season using Unreal's standard local save-slot system. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season|Save")
     bool SaveSeasonToSlot(const FString& SlotName, int32 UserIndex = 0) const;
