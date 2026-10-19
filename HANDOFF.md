@@ -313,3 +313,6 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - **Permitted stopping points:** A genuinely needed user decision that could materially affect the final game, a necessary checkpoint, conversation nearing freeze/context limits, handoff due, actual execution/tool limit or an unavoidable blocker with no independent work. Avoid status-only replies, excessive progress explanations and repeated known Windows/Unreal verification caveats.
 - **Reality of execution:** Regular chat cannot execute new GitHub work after a response ends. Make full use of the current active turn; never promise background work or assert that it continues after turn completion. The user does not want paid services, Work mode, or unsolicited scheduled automations.
 - For handoff, only call one due when length/context risk genuinely warrants it; user explicitly said 'do not just say yes because I am asking.' Preserve these instructions for any future chat.
+
+## Current dated handoff — October 19, 2026
+- The canonical concise new-chat handoff is [HANDOFF_2026-10-19.md](HANDOFF_2026-10-19.md). Read it alongside this permanent history before resuming development.
