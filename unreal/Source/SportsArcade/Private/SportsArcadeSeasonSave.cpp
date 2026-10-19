@@ -52,8 +52,7 @@ bool USportsArcadeSeasonSave::SaveSeasonToSlot(const FString& SlotName, int32 Us
     if (SlotName.IsEmpty() || UserIndex < 0 || CompetitionId.IsNone() || Fixtures.IsEmpty() ||
         CompletedFixtureIndices.Num() != Results.Num())
         return false;
-    TArray<FSportsArcadeLeagueStanding> ValidatedTable;
-    if (!GetCurrentStandings(ValidatedTable)) return false;
+    if (!ValidateProgress()) return false;
     return UGameplayStatics::SaveGameToSlot(const_cast<USportsArcadeSeasonSave*>(this), SlotName, UserIndex);
 }
 
@@ -67,20 +66,7 @@ USportsArcadeSeasonSave* USportsArcadeSeasonSave::LoadSeasonFromSlot(const UObje
         Season->Fixtures.IsEmpty() ||
         Season->CompletedFixtureIndices.Num() != Season->Results.Num())
         return nullptr;
-    TSet<int32> SeenIndices;
-    for (int32 Index = 0; Index < Season->CompletedFixtureIndices.Num(); ++Index)
-    {
-        const int32 FixtureIndex = Season->CompletedFixtureIndices[Index];
-        if (!Season->Fixtures.IsValidIndex(FixtureIndex) || SeenIndices.Contains(FixtureIndex))
-            return nullptr;
-        SeenIndices.Add(FixtureIndex);
-        const FSportsArcadeLeagueFixture& Fixture = Season->Fixtures[FixtureIndex];
-        const FSportsArcadeLeagueResult& Result = Season->Results[Index];
-        if (Result.HomeClubId != Fixture.HomeClubId || Result.AwayClubId != Fixture.AwayClubId)
-            return nullptr;
-    }
-    TArray<FSportsArcadeLeagueStanding> ValidatedTable;
-    return Season->GetCurrentStandings(ValidatedTable) ? Season : nullptr;
+    return Season->ValidateProgress() ? Season : nullptr;
 }
 
 int32 USportsArcadeSeasonSave::GetNextUnplayedFixtureIndex() const
@@ -96,4 +82,24 @@ int32 USportsArcadeSeasonSave::GetNextUnplayedFixtureIndex() const
 bool USportsArcadeSeasonSave::IsSeasonComplete() const
 {
     return !Fixtures.IsEmpty() && GetNextUnplayedFixtureIndex() == INDEX_NONE;
+}
+
+bool USportsArcadeSeasonSave::ValidateProgress() const
+{
+    if (CompetitionId.IsNone() || Fixtures.IsEmpty() ||
+        CompletedFixtureIndices.Num() != Results.Num()) return false;
+    TSet<int32> SeenIndices;
+    for (int32 Index = 0; Index < CompletedFixtureIndices.Num(); ++Index)
+    {
+        const int32 FixtureIndex = CompletedFixtureIndices[Index];
+        if (!Fixtures.IsValidIndex(FixtureIndex) || SeenIndices.Contains(FixtureIndex))
+            return false;
+        SeenIndices.Add(FixtureIndex);
+        const FSportsArcadeLeagueFixture& Fixture = Fixtures[FixtureIndex];
+        const FSportsArcadeLeagueResult& Result = Results[Index];
+        if (Result.HomeClubId != Fixture.HomeClubId || Result.AwayClubId != Fixture.AwayClubId)
+            return false;
+    }
+    TArray<FSportsArcadeLeagueStanding> Standings;
+    return GetCurrentStandings(Standings);
 }
