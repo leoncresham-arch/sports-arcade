@@ -13,5 +13,11 @@ class SeasonFactoryTests(unittest.TestCase):
         self.assertIn("Competition.ParticipantClubIds.Num() < 2", SOURCE)
         self.assertIn("Season->StartSeason(Competition.Id, Competition.ParticipantClubIds, bHomeAndAway)", SOURCE)
 
+class KnockoutFactoryTests(unittest.TestCase):
+    def test_catalog_knockout_setup(self):
+        self.assertIn("CreateKnockoutCup", HEADER)
+        self.assertIn("Competition.Format != ESportsArcadeCompetitionFormat::Knockout", SOURCE)
+        self.assertIn("Cup->StartCup(Competition.Id, Competition.ParticipantClubIds)", SOURCE)
+
 if __name__ == "__main__":
     unittest.main()
