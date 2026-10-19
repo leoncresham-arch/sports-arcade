@@ -26,6 +26,15 @@ class SeasonSaveTests(unittest.TestCase):
         self.assertIn("CompletedFixtureIndices.Add(FixtureIndex)", SOURCE)
         self.assertIn("CalculateTable(ClubIds, Candidate, CandidateStandings)", SOURCE)
 
+    def test_native_slot_saving_and_load_validation(self):
+        self.assertIn("SaveSeasonToSlot", HEADER)
+        self.assertIn("LoadSeasonFromSlot", HEADER)
+        self.assertIn("UGameplayStatics::SaveGameToSlot", SOURCE)
+        self.assertIn("UGameplayStatics::LoadGameFromSlot", SOURCE)
+        self.assertIn("SeenIndices.Contains(FixtureIndex)", SOURCE)
+        self.assertIn("Result.HomeClubId != Fixture.HomeClubId", SOURCE)
+        self.assertIn("Season->GetCurrentStandings(ValidatedTable)", SOURCE)
+
     def test_standings_derive_from_saved_results(self):
         self.assertIn("CalculateTable(ClubIds, Results, OutStandings)", SOURCE)
 
