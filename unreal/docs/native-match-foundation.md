@@ -58,3 +58,10 @@ Extract match clock and refereeing into testable game state for replication, add
 - The existing provisional restart now refuses to teleport a footballer owned by a different world. Eligibility checking is consolidated in `CanResumePendingRestart()`, shared by gameplay and future Blueprint match HUD interactions. It checks match stoppage, restart classification, award team, valid ball and taker, taker team and world ownership.
 - Added `test_restart_taker_world.py`; updated the older `test_restart_taker.py` source contract to assert the same guard. The current restart remains provisional and not an officiated throw-in/corner/goal kick.
 - This does not prove native Unreal gameplay behavior; verify movement, possession and set-piece locations in Editor when available.
+
+
+## October 19 — explicit manual restart gameplay API
+- When `bAutoKickProvisionalRestart` is disabled, `ResumeAfterBallOut` positions the taker and ball but keeps the match clock stopped. The match no longer silently resumes without a real ball contact.
+- A new BlueprintCallable `TakeManualRestart(KickDirection)` is available after staging. It requires a valid awarded taker, same-world contact, a nonzero kick direction and successful physics impulse before clearing stoppage and broadcasting the resume event.
+- The internal `bManualRestartStaged` flag prevents taking a manual restart before the ball is placed; cleared with the pending restart state. These remain provisional offline kicks, not a complete licensed referee/set-piece animation system.
+- Python source regression tests cover manual/automatic paths, action ordering and failure handling. Runtime Unreal 5.5 validation is still needed.
