@@ -27,6 +27,12 @@ class SeasonMatchIntegrationTests(unittest.TestCase):
         self.assertIn("BoundSeason->SaveSeasonToSlot(SlotName, UserIndex)", SOURCE)
         self.assertIn("bMatchFinished && bSeasonResultRecorded", SOURCE)
 
+    def test_next_fixture_requires_finished_recorded_match(self):
+        self.assertIn("AdvanceToNextSeasonFixture", HEADER)
+        self.assertIn("!bMatchFinished || !bSeasonResultRecorded", SOURCE)
+        self.assertIn("BoundSeason->GetNextUnplayedFixtureIndex()", SOURCE)
+        self.assertIn("BindSeasonFixture(BoundSeason, NextIndex)", SOURCE)
+
     def test_result_only_submitted_at_full_time(self):
         self.assertIn("CommitSeasonResult();\n        OnFullTime.Broadcast();", SOURCE)
         self.assertIn("bSeasonResultRecorded || !IsValid(BoundSeason)", SOURCE)
