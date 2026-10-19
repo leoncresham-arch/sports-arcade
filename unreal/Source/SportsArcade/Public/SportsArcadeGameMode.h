@@ -146,6 +146,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     float GetMatchClockMinutes() const;
 
+    /** 1-2 in regulation, 3-4 in extra time; stays at final period after full-time. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
+    int32 GetMatchPeriodNumber() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
