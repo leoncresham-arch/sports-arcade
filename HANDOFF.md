@@ -344,3 +344,10 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - `USportsArcadeSeasonSave` now provides `GetNextUnplayedFixtureIndex()` and `IsSeasonComplete()` for progression UI, in addition to previously implemented SaveGame slot operations.
 - New `unreal/tests/test_season_match_integration.py` and added season progression assertions. Source checks have succeeded for the integration commits; verify final HEAD Actions after this note.
 - Next tasks: connect gameplay mode selection and club IDs to roster actors; explicit UI controllers for fixture selection/results; ensure duplicate match completion and restart transitions are engine tested; add automatic save-on-result if approved by design. No paid or proprietary assets added.
+
+## October 19 — 11v11 season roster and catalog integration
+- Native `ASportsArcadeTeamRoster` now has an editable `ClubId` to identify which database club each existing 11-player formation represents.
+- `BindSeasonFixture` requires unique home and away roster actors, each with valid full lineups, before assigning the fixture's club IDs; this prevents a fixture being bound to an absent or incomplete 11v11 match scene.
+- `USportsArcadeFootballDatabase::FindClubById` added. `ASportsArcadeGameMode::FootballCatalog` is an optional, editor-authored data asset; when supplied, match binding verifies both club IDs exist and squad categories match.
+- Source tests `test_season_roster_binding.py` and `test_season_catalog_selection.py` passed on GitHub Actions (run 39200145231). Unreal Editor compile and in-engine behavior still outstanding.
+- Next: player-to-club record mapping, roster data application, native initial kickoff correctness and real match progression.
