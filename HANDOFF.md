@@ -333,3 +333,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 19 — offline season save progression
 - Added native `USportsArcadeSeasonSave : USaveGame`, holding a competition ID, club IDs, generated league fixture schedule, completed fixture indices and scored results. `StartSeason` validates/generates a new schedule; `RecordFixtureResult` rejects duplicate/invalid fixture entries and validates candidate standings before writing; `GetCurrentStandings` derives the table from recorded results.
 - Added `unreal/tests/test_season_save.py`. Next is UI/menu exposure, slot-based `UGameplayStatics::SaveGameToSlot` integration, actual GameMode match-result wiring and native editor tests. No claim of end-to-end save/load gameplay.
+
+## October 19 — native season save slots
+- `USportsArcadeSeasonSave` now exposes `SaveSeasonToSlot` and static `LoadSeasonFromSlot` using Unreal's `UGameplayStatics` local slot API. Loading checks saved fixture indices for duplicates/out-of-range values, matches recorded home/away teams to fixtures, and recomputes valid standings before accepting a file.
+- New source contract checks appended to `unreal/tests/test_season_save.py`. Full Unreal serialization and Windows save/load remain to be tested in engine. Connect the save class to season menus and match results next.
