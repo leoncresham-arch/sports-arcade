@@ -6,6 +6,7 @@
 
 class USportsArcadeFootballDatabase;
 class USportsArcadeSeasonSave;
+class USportsArcadeCupSave;
 
 /** Offline league-mode selection from an authored competition catalog. */
 UCLASS()
@@ -20,4 +21,10 @@ public:
         const USportsArcadeFootballDatabase* Catalog,
         FName CompetitionId,
         bool bHomeAndAway);
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup", meta=(WorldContext="WorldContextObject"))
+    static USportsArcadeCupSave* CreateKnockoutCup(
+        const UObject* WorldContextObject,
+        const USportsArcadeFootballDatabase* Catalog,
+        FName CompetitionId);
 };
