@@ -8,6 +8,10 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("BindNextCupFixture(USportsArcadeCupSave* Cup)", header)
         self.assertIn("Cup->CurrentRoundFixtures[Cup->CurrentRoundWinners.Num()]", cpp)
         self.assertIn("BoundCup = Cup;", cpp)
+    def test_missing_cup_mapping_clears_stale_player_ids(self):
+        self.assertIn("Home->ClearFootballerRecordIds()", cpp)
+        self.assertIn("Away->ClearFootballerRecordIds()", cpp)
+
     def test_cup_teams_use_validated_catalog(self):
         self.assertIn("HomeClub.Category != AwayClub.Category", cpp)
         self.assertIn("Home->CanAssignFootballerRecords(FootballCatalog)", cpp)
