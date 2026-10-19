@@ -4,6 +4,7 @@
 #include "SportsArcadeTeamRoster.generated.h"
 
 class ASportsArcadeCharacter;
+class USportsArcadeFootballDatabase;
 
 UENUM(BlueprintType)
 enum class ESportsArcadeFormation : uint8
@@ -53,6 +54,10 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     FVector GetFormationPosition(int32 PlayerSlot) const;
+
+    /** Maps all 11 placed footballers to a catalog squad by shirt number. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
+    bool AssignFootballerRecords(const USportsArcadeFootballDatabase* Catalog);
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Team")
     ASportsArcadeCharacter* GetClosestPlayer(const FVector& Location) const;
