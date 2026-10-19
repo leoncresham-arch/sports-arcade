@@ -390,3 +390,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added native ESportsArcadeMatchPhase with Kickoff, Playing, Stoppage, HalfTime and FullTime; GetCurrentMatchPhase lets HUD consume one consistent authoritative phase.
 - GameMode exposes read-only GetBoundSeason and GetBoundFixtureIndex Blueprint methods for league UI and result screens.
 - Updated test_season_match_integration.py and test_match_controls_and_phases.py with source assertions. CI passed implementation commits, check latest regression HEAD. No Unreal native compilation yet.
+
+## October 19 — season UI contracts and knockout mode foundation
+- GameMode now has GetBoundSeasonStandings for UI, alongside read-only bound fixture ID, season object and match phase. Source regression tests added in existing suites.
+- Added native USportsArcadeCupFixtures and FSportsArcadeCupFixture: deterministic opening round for 2-64 teams (power of two only), validated single-elimination winner progression to subsequent rounds. No full cup SaveGame, extra-time/tiebreak rules or authored UI yet. Added test_cup_fixtures.py.
+- Tested implementation commits passed Python source CI; verify latest HEAD source tests after documentation change. Unreal native compilation remains unverified.
+- Continue approved cup persistence and match result linkage, training and rules systems, native interface integrations.
