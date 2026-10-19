@@ -38,6 +38,13 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
     bool GetCurrentStandings(TArray<FSportsArcadeLeagueStanding>& OutStandings) const;
 
+    /** Returns INDEX_NONE when every fixture has a result. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    int32 GetNextUnplayedFixtureIndex() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Season")
+    bool IsSeasonComplete() const;
+
     /** Persist this season using Unreal's standard local save-slot system. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season|Save")
     bool SaveSeasonToSlot(const FString& SlotName, int32 UserIndex = 0) const;
