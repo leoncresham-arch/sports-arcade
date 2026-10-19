@@ -51,6 +51,15 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 1)
         self.assertIn("StageKickoff(1);", cpp)
 
+    def test_exclusive_phase_query_for_match_ui(self):
+        header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
+        mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
+        self.assertIn("enum class ESportsArcadeMatchPhase", header)
+        for phase in ("Kickoff", "Playing", "Stoppage", "HalfTime", "FullTime"):
+            self.assertIn("ESportsArcadeMatchPhase::" + phase, mode)
+        self.assertIn("GetCurrentMatchPhase() const", header)
+        self.assertIn("PendingRestartType == ESportsArcadeRestartType::Kickoff", mode)
+
     def test_ball_settles_at_match_boundaries(self):
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
         ball_h = read("Source/SportsArcade/Public/SportsArcadeBall.h")
