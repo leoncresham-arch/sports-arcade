@@ -21,6 +21,12 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("Candidate->TeamIndex == TakingTeam && Candidate->GetWorld() == GetWorld()", SOURCE)
         self.assertIn("!IsValid(*It) || It->TeamIndex != Team || It->GetWorld() != GetWorld()", method)
 
+    def test_manual_restart_stays_stopped_until_explicit_completion(self):
+        method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
+        self.assertIn("if (!bAutoKickProvisionalRestart)", method)
+        self.assertLess(method.index("if (!bAutoKickProvisionalRestart)"),
+                        method.index("bBallOutOfPlay = false;"))
+
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
         self.assertIn("if (!CanResumePendingRestart()) return;", method)
