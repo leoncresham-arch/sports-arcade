@@ -28,6 +28,7 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn('FVector::DistSquared2D(Footballer->GetActorLocation(), Target)', code)
         self.assertIn('FMath::Square(125.f)', code)
         self.assertIn('MoveToLocation(Target, 125.f', code)
+        self.assertIn('if (!IsValid(*It)) continue;', code)
 
 if __name__ == '__main__':
     unittest.main()
