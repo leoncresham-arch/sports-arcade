@@ -24,6 +24,12 @@ public:
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Cup")
     FName ChampionId;
 
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Cup")
+    int32 OpeningClubCount = 0;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Cup")
+    int32 CompletedTies = 0;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
     bool StartCup(FName InCompetitionId, const TArray<FName>& ClubIds);
 
@@ -37,6 +43,12 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupComplete() const;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
+    float GetCupProgress() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
+    bool GetNextCupFixture(FSportsArcadeCupFixture& OutFixture) const;
 
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
     bool ValidateProgress() const;
