@@ -4,6 +4,7 @@
 #include "SportsArcadeBall.h"
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeSeasonSave.h"
+#include "SportsArcadeCupSave.h"
 #include "SportsArcadeFootballDatabase.h"
 
 #include "Engine/World.h"
@@ -264,6 +265,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             bHasPreviousBallPosition = false;
         }
         CommitSeasonResult();
+        CommitCupResult();
         OnFullTime.Broadcast();
     }
 }
@@ -321,6 +323,7 @@ void ASportsArcadeGameMode::ResetMatch()
         }
     }
     bSeasonResultRecorded = false;
+    bCupResultRecorded = false;
     StageKickoff(0);
     OnMatchReset.Broadcast();
 }
@@ -634,4 +637,38 @@ bool ASportsArcadeGameMode::GetBoundSeasonStandings(
 {
     OutStandings.Reset();
     return IsValid(BoundSeason) && BoundSeason->GetCurrentStandings(OutStandings);
+}
+
+bool ASportsArcadeGameMode::BindNextCupFixture(USportsArcadeCupSave* Cup)
+{
+    if (!IsValid(Cup) || Cup->IsCupComplete() ||
+        !Cup->CurrentRoundFixtures.IsValidIndex(Cup->CurrentRoundWinners.Num()) ||
+        (ElapsedMatchSeconds > 0.f && !bMatchFinished)) return false;
+    if (IsValid(BoundSeason) && !bMatchFinished) return false;
+    const FSportsArcadeCupFixture& Fixture =
+        Cup->CurrentRoundFixtures[Cup->CurrentRoundWinners.Num()];
+    if (Fixture.HomeClubId.IsNone() || Fixture.AwayClubId.IsNone() ||
+        Fixture.HomeClubId == Fixture.AwayClubId) return false;
+
+    // This is a prototype-level binding. Roster actors are reused from the 11v11 scene.
+    BoundCup = Cup;
+    BoundSeason = nullptr;
+    BoundFixtureIndex = INDEX_NONE;
+    SelectedHomeClubId = Fixture.HomeClubId;
+    SelectedAwayClubId = Fixture.AwayClubId;
+    ResetMatch();
+    return true;
+}
+
+void ASportsArcadeGameMode::CommitCupResult()
+{
+    if (!IsValid(BoundCup) || bCupResultRecorded || HomeGoals == AwayGoals)
+        return; // Cup ties need extra time or penalties, not an invented winner.
+    bCupResultRecorded = BoundCup->RecordWinner(
+        HomeGoals > AwayGoals ? SelectedHomeClubId : SelectedAwayClubId);
+}
+
+bool ASportsArcadeGameMode::IsCupResultRecorded() const
+{
+    return IsValid(BoundCup) && bMatchFinished && bCupResultRecorded;
 }
