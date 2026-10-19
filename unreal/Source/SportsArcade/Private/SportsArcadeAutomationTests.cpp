@@ -1,6 +1,7 @@
 #include "SportsArcadeFixtures.h"
 #include "SportsArcadeCupFixtures.h"
 #include "SportsArcadeLeagueTable.h"
+#include "SportsArcadePenaltyShootout.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -78,6 +79,30 @@ bool FSportsArcadeTableAutomation::RunTest(const FString& Parameters)
         TestEqual(TEXT("Winner gets three points"), Table[0].Points, 3);
         TestEqual(TEXT("Loser gets no points"), Table[1].Points, 0);
     }
+    return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadePenaltyShootoutAutomation,
+    "SportsArcade.Rules.PenaltyShootout",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadePenaltyShootoutAutomation::RunTest(const FString& Parameters)
+{
+    USportsArcadePenaltyShootout* Shootout =
+        NewObject<USportsArcadePenaltyShootout>(GetTransientPackage());
+    TestNotNull(TEXT("Shootout state available"), Shootout);
+    if (!Shootout) return false;
+
+    TestEqual(TEXT("Home kicks first"), Shootout->GetNextKickingTeam(), 0);
+    TestTrue(TEXT("Home first attempt"), Shootout->RecordAttempt(0, true));
+    TestFalse(TEXT("Cannot kick twice"), Shootout->RecordAttempt(0, false));
+    TestTrue(TEXT("Away reply"), Shootout->RecordAttempt(1, false));
+    TestTrue(TEXT("Home second attempt"), Shootout->RecordAttempt(0, true));
+    TestTrue(TEXT("Away second miss"), Shootout->RecordAttempt(1, false));
+    TestTrue(TEXT("Home third attempt"), Shootout->RecordAttempt(0, true));
+    TestTrue(TEXT("Away third miss"), Shootout->RecordAttempt(1, false));
+    TestEqual(TEXT("Insurmountable three-goal lead wins shootout"), Shootout->WinningTeam, 0);
+    TestFalse(TEXT("No additional kicks once decided"), Shootout->RecordAttempt(0, true));
     return true;
 }
 
