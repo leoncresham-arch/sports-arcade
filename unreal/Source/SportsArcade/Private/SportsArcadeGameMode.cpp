@@ -264,8 +264,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             MatchBall->StopMotion();
             bHasPreviousBallPosition = false;
         }
-        CommitSeasonResult();
         CommitCupResult();
+        CommitSeasonResult();
         OnFullTime.Broadcast();
     }
 }
