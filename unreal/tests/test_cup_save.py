@@ -51,6 +51,8 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("++CompletedTies;", CPP)
         self.assertIn("OpeningClubCount = ClubIds.Num();", CPP)
         self.assertIn("OutFixture = CurrentRoundFixtures[CurrentRoundWinners.Num()]", CPP)
+        self.assertIn("return !ValidateProgress() ? 0.f :", CPP)
+        self.assertIn("if (!ValidateProgress() || IsCupComplete() ||", CPP)
 
     def test_next_round_requires_every_winner(self):
         self.assertIn("CurrentRoundWinners.Num() != CurrentRoundFixtures.Num()", CPP)
