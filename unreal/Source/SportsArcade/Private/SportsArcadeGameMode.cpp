@@ -492,7 +492,7 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(int32 Team, cons
         // Single-footballer prototype maps may have no authored team roster.
         for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
         {
-            if (It->TeamIndex != Team) continue;
+            if (!IsValid(*It) || It->TeamIndex != Team || It->GetWorld() != GetWorld()) continue;
             const float Distance = FVector::DistSquared2D(It->GetActorLocation(), Location);
             if (Distance < BestDistance)
             {
