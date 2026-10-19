@@ -378,7 +378,12 @@ bool ASportsArcadeGameMode::CanResumePendingRestart() const
 
 void ASportsArcadeGameMode::ResumeAfterBallOut()
 {
-    if (bManualRestartStaged || !CanResumePendingRestart()) return;
+    if (!CanResumePendingRestart()) return;
+    // An already prepared restart stays put, except if ball physics moved it
+    // away from the referee mark. B can then safely restage the dead ball.
+    if (bManualRestartStaged && IsValid(MatchBall) &&
+        FVector::DistSquared2D(MatchBall->GetActorLocation(), PendingRestartLocation) <=
+            FMath::Square(60.f)) return;
     // Provisional in-field set-piece setup; official throw mechanics remain TODO.
     const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
     const float InwardY = PendingRestartLocation.Y >= 0.f ? -1.f : 1.f;
