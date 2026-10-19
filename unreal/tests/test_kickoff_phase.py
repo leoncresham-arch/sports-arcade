@@ -38,6 +38,13 @@ class KickoffRestartContract(unittest.TestCase):
         self.assertIn("Candidate->LineupSlot == 9", staging)
         self.assertLess(staging.index("It->ResetToKickoffPosition();"), staging.index("FindRestartTaker(TakingTeam"))
 
+    def test_initial_and_reset_kickoffs(self):
+        startup = SOURCE.split("void ASportsArcadeGameMode::BeginPlay()", 1)[1].split("void ASportsArcadeGameMode::Tick(", 1)[0]
+        reset = SOURCE.split("void ASportsArcadeGameMode::ResetMatch()", 1)[1].split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[0]
+        self.assertIn("StageKickoff(0);", startup)
+        self.assertIn("StageKickoff(0);", reset)
+        self.assertIn("bBallOutOfPlay = true;", SOURCE)
+
     def test_restart_kick_uses_team_direction(self):
         self.assertIn("PendingRestartType == ESportsArcadeRestartType::Kickoff", SOURCE)
         self.assertIn("FVector(PendingRestartTeam == 0 ? 1.f : -1.f, 0.f, 0.08f)", SOURCE)
