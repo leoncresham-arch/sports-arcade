@@ -669,8 +669,23 @@ bool ASportsArcadeGameMode::BindNextCupFixture(USportsArcadeCupSave* Cup)
     }
     if (!IsValid(Home) || !IsValid(Away) ||
         !Home->HasCompleteLineup() || !Away->HasCompleteLineup()) return false;
+    if (IsValid(FootballCatalog))
+    {
+        FSportsArcadeClubRecord HomeClub;
+        FSportsArcadeClubRecord AwayClub;
+        if (!FootballCatalog->FindClubById(Fixture.HomeClubId, HomeClub) ||
+            !FootballCatalog->FindClubById(Fixture.AwayClubId, AwayClub) ||
+            HomeClub.Category != AwayClub.Category) return false;
+    }
     Home->ClubId = Fixture.HomeClubId;
     Away->ClubId = Fixture.AwayClubId;
+    if (IsValid(FootballCatalog) &&
+        Home->CanAssignFootballerRecords(FootballCatalog) &&
+        Away->CanAssignFootballerRecords(FootballCatalog))
+    {
+        Home->AssignFootballerRecords(FootballCatalog);
+        Away->AssignFootballerRecords(FootballCatalog);
+    }
     BoundCup = Cup;
     BoundSeason = nullptr;
     BoundFixtureIndex = INDEX_NONE;
