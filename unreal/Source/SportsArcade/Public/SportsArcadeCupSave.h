@@ -37,4 +37,11 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupComplete() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Save")
+    bool SaveCupToSlot(const FString& SlotName, int32 UserIndex = 0) const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Save", meta=(WorldContext="WorldContextObject"))
+    static USportsArcadeCupSave* LoadCupFromSlot(const UObject* WorldContextObject,
+        const FString& SlotName, int32 UserIndex = 0);
 };
