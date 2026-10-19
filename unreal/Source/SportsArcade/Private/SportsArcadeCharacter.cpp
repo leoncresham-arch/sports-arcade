@@ -75,6 +75,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
     PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
     PlayerInputComponent->BindAction(TEXT("RestartBallOut"), IE_Pressed, this, &ASportsArcadeCharacter::RestartAfterBallOut);
+    PlayerInputComponent->BindAction(TEXT("TakeManualRestart"), IE_Pressed, this, &ASportsArcadeCharacter::TakeStagedRestart);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -265,6 +266,17 @@ void ASportsArcadeCharacter::RestartAfterBallOut()
     if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
     {
         Mode->ResumeAfterBallOut();
+    }
+}
+
+void ASportsArcadeCharacter::TakeStagedRestart()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        if (Mode->CanTakeManualRestart() && IsValid(Mode->PendingRestartTaker))
+        {
+            Mode->TakeManualRestart(Mode->PendingRestartTaker->GetActorForwardVector());
+        }
     }
 }
 
