@@ -297,6 +297,8 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
 
 void ASportsArcadeGameMode::ResetMatch()
 {
+    // A completed league fixture must not be replayed by the exhibition reset key.
+    if (IsValid(BoundSeason) && BoundSeason->CompletedFixtureIndices.Contains(BoundFixtureIndex)) return;
     ElapsedMatchSeconds = 0.f;
     HomeGoals = 0;
     AwayGoals = 0;
