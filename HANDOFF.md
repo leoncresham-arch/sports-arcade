@@ -351,3 +351,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - `USportsArcadeFootballDatabase::FindClubById` added. `ASportsArcadeGameMode::FootballCatalog` is an optional, editor-authored data asset; when supplied, match binding verifies both club IDs exist and squad categories match.
 - Source tests `test_season_roster_binding.py` and `test_season_catalog_selection.py` passed on GitHub Actions (run 39200145231). Unreal Editor compile and in-engine behavior still outstanding.
 - Next: player-to-club record mapping, roster data application, native initial kickoff correctness and real match progression.
+
+## October 19 — fixture-to-catalog player assignment continued
+- `BindSeasonFixture` now tries to apply a complete authored footballer identity mapping to both placed team rosters after assigning fixture club IDs. Missing/incomplete catalog squad data logs a warning and permits the existing prototype lineup to continue; no unlicensed roster data added.
+- Updated `unreal/tests/test_season_catalog_selection.py` to cover this connection. Source workflow succeeded for implementation SHA `f4174faf`; check latest source test revision at GitHub Actions.
+- Future: implement strict prevalidation for both full squads before any roster mutation; player name and rating presentation; independent Unreal runtime tests.
