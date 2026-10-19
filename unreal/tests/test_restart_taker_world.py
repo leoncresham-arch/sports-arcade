@@ -1,23 +1,27 @@
-"""Static regression for valid world ownership during provisional restarts."""
+"""Source validation for a single authoritative restart eligibility query."""
 from pathlib import Path
 import unittest
 
-SOURCE = (Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = (ROOT / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
+HEADER = (ROOT / "Source/SportsArcade/Public/SportsArcadeGameMode.h").read_text()
 
 
 class RestartOwnershipTests(unittest.TestCase):
-    def test_world_is_checked_before_teleport(self):
-        method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
-        self.assertIn("PendingRestartTaker->GetWorld() != GetWorld()", method)
-        self.assertLess(method.index("PendingRestartTaker->GetWorld() != GetWorld()"),
-                        method.index("SetActorLocation(TakerPosition"))
+    def test_world_and_team_eligibility(self):
+        query = SOURCE.split("bool ASportsArcadeGameMode::CanResumePendingRestart() const", 1)[1].split("\n}", 1)[0]
+        self.assertIn("PendingRestartTaker->GetWorld() == GetWorld()", query)
+        self.assertIn("PendingRestartTaker->TeamIndex == PendingRestartTeam", query)
+        self.assertIn("PendingRestartType != ESportsArcadeRestartType::Undetermined", query)
+        self.assertIn("bool CanResumePendingRestart() const;", HEADER)
 
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
+        self.assertIn("if (!CanResumePendingRestart()) return;", method)
+        self.assertLess(method.index("if (!CanResumePendingRestart()) return;"),
+                        method.index("SetActorLocation(TakerPosition"))
         self.assertLess(method.index("if (!MatchBall->KickByPlayer("),
                         method.index("bBallOutOfPlay = false;"))
-        self.assertLess(method.index("if (!IsValid(PendingRestartTaker) || !IsValid(MatchBall)) return;"),
-                        method.index("MatchBall->PlaceAtRest(PendingRestartLocation);"))
 
 
 if __name__ == "__main__":
