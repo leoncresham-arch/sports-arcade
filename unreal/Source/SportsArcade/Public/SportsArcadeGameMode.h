@@ -257,6 +257,7 @@ private:
     FVector PreviousBallPosition = FVector::ZeroVector;
     bool bHasPreviousBallPosition = false;
     bool bSecondHalfStarted = false;
+    bool bManualRestartStaged = false;
     UPROPERTY(Transient)
     TObjectPtr<USportsArcadeSeasonSave> BoundSeason;
     int32 BoundFixtureIndex = INDEX_NONE;
