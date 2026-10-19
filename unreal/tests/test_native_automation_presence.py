@@ -15,11 +15,12 @@ class NativeUnrealAutomationContracts(unittest.TestCase):
 
     def test_editor_automation_tests_exist(self):
         self.assertIn("#if WITH_DEV_AUTOMATION_TESTS", SOURCE)
-        self.assertEqual(SOURCE.count("IMPLEMENT_SIMPLE_AUTOMATION_TEST("), 4)
+        self.assertEqual(SOURCE.count("IMPLEMENT_SIMPLE_AUTOMATION_TEST("), 5)
         self.assertIn("FSportsArcadeLeagueScheduleAutomation", SOURCE)
         self.assertIn("FSportsArcadeCupBracketAutomation", SOURCE)
         self.assertIn("FSportsArcadeTableAutomation", SOURCE)
         self.assertIn("FSportsArcadePenaltyShootoutAutomation", SOURCE)
+        self.assertIn("FSportsArcadeCupSaveIntegrityAutomation", SOURCE)
     def test_native_tests_invoke_domain_logic(self):
         self.assertIn("USportsArcadeFixtures::GenerateLeagueFixtures", SOURCE)
         self.assertIn("USportsArcadeCupFixtures::GenerateNextRound", SOURCE)
