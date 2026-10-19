@@ -365,6 +365,17 @@ void ASportsArcadeGameMode::ResetMatch()
     OnMatchReset.Broadcast();
 }
 
+bool ASportsArcadeGameMode::CanResumePendingRestart() const
+{
+    return bBallOutOfPlay && !bHalfTime && !bMatchFinished && GetWorld() &&
+        PendingRestartType != ESportsArcadeRestartType::None &&
+        PendingRestartType != ESportsArcadeRestartType::Undetermined &&
+        (PendingRestartTeam == 0 || PendingRestartTeam == 1) &&
+        IsValid(MatchBall) && IsValid(PendingRestartTaker) &&
+        PendingRestartTaker->GetWorld() == GetWorld() &&
+        PendingRestartTaker->TeamIndex == PendingRestartTeam;
+}
+
 void ASportsArcadeGameMode::ResumeAfterBallOut()
 {
     if (!bBallOutOfPlay || bHalfTime || bMatchFinished) return;
