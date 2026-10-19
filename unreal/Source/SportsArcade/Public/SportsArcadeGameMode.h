@@ -179,6 +179,21 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupTieBreakRequired() const;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Cup|Extra Time", meta=(ClampMin="1.0"))
+    float ExtraTimeHalfDurationSeconds = 60.f;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Cup|Extra Time")
+    float ExtraTimeElapsedSeconds = 0.f;
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Extra Time")
+    bool IsCupExtraTimeRequired() const;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Extra Time")
+    bool StartCupExtraTime();
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Extra Time")
+    bool ResumeCupExtraTimeSecondHalf();
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool StartCupPenaltyShootout();
 
@@ -224,6 +239,9 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<USportsArcadePenaltyShootout> ActivePenaltyShootout;
     bool bCupResultRecorded = false;
+    bool bCupExtraTimePlayed = false;
+    bool bExtraTimeActive = false;
+    bool bExtraTimeSecondHalf = false;
     int32 BoundCupFixtureIndex = INDEX_NONE;
     void CommitCupResult();
     void CommitSeasonResult();
