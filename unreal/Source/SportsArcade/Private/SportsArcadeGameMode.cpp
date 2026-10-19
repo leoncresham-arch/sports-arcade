@@ -133,8 +133,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 LastGoalTouchPlayer = MatchBall->GetLastTouchPlayer();
                 bLastGoalWasOwnGoal = IsValid(LastGoalTouchPlayer) && LastGoalTouchPlayer->TeamIndex == 1;
                 RecordGoal(true);
-                MatchBall->ResetToCentre();
-                bHasPreviousBallPosition = false;
+                StageKickoff(1);
                 return;
             }
             else if (CrossesGoal(-Threshold) && PreviousBallPosition.X > -Threshold && Position.X <= -Threshold)
@@ -142,8 +141,7 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
                 LastGoalTouchPlayer = MatchBall->GetLastTouchPlayer();
                 bLastGoalWasOwnGoal = IsValid(LastGoalTouchPlayer) && LastGoalTouchPlayer->TeamIndex == 0;
                 RecordGoal(false);
-                MatchBall->ResetToCentre();
-                bHasPreviousBallPosition = false;
+                StageKickoff(0);
                 return;
             }
         }
@@ -286,8 +284,8 @@ void ASportsArcadeGameMode::ResumeSecondHalf()
     ClearPendingRestart();
     bSecondHalfStarted = true;
     bHasPreviousBallPosition = false;
-    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
-    OnPlayResumed.Broadcast();
+    StageKickoff(1);
+    // Resume event fires only once the second-half kickoff is taken.
 }
 
 void ASportsArcadeGameMode::ResetMatch()
@@ -339,9 +337,11 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     {
         // Offline only: approximates putting the ball back into play.
         // A real throw-in needs hands, animations and set-piece positioning.
-        const FVector Direction = PendingRestartType == ESportsArcadeRestartType::ThrowIn
-            ? FVector(0.f, -FMath::Sign(PendingRestartLocation.Y), 0.25f)
-            : FVector(PendingRestartTeam == 0 ? 1.f : -1.f, -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
+        const FVector Direction = PendingRestartType == ESportsArcadeRestartType::Kickoff
+            ? FVector(PendingRestartTeam == 0 ? 1.f : -1.f, 0.f, 0.08f)
+            : PendingRestartType == ESportsArcadeRestartType::ThrowIn
+                ? FVector(0.f, -FMath::Sign(PendingRestartLocation.Y), 0.25f)
+                : FVector(PendingRestartTeam == 0 ? 1.f : -1.f, -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
         if (!MatchBall->KickByPlayer(PendingRestartTaker, Direction, ProvisionalRestartImpulse, 210.f))
         {
             return;
@@ -351,6 +351,26 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     bHasPreviousBallPosition = false;
     ClearPendingRestart();
     OnPlayResumed.Broadcast();
+}
+
+void ASportsArcadeGameMode::StageKickoff(int32 TakingTeam)
+{
+    if (TakingTeam != 0 && TakingTeam != 1) return;
+    if (!IsValid(MatchBall) && GetWorld())
+    {
+        for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
+        {
+            MatchBall = *It;
+            break;
+        }
+    }
+    if (IsValid(MatchBall)) MatchBall->ResetToCentre();
+    PendingRestartType = ESportsArcadeRestartType::Kickoff;
+    PendingRestartTeam = TakingTeam;
+    PendingRestartLocation = FVector(0.f, 0.f, IsValid(MatchBall) ? MatchBall->BallRadiusCm + 2.f : 14.f);
+    PendingRestartTaker = FindRestartTaker(TakingTeam, PendingRestartLocation);
+    bBallOutOfPlay = true;
+    bHasPreviousBallPosition = false;
 }
 
 void ASportsArcadeGameMode::ClearPendingRestart()
