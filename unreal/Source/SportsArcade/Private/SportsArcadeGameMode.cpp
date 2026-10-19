@@ -628,3 +628,10 @@ int32 ASportsArcadeGameMode::GetBoundFixtureIndex() const
 {
     return IsValid(BoundSeason) ? BoundFixtureIndex : INDEX_NONE;
 }
+
+bool ASportsArcadeGameMode::GetBoundSeasonStandings(
+    TArray<FSportsArcadeLeagueStanding>& OutStandings) const
+{
+    OutStandings.Reset();
+    return IsValid(BoundSeason) && BoundSeason->GetCurrentStandings(OutStandings);
+}
