@@ -58,3 +58,17 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
     }
     return Errors.IsEmpty();
 }
+
+bool USportsArcadeFootballDatabase::FindClubById(FName ClubId, FSportsArcadeClubRecord& OutClub) const
+{
+    if (ClubId.IsNone()) return false;
+    for (const FSportsArcadeClubRecord& Club : Clubs)
+    {
+        if (Club.Id == ClubId)
+        {
+            OutClub = Club;
+            return true;
+        }
+    }
+    return false;
+}
