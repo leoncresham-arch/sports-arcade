@@ -11,6 +11,12 @@ $EngineRoot = (Resolve-Path $EngineRoot).Path
 $Build = Join-Path $EngineRoot 'Engine\Build\BatchFiles\Build.bat'
 $Editor = Join-Path $EngineRoot 'Engine\Binaries\Win64\UnrealEditor.exe'
 $VersionSelector = Join-Path $EngineRoot 'Engine\Binaries\Win64\UnrealVersionSelector-Win64-Shipping.exe'
+$BuildVersionFile = Join-Path $EngineRoot 'Engine\Build\Build.version'
+if (-not (Test-Path $BuildVersionFile)) { throw "Unreal Build.version not found: $BuildVersionFile" }
+$EngineVersion = Get-Content -Raw $BuildVersionFile | ConvertFrom-Json
+if ($EngineVersion.MajorVersion -ne 5 -or $EngineVersion.MinorVersion -ne 5) {
+    throw "Expected Unreal 5.5; installed version is $($EngineVersion.MajorVersion).$($EngineVersion.MinorVersion)"
+}
 if (-not (Test-Path $Build)) { throw "Unreal Build.bat not found: $Build" }
 if (-not (Test-Path $Project)) { throw "Sports Arcade project not found: $Project" }
 if ($GenerateProjectFiles) {
