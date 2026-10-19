@@ -54,6 +54,8 @@ class PrebuildReadiness(unittest.TestCase):
         self.assertIn("Build.bat", source)
         self.assertIn("UnrealVersionSelector", source)
         self.assertIn("Tee-Object -FilePath $LogPath", source)
+        self.assertIn("EngineVersion.MajorVersion -ne 5", source)
+        self.assertIn("EngineVersion.MinorVersion -ne 5", source)
         self.assertIn("$BuildExitCode = $LASTEXITCODE", source)
 
     def test_06_generated_headers_last(self):
