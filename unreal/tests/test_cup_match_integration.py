@@ -22,6 +22,11 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("BoundCup->AdvanceRound()", cpp)
         self.assertIn("return BindNextCupFixture(BoundCup);", cpp)
 
+    def test_cup_ui_can_access_progress_and_save(self):
+        self.assertIn("GetBoundCup() const", header)
+        self.assertIn("SaveBoundCupToSlot", header)
+        self.assertIn("BoundCup->SaveCupToSlot(SlotName, UserIndex)", cpp)
+
     def test_post_match_result(self):
         self.assertIn("IsCupResultRecorded() const", header)
         self.assertIn("bMatchFinished && bCupResultRecorded", cpp)
