@@ -28,6 +28,7 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("PreviousCompletedTies = OpeningClubCount - 2 * FixtureCount;", CPP)
         self.assertIn("CompletedTies != PreviousCompletedTies + CurrentRoundWinners.Num()", CPP)
         self.assertIn("Round != ExpectedRound", CPP)
+        self.assertIn("ChampionId.IsNone()) return false;", CPP)
         for opening_count in (2, 4, 8, 16, 32, 64):
             fixture_count = opening_count // 2
             round_number = 1
