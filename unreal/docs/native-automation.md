@@ -1,11 +1,12 @@
 # Native Unreal Engine 5.5 automation checks
 
-The source includes three Unreal Editor automation tests in
+The source includes four Unreal Editor automation tests in
 `Source/SportsArcade/Private/SportsArcadeAutomationTests.cpp`:
 
 - `SportsArcade.Seasons.LeagueSchedule` (double-round scheduling and ordering)
 - `SportsArcade.Seasons.CupBracket` (knockout winner advancement)
 - `SportsArcade.Seasons.LeagueTable` (points and ranking)
+- `SportsArcade.Rules.PenaltyShootout` (alternation and early resolution)
 
 These are real `IMPLEMENT_SIMPLE_AUTOMATION_TEST` C++ tests, intended for Unreal Engine 5.5 Editor. They have **not yet been compiled or executed in Unreal**. The GitHub Actions source-check workflow checks their presence, not their runtime success.
 
