@@ -579,3 +579,15 @@ void ASportsArcadeGameMode::CommitSeasonResult()
         UE_LOG(LogTemp, Warning, TEXT("SportsArcade: league result could not be recorded for fixture %d"), BoundFixtureIndex);
     }
 }
+
+bool ASportsArcadeGameMode::SaveBoundSeasonToSlot(const FString& SlotName, int32 UserIndex) const
+{
+    if (!IsValid(BoundSeason) || SlotName.IsEmpty() || UserIndex < 0)
+        return false;
+    return BoundSeason->SaveSeasonToSlot(SlotName, UserIndex);
+}
+
+bool ASportsArcadeGameMode::IsBoundSeasonResultRecorded() const
+{
+    return IsValid(BoundSeason) && bMatchFinished && bSeasonResultRecorded;
+}
