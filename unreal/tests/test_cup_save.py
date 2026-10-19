@@ -24,6 +24,24 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("Cup->ValidateProgress()", CPP)
         self.assertIn("if (SlotName.IsEmpty() || UserIndex < 0 || !ValidateProgress())", CPP)
 
+    def test_completed_ties_match_bracket_stage(self):
+        self.assertIn("PreviousCompletedTies = OpeningClubCount - 2 * FixtureCount;", CPP)
+        self.assertIn("CompletedTies != PreviousCompletedTies + CurrentRoundWinners.Num()", CPP)
+        self.assertIn("Round != ExpectedRound", CPP)
+        for opening_count in (2, 4, 8, 16, 32, 64):
+            fixture_count = opening_count // 2
+            round_number = 1
+            while fixture_count:
+                previous_ties = opening_count - 2 * fixture_count
+                for completed_in_round in range(fixture_count + 1):
+                    total = previous_ties + completed_in_round
+                    self.assertLessEqual(total, opening_count - 1)
+                if fixture_count == 1:
+                    self.assertEqual(total, opening_count - 1)
+                    break
+                fixture_count //= 2
+                round_number += 1
+
     def test_cup_progress_and_next_pending_tie(self):
         self.assertIn("GetCupProgress() const", HEADER)
         self.assertIn("GetNextCupFixture(FSportsArcadeCupFixture& OutFixture)", HEADER)
