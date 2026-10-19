@@ -11,7 +11,10 @@ void USportsArcadePenaltyShootout::ResetShootout()
 
 int32 USportsArcadePenaltyShootout::GetNextKickingTeam() const
 {
-    if (WinningTeam != INDEX_NONE) return INDEX_NONE;
+    if (WinningTeam != INDEX_NONE || HomeAttempts < 0 || AwayAttempts < 0 ||
+        HomeAttempts < AwayAttempts || HomeAttempts > AwayAttempts + 1 ||
+        HomeScored < 0 || AwayScored < 0 ||
+        HomeScored > HomeAttempts || AwayScored > AwayAttempts) return INDEX_NONE;
     return HomeAttempts == AwayAttempts ? 0 : 1;
 }
 
