@@ -361,3 +361,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added `CanAssignFootballerRecords` (BlueprintPure) to native team roster. `AssignFootballerRecords` now validates the complete lineup before mutation; GameMode preflights **both** teams before assigning any footballer identities. Prevents a one-sided mapping when away squad records are incomplete.
 - Extended `test_season_catalog_selection.py` with ordering/preflight assertions. Source checks passed at implementation commit `d19dc3f7`; current regression commit is `6e4be306` (verify in Actions).
 - Continue native game progress next; Unreal compilation, actual level gameplay and catalog authored content remain pending.
+
+## October 19 — kickoff and season progression
+- GameMode now stages opening and reset kickoffs, preventing early clock advancement.
+- Blueprint methods SaveBoundSeasonToSlot and IsBoundSeasonResultRecorded expose season saving and result status.
+- AdvanceToNextSeasonFixture selects the next pending fixture after a committed full-time result.
+- Source tests added to existing kickoff and season integration suites. Native Unreal compilation still outstanding.
