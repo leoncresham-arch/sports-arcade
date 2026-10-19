@@ -13,6 +13,11 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("Home->CanAssignFootballerRecords(FootballCatalog)", cpp)
         self.assertIn("Away->CanAssignFootballerRecords(FootballCatalog)", cpp)
 
+    def test_completed_tie_cannot_be_replayed(self):
+        self.assertIn("BoundCup->CurrentRoundWinners.Num() > BoundCupFixtureIndex", cpp)
+        self.assertIn("BoundCupFixtureIndex = Cup->CurrentRoundWinners.Num()", cpp)
+        self.assertIn("BoundCupFixtureIndex != BoundCup->CurrentRoundWinners.Num()", cpp)
+
     def test_draw_does_not_pick_winner(self):
         self.assertIn("HomeGoals == AwayGoals", cpp)
         self.assertIn("BoundCup->RecordWinner(", cpp)
