@@ -7,6 +7,7 @@
 class ASportsArcadeBall;
 class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
+class USportsArcadeSeasonSave;
 
 UENUM(BlueprintType)
 enum class ESportsArcadeRestartType : uint8
@@ -124,6 +125,16 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match|Stats")
     void RecordShotAttempt(int32 ShootingTeam);
 
+    /** Select a scheduled league fixture before playing; scores are committed once at full time. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Season")
+    bool BindSeasonFixture(USportsArcadeSeasonSave* Season, int32 FixtureIndex);
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
+    FName SelectedHomeClubId;
+
+    UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Season")
+    FName SelectedAwayClubId;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Team")
     bool SwitchToNearestTeammate(int32 TeamIndex);
 
@@ -133,6 +144,11 @@ private:
     FVector PreviousBallPosition = FVector::ZeroVector;
     bool bHasPreviousBallPosition = false;
     bool bSecondHalfStarted = false;
+    UPROPERTY(Transient)
+    TObjectPtr<USportsArcadeSeasonSave> BoundSeason;
+    int32 BoundFixtureIndex = INDEX_NONE;
+    bool bSeasonResultRecorded = false;
+    void CommitSeasonResult();
     void ClearPendingRestart();
     void StageKickoff(int32 TakingTeam);
     ASportsArcadeCharacter* FindRestartTaker(int32 Team, const FVector& Location) const;
