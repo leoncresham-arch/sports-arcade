@@ -50,6 +50,20 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("!bCupExtraTimePlayed", cpp)
         self.assertIn("if (bExtraTimeActive)", cpp)
 
+    def test_penalty_attempt_rejects_stale_cup_fixture_before_kicking(self):
+        method = cpp.split("bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(", 1)[1].split("\n}", 1)[0]
+        for guard in (
+            "CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex)",
+            "CurrentRoundWinners.Num() != BoundCupFixtureIndex",
+            "Tie.HomeClubId != SelectedHomeClubId",
+            "Tie.AwayClubId != SelectedAwayClubId",
+        ):
+            self.assertIn(guard, method)
+        self.assertLess(
+            method.index("Tie.HomeClubId != SelectedHomeClubId"),
+            method.index("ActivePenaltyShootout->RecordAttempt("),
+        )
+
     def test_penalty_winner_resolves_draw(self):
         self.assertIn("StartCupPenaltyShootout", header)
         self.assertIn("RecordCupPenaltyAttempt", header)
