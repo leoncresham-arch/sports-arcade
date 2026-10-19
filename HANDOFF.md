@@ -323,3 +323,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Native `USportsArcadeFixtures` Blueprint function library added to generate round-robin league schedules (single or double round, odd-sized leagues with byes). Initial Python tests cover scheduling pairs/rounds; real UE compilation and game-mode connection are still required.
 - Regression suites: `test_kickoff_phase.py`, `test_football_database.py`, `test_league_fixtures.py`; older phase/restart test expectations aligned to explicit kickoff. GitHub source-check Actions completed successfully after kickoff and catalog updates; verify latest HEAD Actions before reporting final CI.
 - Next work: integrate database club IDs into match selection and lineup creation, make season standings/save-game state, refine kickoff action flow and add engine-level tests. Existing main/UE project preserved.
+
+## October 19 — league season arithmetic continuation
+- Added native `USportsArcadeFixtures::GenerateLeagueFixtures`: deterministic circle-method league schedule, single or double leg, odd-sized league byes, duplicate/empty club rejection.
+- Added native `USportsArcadeLeagueTable::CalculateTable`: validates match club IDs and scorelines, tracks played/won/drawn/lost, GF/GA and 3-1-0 points, ranks by points, goal difference, goals for, then stable club ID. Neither is wired into persistent career mode yet.
+- Regression source and reference tests are at `unreal/tests/test_league_fixtures.py` and `test_league_table.py`. Check CI for current HEAD; only source tests run in GitHub Actions.
+- Next independent mode work: seasonal SaveGame records (club IDs, fixture IDs, results, round index) and load/validation routines, match-select integration into authored catalog.
