@@ -650,7 +650,27 @@ bool ASportsArcadeGameMode::BindNextCupFixture(USportsArcadeCupSave* Cup)
     if (Fixture.HomeClubId.IsNone() || Fixture.AwayClubId.IsNone() ||
         Fixture.HomeClubId == Fixture.AwayClubId) return false;
 
-    // This is a prototype-level binding. Roster actors are reused from the 11v11 scene.
+    // A cup fixture needs two complete real 11v11 rosters in this authored scene.
+    ASportsArcadeTeamRoster* Home = nullptr;
+    ASportsArcadeTeamRoster* Away = nullptr;
+    if (!GetWorld()) return false;
+    for (TActorIterator<ASportsArcadeTeamRoster> It(GetWorld()); It; ++It)
+    {
+        if (It->TeamIndex == 0)
+        {
+            if (Home) return false;
+            Home = *It;
+        }
+        else if (It->TeamIndex == 1)
+        {
+            if (Away) return false;
+            Away = *It;
+        }
+    }
+    if (!IsValid(Home) || !IsValid(Away) ||
+        !Home->HasCompleteLineup() || !Away->HasCompleteLineup()) return false;
+    Home->ClubId = Fixture.HomeClubId;
+    Away->ClubId = Fixture.AwayClubId;
     BoundCup = Cup;
     BoundSeason = nullptr;
     BoundFixtureIndex = INDEX_NONE;
