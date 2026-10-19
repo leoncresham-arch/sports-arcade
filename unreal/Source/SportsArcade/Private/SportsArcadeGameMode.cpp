@@ -844,3 +844,14 @@ bool ASportsArcadeGameMode::ResumeCupExtraTimeSecondHalf()
     StageKickoff(1);
     return true;
 }
+
+bool ASportsArcadeGameMode::IsCupExtraTimeActive() const
+{
+    return bExtraTimeActive;
+}
+
+float ASportsArcadeGameMode::GetExtraTimeProgress() const
+{
+    return FMath::Clamp(ExtraTimeElapsedSeconds /
+        FMath::Max(2.f * ExtraTimeHalfDurationSeconds, 1.f), 0.f, 1.f);
+}
