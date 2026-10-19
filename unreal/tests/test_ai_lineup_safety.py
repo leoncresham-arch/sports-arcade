@@ -19,6 +19,7 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn("ReceiverSeparation < 210.f", code)
         self.assertIn("ReceiverPressurePenalty = FMath::Max(", code)
         self.assertIn("Distance * 0.25f - ReceiverPressurePenalty", code)
+        self.assertIn("Delta.X * AttackSign < -650.f", code)
 
     def test_invalid_lineup_stops_navigation(self):
         code = AI.read_text()
