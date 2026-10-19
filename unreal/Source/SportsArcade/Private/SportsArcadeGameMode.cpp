@@ -536,8 +536,19 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
         return false;
     // Do not replace a match in progress or a result already recorded.
     if (ElapsedMatchSeconds > 0.f && !bMatchFinished) return false;
+    // Bind club identities only after all match prerequisites pass.
+    // An authored catalog can optionally assign stable player identities;
+    // incomplete squad data must not prevent the prototype from running.
     HomeRoster->ClubId = Fixture.HomeClubId;
     AwayRoster->ClubId = Fixture.AwayClubId;
+    if (IsValid(FootballCatalog))
+    {
+        if (!HomeRoster->AssignFootballerRecords(FootballCatalog) ||
+            !AwayRoster->AssignFootballerRecords(FootballCatalog))
+        {
+            UE_LOG(LogTemp, Warning, TEXT("SportsArcade: fixture selected but a full catalog player mapping is not yet available"));
+        }
+    }
     BoundSeason = Season;
     BoundFixtureIndex = FixtureIndex;
     SelectedHomeClubId = Fixture.HomeClubId;
