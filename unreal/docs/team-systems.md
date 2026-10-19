@@ -51,3 +51,9 @@ Technical limitations:
 - Nearest automatic team presser excludes footballers currently possessed by a human player controller; this stops human movement from suppressing all team AI pressure. Foreign-world roster candidates are also excluded.
 - AI passing decisions now reject tightly marked receivers (within 210 cm of an opponent), with a graduated scoring penalty when an opponent is closer than 450 cm to the intended receiver. Existing pass lane interception checks remain in place.
 - Both changes have Python source regression coverage and source CI. True gameplay balance and Unreal navigation behavior remain unverified in-editor.
+
+
+## October 19 — short support passing extension
+- AI off-ball passing permits an outfielder up to 650 cm behind the ball when no higher-scoring forward option is available, reducing forced random clearances. Forward penetration still scores higher.
+- Candidate receivers from unrelated Unreal worlds are discarded; receiver marking and corridor occlusion remain factors.
+- Python regression checks cover the new source path; balance and player behaviors must still be tested inside Unreal.
