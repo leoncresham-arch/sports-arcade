@@ -48,7 +48,8 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("FSportsArcadeMatchPhaseEvent OnMatchReset;", header)
         self.assertIn("FSportsArcadeMatchPhaseEvent OnPlayResumed;", header)
         self.assertIn("OnMatchReset.Broadcast();", cpp)
-        self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 2)
+        self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 1)
+        self.assertIn("StageKickoff(1);", cpp)
 
     def test_ball_settles_at_match_boundaries(self):
         mode = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
