@@ -114,3 +114,11 @@ float USportsArcadeSeasonSave::GetSeasonProgress() const
     return Fixtures.IsEmpty() ? 0.f : FMath::Clamp(
         static_cast<float>(CompletedFixtureIndices.Num()) / static_cast<float>(Fixtures.Num()), 0.f, 1.f);
 }
+
+bool USportsArcadeSeasonSave::GetNextUnplayedFixture(FSportsArcadeLeagueFixture& OutFixture) const
+{
+    const int32 Index = GetNextUnplayedFixtureIndex();
+    if (!Fixtures.IsValidIndex(Index)) return false;
+    OutFixture = Fixtures[Index];
+    return true;
+}
