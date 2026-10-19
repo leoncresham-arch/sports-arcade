@@ -816,7 +816,14 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
 
 bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored)
 {
+    // Validate the bound fixture BEFORE consuming an attempt. An invalid or
+    // advanced cup bracket must never strand a completed shootout without a result.
     if (!IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
+        !BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) ||
+        BoundCup->CurrentRoundWinners.Num() != BoundCupFixtureIndex)
+        return false;
+    const FSportsArcadeCupFixture& Tie = BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex];
+    if (Tie.HomeClubId != SelectedHomeClubId || Tie.AwayClubId != SelectedAwayClubId ||
         !ActivePenaltyShootout->RecordAttempt(KickingTeam, bScored))
         return false;
     const int32 Winner = ActivePenaltyShootout->WinningTeam;
