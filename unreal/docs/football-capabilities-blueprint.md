@@ -59,3 +59,22 @@ Existing UE5.5 C++ sources have basic walk/jog/sprint, early stamina tick, J pas
 
 ## Testing standards
 Per-feature Python/domain tests where logic is extractable, source contract tests as intermediate guardrails, eventual UE5 Automation Tests and native C++ build. Record implementation status with evidence. Do not wait for visual screenshots to continue game development.
+
+## Approved expanded full-game scope — worldwide football and modes (October 2026)
+
+Sports Arcade targets worldwide club and national-team coverage across football-playing countries, men's and women's football where feasible. Coverage must be data-driven (country / federation / league / season / club / squad / player / competition / fixtures / standings / transfers / kits). Actual clubs, crests, players, likenesses and competition marks must not be copied without appropriate rights; use original fictional defaults and only integrate licensed data when available. Avoid paid licensing commitments without user approval.
+
+Required modes beyond the initial offline match foundation:
+1. Kick-off / exhibition: club or national teams, difficulty, stadium and rules.
+2. League season: tables, fixtures, promotion/relegation and save progression.
+3. Domestic cup and continental tournament: group and knockout formats.
+4. National international cup / qualifiers and custom international tournaments.
+5. Manager career: squad selection, transfers, contracts, scouting, budgets and multi-season progression.
+6. Player career: create player, progression, transfers, selection and milestones.
+7. Custom clubs/teams and player editor, kits, squad management and tournaments.
+8. Practice arena, training exercises and skill challenges.
+9. Local multiplayer and controller support.
+10. Online friendlies, seasons and cooperative clubs (later release; server architecture and anti-cheat required).
+11. Original squad-building mode as a later expansion, without assuming paid packs, gambling mechanisms or licensed cards.
+
+Make each country's league depth configurable; don't promise every real-world club in the first release. Keep the initial milestone as authentic Unreal native compile and playable exhibition, with shared data contracts that support expanded modes without rewriting core gameplay.
