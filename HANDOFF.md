@@ -433,3 +433,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added FSportsArcadePenaltyShootoutAutomation as fourth UE-native automation test, covering first kicker, alternation, early result resolution and rejection of further attempts after a winner.
 - Updated native automation source checks and runner instructions. Source CI at test inventory revision 34f909eb passed (run 39203182811). These are prepared tests only; actual Unreal Editor execution has not occurred.
 - Next approved development: explicitly model extra time before penalty shootouts, integrate real penalty animations and goalkeeper controls, and implement in-engine match scenario tests.
+
+## October 19 — match mode state isolation fix
+- Switching from knockout mode back to a league fixture now clears BoundCup, its fixture index and any previous penalty shootout state before binding the league. Prevents a league full-time score from also being submitted to a stale cup.
+- Updated test_season_match_integration.py with cross-mode reset assertion. Implementation source CI passed on b6f1ea3e (run 39203263106); check the latest regression test revision.
+- User's standing instruction remains to continue independent approved scope work without routine approval prompts. The next match rules scope is proper two-period extra time and fully driven penalty taking, while maintaining offline native UE5.5 architecture.
