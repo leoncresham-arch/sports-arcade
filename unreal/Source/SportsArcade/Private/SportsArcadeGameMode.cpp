@@ -32,6 +32,10 @@ void ASportsArcadeGameMode::BeginPlay()
         }
     }
 
+    // Begin the offline match with a referee-controlled home kickoff.
+    // Resetting the ball alone must not start the match clock.
+    StageKickoff(0);
+
     if (bAutoPossessHomeRosterStarter && GetWorld())
     {
         APlayerController* PC = GetWorld()->GetFirstPlayerController();
@@ -315,6 +319,7 @@ void ASportsArcadeGameMode::ResetMatch()
         }
     }
     bSeasonResultRecorded = false;
+    StageKickoff(0);
     OnMatchReset.Broadcast();
 }
 
