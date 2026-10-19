@@ -605,3 +605,16 @@ bool ASportsArcadeGameMode::AdvanceToNextSeasonFixture()
         return false;
     return BindSeasonFixture(BoundSeason, NextIndex);
 }
+
+ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const
+{
+    if (bMatchFinished) return ESportsArcadeMatchPhase::FullTime;
+    if (bHalfTime) return ESportsArcadeMatchPhase::HalfTime;
+    if (bBallOutOfPlay)
+    {
+        return PendingRestartType == ESportsArcadeRestartType::Kickoff
+            ? ESportsArcadeMatchPhase::Kickoff
+            : ESportsArcadeMatchPhase::Stoppage;
+    }
+    return ESportsArcadeMatchPhase::Playing;
+}
