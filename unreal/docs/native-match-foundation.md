@@ -46,3 +46,9 @@ Extract match clock and refereeing into testable game state for replication, add
 - `GetCurrentMatchPhase` now distinguishes a drawn cup awaiting extra time, the two extra-time periods and interval, a draw awaiting penalties and an active shootout. Kickoff/stoppage phases retain priority while a period is live; a recorded winner returns FullTime.
 - Penalty attempts now prevalidate the bound knockout fixture index and both selected club identities before consuming a kick, preventing stale bracket references from progressing a shootout.
 - Regression coverage: `test_cup_resolution_phases.py` and `test_cup_match_integration.py`. These remain source-contract checks, not compiled Unreal runtime coverage.
+
+
+## October 19 — Blueprint match clock and period contract
+- `GetMatchClockMinutes()` reports 0–90 normalized football minutes from configurable regulation duration, then 90–120 during extra time. Stoppages and interval preserve the recorded elapsed counters.
+- `GetMatchPeriodNumber()` reports first/second regulation (1/2) and first/second extra-time (3/4) based on the authoritative period state. The HUD should use the separate match-phase enum for restarts, shootouts and finished results.
+- Cup shootout creation now validates fixture position and club identities before creating a shootout, complementing per-attempt preflight. Python source contracts run in CI; UE runtime remains untested.
