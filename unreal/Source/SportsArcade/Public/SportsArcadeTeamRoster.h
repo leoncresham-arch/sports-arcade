@@ -29,6 +29,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team", meta=(ClampMin="0", ClampMax="1"))
     int32 TeamIndex = 0;
 
+    /** Stable club identifier assigned when a season fixture is selected. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
+    FName ClubId;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     ESportsArcadeFormation Formation = ESportsArcadeFormation::Formation433;
 
