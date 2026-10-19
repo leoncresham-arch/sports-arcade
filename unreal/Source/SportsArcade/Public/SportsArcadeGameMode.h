@@ -174,6 +174,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupResultRecorded() const;
 
+    /** Drawn knockout games remain unresolved until extra time/penalties exist. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
+    bool IsCupTieBreakRequired() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
     bool AdvanceBoundCupRound();
 
