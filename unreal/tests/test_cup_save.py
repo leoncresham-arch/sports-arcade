@@ -20,7 +20,9 @@ class CupProgressTests(unittest.TestCase):
         self.assertIn("UGameplayStatics::SaveGameToSlot", CPP)
         self.assertIn("UGameplayStatics::LoadGameFromSlot", CPP)
         self.assertIn("Winner != Fixture.HomeClubId", CPP)
-        self.assertIn("Cup->ChampionId != Cup->CurrentRoundWinners[0]", CPP)
+        self.assertIn("ChampionId != CurrentRoundWinners[0]", CPP)
+        self.assertIn("Cup->ValidateProgress()", CPP)
+        self.assertIn("if (SlotName.IsEmpty() || UserIndex < 0 || !ValidateProgress())", CPP)
 
     def test_next_round_requires_every_winner(self):
         self.assertIn("CurrentRoundWinners.Num() != CurrentRoundFixtures.Num()", CPP)
