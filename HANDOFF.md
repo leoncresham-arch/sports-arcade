@@ -453,3 +453,9 @@ The user strongly insists on sustained autonomous development **within each acti
 - Added explicit Blueprint match phases for cup resolution: awaiting extra time, both extra-time halves and interval, awaiting penalties, and active shootout. Regular league/exhibition behavior remains unchanged.
 - Penalty attempt recording now checks the bound cup fixture index and home/away identities before consuming a kick. Added Python source regressions; GitHub Actions remains static/source validation only.
 - Continue approved work next: match referee state machine, actual set-piece/penalty gameplay, UI binding, native Unreal 5.5 compile and Automation Test runs when available. Preserve continuous-work instructions and existing architecture.
+
+
+## October 19 — continued consecutive work: cup safety and match HUD
+- Shootout startup now prevalidates bound fixture index, winner advancement and club identity, matching per-kick safeguards.
+- Added Blueprint-friendly GetMatchClockMinutes() (0–90 / 0–120 game minutes) and GetMatchPeriodNumber() (1–4); added corresponding CI source regressions.
+- Further unfinished gameplay scope remains: match official rules, set pieces, UI wiring and authentic native UE validation. Continue without pausing after individual commits.
