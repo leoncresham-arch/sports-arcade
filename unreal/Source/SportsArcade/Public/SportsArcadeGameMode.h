@@ -208,6 +208,7 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<USportsArcadeCupSave> BoundCup;
     bool bCupResultRecorded = false;
+    int32 BoundCupFixtureIndex = INDEX_NONE;
     void CommitCupResult();
     void CommitSeasonResult();
     void ClearPendingRestart();
