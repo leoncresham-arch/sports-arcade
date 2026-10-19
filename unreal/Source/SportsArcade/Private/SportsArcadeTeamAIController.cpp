@@ -95,10 +95,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // Only the closest eligible outfielder presses; others maintain support shape.
         ASportsArcadeCharacter* Nearest = nullptr;
         float BestDistance = TNumericLimits<float>::Max();
-        for (int32 Index = 1; Index < Roster->Players.Num(); ++Index)
+        for (ASportsArcadeCharacter* Candidate : Roster->Players)
         {
-            ASportsArcadeCharacter* Candidate = Roster->Players[Index];
-            if (!IsValid(Candidate) || Candidate->TeamIndex != Footballer->TeamIndex) continue;
+            if (!IsValid(Candidate) || Candidate->TeamIndex != Footballer->TeamIndex ||
+                Candidate->LineupSlot == 0) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
             if (Distance < BestDistance)
             {
