@@ -11,6 +11,7 @@ $Build = Join-Path $EngineRoot 'Engine\Build\BatchFiles\Build.bat'
 $Editor = Join-Path $EngineRoot 'Engine\Binaries\Win64\UnrealEditor.exe'
 $VersionSelector = Join-Path $EngineRoot 'Engine\Binaries\Win64\UnrealVersionSelector-Win64-Shipping.exe'
 if (-not (Test-Path $Build)) { throw "Unreal Build.bat not found: $Build" }
+if (-not (Test-Path $Project)) { throw "Sports Arcade project not found: $Project" }
 if ($GenerateProjectFiles) {
     $Generator = Join-Path $EngineRoot 'Engine\Build\BatchFiles\GenerateProjectFiles.bat'
     if (Test-Path $Generator) {
