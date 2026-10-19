@@ -142,6 +142,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
     ESportsArcadeMatchPhase GetCurrentMatchPhase() const;
 
+    /** Football clock in match minutes, normalized for configurable period lengths (0–120). */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Match")
+    float GetMatchClockMinutes() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
