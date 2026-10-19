@@ -1,4 +1,5 @@
 #include "SportsArcadeCupSave.h"
+#include "Kismet/GameplayStatics.h"
 
 bool USportsArcadeCupSave::StartCup(FName InCompetitionId, const TArray<FName>& ClubIds)
 {
@@ -44,4 +45,39 @@ bool USportsArcadeCupSave::AdvanceRound()
 bool USportsArcadeCupSave::IsCupComplete() const
 {
     return !ChampionId.IsNone();
+}
+
+bool USportsArcadeCupSave::SaveCupToSlot(const FString& SlotName, int32 UserIndex) const
+{
+    if (SlotName.IsEmpty() || UserIndex < 0 || CompetitionId.IsNone() ||
+        CurrentRoundFixtures.IsEmpty() ||
+        CurrentRoundWinners.Num() > CurrentRoundFixtures.Num())
+        return false;
+    return UGameplayStatics::SaveGameToSlot(const_cast<USportsArcadeCupSave*>(this), SlotName, UserIndex);
+}
+
+USportsArcadeCupSave* USportsArcadeCupSave::LoadCupFromSlot(
+    const UObject* WorldContextObject, const FString& SlotName, int32 UserIndex)
+{
+    if (!IsValid(WorldContextObject) || SlotName.IsEmpty() || UserIndex < 0)
+        return nullptr;
+    USportsArcadeCupSave* Cup = Cast<USportsArcadeCupSave>(
+        UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
+    if (!IsValid(Cup) || Cup->CompetitionId.IsNone() ||
+        Cup->CurrentRoundFixtures.IsEmpty() ||
+        Cup->CurrentRoundWinners.Num() > Cup->CurrentRoundFixtures.Num())
+        return nullptr;
+    for (int32 Index = 0; Index < Cup->CurrentRoundWinners.Num(); ++Index)
+    {
+        const FSportsArcadeCupFixture& Fixture = Cup->CurrentRoundFixtures[Index];
+        const FName Winner = Cup->CurrentRoundWinners[Index];
+        if (Winner != Fixture.HomeClubId && Winner != Fixture.AwayClubId)
+            return nullptr;
+    }
+    if (!Cup->ChampionId.IsNone() &&
+        (Cup->CurrentRoundFixtures.Num() != 1 ||
+         Cup->CurrentRoundWinners.Num() != 1 ||
+         Cup->ChampionId != Cup->CurrentRoundWinners[0]))
+        return nullptr;
+    return Cup;
 }
