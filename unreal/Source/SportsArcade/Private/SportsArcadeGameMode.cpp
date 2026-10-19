@@ -5,6 +5,7 @@
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeSeasonSave.h"
 #include "SportsArcadeCupSave.h"
+#include "SportsArcadePenaltyShootout.h"
 #include "SportsArcadeFootballDatabase.h"
 
 #include "Engine/World.h"
@@ -326,6 +327,7 @@ void ASportsArcadeGameMode::ResetMatch()
     }
     bSeasonResultRecorded = false;
     bCupResultRecorded = false;
+    ActivePenaltyShootout = nullptr;
     StageKickoff(0);
     OnMatchReset.Broadcast();
 }
@@ -750,4 +752,30 @@ bool ASportsArcadeGameMode::IsCupTieBreakRequired() const
 {
     return IsValid(BoundCup) && bMatchFinished &&
         !bCupResultRecorded && HomeGoals == AwayGoals;
+}
+
+bool ASportsArcadeGameMode::StartCupPenaltyShootout()
+{
+    if (!IsCupTieBreakRequired() || IsValid(ActivePenaltyShootout)) return false;
+    ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
+    return IsValid(ActivePenaltyShootout);
+}
+
+bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored)
+{
+    if (!IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
+        !ActivePenaltyShootout->RecordAttempt(KickingTeam, bScored))
+        return false;
+    const int32 Winner = ActivePenaltyShootout->WinningTeam;
+    if (Winner == 0 || Winner == 1)
+    {
+        bCupResultRecorded = BoundCup->RecordWinner(
+            Winner == 0 ? SelectedHomeClubId : SelectedAwayClubId);
+    }
+    return true;
+}
+
+USportsArcadePenaltyShootout* ASportsArcadeGameMode::GetCupPenaltyShootout() const
+{
+    return IsValid(ActivePenaltyShootout) ? ActivePenaltyShootout.Get() : nullptr;
 }
