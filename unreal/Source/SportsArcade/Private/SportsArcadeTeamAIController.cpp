@@ -198,5 +198,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     }
     Target.X = FMath::Clamp(Target.X, -HalfLength + 150.f, HalfLength - 150.f);
     Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 150.f, HalfWidth - 150.f);
+    // Avoid submitting an identical path request when already inside the acceptance radius.
+    if (FVector::DistSquared2D(Footballer->GetActorLocation(), Target) <= FMath::Square(125.f))
+    {
+        StopMovement();
+        return;
+    }
     MoveToLocation(Target, 125.f, true, true, false, true, nullptr, true);
 }
