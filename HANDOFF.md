@@ -428,3 +428,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - Added native USportsArcadePenaltyShootout: alternating home-first attempts, impossible-comeback early conclusion within five rounds, and sudden-death decision after paired attempts. GameMode StartCupPenaltyShootout / RecordCupPenaltyAttempt / GetCupPenaltyShootout connect a level full-time cup draw to explicit scored/missed attempt records and cup winner advancement.
 - These are provisional data/referee APIs only; not physically executed kicks, player-controlled penalty animations, extra time, or complete IFAB officiating. Presently drawn cup match enters penalty setup without a modeled 30-minute extra-time period; implement genuine extra-time path next.
 - Added/updated Python source and reference algorithm tests for shooter order, early win and sudden death. The implementation source checks passed at 146c6ef8 (run 39203082226); check latest test head.
+
+## October 19 — native shootout test expansion
+- Added FSportsArcadePenaltyShootoutAutomation as fourth UE-native automation test, covering first kicker, alternation, early result resolution and rejection of further attempts after a winner.
+- Updated native automation source checks and runner instructions. Source CI at test inventory revision 34f909eb passed (run 39203182811). These are prepared tests only; actual Unreal Editor execution has not occurred.
+- Next approved development: explicitly model extra time before penalty shootouts, integrate real penalty animations and goalkeeper controls, and implement in-engine match scenario tests.
