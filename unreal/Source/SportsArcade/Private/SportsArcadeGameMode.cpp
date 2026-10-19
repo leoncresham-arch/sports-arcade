@@ -312,6 +312,11 @@ void ASportsArcadeGameMode::RecordShotAttempt(int32 ShootingTeam)
 
 void ASportsArcadeGameMode::ResumeSecondHalf()
 {
+    if (bExtraTimeActive)
+    {
+        ResumeCupExtraTimeSecondHalf();
+        return;
+    }
     if (!bHalfTime || bMatchFinished) return;
     bHalfTime = false;
     bBallOutOfPlay = false;
