@@ -1,4 +1,5 @@
 #include "SportsArcadeSeasonSave.h"
+#include "Kismet/GameplayStatics.h"
 
 bool USportsArcadeSeasonSave::StartSeason(FName InCompetitionId, const TArray<FName>& InClubIds,
     bool bHomeAndAway)
@@ -44,4 +45,40 @@ bool USportsArcadeSeasonSave::GetCurrentStandings(
     TArray<FSportsArcadeLeagueStanding>& OutStandings) const
 {
     return USportsArcadeLeagueTable::CalculateTable(ClubIds, Results, OutStandings);
+}
+
+bool USportsArcadeSeasonSave::SaveSeasonToSlot(const FString& SlotName, int32 UserIndex) const
+{
+    if (SlotName.IsEmpty() || UserIndex < 0 || CompetitionId.IsNone() || Fixtures.IsEmpty() ||
+        CompletedFixtureIndices.Num() != Results.Num())
+        return false;
+    TArray<FSportsArcadeLeagueStanding> ValidatedTable;
+    if (!GetCurrentStandings(ValidatedTable)) return false;
+    return UGameplayStatics::SaveGameToSlot(const_cast<USportsArcadeSeasonSave*>(this), SlotName, UserIndex);
+}
+
+USportsArcadeSeasonSave* USportsArcadeSeasonSave::LoadSeasonFromSlot(const UObject* WorldContextObject,
+    const FString& SlotName, int32 UserIndex)
+{
+    if (!IsValid(WorldContextObject) || SlotName.IsEmpty() || UserIndex < 0) return nullptr;
+    USaveGame* Loaded = UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex);
+    USportsArcadeSeasonSave* Season = Cast<USportsArcadeSeasonSave>(Loaded);
+    if (!IsValid(Season) || Season->CompetitionId.IsNone() ||
+        Season->Fixtures.IsEmpty() ||
+        Season->CompletedFixtureIndices.Num() != Season->Results.Num())
+        return nullptr;
+    TSet<int32> SeenIndices;
+    for (int32 Index = 0; Index < Season->CompletedFixtureIndices.Num(); ++Index)
+    {
+        const int32 FixtureIndex = Season->CompletedFixtureIndices[Index];
+        if (!Season->Fixtures.IsValidIndex(FixtureIndex) || SeenIndices.Contains(FixtureIndex))
+            return nullptr;
+        SeenIndices.Add(FixtureIndex);
+        const FSportsArcadeLeagueFixture& Fixture = Season->Fixtures[FixtureIndex];
+        const FSportsArcadeLeagueResult& Result = Season->Results[Index];
+        if (Result.HomeClubId != Fixture.HomeClubId || Result.AwayClubId != Fixture.AwayClubId)
+            return nullptr;
+    }
+    TArray<FSportsArcadeLeagueStanding> ValidatedTable;
+    return Season->GetCurrentStandings(ValidatedTable) ? Season : nullptr;
 }
