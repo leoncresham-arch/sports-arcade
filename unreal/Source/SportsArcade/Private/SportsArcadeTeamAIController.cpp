@@ -34,6 +34,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     ASportsArcadeBall* Ball = nullptr;
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
+        if (!IsValid(*It)) continue;
         Ball = *It;
         break;
     }
