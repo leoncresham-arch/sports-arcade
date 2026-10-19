@@ -618,3 +618,13 @@ ESportsArcadeMatchPhase ASportsArcadeGameMode::GetCurrentMatchPhase() const
     }
     return ESportsArcadeMatchPhase::Playing;
 }
+
+USportsArcadeSeasonSave* ASportsArcadeGameMode::GetBoundSeason() const
+{
+    return IsValid(BoundSeason) ? BoundSeason.Get() : nullptr;
+}
+
+int32 ASportsArcadeGameMode::GetBoundFixtureIndex() const
+{
+    return IsValid(BoundSeason) ? BoundFixtureIndex : INDEX_NONE;
+}
