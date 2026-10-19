@@ -17,7 +17,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     DecisionCountdown -= DeltaSeconds;
     ActionCooldownRemaining = FMath::Max(0.f, ActionCooldownRemaining - DeltaSeconds);
-    if (DecisionCountdown > 0.f || !GetWorld()) return;
+    if (!GetWorld()) return;
+    if (DecisionCountdown > 0.f) return;
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
     ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
@@ -45,12 +46,17 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             break;
         }
     }
-    if (!IsValid(Roster)) return;
+    if (!IsValid(Roster))
+    {
+        StopMovement();
+        return;
+    }
 
     // Match-phase movement should not inherit stale navigation requests from halftime.
     const int32 MembershipIndex = Roster->Players.IndexOfByKey(Footballer);
     const int32 Slot = Roster->bUseExplicitLineupSlots ? Footballer->LineupSlot : MembershipIndex;
-    if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10)
+    if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10 ||
+        Footballer->TeamIndex < 0 || Footballer->TeamIndex > 1)
     {
         StopMovement();
         return;
