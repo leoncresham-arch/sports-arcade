@@ -13,6 +13,11 @@ class SeasonCatalogContracts(unittest.TestCase):
         self.assertIn("FindClubById(FName ClubId", catalog_h)
         self.assertIn("Club.Id == ClubId", catalog_cpp)
 
+    def test_both_rosters_validated_before_identity_mutation(self):
+        self.assertIn("HomeRoster->CanAssignFootballerRecords(FootballCatalog)", game)
+        self.assertIn("AwayRoster->CanAssignFootballerRecords(FootballCatalog)", game)
+        self.assertLess(game.index("HomeRoster->CanAssignFootballerRecords"), game.index("HomeRoster->AssignFootballerRecords"))
+
     def test_catalog_player_mapping_on_fixture_selection(self):
         self.assertIn("HomeRoster->AssignFootballerRecords(FootballCatalog)", game)
         self.assertIn("AwayRoster->AssignFootballerRecords(FootballCatalog)", game)
