@@ -10,6 +10,7 @@ class ASportsArcadeCharacter;
 class ASportsArcadeTeamRoster;
 class USportsArcadeSeasonSave;
 class USportsArcadeCupSave;
+class USportsArcadePenaltyShootout;
 class USportsArcadeFootballDatabase;
 
 UENUM(BlueprintType)
@@ -178,6 +179,15 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup")
     bool IsCupTieBreakRequired() const;
 
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
+    bool StartCupPenaltyShootout();
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
+    bool RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored);
+
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    USportsArcadePenaltyShootout* GetCupPenaltyShootout() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup")
     bool AdvanceBoundCupRound();
 
@@ -211,6 +221,8 @@ private:
     bool bSeasonResultRecorded = false;
     UPROPERTY(Transient)
     TObjectPtr<USportsArcadeCupSave> BoundCup;
+    UPROPERTY(Transient)
+    TObjectPtr<USportsArcadePenaltyShootout> ActivePenaltyShootout;
     bool bCupResultRecorded = false;
     int32 BoundCupFixtureIndex = INDEX_NONE;
     void CommitCupResult();
