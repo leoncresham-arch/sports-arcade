@@ -15,6 +15,10 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("PendingRestartType != ESportsArcadeRestartType::Undetermined", query)
         self.assertIn("bool CanResumePendingRestart() const;", HEADER)
 
+    def test_roster_taker_selection_rejects_foreign_world(self):
+        method = SOURCE.split("ASportsArcadeCharacter* ASportsArcadeGameMode::FindRestartTaker(", 1)[1].split("\n}", 1)[0]
+        self.assertIn("Candidate->GetWorld() != GetWorld()", method)
+
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
         self.assertIn("if (!CanResumePendingRestart()) return;", method)
