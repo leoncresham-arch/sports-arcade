@@ -356,3 +356,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - `BindSeasonFixture` now tries to apply a complete authored footballer identity mapping to both placed team rosters after assigning fixture club IDs. Missing/incomplete catalog squad data logs a warning and permits the existing prototype lineup to continue; no unlicensed roster data added.
 - Updated `unreal/tests/test_season_catalog_selection.py` to cover this connection. Source workflow succeeded for implementation SHA `f4174faf`; check latest source test revision at GitHub Actions.
 - Future: implement strict prevalidation for both full squads before any roster mutation; player name and rating presentation; independent Unreal runtime tests.
+
+## October 19 — transactional two-squad player identity preflight
+- Added `CanAssignFootballerRecords` (BlueprintPure) to native team roster. `AssignFootballerRecords` now validates the complete lineup before mutation; GameMode preflights **both** teams before assigning any footballer identities. Prevents a one-sided mapping when away squad records are incomplete.
+- Extended `test_season_catalog_selection.py` with ordering/preflight assertions. Source checks passed at implementation commit `d19dc3f7`; current regression commit is `6e4be306` (verify in Actions).
+- Continue native game progress next; Unreal compilation, actual level gameplay and catalog authored content remain pending.
