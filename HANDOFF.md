@@ -371,3 +371,9 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 19 — competition-based season creation
 - Added native BlueprintCallable USportsArcadeSeasonFactory::CreateLeagueSeason: validates authored catalog, selects a league competition by stable ID and starts a round-robin season using its club IDs. Cup formats are intentionally rejected until knockout gameplay exists.
 - Added source-contract test unreal/tests/test_season_factory.py. Native engine build and menu binding remain pending.
+
+## October 19 — CI repair and season data hardening
+- Fixed league return-leg generation to schedule all first-leg rounds before second-leg rounds while maintaining the existing fixture contract; updated `test_league_fixtures.py`. CI succeeded on `7ed01c33` after the prior test failure.
+- Added shared `USportsArcadeSeasonSave::ValidateProgress` for both SaveGameToSlot and LoadGameFromSlot paths, checking completed fixture indices and club identities before accepting persisted progression. Updated `test_season_save.py`; static CI passed at `df32e62a`.
+- Exposed `GetCompletedFixtureCount` and normalized `GetSeasonProgress` for season HUD/menu bindings, with regression checks. Implementation commit `501c266b` passed source CI; verify latest test revision `489791e3`.
+- Still needs Unreal Engine 5.5 compilation and in-engine fixture/save UI tests. Continue next approved item without asking for routine permission.
