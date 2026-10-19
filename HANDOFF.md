@@ -472,3 +472,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - Restart taker selection rejects foreign-world roster, goalkeeper and kickoff actors.
 - Ball kicks, controlled touches and team attribution reject cross-world player references.
 - Added Python static regressions. Native UE 5.5 build and runtime tests remain outstanding.
+
+
+## October 19 — knockout save integrity and fifth Unreal automation
+- Cup ValidateProgress now enforces exact completed tie counts and round numbers for a 2–64-team power-of-two knockout bracket, and requires an explicit champion once the final winner is recorded.
+- Winner recording and round advancement prevalidate bracket state rather than mutating inconsistent in-memory progression.
+- Added source regressions in test_cup_save.py and fifth native UE automation test SportsArcade.Seasons.CupSaveIntegrity (authored but not executed in Unreal).
+- Source CI recovery required updating existing native test count from four to five; follow-on regression passed at 744b96e5. Continue independently through approved gameplay tasks.
