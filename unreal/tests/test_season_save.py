@@ -35,6 +35,13 @@ class SeasonSaveTests(unittest.TestCase):
         self.assertIn("Result.HomeClubId != Fixture.HomeClubId", SOURCE)
         self.assertIn("Season->GetCurrentStandings(ValidatedTable)", SOURCE)
 
+    def test_next_match_selection_and_season_end(self):
+        self.assertIn("GetNextUnplayedFixtureIndex() const", HEADER)
+        self.assertIn("IsSeasonComplete() const", HEADER)
+        self.assertIn("!CompletedFixtureIndices.Contains(Index)", SOURCE)
+        self.assertIn("return INDEX_NONE;", SOURCE)
+        self.assertIn("GetNextUnplayedFixtureIndex() == INDEX_NONE", SOURCE)
+
     def test_standings_derive_from_saved_results(self):
         self.assertIn("CalculateTable(ClubIds, Results, OutStandings)", SOURCE)
 
