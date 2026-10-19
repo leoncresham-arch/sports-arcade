@@ -294,3 +294,8 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 18/19 — tactical AI lineup robustness
 - AI primary pressing-player selection now iterates all registered footballers and excludes goalkeeper by LineupSlot 0 instead of assuming the roster's array entry 0 is always goalkeeper. Invalid formation membership stops any stale MoveTo navigation requests. Opponent evaluations in pass-lane and marking scans skip invalid actors. Source regression tests added.
 - Native UE 5.5 compile and Windows gameplay remain unverified; avoid describing these changes as full tactical intelligence or tested gameplay.
+
+## October 19 — approved worldwide full-game requirements
+- User clarified final product must have teams across countries worldwide and different modes comparable in breadth to FIFA / EA Sports FC, while remaining original. Record as full-game scope, not claim implemented.
+- Dedicated coverage: worldwide clubs, men's/women's national teams, leagues/divisions, domestic and continental cups, global/regional international competitions, kick-off, manager/player careers, create club/player, training, local multiplayer, online modes later, original squad-building system later.
+- Build an extensible country/association/league/club/player/competition database; initial content may be fictional. Actual team/player/competition marks and likenesses need documented permission/licensing. Do not commit to paid licenses or copy EA's modes/assets. More detail: unreal/docs/football-capabilities-blueprint.md.
