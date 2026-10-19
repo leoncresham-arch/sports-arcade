@@ -48,7 +48,8 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("FSportsArcadeMatchPhaseEvent OnMatchReset;", header)
         self.assertIn("FSportsArcadeMatchPhaseEvent OnPlayResumed;", header)
         self.assertIn("OnMatchReset.Broadcast();", cpp)
-        self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 1)
+        self.assertEqual(cpp.count("OnPlayResumed.Broadcast();"), 2)
+        self.assertIn("bool ASportsArcadeGameMode::TakeManualRestart(", cpp)
         self.assertIn("StageKickoff(1);", cpp)
 
     def test_exclusive_phase_query_for_match_ui(self):
