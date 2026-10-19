@@ -194,3 +194,7 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 
 ### Offline 11v11 scene bootstrap
 - An Unreal Editor-only script at Tools/Editor/setup_offline_match.py generates a new level with two team rosters and 22 placed native footballers, plus field, goal and ball actors. The GameMode attempts home roster player possession. Editor API, native C++ compile and gameplay are not verified. See docs/offline-11v11-bootstrap.md.
+
+## Windows build readiness (scope items 1–6)
+
+Source-level audit of the Unreal 5.5 project descriptor, enabled plugins, Game/Editor targets, Build.cs module dependencies, Public/Private file pairs, selected Unreal API include contracts and generated-header ordering is now covered by six CI tests in `tests/test_prebuild_readiness.py`. See [prebuild evidence and Windows build steps](docs/prebuild-checklist.md). This establishes static readiness, **not** a native Unreal 5.5 build, successful UHT parse, or an actual editor launch.
