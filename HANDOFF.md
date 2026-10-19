@@ -290,3 +290,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 ## October 17 11v11 camera and restart safeguards
 - Provisional restart now rejects invalid awarded team indices and aborts if SetActorLocation fails; neither error clears the stoppage. Added source test guards.
 - The 11v11 Editor bootstrap now places an aimed native broadcast camera. Updated mock test actor count from 29 to 30 and camera reflection mock. Native editor and actual camera look still unverified.
+
+## October 18/19 — tactical AI lineup robustness
+- AI primary pressing-player selection now iterates all registered footballers and excludes goalkeeper by LineupSlot 0 instead of assuming the roster's array entry 0 is always goalkeeper. Invalid formation membership stops any stale MoveTo navigation requests. Opponent evaluations in pass-lane and marking scans skip invalid actors. Source regression tests added.
+- Native UE 5.5 compile and Windows gameplay remain unverified; avoid describing these changes as full tactical intelligence or tested gameplay.
