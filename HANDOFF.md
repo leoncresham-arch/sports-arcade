@@ -299,3 +299,7 @@ Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions stat
 - User clarified final product must have teams across countries worldwide and different modes comparable in breadth to FIFA / EA Sports FC, while remaining original. Record as full-game scope, not claim implemented.
 - Dedicated coverage: worldwide clubs, men's/women's national teams, leagues/divisions, domestic and continental cups, global/regional international competitions, kick-off, manager/player careers, create club/player, training, local multiplayer, online modes later, original squad-building system later.
 - Build an extensible country/association/league/club/player/competition database; initial content may be fictional. Actual team/player/competition marks and likenesses need documented permission/licensing. Do not commit to paid licenses or copy EA's modes/assets. More detail: unreal/docs/football-capabilities-blueprint.md.
+
+## October 19 — standing implementation workflow and Windows launcher
+- User explicitly wants uninterrupted work through approved remaining launch items within an active session, without routine approval requests; only stop for genuine lengthy-chat checkpoint/handoff. Do not repeatedly describe the known Windows verification limitation.
+- Added a PowerShell Windows launcher at unreal/Tools/Windows/Build-SportsArcade.ps1 for UE 5.5 editor build with optional project generation and launch, plus test_prebuild_readiness.py contract. Docs: unreal/docs/prebuild-checklist.md. Launcher prepared but never executed on Windows.
