@@ -584,7 +584,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 It->TeamIndex == Footballer->TeamIndex ||
                 It->GetActorLocation().ContainsNaN()) continue;
             const float MarkingDirection = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-            if ((It->GetActorLocation().X - Ball->GetActorLocation().X) * MarkingDirection < -900.f) continue;
+            const bool bDeepDefensiveThreat =
+                It->GetActorLocation().X * MarkingDirection < -HalfLength * 0.45f;
+            if (!bDeepDefensiveThreat &&
+                (It->GetActorLocation().X - Ball->GetActorLocation().X) * MarkingDirection < -900.f) continue;
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
             if (Distance < NearestOpponentDistance)
             {
