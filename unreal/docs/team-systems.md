@@ -299,3 +299,5 @@ Both routine AI teammate passes and emergency challenged-carrier outlet passes n
 Regular and emergency outlet AI passes now reject any nonfinite extrapolated receiving target before touchline and goal-line bounds screening. The existing bounded receiver-velocity lead and pass-lane checks remain. Corresponding source tests have been extended; native Unreal compilation and match simulation remain outstanding.
 
 Emergency AI outlets now reject degenerate or nonfinite pass displacement vectors before assessing receiver position and marking. Existing bounds, pressure and cooldown logic remain in place. Source test updated; native UE gameplay testing remains outstanding.
+
+Regular AI teammate passing now rejects degenerate or nonfinite pass displacements before scoring projected receivers. This matches the emergency outlet guard and retains existing receiver lead, pitch bounds, marking and action-cooldown safeguards. Source regression updated; UE5.5 runtime verification remains pending.
