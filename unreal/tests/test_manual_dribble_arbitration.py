@@ -15,6 +15,11 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", self.tick)
         self.assertIn("It->ApplyControlledTouch(this", self.tick)
 
+    def test_dribble_requires_real_movement_and_world(self):
+        self.assertIn("GetWorld() &&", self.tick)
+        self.assertIn("!GetVelocity().ContainsNaN()", self.tick)
+        self.assertIn("GetVelocity().SizeSquared2D() > FMath::Square(100.f)", self.tick)
+
     def test_nonfinite_dribble_telemetry_blocks_touch(self):
         for token in ("if (!IsValid(*It)) continue",
                       "MyLocation.ContainsNaN()",
