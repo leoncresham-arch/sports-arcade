@@ -480,7 +480,16 @@ void ASportsArcadeCharacter::TackleBall()
             FVector::DotProduct(Forward, Direction.GetSafeNormal2D()) <= 0.25f) continue;
 
         ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
-        if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
+        // Last touch is not enduring possession. Protect a friendly player
+        // only while they are actually within controlled-touch distance.
+        if (IsValid(LastTouch) && LastTouch->GetWorld() == GetWorld() &&
+            LastTouch->TeamIndex == TeamIndex &&
+            !LastTouch->GetActorLocation().ContainsNaN())
+        {
+            const FVector LastTouchOffset = BallLocation - LastTouch->GetActorLocation();
+            if (LastTouchOffset.SizeSquared2D() < FMath::Square(135.f) &&
+                FMath::Abs(LastTouchOffset.Z) < 115.f) continue;
+        }
 
         // Last touch is not possession: avoid knocking the ball away from a
         // nearby teammate even after an opponent's older recorded touch.
