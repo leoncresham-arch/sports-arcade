@@ -38,6 +38,12 @@ class PenaltyFlightObservationTests(unittest.TestCase):
         self.assertEqual(observe_segment((4000, 3000, 20), (5500, 3800, 20)), 0)
         self.assertEqual(observe_segment((-5100, 0, 20), (-5300, 0, 20), -1), 1)
 
+    def test_settled_ball_timeout_is_suggestion_only(self):
+        self.assertIn("PhysicalPenaltyObservationSeconds >= PhysicalPenaltyObservationTimeoutSeconds", SOURCE)
+        self.assertIn("MatchBall->GetVelocity().SizeSquared() < FMath::Square(60.f)", SOURCE)
+        self.assertIn("FMath::IsFinite(DeltaSeconds) && DeltaSeconds > 0.f", SOURCE)
+        self.assertEqual(SOURCE.count("PhysicalPenaltyObservationSeconds = 0.f;"), 5)
+
     def test_source_checks_crossing_order_and_never_auto_adjudicates(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ObservePhysicalCupPenalty()", 1)[1].split("\n}", 1)[0]
         self.assertIn("TouchlineFraction >= 0.f && TouchlineFraction < CrossingFraction", method)
