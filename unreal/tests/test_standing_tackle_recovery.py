@@ -35,6 +35,8 @@ class StandingTackleRecoveryTests(unittest.TestCase):
         for token in ("LastTouch->TeamIndex == TeamIndex",
                       "TActorIterator<ASportsArcadeCharacter>",
                       "Other->TeamIndex != TeamIndex",
+                      "!IsValid(Other)",
+                      "Other->GetWorld() != GetWorld()",
                       "FMath::Square(115.f)",
                       "bTeammateControllingBall"):
             self.assertIn(token, self.tackle)
