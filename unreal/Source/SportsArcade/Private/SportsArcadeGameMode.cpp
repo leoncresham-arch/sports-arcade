@@ -1041,6 +1041,11 @@ bool ASportsArcadeGameMode::CanKickStagedCupPenalty() const
         IsValid(StagedPenaltyTaker) && IsValid(MatchBall) && GetWorld() &&
         StagedPenaltyTaker->GetWorld() == GetWorld() &&
         StagedPenaltyTaker->TeamIndex == ActivePenaltyShootout->GetNextKickingTeam() &&
+        IsValid(BoundCup) &&
+        BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) &&
+        BoundCup->CurrentRoundWinners.Num() == BoundCupFixtureIndex &&
+        BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex].HomeClubId == SelectedHomeClubId &&
+        BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex].AwayClubId == SelectedAwayClubId &&
         FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot) <=
             FMath::Square(60.f);
 }
