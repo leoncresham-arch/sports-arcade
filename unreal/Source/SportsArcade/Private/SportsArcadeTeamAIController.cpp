@@ -511,6 +511,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     if (ReceiverVelocity.ContainsNaN()) continue;
                     const FVector Delta = Teammate->GetActorLocation() + ReceiverVelocity.GetClampedToMaxSize2D(650.f) * 0.25f - Ball->GetActorLocation();
                     const float Distance = Delta.Size2D();
+                    if (Delta.ContainsNaN() || Distance <= KINDA_SMALL_NUMBER) continue;
                     const FVector PredictedReceiver = Ball->GetActorLocation() + Delta;
                     // Never target a teammate's extrapolated position beyond the
                     // playable touchlines or goal lines.
