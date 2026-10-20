@@ -52,8 +52,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             if (FVector::DistSquared2D(Target, Keeper->GetActorLocation()) > FMath::Square(60.f))
                 MoveToLocation(Target, 60.f, true, true, false, true, nullptr, true);
             const float GoalwardSign = Keeper->TeamIndex == 1 ? 1.f : -1.f;
-            const bool bIncomingPenalty = Ball->GetVelocity().X * GoalwardSign > 175.f;
-            if (bIncomingPenalty && ActionCooldownRemaining <= 0.f &&
+            const bool bIncomingPenalty = BallVelocity.X * GoalwardSign > 175.f;
+            // Do not parry a ball that has already passed the keeper's goal
+            // plane, or a speculative ball outside plausible save height.
+            const bool bBallInFront = (BallPosition.X - KeeperPlaneX) * GoalwardSign <= 35.f;
+            const bool bReachableHeight = BallPosition.Z >= 0.f &&
+                BallPosition.Z - Keeper->GetActorLocation().Z <= 220.f;
+            if (bIncomingPenalty && bBallInFront && bReachableHeight &&
+                ActionCooldownRemaining <= 0.f &&
                 FVector::DistSquared(Keeper->GetActorLocation(), Ball->GetActorLocation()) <
                     FMath::Square(ContactRangeCm + 50.f))
             {
