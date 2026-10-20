@@ -345,6 +345,9 @@ private:
     float PhysicalPenaltyObservationSeconds = 0.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Cup|Penalties", meta=(ClampMin="1.0"))
     float PhysicalPenaltyObservationTimeoutSeconds = 8.f;
+    /** Safety cap for a moving or bouncing attempt that never reaches a boundary. */
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Cup|Penalties", meta=(ClampMin="1.0"))
+    float PhysicalPenaltyMaximumObservationSeconds = 20.f;
     void ObservePhysicalCupPenalty();
     bool bCupResultRecorded = false;
     bool bCupExtraTimePlayed = false;
