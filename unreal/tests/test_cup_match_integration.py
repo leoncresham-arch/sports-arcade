@@ -95,6 +95,9 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("StagedPenaltyTaker->TeamIndex != ActivePenaltyShootout->GetNextKickingTeam()", cpp)
         self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
         self.assertIn("StagedPenaltyTaker = nullptr;", cpp)
+        self.assertEqual(cpp.count("bool ASportsArcadeGameMode::StageCupPenaltyKick()"), 1)
+        self.assertEqual(cpp.count("bool ASportsArcadeGameMode::KickStagedCupPenalty("), 1)
+        self.assertIn("Direction.X * (StagedPenaltyTaker->TeamIndex == 0 ? 1.f : -1.f) <= 0.f", cpp)
 
     def test_penalty_winner_resolves_draw(self):
         self.assertIn("StartCupPenaltyShootout", header)
