@@ -589,10 +589,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             if (!bDeepDefensiveThreat &&
                 (It->GetActorLocation().X - Ball->GetActorLocation().X) * MarkingDirection < -900.f) continue;
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
-            if (Distance < NearestOpponentDistance)
+            const float ThreatDistance = bDeepDefensiveThreat ? Distance * 0.85f : Distance;
+            if (ThreatDistance < NearestOpponentDistance)
             {
                 Opponent = *It;
-                NearestOpponentDistance = Distance;
+                NearestOpponentDistance = ThreatDistance;
             }
         }
         if (IsValid(Opponent))
