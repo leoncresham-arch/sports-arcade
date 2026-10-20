@@ -18,7 +18,7 @@ class LineupSafetyTests(unittest.TestCase):
         code = AI.read_text()
         self.assertIn("ReceiverSeparation < 210.f", code)
         self.assertIn("ReceiverPressurePenalty = FMath::Max(", code)
-        self.assertIn("Distance * 0.25f - ReceiverPressurePenalty", code)
+        self.assertIn("Distance * 0.25f -\n                        ReceiverPressurePenalty", code)
         self.assertIn("Delta.X * AttackSign < -650.f", code)
         self.assertIn("Teammate->GetWorld() != GetWorld()", code)
 
@@ -30,7 +30,7 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn("MoveToLocation(Target, 60.f", code)
         self.assertIn("Ball->KickByPlayer(Keeper, Parry", code)
         self.assertIn("BallVelocity.X * GoalwardSign >", code)
-        self.assertIn("bIncomingPenalty && ActionCooldownRemaining <= 0.f", code)
+        self.assertIn("bIncomingPenalty && bApproachingKeeper && bBallInFront && bReachableHeight", code)
         self.assertLess(code.index("Match->IsCupPenaltyAwaitingResult()"),
                         code.index("Match->bMatchFinished || Match->bBallOutOfPlay"))
 
