@@ -248,6 +248,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool KickStagedCupPenalty(const FVector& Direction);
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    bool CanKickStagedCupPenalty() const;
+
     /** Physical kick has been taken and is waiting for referee scoring review. */
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     bool IsCupPenaltyAwaitingResult() const;
