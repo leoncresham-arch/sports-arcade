@@ -42,6 +42,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // following its current lateral position. Keep this movement bounded.
             const FVector BallPosition = Ball->GetActorLocation();
             const FVector BallVelocity = Ball->GetVelocity();
+            if (BallPosition.ContainsNaN() || BallVelocity.ContainsNaN())
+            {
+                StopMovement();
+                break;
+            }
             const float KeeperPlaneX = Keeper->GetActorLocation().X;
             const float TravelSeconds = FMath::Abs(BallVelocity.X) > 175.f
                 ? (KeeperPlaneX - BallPosition.X) / BallVelocity.X : -1.f;
