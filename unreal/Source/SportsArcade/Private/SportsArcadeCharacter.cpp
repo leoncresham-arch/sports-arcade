@@ -311,9 +311,11 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     // Defensive jockeying uses shorter, more controllable stops than open running.
     const FVector TravelDirection = GetVelocity().GetSafeNormal2D();
     const FVector IntendedDirection = GetLastMovementInputVector().GetSafeNormal2D();
-    const bool bHardTurn = !TravelDirection.IsNearlyZero() && !IntendedDirection.IsNearlyZero() &&
-        FVector::DotProduct(TravelDirection, IntendedDirection) < 0.f;
-    const float TurnBraking = bHardTurn ? FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) * 1200.f : 0.f;
+    const float TurnAlignment = !TravelDirection.IsNearlyZero() && !IntendedDirection.IsNearlyZero()
+        ? FVector::DotProduct(TravelDirection, IntendedDirection) : 1.f;
+    // Progressive braking on turns avoids a binary reaction exactly at 90 degrees.
+    const float TurnResistance = FMath::Clamp((0.5f - TurnAlignment) / 1.5f, 0.f, 1.f);
+    const float TurnBraking = FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) * 1200.f * TurnResistance;
     GetCharacterMovement()->BrakingDecelerationWalking =
         ((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
 }
