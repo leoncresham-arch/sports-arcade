@@ -1001,7 +1001,10 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
         Direction.X * (StagedPenaltyTaker->TeamIndex == 0 ? 1.f : -1.f) <= 0.f)
         return false;
-    if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Direction.GetSafeNormal(),
+    const FVector Shot = Direction.GetSafeNormal();
+    if (Shot.X * (StagedPenaltyTaker->TeamIndex == 0 ? 1.f : -1.f) < 0.35f ||
+        Shot.Z < -0.05f || Shot.Z > 0.65f) return false;
+    if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Shot,
         ProvisionalRestartImpulse * 1.6f, 210.f)) return false;
     bPenaltyKickTaken = true;
     return true;
