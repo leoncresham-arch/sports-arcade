@@ -86,6 +86,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("!FMath::IsFinite(ImpulseStrength)", source)
         self.assertIn("MovementAim.ContainsNaN()", source)
         self.assertIn("Forward.ContainsNaN() || Forward.IsNearlyZero()", source)
+        self.assertIn("PlayerFacing.ContainsNaN()", source)
+        self.assertIn("PlayerFacing.GetSafeNormal2D().IsNearlyZero()", source)
 
     def test_native_footballer_ratings(self):
         header = read("Source/SportsArcade/Public/SportsArcadePlayerAttributes.h")
