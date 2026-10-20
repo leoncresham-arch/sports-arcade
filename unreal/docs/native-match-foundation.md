@@ -149,3 +149,9 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - Each physically kicked cup penalty is sampled by GameMode.Tick even while regulation play is stopped at full-time. A segment crossing the defended goal plane between the posts and below the bar produces a *suggested* goal (1); exiting outside the posts/over the bar or the touchline suggests a miss (0). Any earlier touchline exit wins over a later apparent goal-plane crossing in the same simulation step.
 - `GetSuggestedCupPenaltyOutcome()` returns -1 while observation is pending or out of scope, 0 for a likely miss, 1 for a likely goal. `OnCupPenaltyOutcomeSuggested(KickingTeam, bScored)` fires once when a suggestion becomes available.
 - This telemetry is explicitly non-authoritative; the match still requires the referee to confirm with F7/F8 / `ResolvePhysicalCupPenalty()`. Keeper parries, deflections and complex physics need actual Windows UE 5.5 testing before the result can be automated.
+
+
+## October 20 — accepting suggested penalty outcomes
+- The referee can now press **F9** (or call `ConfirmSuggestedCupPenaltyOutcome()`) to explicitly accept an available flight-observation suggestion. This only succeeds when the physical kick is awaiting review and the suggestion is a valid 0/1 miss/goal result.
+- **F7** and **F8** remain manual scored/missed overrides. F9 never infers or records anything without user input. Suggested results are guidance, not a substitute for final refereeing.
+- Python reference regressions cover goal mouth, wide, high, away-end and touchline-first geometry. Native Unreal Editor execution and goal/keeper physics remain unverified.
