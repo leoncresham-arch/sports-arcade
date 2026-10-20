@@ -11,6 +11,8 @@ class PossessionPressureTests(unittest.TestCase):
             "bIsPrimaryPresser = true", 1)[0]
         self.assertIn("RecentTouchTeam == Footballer->TeamIndex", section)
         self.assertIn("IsValid(Ball->GetLastTouchPlayer())", section)
+        self.assertIn("Ball->GetLastTouchPlayer() != Footballer", section)
+        self.assertIn("!Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN()", section)
         self.assertIn("FMath::Square(220.f)", section)
         self.assertIn("if (!bTeammateNearbyBall && Nearest == Footballer", section)
 
