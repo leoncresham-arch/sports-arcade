@@ -37,6 +37,23 @@ class PenaltyObservationHardCapTests(unittest.TestCase):
         self.assertNotIn("RecordCupPenaltyAttempt(", observer)
         self.assertNotIn("ResolvePhysicalCupPenalty(", observer)
 
+    def test_blueprint_review_timing_is_gated_to_pending_physical_attempt(self):
+        header = HEADER.read_text(encoding="utf-8")
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("GetCupPenaltyObservationElapsedSeconds() const", header)
+        self.assertIn("GetCupPenaltyObservationRemainingSeconds() const", header)
+        elapsed = source.split(
+            "float ASportsArcadeGameMode::GetCupPenaltyObservationElapsedSeconds() const", 1
+        )[1].split("float ASportsArcadeGameMode::GetCupPenaltyObservationRemainingSeconds()", 1)[0]
+        remaining = source.split(
+            "float ASportsArcadeGameMode::GetCupPenaltyObservationRemainingSeconds() const", 1
+        )[1].split("void ASportsArcadeGameMode::ObservePhysicalCupPenalty()", 1)[0]
+        self.assertIn("IsCupPenaltyAwaitingResult()", elapsed)
+        self.assertIn("IsCupPenaltyAwaitingResult()", remaining)
+        self.assertIn("SuggestedCupPenaltyOutcome == INDEX_NONE", remaining)
+        self.assertIn("PhysicalPenaltyMaximumObservationSeconds", remaining)
+        self.assertNotIn("RecordCupPenaltyAttempt(", remaining)
+
     def test_goal_crossing_is_evaluated_before_timeouts(self):
         source = SOURCE.read_text(encoding="utf-8")
         observer = source.split("void ASportsArcadeGameMode::ObservePhysicalCupPenalty()", 1)[1].split(
