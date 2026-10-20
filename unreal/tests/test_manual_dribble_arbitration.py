@@ -15,6 +15,16 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", self.tick)
         self.assertIn("It->ApplyControlledTouch(this", self.tick)
 
+    def test_opponent_closer_to_ball_blocks_automatic_steal(self):
+        for token in ("bOpponentHasCloserControl",
+                      "Opponent->TeamIndex == TeamIndex",
+                      "OppToBall.SizeSquared2D() < FMath::Square(95.f)",
+                      "OppToBall.SizeSquared2D() < MyBallDistanceSq",
+                      "if (bOpponentHasCloserControl) continue"):
+            self.assertIn(token, self.tick)
+        self.assertLess(self.tick.index("if (bOpponentHasCloserControl) continue"),
+                        self.tick.index("It->ApplyControlledTouch(this"))
+
     def test_friendly_proximity_arbitrates_controlled_touches(self):
         block = self.tick
         for check in ("TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld())",
