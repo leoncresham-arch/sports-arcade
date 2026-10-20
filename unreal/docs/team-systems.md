@@ -229,3 +229,7 @@ Low stamina now scales both character top speed and acceleration smoothly from 7
 ### October 20 — manual/AI controlled-touch arbitration
 
 The automatic walking-dribble touch in `SportsArcadeCharacter::Tick` now runs for player-controlled pawns only; AI pawns continue to execute controlled touches through their existing tactical controller and cooldown rules. For local human ball contact, the character also checks whether a friendly footballer is closer to the grounded ball within a 115 cm horizontal/vertical contact envelope. If so, the manual dribble impulse is skipped so simultaneous foot proximity does not force a contested friendly takeover. These are heuristics, not a server-authoritative possession system; source tests are in `unreal/tests/test_manual_dribble_arbitration.py`, and UE native playtests are pending.
+
+### October 20 — directional defensive contests
+
+Standing-tackle impulses now bias the ball away from its most recent opposing toucher when that opponent remains valid. A 65% defender-forward / 35% away-from-opponent blend is normalized, with a forward-facing fallback for degenerate or excessively backward directions. Existing finite contact validation, friendly-control exclusion and missed-tackle cooldown remain. This is not a physical body-contact or referee foul simulation. Source contracts updated in `test_standing_tackle_recovery.py` and `test_project_structure.py`; native UE5.5 verification is pending.
