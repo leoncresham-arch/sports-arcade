@@ -386,7 +386,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Defender->TeamIndex == Footballer->TeamIndex ||
                     Defender->GetActorLocation().ContainsNaN()) continue;
                 const FVector Approach = Defender->GetActorLocation() - Ball->GetActorLocation();
-                if (Approach.X * AttackSign >= 0.f && Approach.SizeSquared2D() < FMath::Square(150.f))
+                if (Approach.X * AttackSign >= 0.f && Approach.SizeSquared2D() < FMath::Square(FMath::Clamp(DribbleChallengeRadiusCm, 50.f, 400.f)))
                 {
                     bImmediateChallenge = true;
                     break;
