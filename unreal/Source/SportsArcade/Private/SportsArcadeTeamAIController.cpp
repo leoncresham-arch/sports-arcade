@@ -336,6 +336,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Ball->GetLastTouchPlayer() == Footballer &&
             FVector::DistSquared2D(Footballer->GetActorLocation(),
                 Ball->GetActorLocation()) <= FMath::Square(220.f);
+        // Carry a nearby controlled ball toward goal with a measured touch.
+        // Avoid repeated impulses until the existing action cooldown clears.
+        if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
+        {
+            const FVector DribbleDirection(AttackSign, 0.f, 0.f);
+            if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * 380.f, ContactRangeCm + 75.f))
+                ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds * 0.5f, 0.15f);
+        }
         if (!bTeammateNearbyBall && !bSelfControllingBall &&
             Nearest == Footballer &&
             BestDistance <= FMath::Square(PressureRadiusCm))
