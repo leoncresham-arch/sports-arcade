@@ -294,6 +294,7 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<ASportsArcadeCharacter> StagedPenaltyTaker;
     bool bPenaltyKickStaged = false;
+    FVector StagedPenaltySpot = FVector::ZeroVector;
     bool bPenaltyKickTaken = false;
     bool bCupResultRecorded = false;
     bool bCupExtraTimePlayed = false;
