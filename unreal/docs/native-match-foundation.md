@@ -109,3 +109,11 @@ Extract match clock and refereeing into testable game state for replication, add
 - `IsCupPenaltyAwaitingResult()` lets UI prompt a referee to record scored/missed outcome through `RecordCupPenaltyAttempt`. The impulse does not automatically count as a goal; this is an interim manual ruling until physics/keeper/referee goals are implemented.
 - `GetStagedCupPenaltyTaker()` gives camera and presentation Blueprints the prepared footballer. Staged references and mark are cleared on reset, mode changes, shootout start and recorded result.
 - Removed duplicated GameMode penalty method definitions and added a source-contract regression to prevent reintroduction. Source CI is not an Unreal Engine native build.
+
+
+## October 20 — Windows keyboard physical penalty trial
+With the opt-in `bRequirePhysicalPenaltyKicks` setting enabled and a tied cup match finished after extra time:
+1. **P** stages the next eligible kicker and ball.
+2. **O** strikes with the staged taker's facing direction; the trajectory must point toward the goal and not be excessively high or downwards.
+3. **F7** explicitly records a scored penalty, or **F8** records a missed attempt, after the strike. This consumes that turn and enables staging the next one.
+The result is adjudicated manually for now; ball impulses and keeper outcomes are not automatically matched to official scoring. Source tests cover the input bindings, state transitions and safeguards, not actual Unreal gameplay.
