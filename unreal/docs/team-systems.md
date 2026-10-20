@@ -64,3 +64,7 @@ Technical limitations:
 - Every other AI footballer remains paused. This is a provisional ball-tracking/parry behavior, not full goalie diving, catching, collision fairness, outcome attribution or animation. The referee must still explicitly record scored/missed attempts.
 - `GetCupPenaltyDefendingTeam()` provides the currently defending side to AI and Blueprint presentation.
 - Source CI checks the state routing and contact code; runtime navigation, movement, and realistic balance remain pending for native UE 5.5 testing.
+
+## October 20 — penalty goalkeeper anticipation
+
+During an active *physical* shootout penalty, the defending keeper's provisional AI now projects the ball's lateral position at the keeper's current X plane for plausible forward-arriving shots (0–1.5 seconds), rather than simply chasing its present Y position. The target remains clamped within 300 cm of the goal centre; existing incoming-shot and close-contact checks still gate physics parries. Outfield AI remains stopped during referee review. AI decision clocks now reject nonfinite/negative simulation frame deltas. Source regression coverage: `unreal/tests/test_penalty_keeper_prediction.py`. This is not a dive animation or verified save system; in-editor tuning, navigation and actual UE compilation are pending.
