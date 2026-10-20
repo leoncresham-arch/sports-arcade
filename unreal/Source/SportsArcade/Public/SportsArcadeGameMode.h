@@ -160,6 +160,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Match|Restart")
     bool CanResumePendingRestart() const;
 
+    /** Referee decision for a boundary exit whose last touch was unknown. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match|Restart")
+    bool AwardUndeterminedRestart(int32 AwardedTeam);
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Match")
     void RecordGoal(bool bHomeTeamScored);
 
