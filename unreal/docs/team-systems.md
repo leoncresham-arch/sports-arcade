@@ -327,3 +327,7 @@ Goalkeeper incoming-shot prediction now caps validated ball speed at 4500 cm/s b
 ### October 20 — defender prediction refinement
 
 Secondary AI support only treats a ball as moving inward when it is at least 500 cm off center and has more than 150 cm/s lateral inward velocity, avoiding oversized reactions to tiny movement. The nearest ground presser shortens its prediction horizon to 0.12 seconds while the ball is more than 150 cm above its own position, reducing over-aggressive pursuit of aerial extrapolations. These are provisional source-level heuristics awaiting Unreal playtesting; corresponding regression contracts were updated.
+
+### October 20 — rising-ball defensive anticipation
+
+Both the primary presser and supporting second defender now shorten aerial ball prediction further: when the ball is more than 150 cm above the defender and rising faster than 100 cm/s, their extrapolation horizon falls to zero instead of projecting an implausible foot-level interception. Descending airborne footballs retain bounded short lead, while grounded trajectories keep the previous prediction window. Source regressions have been adjusted; native Unreal physics, animation and pathfinding tests remain outstanding.
