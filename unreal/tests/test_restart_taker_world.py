@@ -13,6 +13,9 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("PendingRestartTaker->GetWorld() == GetWorld()", query)
         self.assertIn("PendingRestartTaker->TeamIndex == PendingRestartTeam", query)
         self.assertIn("PendingRestartType != ESportsArcadeRestartType::Undetermined", query)
+        self.assertIn("!PendingRestartLocation.ContainsNaN()", query)
+        self.assertIn("FMath::Abs(PendingRestartLocation.X) <= PitchHalfLengthCm", query)
+        self.assertIn("FMath::Abs(PendingRestartLocation.Y) <= PitchHalfWidthCm", query)
         self.assertIn("bool CanResumePendingRestart() const;", HEADER)
 
     def test_roster_taker_selection_rejects_foreign_world(self):
