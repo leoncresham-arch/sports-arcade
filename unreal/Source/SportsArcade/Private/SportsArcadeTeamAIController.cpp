@@ -670,7 +670,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             if (MarkingPoint.ContainsNaN()) { StopMovement(); return; }
             // Stay goalside of the moving attacker when recovering defensively.
             const float DefenderAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-            const float GoalSideOffset = FMath::Clamp(FVector::Dist2D(Footballer->GetActorLocation(), MarkingPoint) * 0.12f, 80.f, 180.f);
+            const bool bRunnerAttackingGoal = !OpponentVelocity.ContainsNaN() &&
+                OpponentVelocity.X * DefenderAttackSign < -150.f;
+            const float BaseGoalSideOffset = FVector::Dist2D(Footballer->GetActorLocation(), MarkingPoint) * 0.12f;
+            const float GoalSideOffset = FMath::Clamp(
+                BaseGoalSideOffset + (bRunnerAttackingGoal ? 45.f : 0.f), 80.f, 180.f);
             // Bias marking toward the central lane when the attacker is wide,
             // denying an easy inward cut while retaining goalside cover.
             const float InfieldMarkingShift = FMath::Clamp(
