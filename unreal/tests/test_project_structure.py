@@ -122,7 +122,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("!bIsPrimaryPresser && !bIsSecondaryPresser && IsValid(Ball)", source)
         self.assertIn("BestPassScore", source)
         self.assertIn("FVector2D::DotProduct", source)
-        self.assertIn("Ball->KickByPlayer(Footballer, Direction, BestPassScore", source)
+        self.assertIn("Ball->KickByPlayer(Footballer, Direction, KickImpulse", source)
         self.assertIn("Match->bHalfTime || Match->bMatchFinished", source)
         self.assertIn("AIControllerClass = ASportsArcadeTeamAIController::StaticClass()", footballer)
         self.assertIn("PlacedInWorldOrSpawned", footballer)
