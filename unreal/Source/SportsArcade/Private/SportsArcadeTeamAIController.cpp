@@ -375,7 +375,25 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // Navigation remains active while the footballer chooses an escape route.
         const bool bDribbleLaneCrowded = bSelfControllingBall &&
             CarrierEscapeSide != 0.f;
-        if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
+        // Under close frontal pressure, retain control instead of forcing
+        // a dribble touch directly into a nearby opponent.
+        bool bImmediateChallenge = false;
+        if (bSelfControllingBall)
+        {
+            for (TActorIterator<ASportsArcadeCharacter> Defender(GetWorld()); Defender; ++Defender)
+            {
+                if (!IsValid(*Defender) || Defender->GetWorld() != GetWorld() ||
+                    Defender->TeamIndex == Footballer->TeamIndex ||
+                    Defender->GetActorLocation().ContainsNaN()) continue;
+                const FVector Approach = Defender->GetActorLocation() - Ball->GetActorLocation();
+                if (Approach.X * AttackSign >= 0.f && Approach.SizeSquared2D() < FMath::Square(150.f))
+                {
+                    bImmediateChallenge = true;
+                    break;
+                }
+            }
+        }
+        if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)
         {
             // Reuse the same threat direction as the carrier's movement target.
             const float SafeLateralSign = CarrierEscapeSide;
