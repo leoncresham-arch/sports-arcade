@@ -440,7 +440,7 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
     // An already prepared restart stays put, except if ball physics moved it
     // away from the referee mark. B can then safely restage the dead ball.
     if (bManualRestartStaged && IsValid(MatchBall) &&
-        FVector::DistSquared2D(MatchBall->GetActorLocation(), PendingRestartLocation) <=
+        FVector::DistSquared(MatchBall->GetActorLocation(), PendingRestartLocation) <=
             FMath::Square(60.f)) return;
     // Provisional in-field set-piece setup; official throw mechanics remain TODO.
     const float InwardX = PendingRestartLocation.X >= 0.f ? -1.f : 1.f;
@@ -487,7 +487,7 @@ bool ASportsArcadeGameMode::CanTakeManualRestart() const
 {
     return !bAutoKickProvisionalRestart && bManualRestartStaged &&
         CanResumePendingRestart() &&
-        FVector::DistSquared2D(MatchBall->GetActorLocation(), PendingRestartLocation) <=
+        FVector::DistSquared(MatchBall->GetActorLocation(), PendingRestartLocation) <=
             FMath::Square(60.f);
 }
 
