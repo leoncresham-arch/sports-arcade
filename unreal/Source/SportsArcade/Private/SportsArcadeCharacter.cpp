@@ -123,8 +123,18 @@ void ASportsArcadeCharacter::EndJockey()
 void ASportsArcadeCharacter::EndSprint()
 {
     bSprintHeld = false;
+    // Apply the same fatigue scaling as Tick immediately when sprint is released.
+    // Otherwise one frame of full-speed jog bypasses exhaustion and jockey pace.
+    const float StaminaFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f;
+    const float Capacity = FMath::Max(MaxStamina * StaminaFactor, 1.f);
+    const float FatigueSpeedFactor = FMath::Lerp(0.72f, 1.f,
+        FMath::Clamp(CurrentStamina / (Capacity * 0.4f), 0.f, 1.f));
     const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
-    GetCharacterMovement()->MaxWalkSpeed = JogSpeed * PaceFactor;
+    const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    const bool bPlayActive = !IsValid(MatchMode) ||
+        (!MatchMode->bHalfTime && !MatchMode->bMatchFinished && !MatchMode->bBallOutOfPlay);
+    GetCharacterMovement()->MaxWalkSpeed =
+        (bJockeyHeld && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor;
 }
 
 float ASportsArcadeCharacter::GetStaminaNormalized() const
