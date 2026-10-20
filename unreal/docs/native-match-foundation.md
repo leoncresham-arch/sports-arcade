@@ -117,3 +117,9 @@ With the opt-in `bRequirePhysicalPenaltyKicks` setting enabled and a tied cup ma
 2. **O** strikes with the staged taker's facing direction; the trajectory must point toward the goal and not be excessively high or downwards.
 3. **F7** explicitly records a scored penalty, or **F8** records a missed attempt, after the strike. This consumes that turn and enables staging the next one.
 The result is adjudicated manually for now; ball impulses and keeper outcomes are not automatically matched to official scoring. Source tests cover the input bindings, state transitions and safeguards, not actual Unreal gameplay.
+
+
+## October 20 — physical shootout taker rotation
+- The opt-in physically staged shootout attempts a deterministic 11-player lineup-slot rotation, preferring slots 9, 10, 8, 7, 6, 5, 4, 3, 2, 1, then 0 (goalkeeper). No authored footballer is used again until the cycle wraps at the 12th attempt for the same team.
+- The prototype falls back to a valid nearby teammate when the selected lineup slot is not authored; full roster/eligibility enforcement, injuries, send-offs and substitutes remain future referee work.
+- The current Unreal source and Python contracts support the arrangement but actual positional staging and match balance require UE5.5 Editor validation.
