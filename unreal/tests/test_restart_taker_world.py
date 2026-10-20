@@ -52,6 +52,8 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("ESportsArcadeRestartType::CornerKick", method)
         self.assertIn("ESportsArcadeRestartType::GoalKick", method)
         self.assertIn("PendingRestartTaker = Taker;", method)
+        self.assertIn("Candidate->LineupSlot == 0", method)
+        self.assertIn("Candidate->TeamIndex == AwardedTeam", method)
         self.assertIn("PendingRestartLocation = OriginalLocation;", method)
         self.assertLess(method.index("if (!IsValid(Taker))"), method.index("PendingRestartTeam = AwardedTeam;"))
 
