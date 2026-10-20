@@ -279,3 +279,5 @@ Human automatic dribble touches now require a valid world, finite velocity and m
 ### October 20 — directional player-controlled dribbling
 
 Automatic human dribble contacts now require the player to travel toward the ball (positive 0.2 planar dot-product threshold) as well as face it (existing 0.35 threshold). This prevents backwards or sideways momentum from nudging a ball in front of the mesh and better separates foot-contact intent from facing. Source checks in `test_manual_dribble_arbitration.py`; native movement and animation alignment remains unverified.
+
+Player-controlled automatic dribbling now evaluates all valid, reachable, forward-travel-aligned balls and applies its controlled impulse to the closest eligible candidate rather than the first actor returned by world iteration. Existing friend/opponent contact arbitration and cooldown still apply. This eliminates non-deterministic ball choice when authored maps contain multiple ball actors; source regressions passed on the code/test checkpoint, and native UE runtime tests remain necessary.
