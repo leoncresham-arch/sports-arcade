@@ -315,8 +315,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 SecondDistance <= FMath::Square(FMath::Clamp(SecondaryPressureRadiusCm, 0.f, 3000.f)))
             {
                 const float StandOff = FMath::Clamp(SecondaryPressureStandOffCm, 0.f, 1000.f);
-                Target = Ball->GetActorLocation() - FVector(AttackSign * StandOff, 0.f, Ball->GetActorLocation().Z);
-                Target.Y += Footballer->GetActorLocation().Y >= Ball->GetActorLocation().Y
+                // Move with the ball's short-term path instead of repeatedly
+                // defending its previous position as the primary presser closes.
+                const FVector SafeBallVelocity = Ball->GetVelocity().ContainsNaN()
+                    ? FVector::ZeroVector : Ball->GetVelocity().GetClampedToMaxSize2D(1600.f);
+                const FVector BallLead = Ball->GetActorLocation() +
+                    SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f);
+                Target = BallLead - FVector(AttackSign * StandOff, 0.f, BallLead.Z);
+                Target.Y += Footballer->GetActorLocation().Y >= BallLead.Y
                     ? StandOff * 0.5f : -StandOff * 0.5f;
                 // Preserve defensive shadow position inside the playable area
                 // even when pressure happens next to the touchline.
