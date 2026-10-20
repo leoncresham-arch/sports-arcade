@@ -363,6 +363,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f;
                 }
             }
+            // Prefer the infield route if the selected escape risks the touchline.
+            if (FMath::Abs(Ball->GetActorLocation().Y + CarrierEscapeSide * 350.f) >
+                HalfWidth - 250.f)
+            {
+                CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f;
+            }
             Target.Y += CarrierEscapeSide * 180.f;
         }
         if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
