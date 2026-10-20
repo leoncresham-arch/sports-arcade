@@ -255,7 +255,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             FMath::Clamp(TravelSpeed / FMath::Max(SprintSpeed, 1.f), 0.f, 1.f));
         // A shielding ball carrier makes more frequent, smaller touches so
         // close retention does not depend only on a reduced impulse.
-        const float TouchInterval = bShieldHeld
+        const bool bShieldControl = bShieldHeld && CurrentStamina > 0.f;
+        const float TouchInterval = bShieldControl
             ? FMath::Max(DribbleTouchInterval * 0.70f, 0.05f)
             : FMath::Max(DribbleTouchInterval, 0.05f);
         // Smooth foot touches toward the footballer's facing during sharp
@@ -270,13 +271,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         const float ControlStaminaCapacity = FMath::Max(MaxStamina *
             (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
         const float ControlFatigue = FMath::Clamp(CurrentStamina / ControlStaminaCapacity, 0.f, 1.f);
-        const float TravelWeight = (bShieldHeld ? 0.45f : 0.75f) *
+        const float TravelWeight = (bShieldControl ? 0.45f : 0.75f) *
             FMath::Lerp(0.85f, 1.f, ControlFatigue);
         const FVector BlendedTouchDir = (TravelDir * TravelWeight +
             FacingDir * (1.f - TravelWeight)).GetSafeNormal2D();
         if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&
             ClosestDribbleBall->ApplyControlledTouch(this, BlendedTouchDir *
-                (240.f * (bShieldHeld ? 0.55f : 1.f) * TouchSpeedFactor *
+                (240.f * (bShieldControl ? 0.55f : 1.f) * TouchSpeedFactor *
                     FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
                     (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
         {
@@ -585,10 +586,14 @@ void ASportsArcadeCharacter::ReceiveBall()
     }
     // A moving receiver cushions the ball into their path; stationary
     // receivers retain a gentle facing touch.
+    const float ReceiveControlFactor = PlayerAttributes ?
+        USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f;
+    const bool bReceiveShieldControl = bShieldHeld && CurrentStamina > 0.f;
     const FVector ReceiveDirection = (Facing * 0.65f +
         PlayerVelocity.GetSafeNormal2D() * 0.35f).GetSafeNormal2D();
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
-        BestBall->ApplyControlledTouch(this, ReceiveDirection * (bShieldHeld ? 30.f : 65.f),
+        BestBall->ApplyControlledTouch(this, ReceiveDirection *
+            ((bReceiveShieldControl ? 30.f : 65.f) * FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)),
             FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
     {
         TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
