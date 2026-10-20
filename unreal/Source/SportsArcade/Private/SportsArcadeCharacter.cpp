@@ -209,8 +209,12 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             }
             if (bOpponentHasCloserControl) continue;
             const FVector ToBall = BallLocation - MyLocation;
+            // Controlled touches require the ball to be in front of the
+            // player's actual travel direction, not just their mesh facing.
+            const FVector TravelDirection = MyVelocity.GetSafeNormal2D();
             if (FVector::DotProduct(MyFacing.GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.35f &&
-                It->ApplyControlledTouch(this, MyVelocity.GetSafeNormal2D() *
+                FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f &&
+                It->ApplyControlledTouch(this, TravelDirection *
                     (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
             {
                 TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
