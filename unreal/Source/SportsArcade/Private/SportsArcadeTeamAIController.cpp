@@ -661,8 +661,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const bool bDirectGoalRun = !ThreatVelocity.ContainsNaN() &&
                 ThreatVelocity.X * MarkingDirection < -180.f &&
                 GoalProximityCm < 2500.f;
+            // Runs through the central channel pose greater immediate danger
+            // than equally distant runs hugging the touchline.
+            const float CentralRunWeight = bDirectGoalRun &&
+                FMath::Abs(It->GetActorLocation().Y) < 1000.f ? 0.85f : 1.f;
             const float ThreatDistance = Distance * (bDeepDefensiveThreat ? 0.85f : 1.f) *
-                GoalDangerWeight * (bDirectGoalRun ? 0.82f : 1.f);
+                GoalDangerWeight * (bDirectGoalRun ? 0.82f : 1.f) * CentralRunWeight;
             if (ThreatDistance < NearestOpponentDistance)
             {
                 Opponent = *It;
@@ -682,6 +686,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float BaseGoalSideOffset = FVector::Dist2D(Footballer->GetActorLocation(), MarkingPoint) * 0.12f;
             const float GoalSideOffset = FMath::Clamp(
                 BaseGoalSideOffset + (bRunnerAttackingGoal ? 45.f : 0.f), 80.f, 180.f);
+            // A fast diagonal run across the face of goal needs additional
+            // infield cover even when the runner is still far from the centre.
+            const bool bDiagonalInfieldRun = bRunnerAttackingGoal &&
+                MarkingPoint.Y * OpponentVelocity.Y < 0.f &&
+                FMath::Abs(OpponentVelocity.Y) > 140.f;
             // Bias marking toward the central lane when the attacker is wide,
             // denying an easy inward cut while retaining goalside cover.
             const float InfieldMarkingShift = FMath::Clamp(
@@ -692,7 +701,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float GoalDistance = FMath::Abs(MarkingPoint.X - OwnGoalX);
             const float UrgentGoalCover = FMath::Clamp(GoalDistance / 1200.f, 0.35f, 1.f);
             const float CentralCoverY = MarkingPoint.Y -
-                FMath::Sign(MarkingPoint.Y) * InfieldMarkingShift * UrgentGoalCover;
+                FMath::Sign(MarkingPoint.Y) * InfieldMarkingShift * UrgentGoalCover -
+                (bDiagonalInfieldRun ? FMath::Sign(MarkingPoint.Y) * 75.f : 0.f);
             const FVector GoalSideMarkingPoint = MarkingPoint -
                 FVector(DefenderAttackSign * GoalSideOffset, MarkingPoint.Y - CentralCoverY, 0.f);
             Target = FMath::Lerp(Target, FVector(GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y, 0.f),
