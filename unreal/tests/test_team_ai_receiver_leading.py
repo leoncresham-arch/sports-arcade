@@ -13,6 +13,7 @@ class ReceiverLeadingTests(unittest.TestCase):
         self.assertIn("ReceiverVelocity.ContainsNaN()", passes)
         self.assertIn("ReceiverVelocity.GetClampedToMaxSize2D(650.f) * 0.25f", passes)
         self.assertIn("const FVector2D End(Ball->GetActorLocation() + Delta)", passes)
+        self.assertIn("Opp->GetActorLocation(), Ball->GetActorLocation() + Delta)", passes)
         self.assertIn("Direction = Delta.GetSafeNormal2D()", passes)
 
 
