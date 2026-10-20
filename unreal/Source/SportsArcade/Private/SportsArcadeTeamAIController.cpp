@@ -663,10 +663,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 GoalProximityCm < 2500.f;
             // Runs through the central channel pose greater immediate danger
             // than equally distant runs hugging the touchline.
-            const float CentralRunWeight = bDirectGoalRun &&
-                FMath::Abs(It->GetActorLocation().Y) < 1000.f ? 0.85f : 1.f;
+            // Do not surrender a central runner to a distant opponent merely
+            // because the distant player happens to be moving more quickly.
+            const bool bCentralRunner = bDirectGoalRun &&
+                FMath::Abs(It->GetActorLocation().Y) < 1000.f;
+            const float CentralRunWeight = bCentralRunner ? 0.85f : 1.f;
             const float ThreatDistance = Distance * (bDeepDefensiveThreat ? 0.85f : 1.f) *
                 GoalDangerWeight * (bDirectGoalRun ? 0.82f : 1.f) * CentralRunWeight;
+            // Do not claim distant attackers outside the original marking
+            // search radius just because urgency weighting lowers their score.
+            if (Distance > FMath::Square(FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f))) continue;
             if (ThreatDistance < NearestOpponentDistance)
             {
                 Opponent = *It;
