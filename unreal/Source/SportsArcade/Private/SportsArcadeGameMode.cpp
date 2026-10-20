@@ -1158,9 +1158,13 @@ void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
     if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
         FMath::Abs(Current.Y) > PitchHalfWidthCm + MatchBall->BallRadiusCm)
         SuggestedCupPenaltyOutcome = 0;
+    // A stalled ball may be called after the short timeout; a bouncing or
+    // circling ball must also eventually reach a referee-reviewable result.
+    // These are suggestions, never automatically consumed shootout goals/misses.
     if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
-        PhysicalPenaltyObservationSeconds >= PhysicalPenaltyObservationTimeoutSeconds &&
-        MatchBall->GetVelocity().SizeSquared() < FMath::Square(60.f))
+        (PhysicalPenaltyObservationSeconds >= FMath::Max(1.f, PhysicalPenaltyMaximumObservationSeconds) ||
+         (PhysicalPenaltyObservationSeconds >= PhysicalPenaltyObservationTimeoutSeconds &&
+          MatchBall->GetVelocity().SizeSquared() < FMath::Square(60.f))))
         SuggestedCupPenaltyOutcome = 0;
     PreviousPenaltyBallPosition = Current;
     if (SuggestedCupPenaltyOutcome != INDEX_NONE)
