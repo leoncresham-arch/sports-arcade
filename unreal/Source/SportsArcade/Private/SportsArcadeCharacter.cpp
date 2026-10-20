@@ -305,7 +305,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         FVector::DotProduct(TravelDirection, IntendedDirection) < 0.f;
     const float TurnBraking = bHardTurn ? FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) * 1200.f : 0.f;
     GetCharacterMovement()->BrakingDecelerationWalking =
-        (bJockeyHeld && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
+        ((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
 }
 
 void ASportsArcadeCharacter::PassBall()
