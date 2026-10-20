@@ -85,6 +85,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match")
     FSportsArcadeBallOutEvent OnBallOutOfPlay;
 
+    /** Fired after a previously undetermined restart receives a valid award. */
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match|Restart")
+    FSportsArcadeMatchPhaseEvent OnRestartAwarded;
+
     /** Prototype stoppage: requires a referee restart implementation. */
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bBallOutOfPlay = false;
