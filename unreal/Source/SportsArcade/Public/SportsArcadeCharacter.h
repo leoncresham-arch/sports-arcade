@@ -86,6 +86,8 @@ private:
     void RestartExhibitionMatch();
     void RestartAfterBallOut();
     void TakeStagedRestart();
+    void AwardRestartToHome();
+    void AwardRestartToAway();
     void PassBall();
     void ShootBall();
     void ChipBall();
