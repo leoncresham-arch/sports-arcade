@@ -1151,6 +1151,10 @@ void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
             SuggestedCupPenaltyOutcome = !bTouchlineFirst && bInsidePosts && bUnderBar ? 1 : 0;
         }
     }
+    // A saved or deflected shot that leaves past the opposite goal line is a miss.
+    if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
+        Current.X * GoalDirection < -(PitchHalfLengthCm + MatchBall->BallRadiusCm))
+        SuggestedCupPenaltyOutcome = 0;
     if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
         FMath::Abs(Current.Y) > PitchHalfWidthCm + MatchBall->BallRadiusCm)
         SuggestedCupPenaltyOutcome = 0;
