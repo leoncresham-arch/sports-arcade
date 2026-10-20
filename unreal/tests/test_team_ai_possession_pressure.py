@@ -23,6 +23,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("Target.Y = Ball->GetActorLocation().Y + SideSign * 250.f", part)
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f", part)
         self.assertIn("FMath::Sign(Ball->GetActorLocation().Y) * 350.f", part)
+        self.assertIn("const FVector MidfieldBase = Roster->GetFormationPosition(Slot)", part)
+        self.assertIn("MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f", part)
         self.assertLess(part.index("if (FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f)"), len(part))
         self.assertIn("}\n            // A wide ball carrier always needs an infield outlet", part)
 
