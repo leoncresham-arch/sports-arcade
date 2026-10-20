@@ -18,6 +18,8 @@ class PredictiveMarkingTests(unittest.TestCase):
         self.assertIn("GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y", section)
         self.assertIn("MarkingDirection", section)
         self.assertIn("MarkingDirection < -900.f", section)
+        self.assertIn("bDeepDefensiveThreat", section)
+        self.assertIn("-HalfLength * 0.45f", section)
 
 if __name__ == "__main__":
     unittest.main()
