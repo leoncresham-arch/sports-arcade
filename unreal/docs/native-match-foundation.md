@@ -163,3 +163,9 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - A physically taken shootout attempt that never crosses a goal or touchline can now yield a provisional **miss** suggestion once its ball settles below 60 cm/s after a configurable observation window (default eight seconds). A parry rolling over the opposite goal line also suggests a miss.
 - The observation timer and suggested result are cleared at the next penalty, resets, cup transitions and when the referee records the result. The timeout fires a suggestion only, never an automatic shootout attempt or cup result.
 - Python source-regression checks passed; duration, contact and physics response must be tuned after UE 5.5 runtime testing.
+
+## October 20 — bounded physical penalty-flight review
+
+The optional physical penalty referee assistant now has two independent timeout thresholds: `PhysicalPenaltyObservationTimeoutSeconds` (default 8 seconds) can suggest a miss for a settled ball, while `PhysicalPenaltyMaximumObservationSeconds` (default 20 seconds) suggests a miss for a still-moving or bouncing ball that never reaches a detectable boundary. Both are editable Unreal GameMode defaults and the maximum is clamped to at least 1 second at evaluation. Goal-plane and exit checks execute before these fallbacks. Suggestions are not official results: the referee must still confirm or override them, and the shootout state is not advanced by observation alone.
+
+`unreal/tests/test_penalty_observation_hard_cap.py` asserts the source contract. Validate shootout pacing, field bounds and ball physics in a real UE5.5 editor before calling this gameplay-tested.
