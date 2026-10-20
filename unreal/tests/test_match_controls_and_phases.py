@@ -48,6 +48,21 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
             self.assertIn(f"void ASportsArcadeCharacter::{handler}()", cpp)
             self.assertIn(f"Mode->AwardUndeterminedRestart({team});", cpp)
 
+    def test_keyboard_physical_shootout_uses_staged_taker(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for action, key, handler in (
+            ("StageCupPenalty", "P", "StageShootoutPenalty"),
+            ("KickCupPenalty", "O", "KickShootoutPenalty"),
+        ):
+            self.assertIn(f'ActionName="{action}",Key={key}', ini)
+            self.assertIn(f"void {handler}();", header)
+            self.assertIn(f'BindAction(TEXT("{action}")', cpp)
+        self.assertIn("Mode->CanStageCupPenaltyKick()", cpp)
+        self.assertIn("Mode->GetStagedCupPenaltyTaker()", cpp)
+        self.assertIn("Mode->KickStagedCupPenalty(Taker->GetActorForwardVector())", cpp)
+
     def test_successful_shots_increment_team_stats(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
