@@ -57,3 +57,10 @@ Technical limitations:
 - AI off-ball passing permits an outfielder up to 650 cm behind the ball when no higher-scoring forward option is available, reducing forced random clearances. Forward penetration still scores higher.
 - Candidate receivers from unrelated Unreal worlds are discarded; receiver marking and corridor occlusion remain factors.
 - Python regression checks cover the new source path; balance and player behaviors must still be tested inside Unreal.
+
+
+## October 20 — preliminary shootout goalkeeper reaction
+- When a physical cup penalty has been kicked and awaits explicit referee scoring review, only the defending team's authored goalkeeper (lineup slot 0) bypasses the usual full-time AI pause. The keeper tracks the ball laterally within a 600-cm goal-mouth window and can try a close-contact physics parry.
+- Every other AI footballer remains paused. This is a provisional ball-tracking/parry behavior, not full goalie diving, catching, collision fairness, outcome attribution or animation. The referee must still explicitly record scored/missed attempts.
+- `GetCupPenaltyDefendingTeam()` provides the currently defending side to AI and Blueprint presentation.
+- Source CI checks the state routing and contact code; runtime navigation, movement, and realistic balance remain pending for native UE 5.5 testing.
