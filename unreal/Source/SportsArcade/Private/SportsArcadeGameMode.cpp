@@ -1085,11 +1085,16 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
         ? StagedPenaltyTaker.Get() : nullptr;
 }
 
-bool ASportsArcadeGameMode::ConfirmSuggestedCupPenaltyOutcome()
+bool ASportsArcadeGameMode::CanConfirmSuggestedCupPenaltyOutcome() const
 {
     const int32 Suggestion = GetSuggestedCupPenaltyOutcome();
-    if (Suggestion != 0 && Suggestion != 1) return false;
-    return ResolvePhysicalCupPenalty(Suggestion == 1);
+    return Suggestion == 0 || Suggestion == 1;
+}
+
+bool ASportsArcadeGameMode::ConfirmSuggestedCupPenaltyOutcome()
+{
+    if (!CanConfirmSuggestedCupPenaltyOutcome()) return false;
+    return ResolvePhysicalCupPenalty(GetSuggestedCupPenaltyOutcome() == 1);
 }
 
 int32 ASportsArcadeGameMode::GetSuggestedCupPenaltyOutcome() const
