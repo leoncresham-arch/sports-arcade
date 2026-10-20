@@ -995,6 +995,41 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
     return true;
 }
 
+bool ASportsArcadeGameMode::StageCupPenaltyKick()
+{
+    if (!bRequirePhysicalPenaltyKicks || !IsCupTieBreakRequired() ||
+        !IsValid(ActivePenaltyShootout) || bPenaltyKickStaged ||
+        !IsValid(MatchBall) || !GetWorld()) return false;
+    const int32 Team = ActivePenaltyShootout->GetNextKickingTeam();
+    if (Team != 0 && Team != 1) return false;
+    const FVector Spot(Team == 0 ? PitchHalfLengthCm - 1100.f :
+        -PitchHalfLengthCm + 1100.f, 0.f, MatchBall->BallRadiusCm + 2.f);
+    ASportsArcadeCharacter* Taker = FindRestartTaker(Team, Spot);
+    if (!IsValid(Taker)) return false;
+    const FVector TakerSpot(Spot.X + (Team == 0 ? -160.f : 160.f),
+        Spot.Y, Taker->GetActorLocation().Z);
+    if (!Taker->SetActorLocation(TakerSpot, false, nullptr, ETeleportType::TeleportPhysics))
+        return false;
+    Taker->GetCharacterMovement()->StopMovementImmediately();
+    MatchBall->PlaceAtRest(Spot);
+    StagedPenaltyTaker = Taker;
+    bPenaltyKickStaged = true;
+    bPenaltyKickTaken = false;
+    return true;
+}
+
+bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
+{
+    if (!bRequirePhysicalPenaltyKicks || !bPenaltyKickStaged || bPenaltyKickTaken ||
+        !IsCupTieBreakRequired() || !IsValid(StagedPenaltyTaker) ||
+        !IsValid(MatchBall) || Direction.ContainsNaN() || Direction.IsNearlyZero())
+        return false;
+    if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Direction.GetSafeNormal(),
+        ProvisionalRestartImpulse * 1.6f, 210.f)) return false;
+    bPenaltyKickTaken = true;
+    return true;
+}
+
 bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored)
 {
     // Validate the bound fixture BEFORE consuming an attempt. An invalid or
