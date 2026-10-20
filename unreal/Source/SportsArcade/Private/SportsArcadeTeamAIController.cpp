@@ -325,7 +325,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // The second defender approaches from the side of the play,
                 // denying a simple sideways escape instead of mirroring the
                 // first defender's straight-line route.
-                const float SideSign = Footballer->GetActorLocation().Y >= BallLead.Y ? 1.f : -1.f;
+                // Shade towards the interior when the ball is near a sideline;
+                // this prevents the supporting defender from inviting an easy
+                // cut back into the central passing corridor.
+                const bool bNearTouchline = FMath::Abs(BallLead.Y) > HalfWidth - 650.f;
+                const float SideSign = bNearTouchline
+                    ? (BallLead.Y >= 0.f ? -1.f : 1.f)
+                    : (Footballer->GetActorLocation().Y >= BallLead.Y ? 1.f : -1.f);
                 Target.Y += SideSign * FMath::Max(StandOff * 0.5f, 120.f);
                 // Do not crowd the ball: maintain a minimum lateral shadow
                 // while the primary presser executes the direct challenge.
