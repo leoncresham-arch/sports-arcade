@@ -155,3 +155,5 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - The referee can now press **F9** (or call `ConfirmSuggestedCupPenaltyOutcome()`) to explicitly accept an available flight-observation suggestion. This only succeeds when the physical kick is awaiting review and the suggestion is a valid 0/1 miss/goal result.
 - **F7** and **F8** remain manual scored/missed overrides. F9 never infers or records anything without user input. Suggested results are guidance, not a substitute for final refereeing.
 - Python reference regressions cover goal mouth, wide, high, away-end and touchline-first geometry. Native Unreal Editor execution and goal/keeper physics remain unverified.
+
+- `CanConfirmSuggestedCupPenaltyOutcome()` is exposed to Blueprint so a referee approval control can be disabled while a physical penalty has no valid observed suggestion. F9 and the Blueprint confirmation action share that eligibility check; explicit manual F7/F8 rulings remain unaffected.
