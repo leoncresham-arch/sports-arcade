@@ -270,6 +270,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     bool WasCupPenaltyTouchedByKeeper() const;
 
+    /** -1 pending, 0 suspected miss, 1 suspected goal; only a referee confirms result. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    int32 GetSuggestedCupPenaltyOutcome() const;
+
     /** Offline referee review: record outcome only after a physical attempt. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool ResolvePhysicalCupPenalty(bool bScored);
@@ -324,6 +328,10 @@ private:
     bool bPenaltyKickStaged = false;
     FVector StagedPenaltySpot = FVector::ZeroVector;
     bool bPenaltyKickTaken = false;
+    bool bHasPreviousPenaltyBallPosition = false;
+    FVector PreviousPenaltyBallPosition = FVector::ZeroVector;
+    int32 SuggestedCupPenaltyOutcome = INDEX_NONE;
+    void ObservePhysicalCupPenalty();
     bool bCupResultRecorded = false;
     bool bCupExtraTimePlayed = false;
     bool bExtraTimeActive = false;
