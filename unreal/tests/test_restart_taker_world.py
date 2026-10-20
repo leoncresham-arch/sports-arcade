@@ -42,6 +42,8 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertLess(method.index("MatchBall->KickByPlayer("), method.index("bBallOutOfPlay = false;"))
         self.assertIn("bManualRestartStaged = !bAutoKickProvisionalRestart;", SOURCE)
         self.assertIn("bManualRestartStaged = false;", SOURCE)
+        kickoff = SOURCE.split("void ASportsArcadeGameMode::StageKickoff(", 1)[1].split("\n}", 1)[0]
+        self.assertIn("bManualRestartStaged = false;", kickoff)
 
     def test_undetermined_boundary_award_requires_referee_decision(self):
         self.assertIn("bool AwardUndeterminedRestart(int32 AwardedTeam);", HEADER)
