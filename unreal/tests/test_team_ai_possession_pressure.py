@@ -15,7 +15,9 @@ class PossessionPressureTests(unittest.TestCase):
     def test_secondary_presser_shadows_within_pitch_bounds(self):
         cpp = SOURCE.read_text(encoding="utf-8")
         section = cpp.split("if (Second == Footballer &&", 1)[1].split("bIsSecondaryPresser = true", 1)[0]
-        self.assertIn("SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f)", section)
+        self.assertIn("SafeBallVelocity * SupportLeadSeconds", section)
+        self.assertIn("bAirborneSupport", section)
+        self.assertIn("SafeBallVelocity.Z > 100.f ? 0.f : 0.10f", section)
         self.assertIn("Ball->GetVelocity().GetClampedToMaxSize2D(1600.f)", section)
         self.assertIn("Target = BallLead - FVector(AttackSign * StandOff", section)
         self.assertIn("FMath::Max(StandOff * 0.5f, 120.f)", section)
