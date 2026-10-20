@@ -244,6 +244,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target.X = AttackSign > 0.f
                 ? FMath::Min(Target.X, MaximumSupportX)
                 : FMath::Max(Target.X, MaximumSupportX);
+            // Preserve a useful passing triangle: midfield support near the
+            // carrier spreads into the opposite channel without vacating
+            // its base formation completely.
+            const float LateralSeparation = Target.Y - Ball->GetActorLocation().Y;
+            if (FMath::Abs(LateralSeparation) < 250.f)
+            {
+                const float SideSign = Slot % 2 == 0 ? 1.f : -1.f;
+                Target.Y += SideSign * FMath::Min(250.f - FMath::Abs(LateralSeparation), 250.f);
+            }
         }
 
         // Hold the authored back line within a tunable attacking/recovery band.
