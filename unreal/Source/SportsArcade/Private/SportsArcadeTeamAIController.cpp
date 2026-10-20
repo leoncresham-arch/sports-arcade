@@ -271,6 +271,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector MidfieldBase = Roster->GetFormationPosition(Slot);
             const float MidfieldBaseY = MidfieldBase.Y * HalfWidth / 3400.f;
             Target.Y = FMath::Clamp(Target.Y, MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
+            // A support runner must stay behind the ball even after the
+            // formation corridor adjustment and later tactical offsets.
+            const float SupportDepth = (Ball->GetActorLocation().X - Target.X) * AttackSign;
+            if (SupportDepth < 175.f)
+            {
+                Target.X = Ball->GetActorLocation().X - AttackSign * 175.f;
+            }
         }
 
         // Hold the authored back line within a tunable attacking/recovery band.
