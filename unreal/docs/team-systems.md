@@ -190,3 +190,5 @@ Pressure outlets also project moving receiver velocity 0.20 seconds ahead, with 
 Pressure outlet scoring now adds a penalty for projected receiving positions within 450 cm of either sideline, helping prefer central outlet options when otherwise comparable. The score remains a heuristic and can still select a wide pass when other choices are worse.
 
 Normal AI pass selection also penalizes predicted receiver locations within 400 cm of the sideline. This joins existing opponent-proximity and progress scoring, without disallowing productive wide passes outright. Regression coverage: `test_team_ai_receiver_leading.py`.
+
+Defender interception prediction now uses a zero-velocity fallback if ball velocity is nonfinite, keeping the pursuit target finite without modifying ball physics. The interception source-contract test checks this safeguard. Native movement and engine tests still need execution.
