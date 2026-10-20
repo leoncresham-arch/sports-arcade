@@ -409,6 +409,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 if (MateVelocity.ContainsNaN()) continue;
                 const FVector Delta = Mate->GetActorLocation() + MateVelocity.GetClampedToMaxSize2D(650.f) * 0.20f - Ball->GetActorLocation();
                 const float DistanceSq = Delta.SizeSquared2D();
+                const FVector PredictedOutlet = Ball->GetActorLocation() + Delta;
+                if (FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f ||
+                    FMath::Abs(PredictedOutlet.Y) > HalfWidth - 100.f) continue;
                 if (DistanceSq < FMath::Square(350.f) || DistanceSq > FMath::Square(2200.f)) continue;
                 // Reject outlets already marked at very close range.
                 bool bReceiverMarked = false;
