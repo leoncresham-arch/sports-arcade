@@ -6,6 +6,13 @@ SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/Spor
 
 
 class ReceiverLeadingTests(unittest.TestCase):
+    def test_pass_power_tracks_receiver_distance(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("float BestPassDistanceCm = 0.f", source)
+        self.assertIn("BestPassDistanceCm = Distance", source)
+        self.assertIn("FMath::Clamp(900.f + BestPassDistanceCm * 0.24f, 1000.f, 1800.f)", source)
+        self.assertIn("BestPassScore > -BIG_NUMBER ? PassImpulse : 1700.f", source)
+
     def test_moving_receivers_are_lead_and_bad_velocity_ignored(self):
         source = SOURCE.read_text(encoding="utf-8")
         passes = source.split("for (ASportsArcadeCharacter* Teammate : Roster->Players)", 1)[1].split(
