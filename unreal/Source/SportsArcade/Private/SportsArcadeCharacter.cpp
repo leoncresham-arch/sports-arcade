@@ -551,7 +551,7 @@ void ASportsArcadeCharacter::ReceiveBall()
                 Opp->TeamIndex == TeamIndex || Opp->GetActorLocation().ContainsNaN()) continue;
             const FVector OppToBall = It->GetActorLocation() - Opp->GetActorLocation();
             if (FMath::Abs(OppToBall.Z) < 115.f &&
-                OppToBall.SizeSquared2D() + FMath::Square(25.f) < DistanceSq)
+                OppToBall.Size2D() + 25.f < FMath::Sqrt(DistanceSq))
             {
                 bOpponentClearlyCloser = true;
                 break;
