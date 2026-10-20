@@ -325,7 +325,11 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         ? FVector::DotProduct(TravelDirection, IntendedDirection) : 1.f;
     // Progressive braking on turns avoids a binary reaction exactly at 90 degrees.
     const float TurnResistance = FMath::Clamp((0.5f - TurnAlignment) / 1.5f, 0.f, 1.f);
-    const float TurnBraking = FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) * 1200.f * TurnResistance;
+    // Avoid aggressive planted braking during slow shuffles and stationary
+    // starts: a fast, sharp direction change requires more recovery.
+    const float TurnSpeedFactor = FMath::Clamp(GetVelocity().Size2D() / 350.f, 0.f, 1.f);
+    const float TurnBraking = FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) *
+        1200.f * TurnResistance * TurnSpeedFactor;
     GetCharacterMovement()->BrakingDecelerationWalking =
         ((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
 }
