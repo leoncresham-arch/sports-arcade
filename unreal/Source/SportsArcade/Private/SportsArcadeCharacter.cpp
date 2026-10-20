@@ -386,6 +386,7 @@ void ASportsArcadeCharacter::TackleBall()
     // A missed standing tackle is still a committed defensive action; repeated
     // presses must not bypass the recovery window while the ball approaches.
     TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
+    CurrentStamina = FMath::Max(0.f, CurrentStamina - FMath::Max(0.f, TackleStaminaCost));
     const FVector DefenderLocation = GetActorLocation();
     const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
     if (DefenderLocation.ContainsNaN() || Forward.IsNearlyZero()) return;
