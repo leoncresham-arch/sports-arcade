@@ -298,7 +298,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
         if (CurrentStamina <= 0.f) bSprintExhausted = true;
     }
-    else if (bPlayActive && bShieldHeld && bMoving)
+    else if (bPlayActive && bShieldHeld && bMoving && CurrentStamina > 0.f)
     {
         // Holding off challenges while walking costs less than sprinting but
         // is not a free source of unlimited physical protection.
@@ -324,7 +324,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float AgilityFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
     // Ball shielding requires short, controlled steps instead of the same
     // explosive acceleration used for free sprinting.
-    const float ShieldAccelerationFactor = bShieldHeld && bPlayActive ? 0.72f : 1.f;
+    const bool bEffectiveShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f;
+    const float ShieldAccelerationFactor = bEffectiveShield ? 0.72f : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor *
         FatigueSpeedFactor * ShieldAccelerationFactor;
     GetCharacterMovement()->RotationRate = FRotator(0.f,
