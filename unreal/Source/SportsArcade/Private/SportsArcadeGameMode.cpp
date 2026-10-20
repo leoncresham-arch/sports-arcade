@@ -420,6 +420,7 @@ bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
     PendingRestartTeam = AwardedTeam;
     PendingRestartTaker = Taker;
     bManualRestartStaged = false;
+    OnRestartAwarded.Broadcast();
     return true;
 }
 
