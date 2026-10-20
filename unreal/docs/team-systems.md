@@ -212,3 +212,5 @@ Marking threat filtering retains opponents deep in the defending team's own half
 The defensive marking search radius is now runtime-clamped to 0–3000 cm; very large misconfigured values cannot create unconstrained opposition searches. The existing Unreal setting remains editable.
 
 When several valid players are markable, a deep goal-threatening opponent receives a modest 15% squared-distance weighting in opponent selection. This prioritizes urgent defensive cover without abandoning the search-radius limit.
+
+Goal-area attackers are weighted more heavily in defensive selection: opponents within 1600 cm of the defending goal line receive a 0.75 squared-distance multiplier in addition to the deep-threat priority. This is preliminary spatial scoring, subject to native playtests.
