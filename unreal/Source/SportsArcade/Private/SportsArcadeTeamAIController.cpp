@@ -239,7 +239,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Candidate->TeamIndex != Footballer->TeamIndex ||
                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
                     Roster->Players.IndexOfByKey(Candidate) == 0) ||
-                !Cast<ASportsArcadeTeamAIController>(Candidate->GetController())) continue;
+                !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
+                Candidate->GetActorLocation().ContainsNaN()) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
             if (Distance < BestDistance)
             {
