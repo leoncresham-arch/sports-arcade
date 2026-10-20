@@ -151,10 +151,16 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             // Autonomous teammates use their own AI decision/cooldown logic.
             // A manual touch cannot automatically seize a ball at a nearer
             // teammate's feet during a crowded possession sequence.
+            if (!IsValid(*It)) continue;
             const FVector BallLocation = It->GetActorLocation();
-            if (BallLocation.ContainsNaN()) continue;
+            const FVector MyLocation = GetActorLocation();
+            const FVector MyVelocity = GetVelocity();
+            const FVector MyFacing = GetActorForwardVector();
+            if (BallLocation.ContainsNaN() || MyLocation.ContainsNaN() ||
+                MyVelocity.ContainsNaN() || MyFacing.ContainsNaN() ||
+                MyFacing.GetSafeNormal2D().IsNearlyZero()) continue;
             bool bFriendlyHasCloserControl = false;
-            const float MyBallDistanceSq = FVector::DistSquared2D(GetActorLocation(), BallLocation);
+            const float MyBallDistanceSq = FVector::DistSquared2D(MyLocation, BallLocation);
             for (TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld()); MateIt; ++MateIt)
             {
                 const ASportsArcadeCharacter* Mate = *MateIt;
@@ -189,9 +195,9 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                 }
             }
             if (bOpponentHasCloserControl) continue;
-            const FVector ToBall = BallLocation - GetActorLocation();
-            if (FVector::DotProduct(GetActorForwardVector(), ToBall.GetSafeNormal2D()) > 0.35f &&
-                It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
+            const FVector ToBall = BallLocation - MyLocation;
+            if (FVector::DotProduct(MyFacing.GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.35f &&
+                It->ApplyControlledTouch(this, MyVelocity.GetSafeNormal2D() *
                     (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
             {
                 TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
