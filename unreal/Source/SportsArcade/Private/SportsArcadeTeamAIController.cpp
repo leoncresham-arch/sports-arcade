@@ -397,7 +397,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 135.f)
         {
             ASportsArcadeCharacter* BestOutlet = nullptr;
-            float BestOutletDistanceSq = FMath::Square(2200.f);
+            float BestOutletScore = -BIG_NUMBER;
             for (ASportsArcadeCharacter* Mate : Roster->Players)
             {
                 if (!IsValid(Mate) || Mate == Footballer ||
@@ -405,8 +405,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Mate->TeamIndex != Footballer->TeamIndex ||
                     Mate->GetActorLocation().ContainsNaN()) continue;
                 const FVector Delta = Mate->GetActorLocation() - Ball->GetActorLocation();
-                if (Delta.SizeSquared2D() < FMath::Square(350.f) ||
-                    Delta.SizeSquared2D() >= BestOutletDistanceSq) continue;
+                const float DistanceSq = Delta.SizeSquared2D();
+                if (DistanceSq < FMath::Square(350.f) || DistanceSq > FMath::Square(2200.f)) continue;
                 // Reject outlets already marked at very close range.
                 bool bReceiverMarked = false;
                 for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
@@ -428,8 +428,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     }
                 }
                 if (bReceiverMarked) continue;
-                BestOutlet = Mate;
-                BestOutletDistanceSq = Delta.SizeSquared2D();
+                const float OutletScore = Delta.X * AttackSign * 0.35f - FMath::Sqrt(DistanceSq) * 0.25f;
+                if (OutletScore > BestOutletScore)
+                {
+                    BestOutletScore = OutletScore;
+                    BestOutlet = Mate;
+                }
             }
             if (IsValid(BestOutlet))
             {
