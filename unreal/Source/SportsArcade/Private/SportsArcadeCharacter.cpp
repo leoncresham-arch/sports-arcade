@@ -176,10 +176,19 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         CurrentStamina = FMath::Min(Capacity, CurrentStamina + StaminaRecoveryPerSecond * DeltaSeconds);
     }
     const float PaceFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->SprintSpeed) : 1.f;
+    // Low stamina progressively reduces top speed and acceleration instead
+    // of switching between unrealistic full-speed and exhausted movement.
+    // Keep the minimum high enough to permit defensive recovery and jockeying.
+    const float StaminaFraction = CurrentStamina / Capacity;
+    const float FatigueSpeedFactor = FMath::Lerp(0.72f, 1.f,
+        FMath::Clamp(StaminaFraction / 0.4f, 0.f, 1.f));
     GetCharacterMovement()->MaxWalkSpeed = (bJockeyHeld && bPlayActive ? JockeySpeed :
-        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed)) * PaceFactor;
+        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed)) *
+        PaceFactor * FatigueSpeedFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
-    GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor;
+    GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor * FatigueSpeedFactor;
+    // Defensive jockeying uses shorter, more controllable stops than open running.
+    GetCharacterMovement()->BrakingDecelerationWalking = bJockeyHeld && bPlayActive ? 2800.f : 2100.f;
 }
 
 void ASportsArcadeCharacter::PassBall()
