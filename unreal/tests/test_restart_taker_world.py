@@ -43,6 +43,18 @@ class RestartOwnershipTests(unittest.TestCase):
         self.assertIn("bManualRestartStaged = !bAutoKickProvisionalRestart;", SOURCE)
         self.assertIn("bManualRestartStaged = false;", SOURCE)
 
+    def test_undetermined_boundary_award_requires_referee_decision(self):
+        self.assertIn("bool AwardUndeterminedRestart(int32 AwardedTeam);", HEADER)
+        method = SOURCE.split("bool ASportsArcadeGameMode::AwardUndeterminedRestart(", 1)[1].split("\n}", 1)[0]
+        self.assertIn("PendingRestartType != ESportsArcadeRestartType::Undetermined", method)
+        self.assertIn("(AwardedTeam != 0 && AwardedTeam != 1)", method)
+        self.assertIn("ESportsArcadeRestartType::ThrowIn", method)
+        self.assertIn("ESportsArcadeRestartType::CornerKick", method)
+        self.assertIn("ESportsArcadeRestartType::GoalKick", method)
+        self.assertIn("PendingRestartTaker = Taker;", method)
+        self.assertIn("PendingRestartLocation = OriginalLocation;", method)
+        self.assertLess(method.index("if (!IsValid(Taker))"), method.index("PendingRestartTeam = AwardedTeam;"))
+
     def test_referee_stoppage_only_clears_after_restart(self):
         method = SOURCE.split("void ASportsArcadeGameMode::ResumeAfterBallOut()", 1)[1].split("\n}", 1)[0]
         self.assertIn("if (!CanResumePendingRestart()) return;", method)
