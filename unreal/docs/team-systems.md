@@ -108,3 +108,7 @@ Last-touch attribution is not genuine possession tracking. This is an initial co
 ## Defensive line continuation — October 20
 
 Slots 1–4 now use bounded recovery/advance relative to formation positions when the opponent last touched the ball. Defaults: 650 cm retreat and 1300 cm advance. Defenders only become a secondary presser when the ball is deep in their own half. This is provisional AI; native compilation and balance testing remain pending. Source tests: `test_team_ai_defensive_line.py`, `test_team_ai_secondary_press.py`.
+
+### October 20 — lateral defensive compactness
+
+Defender slots 1–4 now also limit their lateral movement relative to the authored formation position when the opposition was most recently credited with a touch. The `DefensiveLineLateralDisplacementCm` editor setting defaults to 650 cm, with a 1500 cm upper clamp. The constraint runs alongside existing forward/recovery limits and precedes pressure/marking overrides; therefore emergency pressing or later marking can still pull a defender away from the bounded formation target. Python source-contract assertions cover the setting and target calculation, not UE compilation or gameplay performance.
