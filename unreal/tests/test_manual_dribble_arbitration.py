@@ -13,7 +13,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
 
     def test_manual_dribble_does_not_override_ai_decisions(self):
         self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", self.tick)
-        self.assertIn("It->ApplyControlledTouch(this", self.tick)
+        self.assertIn("ClosestDribbleBall->ApplyControlledTouch(this", self.tick)
 
     def test_dribble_requires_real_movement_and_world(self):
         self.assertIn("GetWorld() &&", self.tick)
@@ -32,7 +32,13 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
     def test_automatic_touch_needs_forward_travel_alignment(self):
         self.assertIn("const FVector TravelDirection = MyVelocity.GetSafeNormal2D()", self.tick)
         self.assertIn("FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f", self.tick)
-        self.assertIn("It->ApplyControlledTouch(this, TravelDirection *", self.tick)
+        self.assertIn("ClosestDribbleBall->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *", self.tick)
+
+    def test_nearest_eligible_ball_selected_before_touch(self):
+        self.assertIn("ClosestDribbleDistanceSq", self.tick)
+        self.assertIn("ContactDistanceSq >= ClosestDribbleDistanceSq", self.tick)
+        self.assertIn("ClosestDribbleBall = *It", self.tick)
+        self.assertIn("if (IsValid(ClosestDribbleBall) &&", self.tick)
 
     def test_opponent_closer_to_ball_blocks_automatic_steal(self):
         for token in ("bOpponentHasCloserControl",
@@ -44,7 +50,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
                       "if (bOpponentHasCloserControl) continue"):
             self.assertIn(token, self.tick)
         self.assertLess(self.tick.index("if (bOpponentHasCloserControl) continue"),
-                        self.tick.index("It->ApplyControlledTouch(this"))
+                        self.tick.index("ClosestDribbleBall->ApplyControlledTouch(this"))
 
     def test_friendly_proximity_arbitrates_controlled_touches(self):
         block = self.tick
@@ -58,7 +64,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
                       "BallLocation.ContainsNaN()"):
             self.assertIn(check, block)
         self.assertLess(block.index("if (bFriendlyHasCloserControl) continue"),
-                        block.index("It->ApplyControlledTouch(this"))
+                        block.index("ClosestDribbleBall->ApplyControlledTouch(this"))
 
 if __name__ == "__main__":
     unittest.main()
