@@ -38,8 +38,16 @@ class StandingTackleRecoveryTests(unittest.TestCase):
         self.assertLess(self.tackle.index("if (bTeammateControllingBall) continue;"),
                         self.tackle.index("CandidateBall = *It;"))
 
+    def test_challenge_deflects_from_nearby_opponent_without_backwards_kick(self):
+        for token in ("PreviousCarrier = CandidateBall->GetLastTouchPlayer()",
+                      "PreviousCarrier->TeamIndex != TeamIndex",
+                      "Forward * 0.65f + Away * 0.35f",
+                      "FVector::DotProduct(ChallengeDirection, Forward) < 0.35f",
+                      "ChallengeDirection = Forward"):
+            self.assertIn(token, self.tackle)
+
     def test_kicks_once_with_attributed_contact(self):
-        self.assertIn("CandidateBall->KickByPlayer(this, Forward,", self.tackle)
+        self.assertIn("CandidateBall->KickByPlayer(this, ChallengeDirection,", self.tackle)
         self.assertIn("PlayerAttributes->Tackling", self.tackle)
 
 
