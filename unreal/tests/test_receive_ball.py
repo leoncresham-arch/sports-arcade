@@ -23,6 +23,7 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("FMath::Square(1800.f)", block)
         self.assertIn("RelativeBallVelocity = It->GetVelocity() - PlayerVelocity", block)
         self.assertIn("RelativeBallVelocity.SizeSquared2D()", block)
+        self.assertIn("ContactDistance3DSq = ToBall.SizeSquared()", block)
         self.assertIn("PlayerVelocity.ContainsNaN()", block)
         self.assertIn("bOpponentClearlyCloser", block)
         self.assertIn("bTeammateClearlyCloser", block)
