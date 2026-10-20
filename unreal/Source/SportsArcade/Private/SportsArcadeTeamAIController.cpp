@@ -577,7 +577,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
     {
         ASportsArcadeCharacter* Opponent = nullptr;
-        float NearestOpponentDistance = FMath::Square(FMath::Max(0.f, MarkingSearchRadiusCm));
+        float NearestOpponentDistance = FMath::Square(FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f));
         for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
         {
             if (!IsValid(*It) || It->GetWorld() != GetWorld() ||
