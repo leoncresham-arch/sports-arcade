@@ -248,6 +248,38 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Nearest = Candidate;
             }
         }
+        // The second-closest autonomous outfielder supports defensive pressure
+        // at a conservative stand-off. Avoid both defenders chasing one point.
+        if (Nearest != Footballer && RecentTouchTeam == 1 - Footballer->TeamIndex)
+        {
+            ASportsArcadeCharacter* Second = nullptr;
+            float SecondDistance = TNumericLimits<float>::Max();
+            for (ASportsArcadeCharacter* Candidate : Roster->Players)
+            {
+                if (!IsValid(Candidate) || Candidate == Nearest ||
+                    Candidate->GetWorld() != GetWorld() ||
+                    Candidate->TeamIndex != Footballer->TeamIndex ||
+                    (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
+                        Roster->Players.IndexOfByKey(Candidate) == 0) ||
+                    !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
+                    Candidate->GetActorLocation().ContainsNaN()) continue;
+                const float Distance = FVector::DistSquared2D(
+                    Candidate->GetActorLocation(), Ball->GetActorLocation());
+                if (Distance < SecondDistance)
+                {
+                    SecondDistance = Distance;
+                    Second = Candidate;
+                }
+            }
+            if (Second == Footballer &&
+                SecondDistance <= FMath::Square(FMath::Clamp(SecondaryPressureRadiusCm, 0.f, 3000.f)))
+            {
+                const float StandOff = FMath::Clamp(SecondaryPressureStandOffCm, 0.f, 1000.f);
+                Target = Ball->GetActorLocation() - FVector(AttackSign * StandOff, 0.f, Ball->GetActorLocation().Z);
+                Target.Y += Footballer->GetActorLocation().Y >= Ball->GetActorLocation().Y
+                    ? StandOff * 0.5f : -StandOff * 0.5f;
+            }
+        }
         if (Nearest == Footballer && BestDistance <= FMath::Square(PressureRadiusCm))
         {
             bIsPrimaryPresser = true;
