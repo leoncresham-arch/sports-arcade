@@ -974,6 +974,7 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
         return false;
     Taker->GetCharacterMovement()->StopMovementImmediately();
     MatchBall->PlaceAtRest(Spot);
+    StagedPenaltySpot = Spot;
     StagedPenaltyTaker = Taker;
     bPenaltyKickStaged = true;
     bPenaltyKickTaken = false;
@@ -987,6 +988,7 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
         !IsValid(StagedPenaltyTaker) || !IsValid(MatchBall) ||
         StagedPenaltyTaker->GetWorld() != GetWorld() ||
         StagedPenaltyTaker->TeamIndex != ActivePenaltyShootout->GetNextKickingTeam() ||
+        FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot) > FMath::Square(60.f) ||
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
         Direction.X * (StagedPenaltyTaker->TeamIndex == 0 ? 1.f : -1.f) <= 0.f)
         return false;
