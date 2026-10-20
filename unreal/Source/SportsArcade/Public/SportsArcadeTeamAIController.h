@@ -27,6 +27,18 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float GoalkeeperAdvanceCm = 350.f;
 
+    /** Reject inaccurate goalkeeping pursuits on balls already moving away. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Goalkeeper", meta=(ClampMin="0.0"))
+    float GoalkeeperShotMinSpeedCmPerSec = 175.f;
+
+    /** Highest provisional reachable shot above goalkeeper feet (cm). */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Goalkeeper", meta=(ClampMin="0.0"))
+    float GoalkeeperParryHeightCm = 220.f;
+
+    /** How far in front of the keeper an incoming ball may be for a parry. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Goalkeeper", meta=(ClampMin="0.0"))
+    float GoalkeeperParryOverrunAllowanceCm = 35.f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI", meta=(ClampMin="0.0", ClampMax="1.0"))
     float GoalkeeperAnticipationSeconds = 0.35f;
 
