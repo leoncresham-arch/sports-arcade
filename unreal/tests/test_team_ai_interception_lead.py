@@ -14,7 +14,8 @@ class InterceptionLeadTests(unittest.TestCase):
         self.assertIn("PresserTravelSpeedCmPerSec = 500.f", header.read_text(encoding="utf-8"))
         self.assertIn("SeparationCm / FMath::Clamp(PresserTravelSpeedCmPerSec, 100.f, 1000.f)", part)
         self.assertIn("FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f)", part)
-        self.assertIn("Ball->GetVelocity() * LeadSeconds", part)
+        self.assertIn("BallVelocity * LeadSeconds", part)
+        self.assertIn("Ball->GetVelocity().ContainsNaN()", part)
 
 if __name__ == "__main__":
     unittest.main()
