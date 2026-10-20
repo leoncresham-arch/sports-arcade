@@ -245,3 +245,7 @@ Standing tackles now consume a configurable 5 stamina points on the attempt, inc
 A standing tackle now calculates effective strength from **pre-attempt** stamina relative to the footballer's rating-adjusted capacity: a clamped 60%-100% multiplier reaching maximum at 35% stamina. The existing 5-point attempt cost remains, even on a miss, and the rating-driven tackle force is still applied separately. This is provisional gameplay tuning, with source regressions in `test_standing_tackle_recovery.py`; physics and animation balance require native UE verification.
 
 Standing-tackle candidate screening now ignores a ball moving horizontally faster than 1200 cm/s when the velocity points away from the defender, and rejects nonfinite ball velocities. It does not block slower contests or fast incoming balls. This is an approximate reach filter; native Unreal physics/contact testing remains necessary.
+
+### October 20 — contested human dribble touch
+
+The local player's automatic dribble touch now skips a ball when an opponent in the same world is within 95 cm horizontally / 115 cm vertically of the ball and is closer to it than the human-controlled player. This supplements friendly proximity arbitration and makes possession challenges depend on spatial advantage rather than allowing automatic proximity steals. Explicit tackling remains separate. The filter is heuristic, not authoritative possession or animation-level contact. Source regression coverage is in `test_manual_dribble_arbitration.py`; native UE gameplay remains unverified.
