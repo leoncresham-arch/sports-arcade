@@ -321,6 +321,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     ? FVector::ZeroVector : Ball->GetVelocity().GetClampedToMaxSize2D(1600.f);
                 const FVector BallLead = Ball->GetActorLocation() +
                     SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f);
+                if (BallLead.ContainsNaN()) { StopMovement(); return; }
                 Target = BallLead - FVector(AttackSign * StandOff, 0.f, BallLead.Z);
                 // The second defender approaches from the side of the play,
                 // denying a simple sideways escape instead of mirroring the
@@ -329,7 +330,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // this prevents the supporting defender from inviting an easy
                 // cut back into the central passing corridor.
                 const bool bNearTouchline = FMath::Abs(BallLead.Y) > HalfWidth - 650.f;
-                const float SideSign = bNearTouchline
+                const bool bBallMovingInfield = BallLead.Y * SafeBallVelocity.Y < -FMath::Square(100.f);
+                const float SideSign = (bNearTouchline || bBallMovingInfield)
                     ? (BallLead.Y >= 0.f ? -1.f : 1.f)
                     : (Footballer->GetActorLocation().Y >= BallLead.Y ? 1.f : -1.f);
                 Target.Y += SideSign * FMath::Max(StandOff * 0.5f, 120.f);
