@@ -101,6 +101,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float ActionCooldownSeconds = 0.9f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Dribbling", meta=(ClampMin="50.0", ClampMax="400.0"))
+    float DribbleChallengeRadiusCm = 150.f;
+
 private:
     float DecisionCountdown = 0.f;
     float ActionCooldownRemaining = 0.f;
