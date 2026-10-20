@@ -320,8 +320,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // defending its previous position as the primary presser closes.
                 const FVector SafeBallVelocity = Ball->GetVelocity().ContainsNaN()
                     ? FVector::ZeroVector : Ball->GetVelocity().GetClampedToMaxSize2D(1600.f);
+                const bool bAirborneSupport = FMath::Abs(Ball->GetActorLocation().Z -
+                    Footballer->GetActorLocation().Z) > 150.f;
+                const float SupportLeadSeconds = bAirborneSupport
+                    ? (SafeBallVelocity.Z > 100.f ? 0.f : 0.10f)
+                    : FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f);
                 const FVector BallLead = Ball->GetActorLocation() +
-                    SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f);
+                    SafeBallVelocity * SupportLeadSeconds;
                 if (BallLead.ContainsNaN()) { StopMovement(); return; }
                 Target = BallLead - FVector(AttackSign * StandOff, 0.f, BallLead.Z);
                 // The second defender approaches from the side of the play,
