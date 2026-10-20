@@ -11,6 +11,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("Mate->TeamIndex != Footballer->TeamIndex", block)
         self.assertIn("const FVector PredictedOutlet = Ball->GetActorLocation() + Delta", block)
         self.assertIn("PredictedOutlet.ContainsNaN()", block)
+        self.assertIn("Delta.ContainsNaN() || DistanceSq <= KINDA_SMALL_NUMBER", block)
         self.assertIn("FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f", block)
         self.assertIn("FMath::Abs(PredictedOutlet.Y) > HalfWidth - 100.f", block)
         self.assertIn("BestOutlet = Mate", block)
