@@ -25,6 +25,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Attack", meta=(ClampMin="0.0", ClampMax="1500.0"))
     float ForwardRunOffsetCm = 650.f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Attack", meta=(ClampMin="0.0", ClampMax="800.0"))
+    float ForwardRunLaneSeparationCm = 250.f;
+
     /** Conservative retreat when the opposition was last credited with touch. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="500.0"))
     float DefensiveRecoveryShiftCm = 150.f;
