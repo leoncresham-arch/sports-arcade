@@ -438,7 +438,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             if (IsValid(BestOutlet))
             {
                 const FVector Direction = (BestOutlet->GetActorLocation() - Ball->GetActorLocation()).GetSafeNormal2D();
-                if (Ball->KickByPlayer(Footballer, Direction, 1200.f, ContactRangeCm + 75.f))
+                const float OutletDistanceCm = FVector::Dist2D(BestOutlet->GetActorLocation(), Ball->GetActorLocation());
+                const float OutletImpulse = FMath::Clamp(950.f + OutletDistanceCm * 0.22f, 1000.f, 1550.f);
+                if (Ball->KickByPlayer(Footballer, Direction, OutletImpulse, ContactRangeCm + 75.f))
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
         }
