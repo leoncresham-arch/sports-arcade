@@ -37,7 +37,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
 
     def test_dribble_steers_away_from_nearest_defender(self):
         code = SOURCE.read_text(encoding="utf-8")
-        part = code.split("if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)", 1)[1].split(
+        part = code.split("if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f &&", 1)[1].split(
             "if (!bTeammateNearbyBall", 1)[0]
         self.assertIn("const float SafeLateralSign = CarrierEscapeSide", part)
         self.assertIn("ThreatOffset.X * AttackSign < -100.f", code)
@@ -48,6 +48,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("bDribbleLaneCrowded ? 280.f : 380.f", part)
         self.assertIn("DribbleDirection * DribbleSpeed", part)
+        self.assertIn("<= 115.f", code)
         self.assertIn("CarrierEscapeSide != 0.f", code)
 
     def test_dribble_requires_attributed_nearby_carrier_and_cooldown(self):
