@@ -196,3 +196,7 @@ Defender interception prediction now uses a zero-velocity fallback if ball veloc
 AI forward dribble requests now check the ball is within the same 115 cm vertical reach boundary enforced by `ApplyControlledTouch`, preventing futile high-ball attempts at the caller. Source regression contracts were updated; native match behavior remains untested.
 
 Primary AI defender interception targets are additionally clamped to within a 100 cm infield buffer on both pitch axes, even if a velocity-based projected ball position crosses the sidelines or goal line. Source regression coverage is in `test_team_ai_interception_lead.py`.
+
+## October 20 — predictive defensive marking
+
+General outfield marking now aims toward an opponent's projected position using a 0.20-second velocity lead capped at 650 cm/s. Invalid opponent velocity is treated as stationary, and existing marking influence and final pitch bounds remain. This is a short-horizon heuristic rather than defensive tracking/pathfinding. Source checks: `unreal/tests/test_team_ai_predictive_marking.py`; Unreal gameplay and compilation validation remain pending.
