@@ -427,7 +427,26 @@ void ASportsArcadeCharacter::TackleBall()
 
     if (IsValid(CandidateBall))
     {
-        CandidateBall->KickByPlayer(this, Forward,
+        // A challenge should contest the ball rather than always clearing it
+        // straight ahead. Deflect across the defender's forward line away from
+        // the last opponent's position when the opponent is still close.
+        FVector ChallengeDirection = Forward;
+        const ASportsArcadeCharacter* PreviousCarrier = CandidateBall->GetLastTouchPlayer();
+        if (IsValid(PreviousCarrier) && PreviousCarrier->TeamIndex != TeamIndex &&
+            !PreviousCarrier->GetActorLocation().ContainsNaN())
+        {
+            const FVector Away = (CandidateBall->GetActorLocation() -
+                PreviousCarrier->GetActorLocation()).GetSafeNormal2D();
+            if (!Away.IsNearlyZero())
+            {
+                ChallengeDirection = (Forward * 0.65f + Away * 0.35f).GetSafeNormal2D();
+                // Keep a realistic forward defensive challenge, not a backward
+                // automatic kick after a carrier runs beyond the defender.
+                if (FVector::DotProduct(ChallengeDirection, Forward) < 0.35f)
+                    ChallengeDirection = Forward;
+            }
+        }
+        CandidateBall->KickByPlayer(this, ChallengeDirection,
             850.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f),
             175.f);
     }
