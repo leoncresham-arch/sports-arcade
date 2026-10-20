@@ -591,7 +591,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
             // Prefer threats near our goalmouth while retaining distance-based marking.
             const float GoalProximityCm = FMath::Abs(It->GetActorLocation().X + MarkingDirection * HalfLength);
-            const float GoalDangerWeight = GoalProximityCm < 1600.f ? 0.75f : 1.f;
+            const bool bCentralGoalThreat = FMath::Abs(It->GetActorLocation().Y) < 1800.f;
+            const float GoalDangerWeight = GoalProximityCm < 1600.f && bCentralGoalThreat ? 0.75f : 1.f;
             const float ThreatDistance = Distance * (bDeepDefensiveThreat ? 0.85f : 1.f) * GoalDangerWeight;
             if (ThreatDistance < NearestOpponentDistance)
             {
