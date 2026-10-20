@@ -338,6 +338,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Ball->GetActorLocation()) <= FMath::Square(220.f);
         // Carry a nearby controlled ball toward goal with a measured touch.
         // Avoid repeated impulses until the existing action cooldown clears.
+        if (bSelfControllingBall)
+        {
+            // Follow the ball carrier's attacking lane between controlled touches.
+            Target = Ball->GetActorLocation() + FVector(AttackSign * 280.f, 0.f, -Ball->GetActorLocation().Z);
+            bIsPrimaryPresser = true; // Retain carrier target through generic marking.
+        }
         if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
         {
             const FVector DribbleDirection(AttackSign, 0.f, 0.f);
