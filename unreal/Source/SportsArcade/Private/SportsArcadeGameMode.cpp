@@ -1049,7 +1049,9 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
 
 ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
 {
-    return bPenaltyKickStaged && IsValid(StagedPenaltyTaker)
+    return bRequirePhysicalPenaltyKicks && bPenaltyKickStaged && !bPenaltyKickTaken &&
+        IsCupTieBreakRequired() && IsValid(ActivePenaltyShootout) &&
+        IsValid(StagedPenaltyTaker) && StagedPenaltyTaker->GetWorld() == GetWorld()
         ? StagedPenaltyTaker.Get() : nullptr;
 }
 
