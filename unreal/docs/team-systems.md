@@ -180,3 +180,5 @@ Dribble frontal challenge distance: `DribbleChallengeRadiusCm` defaults to 150 c
 ### October 20 — challenged-carrier outlet passing
 
 When a defender is directly challenging the attributed ball carrier, the AI can attempt a short emergency pass to the nearest same-team outfielder within 350–2200 cm rather than freezing and holding its forward dribble. The candidate is checked for actor validity, world, team and finite location; the pass requires reachable ball height and the existing ball-contact safeguards. A successful release triggers the action cooldown. This is preliminary and does not yet check outlet passing corridors or tactical pass scoring. Regression contract: `unreal/tests/test_team_ai_ball_carrier_dribble.py`.
+
+Emergency outlets now exclude teammates whose passing segment passes within 160 cm of an opponent, including opponents at the receiving point. This uses a two-dimensional nearest-segment check, not a timed interception simulation; source-contract tests were updated accordingly.
