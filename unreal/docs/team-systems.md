@@ -130,3 +130,5 @@ Candidate AI passes now use the selected receiver's predicted distance to choose
 ## October 20 — distance-aware ball interception
 
 Primary outfield AI pressers now scale short-horizon ball interception prediction using distance to the ball and an initial assumed 500 cm/s travel speed. Lead time remains bounded by the configured ball-prediction interval and a 0.5-second ceiling. This avoids over-leading the ball at close range. The algorithm remains a simple kinematic heuristic, not a pathfinder travel-time or collision solver. Source contract: `unreal/tests/test_team_ai_interception_lead.py`; actual native Unreal compilation and tactical playtesting remain pending.
+
+Interception's assumed presser speed is now an Unreal-editor setting, `PresserTravelSpeedCmPerSec` (500 cm/s default, runtime clamped to 100–1000 cm/s). This is not a measurement of the actual pathfinding pawn movement speed. Regression checks were updated accordingly.
