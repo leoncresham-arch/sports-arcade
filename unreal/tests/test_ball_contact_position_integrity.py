@@ -20,6 +20,13 @@ class BallContactPositionIntegrityTests(unittest.TestCase):
         self.assertIn("WorldPosition.ContainsNaN()", body)
         self.assertLess(body.index("WorldPosition.ContainsNaN()"), body.index("SetActorLocation("))
 
+    def test_reset_ignores_invalid_initial_location(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        body = code.split("void ASportsArcadeBall::ResetToCentre()", 1)[1].split(
+            "bool ASportsArcadeBall::ApplyControlledTouch(", 1)[0]
+        self.assertIn("InitialSpawnLocation.ContainsNaN()", body)
+        self.assertLess(body.index("InitialSpawnLocation.ContainsNaN()"), body.index("SetActorLocation("))
+
     def test_controlled_touch_rejects_bad_velocity(self):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
