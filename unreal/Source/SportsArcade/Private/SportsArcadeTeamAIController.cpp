@@ -191,6 +191,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         const float Advance = FMath::Clamp(FormationAdvanceFactor, 0.f, 0.65f);
         Target.X += FMath::Clamp(Ball->GetActorLocation().X - Target.X, -2200.f, 2200.f) * Advance;
         Target.Y += FMath::Clamp(Ball->GetActorLocation().Y - Target.Y, -1800.f, 1800.f) * Advance;
+        // Last-touch attribution is a weak possession signal, not a guarantee:
+        // use only small shape adjustments, never override primary pressing.
+        const int32 RecentTouchTeam = Ball->GetLastTouchTeamIndex();
+        const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
+        if (RecentTouchTeam == Footballer->TeamIndex)
+            Target.X += AttackSign * FMath::Clamp(AttackingSupportShiftCm, 0.f, 500.f);
+        else if (RecentTouchTeam == 1 - Footballer->TeamIndex)
+            Target.X -= AttackSign * FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f);
 
         // Only the closest eligible outfielder presses; others maintain support shape.
         ASportsArcadeCharacter* Nearest = nullptr;
