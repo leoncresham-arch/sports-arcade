@@ -243,3 +243,5 @@ Standing tackles now consume a configurable 5 stamina points on the attempt, inc
 ### October 20 — endurance-scaled defensive force
 
 A standing tackle now calculates effective strength from **pre-attempt** stamina relative to the footballer's rating-adjusted capacity: a clamped 60%-100% multiplier reaching maximum at 35% stamina. The existing 5-point attempt cost remains, even on a miss, and the rating-driven tackle force is still applied separately. This is provisional gameplay tuning, with source regressions in `test_standing_tackle_recovery.py`; physics and animation balance require native UE verification.
+
+Standing-tackle candidate screening now ignores a ball moving horizontally faster than 1200 cm/s when the velocity points away from the defender, and rejects nonfinite ball velocities. It does not block slower contests or fast incoming balls. This is an approximate reach filter; native Unreal physics/contact testing remains necessary.
