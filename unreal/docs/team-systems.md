@@ -283,3 +283,7 @@ Automatic human dribble contacts now require the player to travel toward the bal
 Player-controlled automatic dribbling now evaluates all valid, reachable, forward-travel-aligned balls and applies its controlled impulse to the closest eligible candidate rather than the first actor returned by world iteration. Existing friend/opponent contact arbitration and cooldown still apply. This eliminates non-deterministic ball choice when authored maps contain multiple ball actors; source regressions passed on the code/test checkpoint, and native UE runtime tests remain necessary.
 
 Standing tackle teammate-protection scans now validate each teammate actor and its owning world before reading its team and location. This aligns defensive contact arbitration with the manual dribble validation and guards against stale actors during resets. Source regression extended; native UE behavior still awaits compilation/playtesting.
+
+### October 20 — loose ball versus last-touch distinction
+
+The standing-tackle friendly-last-touch gate now checks for a valid same-world teammate within 135 cm horizontally and 115 cm vertically of the ball. The previous unconditional last-touch exemption could prevent an eligible defender from tackling a loose ball long after its teammate had touched it. The separate nearest-friendly-control safeguard still runs. This remains a proximity heuristic, not a referee-grade possession state; source regressions added and UE runtime validation outstanding.
