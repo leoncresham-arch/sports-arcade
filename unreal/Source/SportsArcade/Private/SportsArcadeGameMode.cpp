@@ -97,6 +97,7 @@ void ASportsArcadeGameMode::BeginPlay()
 void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    ObservePhysicalCupPenalty();
     if (bMatchFinished || bHalfTime || bBallOutOfPlay || DeltaSeconds <= 0.f || !GetWorld()) return;
 
     if (!IsValid(MatchBall))
@@ -1072,6 +1073,48 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
         IsCupTieBreakRequired() && IsValid(ActivePenaltyShootout) &&
         IsValid(StagedPenaltyTaker) && StagedPenaltyTaker->GetWorld() == GetWorld()
         ? StagedPenaltyTaker.Get() : nullptr;
+}
+
+int32 ASportsArcadeGameMode::GetSuggestedCupPenaltyOutcome() const
+{
+    return IsCupPenaltyAwaitingResult() ? SuggestedCupPenaltyOutcome : INDEX_NONE;
+}
+
+void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
+{
+    if (!IsCupPenaltyAwaitingResult() || !IsValid(MatchBall) ||
+        SuggestedCupPenaltyOutcome != INDEX_NONE) return;
+    const int32 Team = ActivePenaltyShootout->GetNextKickingTeam();
+    if (Team != 0 && Team != 1) return;
+    const FVector Current = MatchBall->GetActorLocation();
+    if (Current.ContainsNaN()) return;
+    if (!bHasPreviousPenaltyBallPosition)
+    {
+        PreviousPenaltyBallPosition = Current;
+        bHasPreviousPenaltyBallPosition = true;
+        return;
+    }
+    const FVector Travel = Current - PreviousPenaltyBallPosition;
+    const float GoalDirection = Team == 0 ? 1.f : -1.f;
+    const float GoalPlane = GoalDirection * (PitchHalfLengthCm + MatchBall->BallRadiusCm);
+    if (FMath::Abs(Travel.X) > KINDA_SMALL_NUMBER)
+    {
+        const float CrossingFraction = (GoalPlane - PreviousPenaltyBallPosition.X) / Travel.X;
+        if (CrossingFraction >= 0.f && CrossingFraction <= 1.f &&
+            Travel.X * GoalDirection > 0.f)
+        {
+            const FVector Crossing = PreviousPenaltyBallPosition + Travel * CrossingFraction;
+            const bool bInsidePosts =
+                FMath::Abs(Crossing.Y) + MatchBall->BallRadiusCm < GoalHalfWidthCm;
+            const bool bUnderBar = Crossing.Z >= MatchBall->BallRadiusCm &&
+                Crossing.Z + MatchBall->BallRadiusCm < CrossbarHeightCm;
+            SuggestedCupPenaltyOutcome = bInsidePosts && bUnderBar ? 1 : 0;
+        }
+    }
+    if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
+        FMath::Abs(Current.Y) > PitchHalfWidthCm + MatchBall->BallRadiusCm)
+        SuggestedCupPenaltyOutcome = 0;
+    PreviousPenaltyBallPosition = Current;
 }
 
 bool ASportsArcadeGameMode::WasCupPenaltyTouchedByKeeper() const
