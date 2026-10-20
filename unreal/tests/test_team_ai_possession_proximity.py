@@ -11,7 +11,8 @@ class PossessionProximityTests(unittest.TestCase):
             "const float AttackSign", 1)[0]
         self.assertIn("GetLastTouchPlayer()", section)
         self.assertIn("LastToucher->GetWorld() == GetWorld()", section)
-        self.assertIn("FMath::Square(300.f)", section)
+        self.assertIn("FMath::Square(220.f)", section)
+        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", section)
         self.assertIn("bAttributedControl", section)
         self.assertIn("Ball->GetLastTouchTeamIndex() : INDEX_NONE", section)
 
