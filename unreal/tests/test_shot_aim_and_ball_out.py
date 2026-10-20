@@ -10,7 +10,7 @@ class ShootingAndStoppageTests(unittest.TestCase):
     def test_aim_and_lift(self):
         cpp = source("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
         header = source("Source/SportsArcade/Public/SportsArcadeCharacter.h")
-        self.assertIn("GetLastMovementInputVector().GetSafeNormal2D()", cpp)
+        self.assertIn("MovementAim.ContainsNaN() ? FVector::ZeroVector : MovementAim.GetSafeNormal2D()", cpp)
         self.assertIn("bIsShot ? (Forward + FVector(0.f, 0.f, AppliedLift))", cpp)
         self.assertIn("float ShotLiftRatio = 0.16f;", header)
         self.assertIn("StrikeNearbyBall(PassImpulseKgCmPerSec * Factor, false)", cpp)
