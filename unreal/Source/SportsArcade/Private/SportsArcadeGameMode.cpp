@@ -976,6 +976,26 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     const FVector Spot(Team == 0 ? PitchHalfLengthCm - 1100.f :
         -PitchHalfLengthCm + 1100.f, 0.f, MatchBall->BallRadiusCm + 2.f);
     ASportsArcadeCharacter* Taker = FindRestartTaker(Team, Spot);
+    // Rotate distinct eligible lineup slots before repeating takers after
+    // eleven kicks. Authored incomplete rosters retain prototype fallback.
+    const int32 AttemptNumber = Team == 0
+        ? ActivePenaltyShootout->HomeAttempts : ActivePenaltyShootout->AwayAttempts;
+    static const int32 PreferredSlots[] = {9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+    const int32 ShooterSlot = PreferredSlots[AttemptNumber % UE_ARRAY_COUNT(PreferredSlots)];
+    for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
+    {
+        if (Roster->TeamIndex != Team) continue;
+        for (ASportsArcadeCharacter* Candidate : Roster->Players)
+        {
+            if (IsValid(Candidate) && Candidate->GetWorld() == GetWorld() &&
+                Candidate->TeamIndex == Team && Candidate->LineupSlot == ShooterSlot)
+            {
+                Taker = Candidate;
+                break;
+            }
+        }
+        break;
+    }
     if (!IsValid(Taker)) return false;
     const FVector TakerSpot(Spot.X + (Team == 0 ? -160.f : 160.f),
         Spot.Y, Taker->GetActorLocation().Z);
