@@ -322,8 +322,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector BallLead = Ball->GetActorLocation() +
                     SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f);
                 Target = BallLead - FVector(AttackSign * StandOff, 0.f, BallLead.Z);
-                Target.Y += Footballer->GetActorLocation().Y >= BallLead.Y
-                    ? StandOff * 0.5f : -StandOff * 0.5f;
+                // The second defender approaches from the side of the play,
+                // denying a simple sideways escape instead of mirroring the
+                // first defender's straight-line route.
+                const float SideSign = Footballer->GetActorLocation().Y >= BallLead.Y ? 1.f : -1.f;
+                Target.Y += SideSign * FMath::Max(StandOff * 0.5f, 120.f);
+                // Do not crowd the ball: maintain a minimum lateral shadow
+                // while the primary presser executes the direct challenge.
                 // Preserve defensive shadow position inside the playable area
                 // even when pressure happens next to the touchline.
                 Target.X = FMath::Clamp(Target.X, -HalfLength + 100.f, HalfLength - 100.f);
