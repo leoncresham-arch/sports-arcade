@@ -11,6 +11,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("InfieldMarkingShift", section)
         self.assertIn("FMath::Abs(MarkingPoint.Y) - 1100.f", section)
         self.assertIn("CentralCoverY", section)
+        self.assertIn("GoalDistance / 1200.f, 0.35f, 1.f", section)
+        self.assertIn("InfieldMarkingShift * UrgentGoalCover", section)
         self.assertIn("MarkingPoint.Y - CentralCoverY", section)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
 
