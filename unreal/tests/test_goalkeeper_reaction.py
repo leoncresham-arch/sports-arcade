@@ -6,6 +6,8 @@ class TestKeeperSource(unittest.TestCase):
         path = Path(__file__).resolve().parents[1] / 'Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp'
         source = path.read_text()
         self.assertIn('bIncomingShot = BallVelocity.X * TowardsPlay <', source)
+        self.assertIn('RawBallVelocity.ContainsNaN()', source)
+        self.assertIn('RawBallVelocity.GetClampedToMaxSize(4500.f)', source)
         self.assertIn('const FVector Clearance = bIncomingShot', source)
         self.assertIn('GoalkeeperAnticipationSeconds', source)
         self.assertIn('const float Impulse = bIncomingShot ?', source)
