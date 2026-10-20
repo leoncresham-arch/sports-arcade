@@ -77,6 +77,8 @@ bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVect
     {
         return false;
     }
+    // Attribute the touch only after a finite, nonzero physics impulse.
+    if (CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN()) return false;
     Kick(Direction, StrengthKgCmPerSec);
     LastTouchPlayer = Player;
     return true;
