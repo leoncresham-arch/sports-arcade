@@ -315,7 +315,11 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         PaceFactor * FatigueSpeedFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
     const float AgilityFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
-    GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor * FatigueSpeedFactor;
+    // Ball shielding requires short, controlled steps instead of the same
+    // explosive acceleration used for free sprinting.
+    const float ShieldAccelerationFactor = bShieldHeld && bPlayActive ? 0.72f : 1.f;
+    GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor *
+        FatigueSpeedFactor * ShieldAccelerationFactor;
     GetCharacterMovement()->RotationRate = FRotator(0.f,
         FMath::Clamp(540.f * AgilityFactor * FatigueSpeedFactor, 260.f, 760.f), 0.f);
     // Defensive jockeying uses shorter, more controllable stops than open running.
