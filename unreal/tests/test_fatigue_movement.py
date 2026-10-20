@@ -11,7 +11,7 @@ class FatigueMovementTests(unittest.TestCase):
         self.assertIn("FMath::Lerp(0.72f, 1.f", code)
         self.assertIn("FMath::Clamp(StaminaFraction / 0.4f, 0.f, 1.f)", code)
         self.assertIn("PaceFactor * FatigueSpeedFactor", code)
-        self.assertIn("1600.f * AccelerationFactor * FatigueSpeedFactor", code)
+        self.assertIn("1600.f * AccelerationFactor *\n        FatigueSpeedFactor * ShieldAccelerationFactor", code)
 
     def test_sprint_release_respects_fatigue_and_jockey(self):
         code = SOURCE.read_text(encoding="utf-8")
