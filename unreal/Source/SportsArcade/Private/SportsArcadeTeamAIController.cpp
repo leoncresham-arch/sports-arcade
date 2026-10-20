@@ -479,7 +479,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float PursuitSeconds = SeparationCm / FMath::Clamp(PresserTravelSpeedCmPerSec, 100.f, 1000.f);
             const float LeadSeconds = FMath::Clamp(
                 PursuitSeconds, 0.f, FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f));
-            const FVector BallVelocity = Ball->GetVelocity().ContainsNaN() ? FVector::ZeroVector : Ball->GetVelocity();
+            const FVector BallVelocity = Ball->GetVelocity().ContainsNaN() ? FVector::ZeroVector :
+                Ball->GetVelocity().GetClampedToMaxSize(3500.f);
             FVector Predicted = Ball->GetActorLocation() + BallVelocity * LeadSeconds;
             Target = FVector(FMath::Clamp(Predicted.X, -HalfLength + 100.f, HalfLength - 100.f),
                 FMath::Clamp(Predicted.Y, -HalfWidth + 100.f, HalfWidth - 100.f), 0.f);
