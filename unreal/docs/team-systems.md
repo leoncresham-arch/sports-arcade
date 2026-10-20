@@ -233,3 +233,5 @@ The automatic walking-dribble touch in `SportsArcadeCharacter::Tick` now runs fo
 ### October 20 — directional defensive contests
 
 Standing-tackle impulses now bias the ball away from its most recent opposing toucher when that opponent remains valid. A 65% defender-forward / 35% away-from-opponent blend is normalized, with a forward-facing fallback for degenerate or excessively backward directions. Existing finite contact validation, friendly-control exclusion and missed-tackle cooldown remain. This is not a physical body-contact or referee foul simulation. Source contracts updated in `test_standing_tackle_recovery.py` and `test_project_structure.py`; native UE5.5 verification is pending.
+
+Holding defensive jockey input now suppresses automatic walking-dribble contact on the local player, avoiding unintended ball impulses while positioning defensively. Explicit pass, shot and tackle controls retain their separate contact checks. Source tests updated; native feel and animation tests remain outstanding.
