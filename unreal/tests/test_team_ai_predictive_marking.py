@@ -13,6 +13,8 @@ class PredictiveMarkingTests(unittest.TestCase):
         self.assertIn("OpponentVelocity.ContainsNaN() ? FVector::ZeroVector", section)
         self.assertIn("OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f", section)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
+        self.assertIn("MarkingPoint - FVector(DefenderAttackSign * 120.f", section)
+        self.assertIn("GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y", section)
 
 if __name__ == "__main__":
     unittest.main()
