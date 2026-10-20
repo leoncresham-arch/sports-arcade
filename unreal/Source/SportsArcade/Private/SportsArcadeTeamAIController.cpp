@@ -261,7 +261,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         // The second-closest autonomous outfielder supports defensive pressure
         // at a conservative stand-off. Avoid both defenders chasing one point.
-        if (Nearest != Footballer && RecentTouchTeam == 1 - Footballer->TeamIndex)
+        // Back-line defenders support a second press only when the ball is
+        // deep in their own half; midfielders and attackers may press higher.
+        const bool bDefensiveEmergency = Ball->GetActorLocation().X * AttackSign < -HalfLength * 0.45f;
+        if (Nearest != Footballer && RecentTouchTeam == 1 - Footballer->TeamIndex &&
+            (Slot > 4 || bDefensiveEmergency))
         {
             ASportsArcadeCharacter* Second = nullptr;
             float SecondDistance = TNumericLimits<float>::Max();
