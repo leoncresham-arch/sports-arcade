@@ -176,3 +176,7 @@ AI avoidance now prefers an infield steering side if a projected 350 cm lateral 
 When a defender is within 150 cm immediately ahead of a controlled ball, AI holds the next forward touch rather than pushing the ball straight into that defender. The carrier continues evaluating an avoidance lane, and existing action cooldown remains in effect. This is an early possession-protection heuristic, not a complete pass-versus-dribble decision or shielding animation. Source regression contracts in `unreal/tests/test_team_ai_ball_carrier_dribble.py`; native compilation and runtime testing are pending.
 
 Dribble frontal challenge distance: `DribbleChallengeRadiusCm` defaults to 150 cm and is clamped to 50–400 cm when used. Tune it during native playtesting.
+
+### October 20 — challenged-carrier outlet passing
+
+When a defender is directly challenging the attributed ball carrier, the AI can attempt a short emergency pass to the nearest same-team outfielder within 350–2200 cm rather than freezing and holding its forward dribble. The candidate is checked for actor validity, world, team and finite location; the pass requires reachable ball height and the existing ball-contact safeguards. A successful release triggers the action cooldown. This is preliminary and does not yet check outlet passing corridors or tactical pass scoring. Regression contract: `unreal/tests/test_team_ai_ball_carrier_dribble.py`.
