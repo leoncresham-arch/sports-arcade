@@ -359,3 +359,7 @@ Item 1 (team AI): opponent threat weighting now preserves the actual maximum mar
 Additional ball-retention behavior: automatic human controlled touches now reject fast-moving balls receding from the footballer (relative speed over 1150 cm/s and departing trajectory); standing challenges and deliberate strikes remain independent. Added source regression. These are not substitutes for animation-accurate contact and Unreal playtesting.
 
 Coordinated AI team-possession support and second-pressure gating now require the last attributed toucher to be within 220 cm horizontally and 135 cm vertically of the ball; airborne/separated last-touch history no longer claims active control. Primary presser can still recover loose balls, and support assignments retain existing boundaries. Regression coverage added.
+
+### October 20 — midfield attacking support
+
+AI central midfield slots 5–8 now shift up to 450 cm forward to create a short passing option when their team has proximity-validated possession in the attacking half and the player is within 2400 cm of the ball. This adds a bounded transition movement without changing formation assignment or requiring a new tactical director. Source test added; UE movement/navmesh and passing evaluation are pending.
