@@ -433,8 +433,11 @@ void ASportsArcadeCharacter::TackleBall()
         // the last opponent's position when the opponent is still close.
         FVector ChallengeDirection = Forward;
         const ASportsArcadeCharacter* PreviousCarrier = CandidateBall->GetLastTouchPlayer();
-        if (IsValid(PreviousCarrier) && PreviousCarrier->TeamIndex != TeamIndex &&
-            !PreviousCarrier->GetActorLocation().ContainsNaN())
+        if (IsValid(PreviousCarrier) && PreviousCarrier->GetWorld() == GetWorld() &&
+            PreviousCarrier->TeamIndex != TeamIndex &&
+            !PreviousCarrier->GetActorLocation().ContainsNaN() &&
+            FVector::DistSquared2D(PreviousCarrier->GetActorLocation(),
+                CandidateBall->GetActorLocation()) <= FMath::Square(220.f))
         {
             const FVector Away = (CandidateBall->GetActorLocation() -
                 PreviousCarrier->GetActorLocation()).GetSafeNormal2D();
