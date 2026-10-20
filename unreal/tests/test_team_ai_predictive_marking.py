@@ -19,6 +19,8 @@ class PredictiveMarkingTests(unittest.TestCase):
         self.assertIn("MarkingDirection", section)
         self.assertIn("MarkingDirection < -900.f", section)
         self.assertIn("bDeepDefensiveThreat", section)
+        self.assertIn("bDeepDefensiveThreat ? Distance * 0.85f : Distance", section)
+        self.assertIn("NearestOpponentDistance = ThreatDistance", section)
         self.assertIn("FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f)", section)
         self.assertIn("-HalfLength * 0.45f", section)
 
