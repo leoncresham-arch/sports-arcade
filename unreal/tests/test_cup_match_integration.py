@@ -105,6 +105,7 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("Candidate->LineupSlot == ShooterSlot", cpp)
         self.assertIn("Keeper->TeamIndex != 1 - Team || Keeper->LineupSlot != 0", cpp)
         self.assertIn("Keeper->SetActorLocation(GoalLinePosition", cpp)
+        self.assertIn("Taker->SetActorRotation(FRotator(0.f, Team == 0 ? 0.f : 180.f, 0.f))", cpp)
         self.assertIn("GoalX, 0.f, Keeper->GetActorLocation().Z", cpp)
         rotation = [9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         self.assertEqual(len(rotation), 11)
