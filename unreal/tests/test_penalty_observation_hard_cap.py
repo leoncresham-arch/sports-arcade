@@ -12,6 +12,14 @@ SOURCE = ROOT / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp"
 
 
 class PenaltyObservationHardCapTests(unittest.TestCase):
+    def test_match_tick_rejects_nonfinite_delta_before_normal_play(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        tick = source.split("void ASportsArcadeGameMode::Tick(float DeltaSeconds)", 1)[1].split(
+            "void ASportsArcadeGameMode::", 1
+        )[0]
+        self.assertIn("!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f", tick)
+        self.assertIn("PhysicalPenaltyObservationSeconds += DeltaSeconds", tick)
+
     def test_editor_tunable_hard_cap_is_separate_from_settled_ball_timeout(self):
         header = HEADER.read_text(encoding="utf-8")
         self.assertIn("PhysicalPenaltyObservationTimeoutSeconds = 8.f", header)
