@@ -298,6 +298,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
         if (CurrentStamina <= 0.f) bSprintExhausted = true;
     }
+    else if (bPlayActive && bShieldHeld && bMoving)
+    {
+        // Holding off challenges while walking costs less than sprinting but
+        // is not a free source of unlimited physical protection.
+        CurrentStamina = FMath::Max(0.f,
+            CurrentStamina - FMath::Max(ShieldStaminaDrainPerSecond, 0.f) * DeltaSeconds);
+    }
     else
     {
         CurrentStamina = FMath::Min(Capacity, CurrentStamina + StaminaRecoveryPerSecond * DeltaSeconds);
