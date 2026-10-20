@@ -5,6 +5,14 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeBall.cpp"
 
 class BallContactPositionIntegrityTests(unittest.TestCase):
+    def test_general_kick_validates_ball_physics_state(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("void ASportsArcadeBall::Kick(", 1)[1].split(
+            "bool ASportsArcadeBall::KickByPlayer(", 1)[0]
+        self.assertIn("CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN()", section)
+        self.assertIn("CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN()", section)
+        self.assertLess(section.index("ContainsNaN()"), section.index("CollisionSphere->AddImpulse("))
+
     def test_kick_requires_finite_player_and_ball_location(self):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("bool ASportsArcadeBall::KickByPlayer(", 1)[1].split(
