@@ -265,6 +265,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Target.Y = Ball->GetActorLocation().Y -
                     FMath::Sign(Ball->GetActorLocation().Y) * 350.f;
             }
+            // Do not abandon the natural midfield station on a distant
+            // cross-field transition. Keep the supporting runner in a
+            // reachable channel relative to their own formation.
+            const FVector MidfieldBase = Roster->GetFormationPosition(Slot);
+            const float MidfieldBaseY = MidfieldBase.Y * HalfWidth / 3400.f;
+            Target.Y = FMath::Clamp(Target.Y, MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
         }
 
         // Hold the authored back line within a tunable attacking/recovery band.
