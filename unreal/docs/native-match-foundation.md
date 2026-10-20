@@ -80,3 +80,10 @@ Extract match clock and refereeing into testable game state for replication, add
 - Manual restart eligibility also checks that the staged ball remains within 60 cm horizontally of the official restart mark. Drifting balls must be restaged rather than kicked from an incorrect location.
 
 - If the prepared dead ball drifts more than 60 cm, pressing B again restages it at the restart mark; otherwise repeated B presses leave a correctly staged ball alone. An invalid drifted ball cannot be struck by M until it has been restaged.
+
+
+## October 20 — referee review for unknown-touch boundary exits
+- `AwardUndeterminedRestart(AwardedTeam)` is a Blueprint-callable explicit decision for a stopped out-of-play ball whose last attributed team is unknown; it does not guess an award automatically.
+- Touchline exits become throw-ins; endline exits become a goal kick for the defending side or corner for the attacking side. Goal kick awards prefer the authored goalkeeper.
+- Invalid team values, non-unknown stoppages, play-in-progress and missing ball are rejected. Missing eligible taker retains the unresolved restart and original referee mark for later retry.
+- Starting any new kickoff clears old staged manual set-piece state. These are offline rules foundations, not full officiating or legal restart animations.
