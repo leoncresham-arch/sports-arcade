@@ -15,6 +15,7 @@ ASportsArcadeTeamAIController::ASportsArcadeTeamAIController()
 void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;
     DecisionCountdown -= DeltaSeconds;
     ActionCooldownRemaining = FMath::Max(0.f, ActionCooldownRemaining - DeltaSeconds);
     if (!GetWorld()) return;
@@ -37,7 +38,17 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         {
             if (!IsValid(*Ball)) continue;
             FVector Target = Keeper->GetActorLocation();
-            Target.Y = FMath::Clamp(Ball->GetActorLocation().Y, -300.f, 300.f);
+            // Project an incoming shot toward the keeper plane rather than only
+            // following its current lateral position. Keep this movement bounded.
+            const FVector BallPosition = Ball->GetActorLocation();
+            const FVector BallVelocity = Ball->GetVelocity();
+            const float KeeperPlaneX = Keeper->GetActorLocation().X;
+            const float TravelSeconds = FMath::Abs(BallVelocity.X) > 175.f
+                ? (KeeperPlaneX - BallPosition.X) / BallVelocity.X : -1.f;
+            const bool bApproachingKeeper = TravelSeconds >= 0.f && TravelSeconds <= 1.5f;
+            const float AnticipatedY = bApproachingKeeper
+                ? BallPosition.Y + BallVelocity.Y * TravelSeconds : BallPosition.Y;
+            Target.Y = FMath::Clamp(AnticipatedY, -300.f, 300.f);
             if (FVector::DistSquared2D(Target, Keeper->GetActorLocation()) > FMath::Square(60.f))
                 MoveToLocation(Target, 60.f, true, true, false, true, nullptr, true);
             const float GoalwardSign = Keeper->TeamIndex == 1 ? 1.f : -1.f;
