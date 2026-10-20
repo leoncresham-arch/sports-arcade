@@ -318,6 +318,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Target = Ball->GetActorLocation() - FVector(AttackSign * StandOff, 0.f, Ball->GetActorLocation().Z);
                 Target.Y += Footballer->GetActorLocation().Y >= Ball->GetActorLocation().Y
                     ? StandOff * 0.5f : -StandOff * 0.5f;
+                // Preserve defensive shadow position inside the playable area
+                // even when pressure happens next to the touchline.
+                Target.X = FMath::Clamp(Target.X, -HalfLength + 100.f, HalfLength - 100.f);
+                Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 100.f, HalfWidth - 100.f);
                 bIsSecondaryPresser = true;
             }
         }
