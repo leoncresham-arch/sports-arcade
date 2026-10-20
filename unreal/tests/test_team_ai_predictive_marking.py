@@ -13,7 +13,7 @@ class PredictiveMarkingTests(unittest.TestCase):
         self.assertIn("OpponentVelocity.ContainsNaN() ? FVector::ZeroVector", section)
         self.assertIn("OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f", section)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
-        self.assertIn("MarkingPoint - FVector(DefenderAttackSign * GoalSideOffset", section)
+        self.assertIn("MarkingPoint -\n                FVector(DefenderAttackSign * GoalSideOffset", section)
         self.assertIn("0.12f, 80.f, 180.f", section)
         self.assertIn("GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y", section)
         self.assertIn("MarkingDirection", section)
