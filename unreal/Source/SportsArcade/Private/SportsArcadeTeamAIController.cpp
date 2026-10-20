@@ -410,7 +410,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector Delta = Mate->GetActorLocation() + MateVelocity.GetClampedToMaxSize2D(650.f) * 0.20f - Ball->GetActorLocation();
                 const float DistanceSq = Delta.SizeSquared2D();
                 const FVector PredictedOutlet = Ball->GetActorLocation() + Delta;
-                if (FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f ||
+                if (PredictedOutlet.ContainsNaN() ||
+                    FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f ||
                     FMath::Abs(PredictedOutlet.Y) > HalfWidth - 100.f) continue;
                 if (DistanceSq < FMath::Square(350.f) || DistanceSq > FMath::Square(2200.f)) continue;
                 // Reject outlets already marked at very close range.
@@ -511,7 +512,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     const FVector PredictedReceiver = Ball->GetActorLocation() + Delta;
                     // Never target a teammate's extrapolated position beyond the
                     // playable touchlines or goal lines.
-                    if (FMath::Abs(PredictedReceiver.X) > HalfLength - 100.f ||
+                    if (PredictedReceiver.ContainsNaN() ||
+                        FMath::Abs(PredictedReceiver.X) > HalfLength - 100.f ||
                         FMath::Abs(PredictedReceiver.Y) > HalfWidth - 100.f) continue;
                     // Support lateral circulation and bounded back-passes when no
                     // progressive lane is available; score still favours forward play.
