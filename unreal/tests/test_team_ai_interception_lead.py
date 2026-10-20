@@ -7,7 +7,7 @@ SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/Spor
 class InterceptionLeadTests(unittest.TestCase):
     def test_presser_adapts_prediction_to_separation(self):
         code = SOURCE.read_text(encoding="utf-8")
-        part = code.split("if (Nearest == Footballer && BestDistance", 1)[1].split(
+        part = code.split("Nearest == Footballer &&", 1)[1].split(
             "// No controlled kick attempts", 1)[0]
         self.assertIn("FMath::Sqrt(BestDistance)", part)
         header = SOURCE.parents[1] / "Public/SportsArcadeTeamAIController.h"
