@@ -15,5 +15,13 @@ class PossessionProximityTests(unittest.TestCase):
         self.assertIn("bAttributedControl", section)
         self.assertIn("Ball->GetLastTouchTeamIndex() : INDEX_NONE", section)
 
+    def test_marking_resumes_after_last_toucher_separates(self):
+        cpp = SOURCE.read_text(encoding="utf-8")
+        section = cpp.split("// A conservative defensive shadow", 1)[1].split(
+            "ASportsArcadeCharacter* Opponent", 1)[0]
+        self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
+        self.assertIn("Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN()", section)
+        self.assertIn("FMath::Square(300.f)", section)
+
 if __name__ == "__main__":
     unittest.main()
