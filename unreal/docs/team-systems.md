@@ -142,3 +142,5 @@ Defensive opponent marking is now skipped while the player's own team is the rec
 ## October 20 — loose-ball possession approximation
 
 Formation attack/recovery shifts, forward runs and secondary-pressure heuristics now treat last-touch attribution as possession only while the recorded toucher is a valid actor in the same world and remains within 300 cm of the ball. Once the ball moves farther away, the decision falls back to unknown possession rather than extending a stale tactical assumption. This does not yet implement robust contested possession, interceptions or transition timers. Existing marking and teammate proximity checks retain their separate conditions. Source regression: `unreal/tests/test_team_ai_possession_proximity.py`. Unreal engine build and runtime testing remain outstanding.
+
+Defensive marking also resumes when the attributed teammate has moved beyond the 300 cm control radius, rather than treating any historical last touch as continuous possession. A matching source regression was added to `test_team_ai_possession_proximity.py`.
