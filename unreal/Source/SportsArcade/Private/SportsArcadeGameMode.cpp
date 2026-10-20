@@ -393,6 +393,23 @@ bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
                 SideY * 500.f, MatchBall->BallRadiusCm + 2.f);
     }
     ASportsArcadeCharacter* Taker = FindRestartTaker(AwardedTeam, PendingRestartLocation);
+    if (PendingRestartType == ESportsArcadeRestartType::GoalKick)
+    {
+        for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
+        {
+            if (Roster->TeamIndex != AwardedTeam) continue;
+            for (ASportsArcadeCharacter* Candidate : Roster->Players)
+            {
+                if (IsValid(Candidate) && Candidate->GetWorld() == GetWorld() &&
+                    Candidate->TeamIndex == AwardedTeam && Candidate->LineupSlot == 0)
+                {
+                    Taker = Candidate;
+                    break;
+                }
+            }
+            break;
+        }
+    }
     if (!IsValid(Taker))
     {
         // Referee can retry after roster setup; never consume the unknown award.
