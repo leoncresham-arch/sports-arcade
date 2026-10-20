@@ -522,8 +522,11 @@ void ASportsArcadeCharacter::ReceiveBall()
             It->GetVelocity().ContainsNaN()) continue;
         const FVector ToBall = It->GetActorLocation() - PlayerLocation;
         const float DistanceSq = ToBall.SizeSquared2D();
+        // Judge the ball's approach relative to the receiving player rather
+        // than its absolute speed: moving receivers can trap a matching pass.
+        const FVector RelativeBallVelocity = It->GetVelocity() - GetVelocity();
         if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
-            It->GetVelocity().SizeSquared2D() > FMath::Square(1800.f) ||
+            RelativeBallVelocity.SizeSquared2D() > FMath::Square(1800.f) ||
             FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
 
         bool bOpponentClearlyCloser = false;
