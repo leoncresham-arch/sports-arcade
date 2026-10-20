@@ -132,3 +132,7 @@ Candidate AI passes now use the selected receiver's predicted distance to choose
 Primary outfield AI pressers now scale short-horizon ball interception prediction using distance to the ball and an initial assumed 500 cm/s travel speed. Lead time remains bounded by the configured ball-prediction interval and a 0.5-second ceiling. This avoids over-leading the ball at close range. The algorithm remains a simple kinematic heuristic, not a pathfinder travel-time or collision solver. Source contract: `unreal/tests/test_team_ai_interception_lead.py`; actual native Unreal compilation and tactical playtesting remain pending.
 
 Interception's assumed presser speed is now an Unreal-editor setting, `PresserTravelSpeedCmPerSec` (500 cm/s default, runtime clamped to 100–1000 cm/s). This is not a measurement of the actual pathfinding pawn movement speed. Regression checks were updated accordingly.
+
+## October 20 — teammate possession-aware pressing gate
+
+Primary AI pressure is suppressed when a *different*, valid teammate is the ball's recorded last toucher and stays within 220 cm of the ball. The attributed ball carrier remains eligible to act; invalid last-toucher coordinates are ignored. This avoids some unhelpful immediate teammate-on-teammate pressure, but it is a simple last-touch/proximity heuristic, not authoritative possession tracking or competitive AI. Source regression coverage: `unreal/tests/test_team_ai_possession_pressure.py`; UE5.5 gameplay validation pending.
