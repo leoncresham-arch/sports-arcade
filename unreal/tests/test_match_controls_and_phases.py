@@ -34,6 +34,20 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("Mode->PendingRestartTaker->GetActorForwardVector()", cpp)
         self.assertIn("Mode->TakeManualRestart(", cpp)
 
+    def test_debug_referee_award_keyboard_routes_to_game_mode(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for action, key, handler, team in (
+            ("AwardRestartHome", "F5", "AwardRestartToHome", 0),
+            ("AwardRestartAway", "F6", "AwardRestartToAway", 1),
+        ):
+            self.assertIn(f'ActionName="{action}",Key={key}', ini)
+            self.assertIn(f"void {handler}();", header)
+            self.assertIn(f'BindAction(TEXT("{action}")', cpp)
+            self.assertIn(f"void ASportsArcadeCharacter::{handler}()", cpp)
+            self.assertIn(f"Mode->AwardUndeterminedRestart({team});", cpp)
+
     def test_successful_shots_increment_team_stats(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
