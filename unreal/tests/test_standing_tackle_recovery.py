@@ -51,6 +51,16 @@ class StandingTackleRecoveryTests(unittest.TestCase):
                       "ChallengeDirection = Forward"):
             self.assertIn(token, self.tackle)
 
+    def test_endurance_scales_tackle_strength(self):
+        for token in ("TackleCapacity = FMath::Max(MaxStamina",
+                      "FMath::Clamp(CurrentStamina, 0.f, TackleCapacity)",
+                      "FMath::Lerp(0.6f, 1.f",
+                      "CurrentStamina / (TackleCapacity * 0.35f)",
+                      "850.f * TackleEnergyFactor *"):
+            self.assertIn(token, self.tackle)
+        self.assertLess(self.tackle.index("const float TackleEnergyFactor"),
+                        self.tackle.index("CurrentStamina = FMath::Max(0.f, CurrentStamina -"))
+
     def test_kicks_once_with_attributed_contact(self):
         self.assertIn("CandidateBall->KickByPlayer(this, ChallengeDirection,", self.tackle)
         self.assertIn("PlayerAttributes->Tackling", self.tackle)
