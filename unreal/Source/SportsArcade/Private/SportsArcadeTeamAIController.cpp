@@ -414,8 +414,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
                         Opp->TeamIndex == Footballer->TeamIndex ||
                         Opp->GetActorLocation().ContainsNaN()) continue;
-                    if (FVector::DistSquared2D(Opp->GetActorLocation(), Mate->GetActorLocation()) <
-                        FMath::Square(180.f))
+                    const FVector2D Start(Ball->GetActorLocation());
+                    const FVector2D End(Mate->GetActorLocation());
+                    const FVector2D Path = End - Start;
+                    const float Along = FMath::Clamp(FVector2D::DotProduct(
+                        FVector2D(Opp->GetActorLocation()) - Start, Path) /
+                        FMath::Max(Path.SizeSquared(), 1.f), 0.f, 1.f);
+                    if (FVector2D::DistSquared(FVector2D(Opp->GetActorLocation()),
+                        Start + Path * Along) < FMath::Square(160.f))
                     {
                         bReceiverMarked = true;
                         break;
