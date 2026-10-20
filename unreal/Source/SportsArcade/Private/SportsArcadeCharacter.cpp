@@ -511,8 +511,10 @@ void ASportsArcadeCharacter::ReceiveBall()
     if (!GetWorld() || TouchCooldownRemaining > 0.f ||
         (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay))) return;
     const FVector PlayerLocation = GetActorLocation();
+    const FVector PlayerVelocity = GetVelocity();
     const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
-    if (PlayerLocation.ContainsNaN() || Facing.IsNearlyZero()) return;
+    if (PlayerLocation.ContainsNaN() || PlayerVelocity.ContainsNaN() ||
+        Facing.IsNearlyZero()) return;
 
     ASportsArcadeBall* BestBall = nullptr;
     float BestDistanceSq = FMath::Square(FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f));
@@ -524,7 +526,7 @@ void ASportsArcadeCharacter::ReceiveBall()
         const float DistanceSq = ToBall.SizeSquared2D();
         // Judge the ball's approach relative to the receiving player rather
         // than its absolute speed: moving receivers can trap a matching pass.
-        const FVector RelativeBallVelocity = It->GetVelocity() - GetVelocity();
+        const FVector RelativeBallVelocity = It->GetVelocity() - PlayerVelocity;
         if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
             RelativeBallVelocity.SizeSquared2D() > FMath::Square(1800.f) ||
             FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
