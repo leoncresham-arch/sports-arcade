@@ -1074,6 +1074,15 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
         ? StagedPenaltyTaker.Get() : nullptr;
 }
 
+bool ASportsArcadeGameMode::WasCupPenaltyTouchedByKeeper() const
+{
+    if (!IsCupPenaltyAwaitingResult() || !IsValid(MatchBall)) return false;
+    const ASportsArcadeCharacter* LastTouch = MatchBall->GetLastTouchPlayer();
+    return IsValid(LastTouch) && LastTouch->GetWorld() == GetWorld() &&
+        LastTouch->LineupSlot == 0 &&
+        LastTouch->TeamIndex == GetCupPenaltyDefendingTeam();
+}
+
 int32 ASportsArcadeGameMode::GetCupPenaltyDefendingTeam() const
 {
     if (!IsCupPenaltyAwaitingResult() || !IsValid(ActivePenaltyShootout))
