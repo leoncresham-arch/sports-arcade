@@ -239,3 +239,7 @@ Holding defensive jockey input now suppresses automatic walking-dribble contact 
 Directional standing-tackle deflection now checks that the previously attributed opposing player remains in the same world and within 220 cm horizontally of the challenged ball. Distant historical last touches no longer skew the deflection vector; the fallback is the defender's forward direction. Source tests updated; native gameplay still requires Unreal validation.
 
 Standing tackles now consume a configurable 5 stamina points on the attempt, including a missed challenge, clamped at zero. Combined with cooldown and low-stamina foot-speed/acceleration penalties this discourages repeated lunges. The balance value is provisional until physical UE playtests. Source contracts cover debit-before-contact and cooldown behavior.
+
+### October 20 — endurance-scaled defensive force
+
+A standing tackle now calculates effective strength from **pre-attempt** stamina relative to the footballer's rating-adjusted capacity: a clamped 60%-100% multiplier reaching maximum at 35% stamina. The existing 5-point attempt cost remains, even on a miss, and the rating-driven tackle force is still applied separately. This is provisional gameplay tuning, with source regressions in `test_standing_tackle_recovery.py`; physics and animation balance require native UE verification.
