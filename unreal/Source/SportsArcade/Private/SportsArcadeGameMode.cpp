@@ -996,6 +996,12 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
     return true;
 }
 
+bool ASportsArcadeGameMode::IsCupPenaltyAwaitingResult() const
+{
+    return bRequirePhysicalPenaltyKicks && bPenaltyKickTaken &&
+        IsCupTieBreakRequired() && IsValid(ActivePenaltyShootout);
+}
+
 bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored)
 {
     // Validate the bound fixture BEFORE consuming an attempt. An invalid or
