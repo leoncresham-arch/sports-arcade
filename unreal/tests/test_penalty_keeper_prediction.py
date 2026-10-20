@@ -40,7 +40,7 @@ class PenaltyKeeperPredictionTests(unittest.TestCase):
         self.assertIn("Ball->KickByPlayer(Keeper", penalty)
 
     def test_keeper_tuning_exposed_for_unreal_editor(self):
-        header = (SOURCE.parents[2] / "Public/SportsArcadeTeamAIController.h").read_text(encoding="utf-8")
+        header = (SOURCE.parents[1] / "Public/SportsArcadeTeamAIController.h").read_text(encoding="utf-8")
         for field in ("GoalkeeperShotMinSpeedCmPerSec", "GoalkeeperParryHeightCm",
                       "GoalkeeperParryOverrunAllowanceCm"):
             self.assertIn(field, header)
