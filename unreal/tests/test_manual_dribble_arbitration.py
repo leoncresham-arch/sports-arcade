@@ -12,7 +12,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
             "void ASportsArcadeCharacter::PassBall()", 1)[0]
 
     def test_manual_dribble_does_not_override_ai_decisions(self):
-        self.assertIn("bPlayActive && IsPlayerControlled() && TouchCooldownRemaining <= 0.f", self.tick)
+        self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", self.tick)
         self.assertIn("It->ApplyControlledTouch(this", self.tick)
 
     def test_friendly_proximity_arbitrates_controlled_touches(self):
