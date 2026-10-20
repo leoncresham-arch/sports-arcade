@@ -12,6 +12,7 @@ class BallContactPositionIntegrityTests(unittest.TestCase):
         self.assertIn("Player->GetActorLocation().ContainsNaN()", part)
         self.assertIn("GetActorLocation().ContainsNaN()", part)
         self.assertLess(part.index("ContainsNaN()"), part.index("LastTouchPlayer = Player"))
+        self.assertIn("CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN()", part)
         self.assertIn("CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN()", part)
 
     def test_referee_placement_rejects_nonfinite_mark(self):
