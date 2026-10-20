@@ -18,6 +18,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("SafeBallVelocity * FMath::Clamp(BallPredictionSeconds, 0.f, 0.25f)", section)
         self.assertIn("Ball->GetVelocity().GetClampedToMaxSize2D(1600.f)", section)
         self.assertIn("Target = BallLead - FVector(AttackSign * StandOff", section)
+        self.assertIn("FMath::Max(StandOff * 0.5f, 120.f)", section)
+        self.assertIn("const float SideSign", section)
         self.assertIn("Target.X = FMath::Clamp(Target.X, -HalfLength + 100.f, HalfLength - 100.f)", section)
         self.assertIn("Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 100.f, HalfWidth - 100.f)", section)
 
