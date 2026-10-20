@@ -17,6 +17,10 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("FMath::Clamp(950.f + OutletDistanceCm * 0.22f, 1000.f, 1550.f)", block)
         self.assertIn("FVector2D::DotProduct", block)
         self.assertIn("Start + Path * Along", block)
+        self.assertIn("MateVelocity.ContainsNaN()", block)
+        self.assertIn("MateVelocity.GetClampedToMaxSize2D(650.f) * 0.20f", block)
+        self.assertIn("const FVector2D End(Ball->GetActorLocation() + Delta)", block)
+        self.assertIn("BestVelocity * 0.20f", block)
         self.assertIn("if (bReceiverMarked) continue", block)
         self.assertIn("ActionCooldownRemaining = FMath::Max", block)
 
