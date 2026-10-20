@@ -7,6 +7,16 @@ CHARACTER = (ROOT / "Private/SportsArcadeCharacter.cpp").read_text(encoding="utf
 HEADER = (ROOT / "Public/SportsArcadeCharacter.h").read_text(encoding="utf-8")
 
 class MovementDribbleBatchTests(unittest.TestCase):
+    def test_manual_shielding_is_input_driven_and_caps_pace(self):
+        self.assertIn("bool IsShieldingBall() const", HEADER)
+        self.assertIn("void ASportsArcadeCharacter::BeginShield()", CHARACTER)
+        self.assertIn("void ASportsArcadeCharacter::EndShield()", CHARACTER)
+        self.assertIn('BindAction(TEXT("Shield"), IE_Pressed', CHARACTER)
+        self.assertIn('BindAction(TEXT("Shield"), IE_Released', CHARACTER)
+        self.assertIn("!bShieldHeld && bSprintHeld", CHARACTER)
+        self.assertIn("(bShieldHeld ? 0.55f : 1.f)", CHARACTER)
+        self.assertIn("bShieldHeld = false", CHARACTER)
+
     def test_turn_braking_responds_to_opposed_travel_and_input(self):
         self.assertIn("FVector::DotProduct(TravelDirection, IntendedDirection) < 0.f", CHARACTER)
         self.assertIn("bHardTurn ? FMath::Clamp(TurnBrakingWeight, 0.f, 1.f)", CHARACTER)
