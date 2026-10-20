@@ -88,3 +88,7 @@ The existing team AI controller now rejects nonfinite ball location or velocity 
 **Next implementation priorities:** split tactical responsibility from navigation, implement coordinated team possession/defensive lines and pressure support, add in-engine unit/functional tests, and tune against a genuine Unreal 5.5 PC playtest. Continue without treating unavailable PC engine testing as a source-code blocker.
 
 AI passing/marking candidate filtering now also skips teammate or opponent actors whose world positions contain NaN values, protecting passing-lane segment calculations, receiver scoring, and opponent marking targets from corrupt spatial data. The static integrity test covers these guards; native AI behavior still requires a real engine test.
+
+## October 20 — bounded off-ball support and defensive recovery
+
+Outfield AI now makes a small forward shift for the team most recently attributed a ball touch, or a small recovery shift if the opponents last touched it. This is a lightweight approximation of possession, **not** an authoritative possession state: a deflection, clearance or loose ball can misclassify it. Adjustable defaults are 220 cm attacking support and 150 cm defensive recovery, clamped to 500 cm; pitch bounds remain enforced after tactical movement. Existing primary-presser behavior overrides this shape shift. Source contracts: `unreal/tests/test_team_ai_shape_shift.py`. Unreal runtime evaluation, player coordination and true possession arbitration remain future work.
