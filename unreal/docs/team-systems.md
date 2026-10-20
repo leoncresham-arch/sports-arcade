@@ -200,3 +200,5 @@ Primary AI defender interception targets are additionally clamped to within a 10
 ## October 20 — predictive defensive marking
 
 General outfield marking now aims toward an opponent's projected position using a 0.20-second velocity lead capped at 650 cm/s. Invalid opponent velocity is treated as stationary, and existing marking influence and final pitch bounds remain. This is a short-horizon heuristic rather than defensive tracking/pathfinding. Source checks: `unreal/tests/test_team_ai_predictive_marking.py`; Unreal gameplay and compilation validation remain pending.
+
+The marking point also maintains an initial 120 cm goalside offset relative to the opponent's predicted movement, before existing blend and pitch clamping. Source regression updated; this offset is not yet dynamically tuned by defensive formation or tackling state.
