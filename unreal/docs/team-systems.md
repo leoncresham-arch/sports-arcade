@@ -351,3 +351,7 @@ Off-ball marking now increases the goal-side offset by up to 45 cm when a marked
 ### October 20 — central and diagonal runner defense
 
 Off-ball defenders now weight actively advancing central attackers (within 1000 cm of midfield's Y axis) more urgently when selecting an opponent to mark. A tracked attacker moving rapidly towards goal and diagonally infield triggers an additional 75 cm infield coverage shift (with final navigation pitch bounds retained). This develops direct-run recognition beyond the preceding goal-side adjustment. Source-contract tests cover both decisions; native Unreal runtime behavior remains unverified.
+
+### October 20 — combined movement, control, tactical AI batch
+
+Item 1 (team AI): opponent threat weighting now preserves the actual maximum marking radius; urgency scoring cannot draw a defender to a physically distant opponent. Item 2 (movement): player braking increases on opposing travel and intended input directions using a configurable turn-braking coefficient, preserving jockey behavior. Item 3 (ball control): controlled touches now scale with player travel speed (bounded 0.65–1.15), multiplied by the existing BallControl rating and a configurable touch scale. These are incremental implementations toward the three larger scopes, not completion claims. Static source tests added; Unreal compilation, frame tuning, animations and playtesting are still required.
