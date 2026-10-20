@@ -174,3 +174,5 @@ AI avoidance now prefers an infield steering side if a projected 350 cm lateral 
 ### October 20 — frontal dribble challenge
 
 When a defender is within 150 cm immediately ahead of a controlled ball, AI holds the next forward touch rather than pushing the ball straight into that defender. The carrier continues evaluating an avoidance lane, and existing action cooldown remains in effect. This is an early possession-protection heuristic, not a complete pass-versus-dribble decision or shielding animation. Source regression contracts in `unreal/tests/test_team_ai_ball_carrier_dribble.py`; native compilation and runtime testing are pending.
+
+Dribble frontal challenge distance: `DribbleChallengeRadiusCm` defaults to 150 cm and is clamped to 50–400 cm when used. Tune it during native playtesting.
