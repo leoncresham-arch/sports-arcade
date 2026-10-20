@@ -188,3 +188,5 @@ Pressure outlet selection now ranks unblocked candidate passes by forward progre
 Pressure outlets also project moving receiver velocity 0.20 seconds ahead, with horizontal velocity capped at 650 cm/s. The projected point is used for candidate distance, interception corridor and release direction; invalid receiver velocities are excluded. This is not a full time-of-flight solver and must be tuned in UE5.5.
 
 Pressure outlet scoring now adds a penalty for projected receiving positions within 450 cm of either sideline, helping prefer central outlet options when otherwise comparable. The score remains a heuristic and can still select a wide pass when other choices are worse.
+
+Normal AI pass selection also penalizes predicted receiver locations within 400 cm of the sideline. This joins existing opponent-proximity and progress scoring, without disallowing productive wide passes outright. Regression coverage: `test_team_ai_receiver_leading.py`.
