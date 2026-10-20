@@ -293,3 +293,7 @@ Primary AI pressing now caps the finite ball velocity used for interception lead
 ### October 20 — pitch-bound AI receiving decisions
 
 Both routine AI teammate passes and emergency challenged-carrier outlet passes now reject receiver positions projected beyond the pitch limits (100 cm interior margin on X/Y). Existing receiver velocity lead, lane screening and touchline-risk scoring remain. This prevents selecting an out-of-play target before evaluating pass quality, without making every wide pass illegal. Defensive standing tackles now also verify the ball actor remains valid before evaluating contact. Python source contracts added/updated; native Unreal compile and playtesting remain outstanding.
+
+### October 20 — finite AI receiving locations
+
+Regular and emergency outlet AI passes now reject any nonfinite extrapolated receiving target before touchline and goal-line bounds screening. The existing bounded receiver-velocity lead and pass-lane checks remain. Corresponding source tests have been extended; native Unreal compilation and match simulation remain outstanding.
