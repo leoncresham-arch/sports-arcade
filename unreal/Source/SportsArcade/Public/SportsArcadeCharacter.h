@@ -101,6 +101,7 @@ private:
     void ShootBall();
     void ChipBall();
     void TackleBall();
+    void ReceiveBall();
     void BeginJockey();
     void BeginShield();
     void EndShield();
