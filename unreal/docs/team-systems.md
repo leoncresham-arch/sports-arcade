@@ -331,3 +331,7 @@ Secondary AI support only treats a ball as moving inward when it is at least 500
 ### October 20 — rising-ball defensive anticipation
 
 Both the primary presser and supporting second defender now shorten aerial ball prediction further: when the ball is more than 150 cm above the defender and rising faster than 100 cm/s, their extrapolation horizon falls to zero instead of projecting an implausible foot-level interception. Descending airborne footballs retain bounded short lead, while grounded trajectories keep the previous prediction window. Source regressions have been adjusted; native Unreal physics, animation and pathfinding tests remain outstanding.
+
+### October 20 — goal-side marking lane cover
+
+Off-ball AI marking now biases a defender's goal-side shadow laterally toward the centre when the tracked attacker is wide. The correction starts beyond 1100 cm from the centre line, scales gradually and is bounded by the existing marking influence and final pitch clamps. This is a tactical source-level heuristic, not physics-based man marking. Tested by `test_team_ai_possession_pressure.py`; native Unreal navigation and match-play tuning remain outstanding.
