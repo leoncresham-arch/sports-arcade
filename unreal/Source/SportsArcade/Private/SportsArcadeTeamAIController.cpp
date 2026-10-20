@@ -396,6 +396,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         if (bSelfControllingBall && bImmediateChallenge && ActionCooldownRemaining <= 0.f &&
             FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 135.f)
         {
+            ASportsArcadeCharacter* BestOutlet = nullptr;
+            float BestOutletDistanceSq = FMath::Square(2200.f);
             for (ASportsArcadeCharacter* Mate : Roster->Players)
             {
                 if (!IsValid(Mate) || Mate == Footballer ||
