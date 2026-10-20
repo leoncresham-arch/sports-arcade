@@ -488,7 +488,8 @@ void ASportsArcadeCharacter::TackleBall()
         for (TActorIterator<ASportsArcadeCharacter> PlayerIt(GetWorld()); PlayerIt; ++PlayerIt)
         {
             ASportsArcadeCharacter* Other = *PlayerIt;
-            if (Other == this || Other->TeamIndex != TeamIndex ||
+            if (!IsValid(Other) || Other == this || Other->GetWorld() != GetWorld() ||
+                Other->TeamIndex != TeamIndex ||
                 Other->GetActorLocation().ContainsNaN()) continue;
             const FVector OtherToBall = BallLocation - Other->GetActorLocation();
             if (OtherToBall.SizeSquared2D() < FMath::Square(115.f) &&
