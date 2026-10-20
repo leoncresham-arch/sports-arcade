@@ -592,7 +592,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         if (IsValid(Opponent))
         {
-            const FVector MarkingPoint = Opponent->GetActorLocation() + Opponent->GetVelocity().GetClampedToMaxSize2D(650.f) * 0.20f;
+            const FVector OpponentVelocity = Opponent->GetVelocity();
+            const FVector MarkingPoint = Opponent->GetActorLocation() +
+                (OpponentVelocity.ContainsNaN() ? FVector::ZeroVector : OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f);
             Target = FMath::Lerp(Target, FVector(MarkingPoint.X, MarkingPoint.Y, 0.f),
                 FMath::Clamp(MarkingInfluence, 0.f, 0.5f));
         }
