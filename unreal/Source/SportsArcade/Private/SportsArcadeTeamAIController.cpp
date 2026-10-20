@@ -311,7 +311,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     ? StandOff * 0.5f : -StandOff * 0.5f;
             }
         }
-        if (Nearest == Footballer && BestDistance <= FMath::Square(PressureRadiusCm))
+        // Do not press a teammate's clearly controlled ball. Last touch is
+        // only a proxy, so retain pressure once the ball has separated.
+        const bool bTeammateNearbyBall = RecentTouchTeam == Footballer->TeamIndex &&
+            IsValid(Ball->GetLastTouchPlayer()) &&
+            FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
+                Ball->GetActorLocation()) < FMath::Square(220.f);
+        if (!bTeammateNearbyBall && Nearest == Footballer &&
+            BestDistance <= FMath::Square(PressureRadiusCm))
         {
             bIsPrimaryPresser = true;
             // Lead moving balls slightly for more credible interception movement.
