@@ -257,3 +257,7 @@ Manual pass/shot/chip now rejects nonfinite strength, treats nonfinite player mo
 ### October 20 — manual strike numerical validation
 
 Manual pass, shot and chip inputs now validate finite strike strength, movement input, player location, player facing and resultant aim before applying a ball impulse. Invalid movement input falls back to valid facing, while invalid facing prevents selection outright. Source regression tests were updated to match guarded normalization and contact screening. Source CI is not native Unreal compilation or gameplay validation.
+
+### October 20 — finite manual dribble telemetry
+
+Manual controlled-touch selection now validates the ball actor and finite human location, velocity and facing before proximity scans and impulse requests. A degenerate horizontal facing vector is rejected. These guards avoid invalid movement telemetry causing uncontrolled contacts; they do not substitute for UE native testing. The source-only regression is `unreal/tests/test_manual_dribble_arbitration.py`.
