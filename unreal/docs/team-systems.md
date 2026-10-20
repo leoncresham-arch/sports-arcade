@@ -168,3 +168,5 @@ When the AI ball carrier selects a lateral escape touch around a nearby defender
 ### October 20 — dribble direction consistency
 
 The controlled ball carrier now checks its lateral escape direction on each AI decision, including frames when the ball-touch cooldown is active. Both its navigation target and subsequent controlled touch use the same nearest-defender escape direction, so a player no longer straightens its running path between touches. The duplicated opponent scan was removed from the touch action. Regression coverage updated in `unreal/tests/test_team_ai_ball_carrier_dribble.py`; this remains unverified in Unreal gameplay.
+
+AI avoidance now prefers an infield steering side if a projected 350 cm lateral escape would run within 250 cm of the pitch touchline. The same adjusted side is reused by both runner movement and its next controlled touch. Source-contract tests were extended; pitch-specific gameplay validation is pending.
