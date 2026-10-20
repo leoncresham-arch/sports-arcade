@@ -327,7 +327,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             !Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() &&
             FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
                 Ball->GetActorLocation()) < FMath::Square(220.f);
-        if (!bTeammateNearbyBall && Nearest == Footballer &&
+        // A controlled opponent ball deserves pressure; when the ball is loose,
+        // the nearest defender still recovers it. The carrier never presses
+        // its own controlled touch simply because it is nearest to the ball.
+        const bool bSelfControllingBall = RecentTouchTeam == Footballer->TeamIndex &&
+            Ball->GetLastTouchPlayer() == Footballer &&
+            FVector::DistSquared2D(Footballer->GetActorLocation(),
+                Ball->GetActorLocation()) <= FMath::Square(220.f);
+        if (!bTeammateNearbyBall && !bSelfControllingBall &&
+            Nearest == Footballer &&
             BestDistance <= FMath::Square(PressureRadiusCm))
         {
             bIsPrimaryPresser = true;
