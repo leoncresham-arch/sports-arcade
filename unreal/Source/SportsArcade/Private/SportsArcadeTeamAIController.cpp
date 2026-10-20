@@ -315,7 +315,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         {
             bIsPrimaryPresser = true;
             // Lead moving balls slightly for more credible interception movement.
-            FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f);
+            // Predict an interception using ball speed and the presser's travel
+            // capacity; avoid always chasing a fixed future time point.
+            const float SeparationCm = FMath::Sqrt(BestDistance);
+            const float PursuitSeconds = SeparationCm / 500.f;
+            const float LeadSeconds = FMath::Clamp(
+                PursuitSeconds, 0.f, FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f));
+            FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * LeadSeconds;
             Target = FVector(Predicted.X, Predicted.Y, 0.f);
             // No controlled kick attempts while the ball is too high to reach.
             const bool bBallAtFootHeight = FMath::Abs(Footballer->GetActorLocation().Z -
