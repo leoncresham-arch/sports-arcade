@@ -29,6 +29,8 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn("Keeper->LineupSlot != 0", code)
         self.assertIn("MoveToLocation(Target, 60.f", code)
         self.assertIn("Ball->KickByPlayer(Keeper, Parry", code)
+        self.assertIn("Ball->GetVelocity().X * GoalwardSign > 175.f", code)
+        self.assertIn("bIncomingPenalty && ActionCooldownRemaining <= 0.f", code)
         self.assertLess(code.index("Match->IsCupPenaltyAwaitingResult()"),
                         code.index("Match->bMatchFinished || Match->bBallOutOfPlay"))
 
