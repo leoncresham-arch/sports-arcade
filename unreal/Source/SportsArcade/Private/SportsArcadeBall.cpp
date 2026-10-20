@@ -73,6 +73,7 @@ bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVect
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
         Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
         CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN() ||
+        CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN() ||
         !FMath::IsFinite(MaxContactDistanceCm) || MaxContactDistanceCm <= 0.f ||
         FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxContactDistanceCm))
     {
