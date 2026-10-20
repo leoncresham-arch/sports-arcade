@@ -36,6 +36,7 @@ class TeamAIBallIntegrityTests(unittest.TestCase):
         self.assertIn("Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0", section)
         self.assertIn("Roster->Players.IndexOfByKey(Candidate) == 0", section)
         self.assertIn("Candidate->GetController()", section)
+        self.assertIn("Candidate->GetActorLocation().ContainsNaN()", section)
 
 
 if __name__ == "__main__":
