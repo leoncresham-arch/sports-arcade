@@ -250,8 +250,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float LateralSeparation = Target.Y - Ball->GetActorLocation().Y;
             if (FMath::Abs(LateralSeparation) < 250.f)
             {
-                const float SideSign = Slot % 2 == 0 ? 1.f : -1.f;
-                Target.Y += SideSign * FMath::Min(250.f - FMath::Abs(LateralSeparation), 250.f);
+                // Keep the midfielder on its existing side of the carrier;
+                // a fixed slot sign could pull a nearly-open lane across the
+                // ball, making the passing triangle narrower.
+                const float SideSign = FMath::Abs(LateralSeparation) > 20.f
+                    ? FMath::Sign(LateralSeparation)
+                    : (Slot % 2 == 0 ? 1.f : -1.f);
+                Target.Y = Ball->GetActorLocation().Y + SideSign * 250.f;
             }
         }
 
