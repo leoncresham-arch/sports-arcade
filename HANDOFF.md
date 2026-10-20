@@ -552,3 +552,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - `GetSuggestedCupPenaltyOutcome()` reports -1 pending, 0 suspected miss, 1 suspected goal. `OnCupPenaltyOutcomeSuggested(KickingTeam, bScored)` fires once; official outcome remains strictly separate through F7/F8 / `ResolvePhysicalCupPenalty` and `OnCupPenaltyReviewed`.
 - Segment crossing checks prevent a prior touchline exit being reported as a goal; state resets after review, match/cup resets and each new kick. Native UE 5.5 runtime and moving goalkeeper geometry remain unverified; do not automatically award results based on these suggestions yet.
 - Native C++ automation expanded to verify eleventh-to-twelfth kicker rotation, plus static CI source contracts. Continue scope and avoid a new project or redesign.
+
+
+## October 20 — referee confirmation of penalty flight suggestions
+- Penalty ball flight observes goal-plane and touchline crossing segments after a physical shootout strike. Suggestions are delivered via `GetSuggestedCupPenaltyOutcome()` and `OnCupPenaltyOutcomeSuggested`, and remain distinct from official `OnCupPenaltyReviewed` scores.
+- Press **F9** to explicitly accept a valid suggested goal/miss using `ConfirmSuggestedCupPenaltyOutcome()`, or **F7/F8** to override with an independently reviewed goal/miss. No automatic result commitment.
+- Added regression reference geometry covering goal, high, wide, reverse goal direction and an earlier touchline crossing. Source CI passed for these additions. Native Unreal 5.5 runtime and physics are not verified.
+- Continue original repo/main with full 11v11 scope, practical goalkeeper, referee and penalty improvements, avoiding per-task permission prompts.
