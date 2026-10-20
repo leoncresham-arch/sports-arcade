@@ -287,3 +287,5 @@ Standing tackle teammate-protection scans now validate each teammate actor and i
 ### October 20 — loose ball versus last-touch distinction
 
 The standing-tackle friendly-last-touch gate now checks for a valid same-world teammate within 135 cm horizontally and 115 cm vertically of the ball. The previous unconditional last-touch exemption could prevent an eligible defender from tackling a loose ball long after its teammate had touched it. The separate nearest-friendly-control safeguard still runs. This remains a proximity heuristic, not a referee-grade possession state; source regressions added and UE runtime validation outstanding.
+
+Primary AI pressing now caps the finite ball velocity used for interception lead prediction at 3500 cm/s (retaining nonfinite velocity fallback). This avoids extreme physics spikes commanding an exaggerated future intercept before pitch-bound clamping. Ball physics itself remains unchanged; lead tuning and movement need UE native playtests. Source test updated in `test_team_ai_interception_lead.py`.
