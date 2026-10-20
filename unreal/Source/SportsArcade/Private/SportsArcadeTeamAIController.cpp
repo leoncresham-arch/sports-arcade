@@ -140,6 +140,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     Target.X *= HalfLength / 5250.f;
     Target.Y *= HalfWidth / 3400.f;
     bool bIsPrimaryPresser = false;
+    bool bIsSecondaryPresser = false;
     if (IsValid(Ball) && Slot == 0)
     {
         // Never issue a navigation target from nonfinite physics telemetry.
@@ -317,6 +318,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Target = Ball->GetActorLocation() - FVector(AttackSign * StandOff, 0.f, Ball->GetActorLocation().Z);
                 Target.Y += Footballer->GetActorLocation().Y >= Ball->GetActorLocation().Y
                     ? StandOff * 0.5f : -StandOff * 0.5f;
+                bIsSecondaryPresser = true;
             }
         }
         // Do not press a teammate's clearly controlled ball. Last touch is
@@ -428,7 +430,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     }
     // A conservative defensive shadow towards the closest nearby opponent.
     // Pressing footballer already has the ball as target and must not be pulled away.
-    if (Slot != 0 && !bIsPrimaryPresser && IsValid(Ball) &&
+    if (Slot != 0 && !bIsPrimaryPresser && !bIsSecondaryPresser && IsValid(Ball) &&
         (Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex ||
             !IsValid(Ball->GetLastTouchPlayer()) ||
             Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() ||
