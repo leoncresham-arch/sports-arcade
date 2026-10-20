@@ -194,3 +194,5 @@ Normal AI pass selection also penalizes predicted receiver locations within 400 
 Defender interception prediction now uses a zero-velocity fallback if ball velocity is nonfinite, keeping the pursuit target finite without modifying ball physics. The interception source-contract test checks this safeguard. Native movement and engine tests still need execution.
 
 AI forward dribble requests now check the ball is within the same 115 cm vertical reach boundary enforced by `ApplyControlledTouch`, preventing futile high-ball attempts at the caller. Source regression contracts were updated; native match behavior remains untested.
+
+Primary AI defender interception targets are additionally clamped to within a 100 cm infield buffer on both pitch axes, even if a velocity-based projected ball position crosses the sidelines or goal line. Source regression coverage is in `test_team_ai_interception_lead.py`.
