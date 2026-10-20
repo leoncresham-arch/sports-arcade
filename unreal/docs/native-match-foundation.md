@@ -136,3 +136,10 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - `GetStagedCupPenaltyTaker()` no longer exposes a taker after the attempt has been struck or when the actor belongs to another Unreal world, preventing repeat keyboard kicks against a stale pointer.
 - Shootout goalkeeper provisional physics parries require an incoming ball travelling toward the defended goal, not just a nearby loose ball. Score or miss remains a human-reviewed event rather than automatically inferred.
 - GitHub CI performs static Python source checks. Native Unreal Engine 5.5 compiling, goalkeeper physics and penalty outcomes are not yet verified.
+
+
+## October 20 — shootout UI event separation
+- `OnPhysicalPenaltyKicked` fires after an actual attributed physics kick; the event is never sent on a rejected kick and indicates only a taken attempt, not a goal.
+- `OnCupPenaltyReviewed(KickingTeam, bScored)` fires after the shootout state successfully records the referee's score/miss ruling, allowing future HUD tally updates.
+- `CanKickStagedCupPenalty()` validates readiness for the actual kick. `GetStagedCupPenaltyTaker()` hides stale or already-kicked takers. Both staging and kicking reject mismatched/advanced cup fixtures.
+- Goalkeeper physics parry attempts are gated on ball velocity directed toward the defended goal. Source CI is not an Unreal Engine 5.5 runtime or compile test.
