@@ -415,3 +415,7 @@ Deliberate receiving now considers ball velocity relative to the footballer's ow
 Deliberate receiving now requires full 3D ball-to-player distance within the controlled-touch reach in addition to contact-height checks, avoiding impossible touches on elevated passes. The central-midfield forward-support shift is suspended during fast backward-moving passes (ball velocity more than 450 cm/s against attacking direction), preventing a surge in the wrong phase of possession. Regression contracts added. These changes still require native Unreal evaluation.
 
 Shielding also now scales commanded movement acceleration to 72% during active play, on top of existing speed, braking and fatigue constraints. This helps provide a controlled footing baseline prior to implementing physically verified player-body contact and animation-based shielding.
+
+### October 20 — moving reception and fast switching
+
+Explicit first touch now blends player-facing direction (65%) with the receiver's movement direction (35%) to cushion a moving reception into travel while preserving stationary control and existing reach/contestation limits. Midfielder forward-support surges are also held on rapid lateral ball switches (over 1100 cm/s sideways), allowing the formation to reset before joining play. Source regressions updated; native Unreal contact physics, animation and tactical tuning remain outstanding.
