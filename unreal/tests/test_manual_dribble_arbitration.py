@@ -27,6 +27,8 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
     def test_opponent_closer_to_ball_blocks_automatic_steal(self):
         for token in ("bOpponentHasCloserControl",
                       "Opponent->TeamIndex == TeamIndex",
+                      "!IsValid(Opponent)",
+                      "Opponent->GetWorld() != GetWorld()",
                       "OppToBall.SizeSquared2D() < FMath::Square(95.f)",
                       "OppToBall.SizeSquared2D() < MyBallDistanceSq",
                       "if (bOpponentHasCloserControl) continue"):
@@ -38,6 +40,8 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         block = self.tick
         for check in ("TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld())",
                       "Mate->TeamIndex != TeamIndex",
+                      "!IsValid(Mate)",
+                      "Mate->GetWorld() != GetWorld()",
                       "MateToBall.SizeSquared2D() < MyBallDistanceSq",
                       "FMath::Abs(MateToBall.Z) <= 115.f",
                       "if (bFriendlyHasCloserControl) continue",
