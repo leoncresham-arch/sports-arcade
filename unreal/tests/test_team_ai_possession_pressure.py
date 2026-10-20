@@ -25,6 +25,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("FMath::Sign(Ball->GetActorLocation().Y) * 350.f", part)
         self.assertIn("const FVector MidfieldBase = Roster->GetFormationPosition(Slot)", part)
         self.assertIn("MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f", part)
+        self.assertIn("bRetreatingPass", part)
+        self.assertIn("SupportBallVelocity.X * AttackSign < -450.f", part)
         self.assertIn("const float SupportDepth =", part)
         self.assertIn("if (SupportDepth < 175.f)", part)
         self.assertLess(part.index("if (FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f)"), len(part))
