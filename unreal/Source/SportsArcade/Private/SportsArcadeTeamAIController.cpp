@@ -22,6 +22,36 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
     ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    // Only the defending goalkeeper may react during a completed cup match's
+    // physical penalty attempt. All outfield AI remain stopped.
+    if (IsValid(Match) && Match->IsCupPenaltyAwaitingResult())
+    {
+        ASportsArcadeCharacter* Keeper = Cast<ASportsArcadeCharacter>(GetPawn());
+        if (!IsValid(Keeper) || Keeper->LineupSlot != 0 ||
+            Keeper->TeamIndex != Match->GetCupPenaltyDefendingTeam())
+        {
+            StopMovement();
+            return;
+        }
+        for (TActorIterator<ASportsArcadeBall> Ball(GetWorld()); Ball; ++Ball)
+        {
+            if (!IsValid(*Ball)) continue;
+            FVector Target = Keeper->GetActorLocation();
+            Target.Y = FMath::Clamp(Ball->GetActorLocation().Y, -300.f, 300.f);
+            if (FVector::DistSquared2D(Target, Keeper->GetActorLocation()) > FMath::Square(60.f))
+                MoveToLocation(Target, 60.f, true, true, false, true, nullptr, true);
+            if (ActionCooldownRemaining <= 0.f &&
+                FVector::DistSquared(Keeper->GetActorLocation(), Ball->GetActorLocation()) <
+                    FMath::Square(ContactRangeCm + 50.f))
+            {
+                const FVector Parry(0.f, Ball->GetActorLocation().Y >= 0.f ? 1.f : -1.f, 0.25f);
+                if (Ball->KickByPlayer(Keeper, Parry, 2300.f, ContactRangeCm + 50.f))
+                    ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
+            }
+            break;
+        }
+        return;
+    }
     if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay))
     {
         StopMovement();
