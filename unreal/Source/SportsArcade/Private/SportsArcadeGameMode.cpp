@@ -1108,6 +1108,18 @@ int32 ASportsArcadeGameMode::GetSuggestedCupPenaltyOutcome() const
     return IsCupPenaltyAwaitingResult() ? SuggestedCupPenaltyOutcome : INDEX_NONE;
 }
 
+float ASportsArcadeGameMode::GetCupPenaltyObservationElapsedSeconds() const
+{
+    return IsCupPenaltyAwaitingResult() ? FMath::Max(0.f, PhysicalPenaltyObservationSeconds) : 0.f;
+}
+
+float ASportsArcadeGameMode::GetCupPenaltyObservationRemainingSeconds() const
+{
+    return IsCupPenaltyAwaitingResult() && SuggestedCupPenaltyOutcome == INDEX_NONE
+        ? FMath::Max(0.f, FMath::Max(1.f, PhysicalPenaltyMaximumObservationSeconds) -
+            GetCupPenaltyObservationElapsedSeconds()) : 0.f;
+}
+
 void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
 {
     if (!IsCupPenaltyAwaitingResult() || !IsValid(MatchBall) ||
