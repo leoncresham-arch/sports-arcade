@@ -12,7 +12,9 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("BestOutlet = Mate", block)
         self.assertIn("Ball->KickByPlayer(Footballer, Direction", block)
         self.assertIn("BestOutletDistanceSq = Delta.SizeSquared2D()", block)
-        self.assertIn("FMath::Square(180.f)", block)
+        self.assertIn("FMath::Square(160.f)", block)
+        self.assertIn("FVector2D::DotProduct", block)
+        self.assertIn("Start + Path * Along", block)
         self.assertIn("if (bReceiverMarked) continue", block)
         self.assertIn("ActionCooldownRemaining = FMath::Max", block)
 
