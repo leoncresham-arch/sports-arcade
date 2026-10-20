@@ -421,3 +421,7 @@ Shielding also now scales commanded movement acceleration to 72% during active p
 Explicit first touch now blends player-facing direction (65%) with the receiver's movement direction (35%) to cushion a moving reception into travel while preserving stationary control and existing reach/contestation limits. Midfielder forward-support surges are also held on rapid lateral ball switches (over 1100 cm/s sideways), allowing the formation to reset before joining play. Source regressions updated; native Unreal contact physics, animation and tactical tuning remain outstanding.
 
 First-touch defensive contest comparison now applies the full 25 cm spatial margin to the opponent's *distance* instead of adding squared distances, so only a meaningfully nearer opponent blocks the reception. Source regression covers the corrected units.
+
+### October 20 — shielding endurance
+
+Active, moving shielding now draws a tunable 4 stamina units per second instead of recovering endurance while holding off challenges. Stationary shielding and inactive match phases keep normal recovery; sprinting continues to use its separate larger drain. Existing fatigue-dependent movement and control scale from the resulting stamina. Static source regression added; physical balance remains unverified in UE.
