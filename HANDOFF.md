@@ -545,3 +545,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - Goalkeeper provisional penalty parry only reacts to balls travelling toward the defended goal; this is not automatic score/save adjudication.
 - Added Blueprint `OnPhysicalPenaltyKicked` event when physics kick succeeds, separate from `OnCupPenaltyReviewed(KickingTeam, bScored)` after official score/miss recording. Regression tests updated and static source CI verified.
 - Continue next gameplay items in existing repo. UE 5.5 Windows compile, movement, and source/native automation remain to be run on a real Unreal installation.
+
+
+## October 20 — penalty ball-flight outcome suggestions
+- Added optional, explicitly non-authoritative shootout ball-flight observation in GameMode.Tick (which runs during finished regulation). It samples the physical ball's movement across the attacked goal plane or touchline to suggest scored/missed outcomes for the referee.
+- `GetSuggestedCupPenaltyOutcome()` reports -1 pending, 0 suspected miss, 1 suspected goal. `OnCupPenaltyOutcomeSuggested(KickingTeam, bScored)` fires once; official outcome remains strictly separate through F7/F8 / `ResolvePhysicalCupPenalty` and `OnCupPenaltyReviewed`.
+- Segment crossing checks prevent a prior touchline exit being reported as a goal; state resets after review, match/cup resets and each new kick. Native UE 5.5 runtime and moving goalkeeper geometry remain unverified; do not automatically award results based on these suggestions yet.
+- Native C++ automation expanded to verify eleventh-to-twelfth kicker rotation, plus static CI source contracts. Continue scope and avoid a new project or redesign.
