@@ -30,6 +30,7 @@ class PenaltyKeeperPredictionTests(unittest.TestCase):
         self.assertIn("(BallPosition.X - KeeperPlaneX) * GoalwardSign <= 35.f", penalty)
         self.assertIn("BallPosition.Z - Keeper->GetActorLocation().Z <= 220.f", penalty)
         self.assertIn("bIncomingPenalty && bBallInFront && bReachableHeight", penalty)
+        self.assertIn("BallPosition.ContainsNaN() || BallVelocity.ContainsNaN()", penalty)
         self.assertIn("Ball->KickByPlayer(Keeper", penalty)
 
     def test_invalid_frame_deltas_do_not_tick_ai_cooldowns(self):
