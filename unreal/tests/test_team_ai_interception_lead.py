@@ -10,7 +10,9 @@ class InterceptionLeadTests(unittest.TestCase):
         part = code.split("if (Nearest == Footballer && BestDistance", 1)[1].split(
             "// No controlled kick attempts", 1)[0]
         self.assertIn("FMath::Sqrt(BestDistance)", part)
-        self.assertIn("SeparationCm / 500.f", part)
+        header = SOURCE.parents[1] / "Public/SportsArcadeTeamAIController.h"
+        self.assertIn("PresserTravelSpeedCmPerSec = 500.f", header.read_text(encoding="utf-8"))
+        self.assertIn("SeparationCm / FMath::Clamp(PresserTravelSpeedCmPerSec, 100.f, 1000.f)", part)
         self.assertIn("FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f)", part)
         self.assertIn("Ball->GetVelocity() * LeadSeconds", part)
 
