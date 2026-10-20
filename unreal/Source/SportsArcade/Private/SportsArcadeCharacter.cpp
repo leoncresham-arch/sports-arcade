@@ -142,11 +142,34 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     StrikeCooldownRemaining = FMath::Max(0.f, StrikeCooldownRemaining - DeltaSeconds);
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     const bool bPlayActive = !IsValid(MatchMode) || (!MatchMode->bHalfTime && !MatchMode->bMatchFinished && !MatchMode->bBallOutOfPlay);
-    if (bPlayActive && TouchCooldownRemaining <= 0.f && GetVelocity().SizeSquared2D() > 400.f)
+    if (bPlayActive && IsPlayerControlled() && TouchCooldownRemaining <= 0.f &&
+        GetVelocity().SizeSquared2D() > 400.f)
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
         {
-            const FVector ToBall = It->GetActorLocation() - GetActorLocation();
+            // Autonomous teammates use their own AI decision/cooldown logic.
+            // A manual touch cannot automatically seize a ball at a nearer
+            // teammate's feet during a crowded possession sequence.
+            const FVector BallLocation = It->GetActorLocation();
+            if (BallLocation.ContainsNaN()) continue;
+            bool bFriendlyHasCloserControl = false;
+            const float MyBallDistanceSq = FVector::DistSquared2D(GetActorLocation(), BallLocation);
+            for (TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld()); MateIt; ++MateIt)
+            {
+                const ASportsArcadeCharacter* Mate = *MateIt;
+                if (Mate == this || Mate->TeamIndex != TeamIndex ||
+                    Mate->GetActorLocation().ContainsNaN()) continue;
+                const FVector MateToBall = BallLocation - Mate->GetActorLocation();
+                if (FMath::Abs(MateToBall.Z) <= 115.f &&
+                    MateToBall.SizeSquared2D() < FMath::Square(115.f) &&
+                    MateToBall.SizeSquared2D() < MyBallDistanceSq)
+                {
+                    bFriendlyHasCloserControl = true;
+                    break;
+                }
+            }
+            if (bFriendlyHasCloserControl) continue;
+            const FVector ToBall = BallLocation - GetActorLocation();
             if (FVector::DotProduct(GetActorForwardVector(), ToBall.GetSafeNormal2D()) > 0.35f &&
                 It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
                     (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
