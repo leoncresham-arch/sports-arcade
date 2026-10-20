@@ -311,3 +311,5 @@ Secondary AI pressing now clamps its lateral support/shadow target to the playab
 ### October 20 — anticipatory second defender
 
 The secondary AI presser's support/shadow destination now leads the ball for at most 0.25 seconds using horizontally bounded 1600 cm/s velocity, rather than always positioning off the ball's current location. Nonfinite velocity falls back to zero, and the established playable-pitch clamping still applies. This is early coordinated pressing behavior, not a complete tactical defense simulation. Added static regression coverage in `test_team_ai_possession_pressure.py`; UE native compilation and playtesting remain pending.
+
+Secondary AI pressing now maintains a minimum 120 cm lateral shadow displacement around predicted ball position, while keeping its existing standoff, ball anticipation and pitch clamping. This encourages a second defender to block a side escape rather than entirely converge on the primary defender's route. Source regression updated; real UE navigation and balance are unverified.
