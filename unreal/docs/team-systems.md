@@ -136,3 +136,5 @@ Interception's assumed presser speed is now an Unreal-editor setting, `PresserTr
 ## October 20 — teammate possession-aware pressing gate
 
 Primary AI pressure is suppressed when a *different*, valid teammate is the ball's recorded last toucher and stays within 220 cm of the ball. The attributed ball carrier remains eligible to act; invalid last-toucher coordinates are ignored. This avoids some unhelpful immediate teammate-on-teammate pressure, but it is a simple last-touch/proximity heuristic, not authoritative possession tracking or competitive AI. Source regression coverage: `unreal/tests/test_team_ai_possession_pressure.py`; UE5.5 gameplay validation pending.
+
+Defensive opponent marking is now skipped while the player's own team is the recorded last toucher, so marking does not immediately override its attacking support and split-channel forward-run targets. Unknown last touch still permits marking. This remains a heuristic rather than a confirmed possession model; the regression test above covers the gating condition.
