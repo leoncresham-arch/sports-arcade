@@ -307,3 +307,7 @@ Regular AI teammate passing now rejects degenerate or nonfinite pass displacemen
 AI primary presser suppression for a teammate's recently touched ball now requires the previous teammate to belong to the same game world and to remain within 115 cm vertically of the ball, in addition to the existing 220 cm horizontal control radius. This prevents airborne or stale-world touch attribution from indefinitely stopping loose-ball recovery. Source regression extended; native UE runtime tests pending.
 
 Secondary AI pressing now clamps its lateral support/shadow target to the playable pitch (100 cm inner margin). This prevents the second defender from trying to navigate outside the touchlines when the ball is near a boundary. The existing presser selection and stand-off spacing remain unchanged. Source regression added; native UE navigation testing remains pending.
+
+### October 20 — anticipatory second defender
+
+The secondary AI presser's support/shadow destination now leads the ball for at most 0.25 seconds using horizontally bounded 1600 cm/s velocity, rather than always positioning off the ball's current location. Nonfinite velocity falls back to zero, and the established playable-pitch clamping still applies. This is early coordinated pressing behavior, not a complete tactical defense simulation. Added static regression coverage in `test_team_ai_possession_pressure.py`; UE native compilation and playtesting remain pending.
