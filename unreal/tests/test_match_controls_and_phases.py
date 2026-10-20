@@ -76,6 +76,15 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
             self.assertIn(f'BindAction(TEXT("{action}")', cpp)
             self.assertIn(f"Mode->ResolvePhysicalCupPenalty({result});", cpp)
 
+    def test_keyboard_confirms_observed_penalty_only_by_referee_action(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        self.assertIn('ActionName="ConfirmPenaltySuggestion",Key=F9', ini)
+        self.assertIn("void ConfirmPenaltySuggestion();", header)
+        self.assertIn('BindAction(TEXT("ConfirmPenaltySuggestion")', cpp)
+        self.assertIn("Mode->ConfirmSuggestedCupPenaltyOutcome();", cpp)
+
     def test_successful_shots_increment_team_stats(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
