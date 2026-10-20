@@ -430,7 +430,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     }
                 }
                 if (bReceiverMarked) continue;
-                const float OutletScore = Delta.X * AttackSign * 0.35f - FMath::Sqrt(DistanceSq) * 0.25f;
+                // Prefer teammates away from the touchline when choices are similar.
+                const float ProjectedReceiverY = Ball->GetActorLocation().Y + Delta.Y;
+                const float SidelinePenalty = FMath::Max(0.f,
+                    FMath::Abs(ProjectedReceiverY) - (HalfWidth - 450.f)) * 0.5f;
+                const float OutletScore = Delta.X * AttackSign * 0.35f -
+                    FMath::Sqrt(DistanceSq) * 0.25f - SidelinePenalty;
                 if (OutletScore > BestOutletScore)
                 {
                     BestOutletScore = OutletScore;
