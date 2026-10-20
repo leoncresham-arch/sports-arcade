@@ -957,11 +957,17 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
     return IsValid(ActivePenaltyShootout);
 }
 
+bool ASportsArcadeGameMode::CanStageCupPenaltyKick() const
+{
+    return bRequirePhysicalPenaltyKicks && IsCupTieBreakRequired() &&
+        IsValid(ActivePenaltyShootout) && !bPenaltyKickStaged &&
+        !bPenaltyKickTaken && IsValid(MatchBall) && GetWorld() &&
+        ActivePenaltyShootout->GetNextKickingTeam() != INDEX_NONE;
+}
+
 bool ASportsArcadeGameMode::StageCupPenaltyKick()
 {
-    if (!bRequirePhysicalPenaltyKicks || !IsCupTieBreakRequired() ||
-        !IsValid(ActivePenaltyShootout) || bPenaltyKickStaged ||
-        !IsValid(MatchBall) || !GetWorld()) return false;
+    if (!CanStageCupPenaltyKick()) return false;
     const int32 Team = ActivePenaltyShootout->GetNextKickingTeam();
     if (Team != 0 && Team != 1) return false;
     const FVector Spot(Team == 0 ? PitchHalfLengthCm - 1100.f :
