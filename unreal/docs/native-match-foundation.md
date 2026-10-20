@@ -87,3 +87,10 @@ Extract match clock and refereeing into testable game state for replication, add
 - Touchline exits become throw-ins; endline exits become a goal kick for the defending side or corner for the attacking side. Goal kick awards prefer the authored goalkeeper.
 - Invalid team values, non-unknown stoppages, play-in-progress and missing ball are rejected. Missing eligible taker retains the unresolved restart and original referee mark for later retry.
 - Starting any new kickoff clears old staged manual set-piece state. These are offline rules foundations, not full officiating or legal restart animations.
+
+
+## October 20 — restarted dead-ball adjudication and placement hardening
+- The Blueprint `OnRestartAwarded` event fires only when an unknown-touch referee award has a valid taker; menus can update restart details without treating uncertain attribution as fact.
+- Provisional automatic corner kicks now aim inward toward the penalty area at either goal end instead of following team attack direction out of play.
+- Restart eligibility rejects nonfinite referee marks and marks outside the configured pitch length/width, as well as 3D ball drift from staged positions.
+- Source contracts cover event order, corner direction and restart location constraints; Unreal runtime rules and authored presentation still need validation.
