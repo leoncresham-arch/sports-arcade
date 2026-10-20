@@ -4,6 +4,14 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_challenged_carrier_has_teammate_outlet(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        block = source.split("if (bSelfControllingBall && bImmediateChallenge", 1)[1].split(
+            "if (bSelfControllingBall && !bImmediateChallenge", 1)[0]
+        self.assertIn("Mate->TeamIndex != Footballer->TeamIndex", block)
+        self.assertIn("Ball->KickByPlayer(Footballer, Delta.GetSafeNormal2D()", block)
+        self.assertIn("ActionCooldownRemaining = FMath::Max", block)
+
     def test_nearby_challenge_holds_controlled_touch(self):
         code = SOURCE.read_text(encoding="utf-8")
         self.assertIn("FMath::Clamp(DribbleChallengeRadiusCm, 50.f, 400.f)", code)
