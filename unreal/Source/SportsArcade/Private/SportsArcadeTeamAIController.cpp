@@ -227,6 +227,18 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f);
         }
 
+        // Central midfielders supply a short forward passing option when our
+        // ball carrier enters the attacking half, but never sprint beyond the
+        // ball or abandon their base formation for a distant possession.
+        if (RecentTouchTeam == Footballer->TeamIndex && Slot >= 5 && Slot <= 8 &&
+            Ball->GetActorLocation().X * AttackSign > 0.f &&
+            FVector::DistSquared2D(Footballer->GetActorLocation(),
+                Ball->GetActorLocation()) < FMath::Square(2400.f))
+        {
+            const float SupportGap = (Ball->GetActorLocation().X - Target.X) * AttackSign;
+            Target.X += AttackSign * FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f);
+        }
+
         // Hold the authored back line within a tunable attacking/recovery band.
         if (Slot >= 1 && Slot <= 4 && RecentTouchTeam == 1 - Footballer->TeamIndex)
         {
