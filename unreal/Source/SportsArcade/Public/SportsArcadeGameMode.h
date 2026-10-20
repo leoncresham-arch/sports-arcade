@@ -89,6 +89,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Match|Restart")
     FSportsArcadeMatchPhaseEvent OnRestartAwarded;
 
+    /** Fired when the physics-backed cup penalty is actually struck. */
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Cup|Penalties")
+    FSportsArcadeMatchPhaseEvent OnPhysicalPenaltyKicked;
+
     /** Prototype stoppage: requires a referee restart implementation. */
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bBallOutOfPlay = false;
