@@ -519,7 +519,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 PursuitSeconds, 0.f, FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f));
             const FVector BallVelocity = Ball->GetVelocity().ContainsNaN() ? FVector::ZeroVector :
                 Ball->GetVelocity().GetClampedToMaxSize(3500.f);
-            FVector Predicted = Ball->GetActorLocation() + BallVelocity * LeadSeconds;
+            // A sharply lofted ball should not drag a ground presser toward a
+            // far extrapolated landing point as if the ball were rolling.
+            const bool bAirborne = FMath::Abs(Ball->GetActorLocation().Z -
+                Footballer->GetActorLocation().Z) > 150.f;
+            const float GroundLeadSeconds = bAirborne ? FMath::Min(LeadSeconds, 0.12f) : LeadSeconds;
+            FVector Predicted = Ball->GetActorLocation() + BallVelocity * GroundLeadSeconds;
             if (Predicted.ContainsNaN()) { StopMovement(); return; }
             Target = FVector(FMath::Clamp(Predicted.X, -HalfLength + 100.f, HalfLength - 100.f),
                 FMath::Clamp(Predicted.Y, -HalfWidth + 100.f, HalfWidth - 100.f), 0.f);
