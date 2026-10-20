@@ -523,7 +523,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // far extrapolated landing point as if the ball were rolling.
             const bool bAirborne = FMath::Abs(Ball->GetActorLocation().Z -
                 Footballer->GetActorLocation().Z) > 150.f;
-            const float GroundLeadSeconds = bAirborne ? FMath::Min(LeadSeconds, 0.12f) : LeadSeconds;
+            // The aerial lead is useful only when the ball is descending; a
+            // rising ball should keep defenders close to its current ground
+            // projection rather than sending them toward an imagined landing.
+            const float GroundLeadSeconds = bAirborne
+                ? (BallVelocity.Z > 100.f ? 0.f : FMath::Min(LeadSeconds, 0.12f))
+                : LeadSeconds;
             FVector Predicted = Ball->GetActorLocation() + BallVelocity * GroundLeadSeconds;
             if (Predicted.ContainsNaN()) { StopMovement(); return; }
             Target = FVector(FMath::Clamp(Predicted.X, -HalfLength + 100.f, HalfLength - 100.f),
