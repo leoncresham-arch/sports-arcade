@@ -266,6 +266,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     int32 GetCupPenaltyDefendingTeam() const;
 
+    /** Last attributed physical penalty contact was by the defending goalkeeper. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    bool WasCupPenaltyTouchedByKeeper() const;
+
     /** Offline referee review: record outcome only after a physical attempt. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool ResolvePhysicalCupPenalty(bool bScored);
