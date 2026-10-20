@@ -72,6 +72,20 @@ class CupMatchIntegration(unittest.TestCase):
             method.index("ActivePenaltyShootout->RecordAttempt("),
         )
 
+    def test_physical_penalty_staging_is_opt_in_and_outcome_remains_refereed(self):
+        self.assertIn("bool StageCupPenaltyKick();", header)
+        self.assertIn("bool KickStagedCupPenalty(const FVector& Direction);", header)
+        self.assertIn("bool bRequirePhysicalPenaltyKicks = false;", header)
+        stage = cpp.split("bool ASportsArcadeGameMode::StageCupPenaltyKick()", 1)[1].split("\n}", 1)[0]
+        strike = cpp.split("bool ASportsArcadeGameMode::KickStagedCupPenalty(", 1)[1].split("\n}", 1)[0]
+        self.assertIn("ActivePenaltyShootout->GetNextKickingTeam()", stage)
+        self.assertIn("MatchBall->PlaceAtRest(Spot)", stage)
+        self.assertIn("FindRestartTaker(Team, Spot)", stage)
+        self.assertIn("MatchBall->KickByPlayer(StagedPenaltyTaker", strike)
+        self.assertIn("Direction.ContainsNaN()", strike)
+        self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
+        self.assertIn("bPenaltyKickTaken = false;", cpp)
+
     def test_penalty_winner_resolves_draw(self):
         self.assertIn("StartCupPenaltyShootout", header)
         self.assertIn("RecordCupPenaltyAttempt", header)
