@@ -288,7 +288,10 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed))) *
         PaceFactor * FatigueSpeedFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
+    const float AgilityFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor * FatigueSpeedFactor;
+    GetCharacterMovement()->RotationRate = FRotator(0.f,
+        FMath::Clamp(540.f * AgilityFactor * FatigueSpeedFactor, 260.f, 760.f), 0.f);
     // Defensive jockeying uses shorter, more controllable stops than open running.
     const FVector TravelDirection = GetVelocity().GetSafeNormal2D();
     const FVector IntendedDirection = GetLastMovementInputVector().GetSafeNormal2D();
