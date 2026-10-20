@@ -35,4 +35,8 @@ public:
 
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Penalties")
     int32 GetNextKickingTeam() const;
+
+    /** Preferred next authored lineup slot, or INDEX_NONE when shootout is decided. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Penalties")
+    int32 GetNextKickerLineupSlot() const;
 };
