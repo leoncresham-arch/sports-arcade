@@ -14,6 +14,20 @@ class TeamAIShapeShiftTests(unittest.TestCase):
         self.assertIn("DefensiveRecoveryShiftCm = 150.f", header)
         self.assertIn('Category="Sports Arcade|AI|Shape"', header)
 
+    def test_lateral_support_responds_to_nearby_opponent(self):
+        header = H.read_text(encoding="utf-8")
+        code = CPP.read_text(encoding="utf-8")
+        self.assertIn("PassingSupportLateralShiftCm = 350.f", header)
+        self.assertIn("PassingSupportOpponentSearchCm = 1000.f", header)
+        section = code.split("else if (IsValid(Ball))", 1)[1].split(
+            "// Only the closest eligible outfielder presses", 1
+        )[0]
+        self.assertIn("RecentTouchTeam == Footballer->TeamIndex", section)
+        self.assertIn("NearestOpponent", section)
+        self.assertIn("Opp->GetWorld() != GetWorld()", section)
+        self.assertIn("Opp->GetActorLocation().ContainsNaN()", section)
+        self.assertIn("FMath::Clamp(PassingSupportLateralShiftCm, 0.f, 1200.f)", section)
+
     def test_last_touch_drives_small_team_shape_changes_not_pressing(self):
         code = CPP.read_text(encoding="utf-8")
         section = code.split("else if (IsValid(Ball))", 1)[1].split(
