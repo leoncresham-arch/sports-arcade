@@ -481,7 +481,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 PursuitSeconds, 0.f, FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f));
             const FVector BallVelocity = Ball->GetVelocity().ContainsNaN() ? FVector::ZeroVector : Ball->GetVelocity();
             FVector Predicted = Ball->GetActorLocation() + BallVelocity * LeadSeconds;
-            Target = FVector(Predicted.X, Predicted.Y, 0.f);
+            Target = FVector(FMath::Clamp(Predicted.X, -HalfLength + 100.f, HalfLength - 100.f),
+                FMath::Clamp(Predicted.Y, -HalfWidth + 100.f, HalfWidth - 100.f), 0.f);
             // No controlled kick attempts while the ball is too high to reach.
             const bool bBallAtFootHeight = FMath::Abs(Footballer->GetActorLocation().Z -
                 Ball->GetActorLocation().Z) < 135.f;
