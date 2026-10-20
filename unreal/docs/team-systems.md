@@ -263,3 +263,7 @@ Manual pass, shot and chip inputs now validate finite strike strength, movement 
 Manual controlled-touch selection now validates the ball actor and finite human location, velocity and facing before proximity scans and impulse requests. A degenerate horizontal facing vector is rejected. These guards avoid invalid movement telemetry causing uncontrolled contacts; they do not substitute for UE native testing. The source-only regression is `unreal/tests/test_manual_dribble_arbitration.py`.
 
 Successful standing tackles now impose a 0.35-second local automatic dribble-touch cooldown, preventing a defender from immediately undoing the ball deflection on the next frame. Misses retain their tackle cooldown and stamina cost but do not impose this extra touch delay. Covered by `test_standing_tackle_recovery.py`, pending UE gameplay validation.
+
+### October 20 — contested dribble actor validation
+
+Manual possession-proximity scans now reject invalid teammate and opponent actor references and players from a different world before reading their position. This hardens level transition and actor teardown edge cases, while retaining spatial contest arbitration. Regression contracts in `test_manual_dribble_arbitration.py`; native Unreal playtesting still pending.
