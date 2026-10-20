@@ -15,7 +15,7 @@ class GoalkeeperMatchAnticipationTests(unittest.TestCase):
         segment = source.split("if (IsValid(Ball) && Slot == 0)", 1)[1].split(
             "else if (IsValid(Ball))", 1
         )[0]
-        self.assertIn("BallPosition.ContainsNaN() || BallVelocity.ContainsNaN()", segment)
+        self.assertIn("BallPosition.ContainsNaN() || RawBallVelocity.ContainsNaN()", segment)
         self.assertIn("GoalkeeperShotMinSpeedCmPerSec", segment)
         self.assertIn("(Footballer->GetActorLocation().X - BallPosition.X) / BallVelocity.X", segment)
         self.assertIn("ApproachSeconds >= 0.f && ApproachSeconds <= 1.5f", segment)
