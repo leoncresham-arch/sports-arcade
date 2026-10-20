@@ -1085,6 +1085,13 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
         ? StagedPenaltyTaker.Get() : nullptr;
 }
 
+bool ASportsArcadeGameMode::ConfirmSuggestedCupPenaltyOutcome()
+{
+    const int32 Suggestion = GetSuggestedCupPenaltyOutcome();
+    if (Suggestion != 0 && Suggestion != 1) return false;
+    return ResolvePhysicalCupPenalty(Suggestion == 1);
+}
+
 int32 ASportsArcadeGameMode::GetSuggestedCupPenaltyOutcome() const
 {
     return IsCupPenaltyAwaitingResult() ? SuggestedCupPenaltyOutcome : INDEX_NONE;
