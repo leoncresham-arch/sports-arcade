@@ -24,6 +24,9 @@ class TeamAIBallIntegrityTests(unittest.TestCase):
         code = SRC.read_text(encoding="utf-8")
         self.assertIn("Opp->GetWorld() != GetWorld()", code)
         self.assertIn("It->GetWorld() != GetWorld()", code)
+        self.assertIn("Teammate->GetActorLocation().ContainsNaN()", code)
+        self.assertIn("Opp->GetActorLocation().ContainsNaN()", code)
+        self.assertIn("It->GetActorLocation().ContainsNaN()", code)
 
     def test_pressing_excludes_goalkeeper_using_correct_roster_slot_mode(self):
         code = SRC.read_text(encoding="utf-8")
