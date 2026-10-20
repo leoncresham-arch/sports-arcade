@@ -5,6 +5,16 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class PossessionPressureTests(unittest.TestCase):
+    def test_midfield_support_runs_remain_bounded_and_possession_based(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        part = code.split("// Central midfielders supply a short forward", 1)[1].split(
+            "// Hold the authored back line", 1
+        )[0]
+        self.assertIn("RecentTouchTeam == Footballer->TeamIndex", part)
+        self.assertIn("Slot >= 5 && Slot <= 8", part)
+        self.assertIn("FMath::Square(2400.f)", part)
+        self.assertIn("FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f)", part)
+
     def test_off_ball_marking_protects_central_lane(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("if (IsValid(Opponent))", 1)[1]
