@@ -393,3 +393,7 @@ Manual controlled-touch steering now scales travel-versus-facing blend by the pl
 When the ball carrier is within 600 cm of a touchline, a supporting midfielder now positions 350 cm toward the pitch center to give a safer inside passing option rather than spreading beyond the sideline. Other midfield support remains on the player's existing side where possible. Tests assert the boundary-specific branch; native UE tactical validation pending.
 
 Touchline support correction: the midfielder's 350 cm inward outlet is now applied irrespective of the earlier 250 cm lateral separation test. Wide carriers therefore receive the same central option even when midfield formation already happens to be offset to the side. Source regression updated; UE runtime validation remains pending.
+
+### October 20 — movement turn braking and close shielding cadence
+
+Directional turn braking now varies continuously with the angle between velocity and requested movement, rather than switching suddenly at a ninety-degree threshold. Manual shielding now triggers smaller close-ball touches at 70% of the normal touch interval (minimum 0.05 seconds), with the previously lowered touch force retained. Source regression updated; UE5.5 compilation, animation and runtime collision balance are outstanding.
