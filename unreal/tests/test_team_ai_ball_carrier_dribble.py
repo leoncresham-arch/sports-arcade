@@ -4,9 +4,15 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_nearby_challenge_holds_controlled_touch(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("Approach.SizeSquared2D() < FMath::Square(150.f)", code)
+        self.assertIn("bImmediateChallenge = true", code)
+        self.assertIn("!bImmediateChallenge && ActionCooldownRemaining <= 0.f", code)
+
     def test_dribble_steers_away_from_nearest_defender(self):
         code = SOURCE.read_text(encoding="utf-8")
-        part = code.split("if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)", 1)[1].split(
+        part = code.split("if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)", 1)[1].split(
             "if (!bTeammateNearbyBall", 1)[0]
         self.assertIn("const float SafeLateralSign = CarrierEscapeSide", part)
         self.assertIn("ThreatOffset.X * AttackSign < -100.f", code)
@@ -25,7 +31,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
             "if (!bTeammateNearbyBall",1)[0]
         self.assertIn("Ball->GetLastTouchPlayer() == Footballer", section)
         self.assertIn("FMath::Square(220.f)", section)
-        self.assertIn("bSelfControllingBall && ActionCooldownRemaining <= 0.f", section)
+        self.assertIn("bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f", section)
         self.assertIn("Ball->ApplyControlledTouch(Footballer", section)
         self.assertIn("Target = Ball->GetActorLocation() + FVector(AttackSign * 280.f", section)
         self.assertIn("bIsPrimaryPresser = true", section)
