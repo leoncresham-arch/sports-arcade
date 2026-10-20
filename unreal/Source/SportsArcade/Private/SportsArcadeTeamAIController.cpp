@@ -40,7 +40,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target.Y = FMath::Clamp(Ball->GetActorLocation().Y, -300.f, 300.f);
             if (FVector::DistSquared2D(Target, Keeper->GetActorLocation()) > FMath::Square(60.f))
                 MoveToLocation(Target, 60.f, true, true, false, true, nullptr, true);
-            if (ActionCooldownRemaining <= 0.f &&
+            const float GoalwardSign = Keeper->TeamIndex == 1 ? 1.f : -1.f;
+            const bool bIncomingPenalty = Ball->GetVelocity().X * GoalwardSign > 175.f;
+            if (bIncomingPenalty && ActionCooldownRemaining <= 0.f &&
                 FVector::DistSquared(Keeper->GetActorLocation(), Ball->GetActorLocation()) <
                     FMath::Square(ContactRangeCm + 50.f))
             {
