@@ -301,3 +301,7 @@ Regular and emergency outlet AI passes now reject any nonfinite extrapolated rec
 Emergency AI outlets now reject degenerate or nonfinite pass displacement vectors before assessing receiver position and marking. Existing bounds, pressure and cooldown logic remain in place. Source test updated; native UE gameplay testing remains outstanding.
 
 Regular AI teammate passing now rejects degenerate or nonfinite pass displacements before scoring projected receivers. This matches the emergency outlet guard and retains existing receiver lead, pitch bounds, marking and action-cooldown safeguards. Source regression updated; UE5.5 runtime verification remains pending.
+
+### October 20 — defensive AI teammate possession height gate
+
+AI primary presser suppression for a teammate's recently touched ball now requires the previous teammate to belong to the same game world and to remain within 115 cm vertically of the ball, in addition to the existing 220 cm horizontal control radius. This prevents airborne or stale-world touch attribution from indefinitely stopping loose-ball recovery. Source regression extended; native UE runtime tests pending.
