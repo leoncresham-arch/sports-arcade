@@ -78,6 +78,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("TakeManualRestart"), IE_Pressed, this, &ASportsArcadeCharacter::TakeStagedRestart);
     PlayerInputComponent->BindAction(TEXT("AwardRestartHome"), IE_Pressed, this, &ASportsArcadeCharacter::AwardRestartToHome);
     PlayerInputComponent->BindAction(TEXT("AwardRestartAway"), IE_Pressed, this, &ASportsArcadeCharacter::AwardRestartToAway);
+    PlayerInputComponent->BindAction(TEXT("StageCupPenalty"), IE_Pressed, this, &ASportsArcadeCharacter::StageShootoutPenalty);
+    PlayerInputComponent->BindAction(TEXT("KickCupPenalty"), IE_Pressed, this, &ASportsArcadeCharacter::KickShootoutPenalty);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -295,6 +297,25 @@ void ASportsArcadeCharacter::AwardRestartToAway()
     if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
     {
         Mode->AwardUndeterminedRestart(1);
+    }
+}
+
+void ASportsArcadeCharacter::StageShootoutPenalty()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        if (Mode->CanStageCupPenaltyKick()) Mode->StageCupPenaltyKick();
+    }
+}
+
+void ASportsArcadeCharacter::KickShootoutPenalty()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        if (ASportsArcadeCharacter* Taker = Mode->GetStagedCupPenaltyTaker())
+        {
+            Mode->KickStagedCupPenalty(Taker->GetActorForwardVector());
+        }
     }
 }
 
