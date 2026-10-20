@@ -372,6 +372,7 @@ bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
         (AwardedTeam != 0 && AwardedTeam != 1) || !IsValid(MatchBall))
         return false;
 
+    const FVector OriginalLocation = PendingRestartLocation;
     const bool bTouchlineExit =
         FMath::Abs(PendingRestartLocation.Y) >= PitchHalfWidthCm - 100.f;
     if (bTouchlineExit)
@@ -396,6 +397,7 @@ bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
     {
         // Referee can retry after roster setup; never consume the unknown award.
         PendingRestartType = ESportsArcadeRestartType::Undetermined;
+        PendingRestartLocation = OriginalLocation;
         return false;
     }
     PendingRestartTeam = AwardedTeam;
