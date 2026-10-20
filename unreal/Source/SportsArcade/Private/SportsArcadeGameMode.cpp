@@ -959,44 +959,6 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
 
 bool ASportsArcadeGameMode::StageCupPenaltyKick()
 {
-    if (!IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
-        bPenaltyKickStaged || bPenaltyKickTaken || !IsValid(MatchBall)) return false;
-    const int32 Team = ActivePenaltyShootout->GetNextKickingTeam();
-    if (Team != 0 && Team != 1) return false;
-    const float AttackSign = Team == 0 ? 1.f : -1.f;
-    const FVector Spot(AttackSign * (PitchHalfLengthCm - 1100.f), 0.f,
-        MatchBall->BallRadiusCm + 2.f);
-    ASportsArcadeCharacter* Taker = FindRestartTaker(Team, Spot);
-    if (!IsValid(Taker) || Taker->GetWorld() != GetWorld()) return false;
-    const FVector Approach = Spot - FVector(AttackSign * 130.f, 0.f, 0.f);
-    if (!Taker->SetActorLocation(
-        FVector(Approach.X, Approach.Y, Taker->GetActorLocation().Z),
-        false, nullptr, ETeleportType::TeleportPhysics)) return false;
-    Taker->GetCharacterMovement()->StopMovementImmediately();
-    MatchBall->PlaceAtRest(Spot);
-    StagedPenaltyTaker = Taker;
-    bPenaltyKickStaged = true;
-    return true;
-}
-
-bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
-{
-    if (!IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
-        !bPenaltyKickStaged || !IsValid(StagedPenaltyTaker) ||
-        !IsValid(MatchBall) || Direction.ContainsNaN() || Direction.IsNearlyZero())
-        return false;
-    const int32 Team = ActivePenaltyShootout->GetNextKickingTeam();
-    if (StagedPenaltyTaker->TeamIndex != Team ||
-        Direction.X * (Team == 0 ? 1.f : -1.f) <= 0.f) return false;
-    if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Direction, 3000.f, 230.f))
-        return false;
-    bPenaltyKickStaged = false;
-    bPenaltyKickTaken = true;
-    return true;
-}
-
-bool ASportsArcadeGameMode::StageCupPenaltyKick()
-{
     if (!bRequirePhysicalPenaltyKicks || !IsCupTieBreakRequired() ||
         !IsValid(ActivePenaltyShootout) || bPenaltyKickStaged ||
         !IsValid(MatchBall) || !GetWorld()) return false;
@@ -1048,9 +1010,6 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
         !ActivePenaltyShootout->RecordAttempt(KickingTeam, bScored))
         return false;
     // Never reuse a taken kick for the next shootout turn.
-    StagedPenaltyTaker = nullptr;
-    bPenaltyKickStaged = false;
-    bPenaltyKickTaken = false;
     // The referee records the physical outcome; never infer a score from impulse alone.
     StagedPenaltyTaker = nullptr;
     bPenaltyKickStaged = false;
