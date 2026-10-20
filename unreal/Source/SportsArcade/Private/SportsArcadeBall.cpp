@@ -50,7 +50,7 @@ void ASportsArcadeBall::OnConstruction(const FTransform& Transform)
 void ASportsArcadeBall::BeginPlay()
 {
     Super::BeginPlay();
-    InitialSpawnLocation = GetActorLocation();
+    InitialSpawnLocation = GetActorLocation().ContainsNaN() ? FVector::ZeroVector : GetActorLocation();
     LastTouchPlayer.Reset();
 }
 
