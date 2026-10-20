@@ -33,6 +33,7 @@ class BallContactPositionIntegrityTests(unittest.TestCase):
         part = code.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
             "int32 ASportsArcadeBall::GetLastTouchTeamIndex()", 1)[0]
         self.assertIn("CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN()", part)
+        self.assertIn("CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN()", part)
         self.assertIn("Player->GetActorLocation().ContainsNaN()", part)
         self.assertIn("GetActorLocation().ContainsNaN()", part)
         self.assertLess(part.index("ContainsNaN()"), part.index("LastTouchPlayer = Player"))
