@@ -429,3 +429,7 @@ Active, moving shielding now draws a tunable 4 stamina units per second instead 
 ### October 20 — pressured possession and shielding endurance
 
 The midfield forward support offset now pauses when an opponent is within 220 cm of the ball, keeping close passing support during immediate defensive pressure. Moving shields only drain while stamina is available, and the reduced shielding acceleration no longer applies when endurance reaches zero. Static source tests cover both cases. Native UE5.5 compilation, animation/collision and gameplay tests remain outstanding.
+
+### October 20 — stamina-gated shielding and rated reception
+
+Automatic close-control touch force and touch cadence now apply the shielding bonus only while stamina remains above zero; first-touch cushioning similarly loses its shielding advantage when exhausted. Explicit reception additionally uses the footballer's BallControl attribute with a bounded rating factor (0.6–1.4). Source tests updated; native Unreal gameplay remains unverified.
