@@ -317,8 +317,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Lead moving balls slightly for more credible interception movement.
             FVector Predicted = Ball->GetActorLocation() + Ball->GetVelocity() * FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f);
             Target = FVector(Predicted.X, Predicted.Y, 0.f);
+            // No controlled kick attempts while the ball is too high to reach.
+            const bool bBallAtFootHeight = FMath::Abs(Footballer->GetActorLocation().Z -
+                Ball->GetActorLocation().Z) < 135.f;
             if (BestDistance <= FMath::Square(ContactRangeCm) && ActionCooldownRemaining <= 0.f &&
-                FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 135.f)
+                bBallAtFootHeight)
             {
                 // Prefer a forward teammate with a clear passing lane; otherwise clear towards goal.
                 const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
