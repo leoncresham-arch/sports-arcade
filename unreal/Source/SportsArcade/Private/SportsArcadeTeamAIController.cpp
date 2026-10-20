@@ -363,6 +363,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 }
             }
             const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f);
+            // Keep the runner's movement aligned with the chosen escape lane.
+            Target.Y += SafeLateralSign * 180.f;
             if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * 380.f, ContactRangeCm + 75.f))
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds * 0.5f, 0.15f);
         }
