@@ -271,3 +271,7 @@ Manual possession-proximity scans now reject invalid teammate and opponent actor
 ### October 20 — consistent sprint release
 
 Releasing sprint now recomputes movement speed using the same rated stamina/capacity and 72%-100% fatigue scaling as the regular movement tick. It also preserves jockey speed while jockey is held instead of momentarily switching to normal jog. Source tests cover immediate sprint-release behavior; no Unreal runtime input validation yet.
+
+### October 20 — deliberate manual dribble movement
+
+Human automatic dribble touches now require a valid world, finite velocity and more than 100 cm/s horizontal movement. The former 20 cm/s effective threshold could trigger minor ball impulses during nearly stationary player movement. This keeps explicit passes, shots and tackles available while preventing incidental slow foot-contact automation. Source regression added; UE playtesting and tuning remain pending.
