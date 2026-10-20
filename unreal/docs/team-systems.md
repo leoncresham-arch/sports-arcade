@@ -425,3 +425,7 @@ First-touch defensive contest comparison now applies the full 25 cm spatial marg
 ### October 20 — shielding endurance
 
 Active, moving shielding now draws a tunable 4 stamina units per second instead of recovering endurance while holding off challenges. Stationary shielding and inactive match phases keep normal recovery; sprinting continues to use its separate larger drain. Existing fatigue-dependent movement and control scale from the resulting stamina. Static source regression added; physical balance remains unverified in UE.
+
+### October 20 — pressured possession and shielding endurance
+
+The midfield forward support offset now pauses when an opponent is within 220 cm of the ball, keeping close passing support during immediate defensive pressure. Moving shields only drain while stamina is available, and the reduced shielding acceleration no longer applies when endurance reaches zero. Static source tests cover both cases. Native UE5.5 compilation, animation/collision and gameplay tests remain outstanding.
