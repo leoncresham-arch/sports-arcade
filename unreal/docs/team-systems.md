@@ -214,3 +214,5 @@ The defensive marking search radius is now runtime-clamped to 0–3000 cm; very 
 When several valid players are markable, a deep goal-threatening opponent receives a modest 15% squared-distance weighting in opponent selection. This prioritizes urgent defensive cover without abandoning the search-radius limit.
 
 Goal-area attackers are weighted more heavily in defensive selection: opponents within 1600 cm of the defending goal line receive a 0.75 squared-distance multiplier in addition to the deep-threat priority. This is preliminary spatial scoring, subject to native playtests.
+
+The goalmouth threat bonus is restricted to attackers in the central 1800 cm of pitch width, avoiding over-prioritization of wide attackers near the end line. Source tests check both spatial gates.
