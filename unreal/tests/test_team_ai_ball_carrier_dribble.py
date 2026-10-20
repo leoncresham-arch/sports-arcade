@@ -9,6 +9,9 @@ class BallCarrierDribbleTests(unittest.TestCase):
         block = source.split("if (bSelfControllingBall && bImmediateChallenge", 1)[1].split(
             "if (bSelfControllingBall && !bImmediateChallenge", 1)[0]
         self.assertIn("Mate->TeamIndex != Footballer->TeamIndex", block)
+        self.assertIn("const FVector PredictedOutlet = Ball->GetActorLocation() + Delta", block)
+        self.assertIn("FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f", block)
+        self.assertIn("FMath::Abs(PredictedOutlet.Y) > HalfWidth - 100.f", block)
         self.assertIn("BestOutlet = Mate", block)
         self.assertIn("Ball->KickByPlayer(Footballer, Direction", block)
         self.assertIn("OutletScore > BestOutletScore", block)
