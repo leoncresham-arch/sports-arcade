@@ -962,10 +962,17 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
 
 bool ASportsArcadeGameMode::CanStageCupPenaltyKick() const
 {
-    return bRequirePhysicalPenaltyKicks && IsCupTieBreakRequired() &&
-        IsValid(ActivePenaltyShootout) && !bPenaltyKickStaged &&
-        !bPenaltyKickTaken && IsValid(MatchBall) && GetWorld() &&
-        ActivePenaltyShootout->GetNextKickingTeam() != INDEX_NONE;
+    if (!bRequirePhysicalPenaltyKicks || !IsCupTieBreakRequired() ||
+        !IsValid(ActivePenaltyShootout) || bPenaltyKickStaged ||
+        bPenaltyKickTaken || !IsValid(MatchBall) || !GetWorld() ||
+        !IsValid(BoundCup) ||
+        !BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) ||
+        BoundCup->CurrentRoundWinners.Num() != BoundCupFixtureIndex ||
+        ActivePenaltyShootout->GetNextKickingTeam() == INDEX_NONE)
+        return false;
+    const FSportsArcadeCupFixture& Fixture = BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex];
+    return Fixture.HomeClubId == SelectedHomeClubId &&
+        Fixture.AwayClubId == SelectedAwayClubId;
 }
 
 bool ASportsArcadeGameMode::StageCupPenaltyKick()
