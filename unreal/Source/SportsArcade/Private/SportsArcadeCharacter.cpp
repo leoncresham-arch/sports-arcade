@@ -170,6 +170,25 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                 }
             }
             if (bFriendlyHasCloserControl) continue;
+            // Recent enemy contact alone is not proof of ownership. A nearby
+            // opponent physically nearer the grounded ball gets first control
+            // priority until the local player moves into a better position.
+            bool bOpponentHasCloserControl = false;
+            for (TActorIterator<ASportsArcadeCharacter> OppIt(GetWorld()); OppIt; ++OppIt)
+            {
+                const ASportsArcadeCharacter* Opponent = *OppIt;
+                if (Opponent->TeamIndex == TeamIndex || Opponent->GetWorld() != GetWorld() ||
+                    Opponent->GetActorLocation().ContainsNaN()) continue;
+                const FVector OppToBall = BallLocation - Opponent->GetActorLocation();
+                if (FMath::Abs(OppToBall.Z) <= 115.f &&
+                    OppToBall.SizeSquared2D() < FMath::Square(95.f) &&
+                    OppToBall.SizeSquared2D() < MyBallDistanceSq)
+                {
+                    bOpponentHasCloserControl = true;
+                    break;
+                }
+            }
+            if (bOpponentHasCloserControl) continue;
             const FVector ToBall = BallLocation - GetActorLocation();
             if (FVector::DotProduct(GetActorForwardVector(), ToBall.GetSafeNormal2D()) > 0.35f &&
                 It->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
