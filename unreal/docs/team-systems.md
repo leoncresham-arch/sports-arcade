@@ -184,3 +184,5 @@ When a defender is directly challenging the attributed ball carrier, the AI can 
 Emergency outlets now exclude teammates whose passing segment passes within 160 cm of an opponent, including opponents at the receiving point. This uses a two-dimensional nearest-segment check, not a timed interception simulation; source-contract tests were updated accordingly.
 
 Pressure outlet selection now ranks unblocked candidate passes by forward progress and distance rather than always selecting the nearest teammate. The ball impulse is distance-adjusted (950 + 0.22 times outlet distance, clamped 1000–1550) to better support both short and longer emergency releases. This remains an untuned heuristic requiring UE gameplay tests. Source regression coverage was updated in `test_team_ai_ball_carrier_dribble.py`.
+
+Pressure outlets also project moving receiver velocity 0.20 seconds ahead, with horizontal velocity capped at 650 cm/s. The projected point is used for candidate distance, interception corridor and release direction; invalid receiver velocities are excluded. This is not a full time-of-flight solver and must be tuned in UE5.5.
