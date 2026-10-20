@@ -93,6 +93,8 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("bool KickStagedCupPenalty(const FVector& Direction);", header)
         self.assertIn("bRequirePhysicalPenaltyKicks", header)
         self.assertIn("bool IsCupPenaltyAwaitingResult() const;", header)
+        self.assertIn("GetStagedCupPenaltyTaker() const;", header)
+        self.assertIn("bPenaltyKickStaged && IsValid(StagedPenaltyTaker)", cpp)
         self.assertIn("bool ASportsArcadeGameMode::IsCupPenaltyAwaitingResult() const", cpp)
         self.assertIn("bPenaltyKickStaged = true;", cpp)
         self.assertIn("StagedPenaltySpot = Spot;", cpp)
