@@ -325,6 +325,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 FVector Direction = FVector(AttackSign * HalfLength - Ball->GetActorLocation().X,
                     -Ball->GetActorLocation().Y, 0.f).GetSafeNormal();
                 float BestPassScore = -BIG_NUMBER;
+                float BestPassDistanceCm = 0.f;
                 for (ASportsArcadeCharacter* Teammate : Roster->Players)
                 {
                     if (!IsValid(Teammate) || Teammate->GetWorld() != GetWorld() ||
@@ -371,10 +372,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     if (Score > BestPassScore)
                     {
                         BestPassScore = Score;
+                        BestPassDistanceCm = Distance;
                         Direction = Delta.GetSafeNormal2D();
                     }
                 }
-                if (Ball->KickByPlayer(Footballer, Direction, BestPassScore > -BIG_NUMBER ? 1400.f : 1700.f, ContactRangeCm + 25.f))
+                const float PassImpulse = FMath::Clamp(900.f + BestPassDistanceCm * 0.24f, 1000.f, 1800.f);
+                const float KickImpulse = BestPassScore > -BIG_NUMBER ? PassImpulse : 1700.f;
+                if (Ball->KickByPlayer(Footballer, Direction, KickImpulse, ContactRangeCm + 25.f))
                 {
                     // Count only an attacking-third direct goal attempt, not a
                     // normal pass or deep defensive clearance.
