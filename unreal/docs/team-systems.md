@@ -112,3 +112,7 @@ Slots 1–4 now use bounded recovery/advance relative to formation positions whe
 ### October 20 — lateral defensive compactness
 
 Defender slots 1–4 now also limit their lateral movement relative to the authored formation position when the opposition was most recently credited with a touch. The `DefensiveLineLateralDisplacementCm` editor setting defaults to 650 cm, with a 1500 cm upper clamp. The constraint runs alongside existing forward/recovery limits and precedes pressure/marking overrides; therefore emergency pressing or later marking can still pull a defender away from the bounded formation target. Python source-contract assertions cover the setting and target calculation, not UE compilation or gameplay performance.
+
+## October 20 — provisional attacking forward runs
+
+When a team was most recently credited with touching the ball and play is in the attacking half, authored advanced lineup slots 9 and 10 can make bounded forward runs when they are not already far beyond the ball. The editor-tunable `ForwardRunOffsetCm` defaults to 650 cm and is clamped to 1500 cm. Final targets remain pitch-clamped. The player-selection logic still relies on weak last-touch attribution rather than verified possession, and does not implement offside awareness or tactical combination runs. A source-only regression test is in `unreal/tests/test_team_ai_forward_runs.py`; Unreal compilation and on-pitch evaluation are pending.
