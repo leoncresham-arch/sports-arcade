@@ -5,6 +5,15 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class PossessionPressureTests(unittest.TestCase):
+    def test_off_ball_marking_protects_central_lane(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("if (IsValid(Opponent))", 1)[1]
+        self.assertIn("InfieldMarkingShift", section)
+        self.assertIn("FMath::Abs(MarkingPoint.Y) - 1100.f", section)
+        self.assertIn("CentralCoverY", section)
+        self.assertIn("MarkingPoint.Y - CentralCoverY", section)
+        self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
+
     def test_defensive_marking_does_not_override_attacking_support(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// A conservative defensive shadow", 1)[1].split(
