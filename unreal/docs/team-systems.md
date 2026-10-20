@@ -206,3 +206,5 @@ The marking point also maintains an initial 120 cm goalside offset relative to t
 General marking now ignores a nearest opponent positioned more than 900 cm behind the ball in the team's defensive orientation, reducing pursuit of players away from the immediate threat. This is an approximation and must be checked in formation playtests.
 
 Goalside marking separation is now scaled to 12% of the marker-to-attacker distance, clamped to 80–180 cm, rather than a single 120 cm offset. This is an initial tunable behavior subject to engine playtests.
+
+Marking threat filtering retains opponents deep in the defending team's own half (beyond 45% of half-pitch length) even when more than 900 cm behind the ball; this prevents losing track of goal-threatening attackers during loose-ball recovery.
