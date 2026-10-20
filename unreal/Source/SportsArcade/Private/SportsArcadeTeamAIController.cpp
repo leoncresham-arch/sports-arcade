@@ -667,6 +667,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector OpponentVelocity = Opponent->GetVelocity();
             const FVector MarkingPoint = Opponent->GetActorLocation() +
                 (OpponentVelocity.ContainsNaN() ? FVector::ZeroVector : OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f);
+            if (MarkingPoint.ContainsNaN()) { StopMovement(); return; }
             // Stay goalside of the moving attacker when recovering defensively.
             const float DefenderAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
             const float GoalSideOffset = FMath::Clamp(FVector::Dist2D(Footballer->GetActorLocation(), MarkingPoint) * 0.12f, 80.f, 180.f);
