@@ -362,6 +362,7 @@ void ASportsArcadeGameMode::ResetMatch()
     ExtraTimeElapsedSeconds = 0.f;
     ActivePenaltyShootout = nullptr;
     StagedPenaltyTaker = nullptr;
+    StagedPenaltySpot = FVector::ZeroVector;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     StageKickoff(0);
@@ -730,6 +731,7 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
     BoundCupFixtureIndex = INDEX_NONE;
     ActivePenaltyShootout = nullptr;
     StagedPenaltyTaker = nullptr;
+    StagedPenaltySpot = FVector::ZeroVector;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     BoundSeason = Season;
@@ -952,6 +954,7 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
         return false;
     ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
     StagedPenaltyTaker = nullptr;
+    StagedPenaltySpot = FVector::ZeroVector;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     return IsValid(ActivePenaltyShootout);
@@ -1027,6 +1030,7 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
     // Never reuse a taken kick for the next shootout turn.
     // The referee records the physical outcome; never infer a score from impulse alone.
     StagedPenaltyTaker = nullptr;
+    StagedPenaltySpot = FVector::ZeroVector;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     const int32 Winner = ActivePenaltyShootout->WinningTeam;
