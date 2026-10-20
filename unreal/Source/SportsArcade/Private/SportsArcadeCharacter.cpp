@@ -70,6 +70,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ASportsArcadeCharacter::ShootBall);
     PlayerInputComponent->BindAction(TEXT("Chip"), IE_Pressed, this, &ASportsArcadeCharacter::ChipBall);
     PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
+    PlayerInputComponent->BindAction(TEXT("Receive"), IE_Pressed, this, &ASportsArcadeCharacter::ReceiveBall);
     PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Pressed, this, &ASportsArcadeCharacter::BeginJockey);
     PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Released, this, &ASportsArcadeCharacter::EndJockey);
     PlayerInputComponent->BindAction(TEXT("Shield"), IE_Pressed, this, &ASportsArcadeCharacter::BeginShield);
@@ -502,6 +503,52 @@ void ASportsArcadeCharacter::ConfirmPenaltySuggestion()
 {
     if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
         Mode->ConfirmSuggestedCupPenaltyOutcome();
+}
+
+void ASportsArcadeCharacter::ReceiveBall()
+{
+    const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
+    if (!GetWorld() || TouchCooldownRemaining > 0.f ||
+        (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay))) return;
+    const FVector PlayerLocation = GetActorLocation();
+    const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
+    if (PlayerLocation.ContainsNaN() || Facing.IsNearlyZero()) return;
+
+    ASportsArcadeBall* BestBall = nullptr;
+    float BestDistanceSq = FMath::Square(FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f));
+    for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
+    {
+        if (!IsValid(*It) || It->GetActorLocation().ContainsNaN() ||
+            It->GetVelocity().ContainsNaN()) continue;
+        const FVector ToBall = It->GetActorLocation() - PlayerLocation;
+        const float DistanceSq = ToBall.SizeSquared2D();
+        if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
+            It->GetVelocity().SizeSquared2D() > FMath::Square(1800.f) ||
+            FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
+
+        bool bOpponentClearlyCloser = false;
+        for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+        {
+            if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                Opp->TeamIndex == TeamIndex || Opp->GetActorLocation().ContainsNaN()) continue;
+            const FVector OppToBall = It->GetActorLocation() - Opp->GetActorLocation();
+            if (FMath::Abs(OppToBall.Z) < 115.f &&
+                OppToBall.SizeSquared2D() + FMath::Square(25.f) < DistanceSq)
+            {
+                bOpponentClearlyCloser = true;
+                break;
+            }
+        }
+        if (bOpponentClearlyCloser) continue;
+        BestDistanceSq = DistanceSq;
+        BestBall = *It;
+    }
+    if (IsValid(BestBall) &&
+        BestBall->ApplyControlledTouch(this, Facing * (bShieldHeld ? 30.f : 65.f),
+            FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
+    {
+        TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
+    }
 }
 
 void ASportsArcadeCharacter::TackleBall()
