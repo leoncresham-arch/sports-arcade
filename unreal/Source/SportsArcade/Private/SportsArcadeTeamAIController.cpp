@@ -331,7 +331,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // this prevents the supporting defender from inviting an easy
                 // cut back into the central passing corridor.
                 const bool bNearTouchline = FMath::Abs(BallLead.Y) > HalfWidth - 650.f;
-                const bool bBallMovingInfield = BallLead.Y * SafeBallVelocity.Y < -FMath::Square(100.f);
+                // Only treat a significant lateral run as inward travel.
+                // Multiplying position by velocity previously made this gate
+                // trigger on almost any tiny inward movement at wide positions.
+                const bool bBallMovingInfield = FMath::Abs(BallLead.Y) > 500.f &&
+                    BallLead.Y * SafeBallVelocity.Y < 0.f &&
+                    FMath::Abs(SafeBallVelocity.Y) > 150.f;
                 const float SideSign = (bNearTouchline || bBallMovingInfield)
                     ? (BallLead.Y >= 0.f ? -1.f : 1.f)
                     : (Footballer->GetActorLocation().Y >= BallLead.Y ? 1.f : -1.f);
