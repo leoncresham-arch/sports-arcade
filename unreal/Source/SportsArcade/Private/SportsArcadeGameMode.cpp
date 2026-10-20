@@ -1035,6 +1035,7 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
     // Validate the bound fixture BEFORE consuming an attempt. An invalid or
     // advanced cup bracket must never strand a completed shootout without a result.
     if (!IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
+        (bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken) ||
         !BoundCup->CurrentRoundFixtures.IsValidIndex(BoundCupFixtureIndex) ||
         BoundCup->CurrentRoundWinners.Num() != BoundCupFixtureIndex)
         return false;
@@ -1044,6 +1045,10 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
         !ActivePenaltyShootout->RecordAttempt(KickingTeam, bScored))
         return false;
     // Never reuse a taken kick for the next shootout turn.
+    StagedPenaltyTaker = nullptr;
+    bPenaltyKickStaged = false;
+    bPenaltyKickTaken = false;
+    // The referee records the physical outcome; never infer a score from impulse alone.
     StagedPenaltyTaker = nullptr;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
