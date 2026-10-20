@@ -252,6 +252,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     bool IsCupPenaltyAwaitingResult() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    ASportsArcadeCharacter* GetStagedCupPenaltyTaker() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored);
 
