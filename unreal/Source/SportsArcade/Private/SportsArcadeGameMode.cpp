@@ -1137,6 +1137,8 @@ void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
         FMath::Abs(Current.Y) > PitchHalfWidthCm + MatchBall->BallRadiusCm)
         SuggestedCupPenaltyOutcome = 0;
     PreviousPenaltyBallPosition = Current;
+    if (SuggestedCupPenaltyOutcome != INDEX_NONE)
+        OnCupPenaltyOutcomeSuggested.Broadcast(Team, SuggestedCupPenaltyOutcome == 1);
 }
 
 bool ASportsArcadeGameMode::WasCupPenaltyTouchedByKeeper() const
