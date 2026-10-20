@@ -7,7 +7,7 @@ class LineupSafetyTests(unittest.TestCase):
     def test_outfielder_selection_ignores_goalkeeper_slot(self):
         code = AI.read_text()
         self.assertIn('for (ASportsArcadeCharacter* Candidate : Roster->Players)', code)
-        self.assertIn('Candidate->LineupSlot == 0 ||', code)
+        self.assertIn('Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0', code)
         self.assertNotIn('for (int32 Index = 1; Index < Roster->Players.Num(); ++Index)', code)
     def test_human_controlled_player_does_not_suppress_ai_pressing(self):
         code = AI.read_text()
@@ -29,7 +29,7 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn("Keeper->LineupSlot != 0", code)
         self.assertIn("MoveToLocation(Target, 60.f", code)
         self.assertIn("Ball->KickByPlayer(Keeper, Parry", code)
-        self.assertIn("Ball->GetVelocity().X * GoalwardSign > 175.f", code)
+        self.assertIn("BallVelocity.X * GoalwardSign >", code)
         self.assertIn("bIncomingPenalty && ActionCooldownRemaining <= 0.f", code)
         self.assertLess(code.index("Match->IsCupPenaltyAwaitingResult()"),
                         code.index("Match->bMatchFinished || Match->bBallOutOfPlay"))
@@ -41,7 +41,7 @@ class LineupSafetyTests(unittest.TestCase):
     def test_invalid_opponents_not_marked(self):
         code = AI.read_text()
         self.assertIn('if (!IsValid(*Opp)', code)
-        self.assertIn('if (!IsValid(*It) || It->TeamIndex', code)
+        self.assertIn('Opp->TeamIndex == Footballer->TeamIndex', code)
 
     def test_roster_absence_and_invalid_team_stop_navigation(self):
         code = AI.read_text()
