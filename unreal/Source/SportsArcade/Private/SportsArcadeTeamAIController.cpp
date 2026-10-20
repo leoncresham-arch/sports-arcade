@@ -228,7 +228,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 for (ASportsArcadeCharacter* Teammate : Roster->Players)
                 {
                     if (!IsValid(Teammate) || Teammate->GetWorld() != GetWorld() ||
-                        Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex) continue;
+                        Teammate == Footballer || Teammate->TeamIndex != Footballer->TeamIndex ||
+                        Teammate->GetActorLocation().ContainsNaN()) continue;
                     const FVector Delta = Teammate->GetActorLocation() - Ball->GetActorLocation();
                     const float Distance = Delta.Size2D();
                     // Support lateral circulation and bounded back-passes when no
@@ -240,7 +241,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
                     {
                         if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
-                            Opp->TeamIndex == Footballer->TeamIndex) continue;
+                            Opp->TeamIndex == Footballer->TeamIndex ||
+                            Opp->GetActorLocation().ContainsNaN()) continue;
                         // An unblocked pass can still be intercepted at the receiver.
                         const float ReceiverSeparation = FVector::Dist2D(
                             Opp->GetActorLocation(), Teammate->GetActorLocation());
@@ -293,7 +295,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
         {
             if (!IsValid(*It) || It->GetWorld() != GetWorld() ||
-                It->TeamIndex == Footballer->TeamIndex) continue;
+                It->TeamIndex == Footballer->TeamIndex ||
+                It->GetActorLocation().ContainsNaN()) continue;
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
             if (Distance < NearestOpponentDistance)
             {
