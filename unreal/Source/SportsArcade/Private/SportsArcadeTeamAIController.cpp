@@ -592,6 +592,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         if (IsValid(Opponent))
         {
+            // Avoid chasing an attacker that is already far behind the ball.
+            const float DefensiveSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
+            const bool bOpponentThreatening =
+                (Opponent->GetActorLocation().X - Ball->GetActorLocation().X) * DefensiveSign >= -900.f;
+            if (!bOpponentThreatening) Opponent = nullptr;
+        }
+        if (IsValid(Opponent))
+        {
             const FVector OpponentVelocity = Opponent->GetVelocity();
             const FVector MarkingPoint = Opponent->GetActorLocation() +
                 (OpponentVelocity.ContainsNaN() ? FVector::ZeroVector : OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f);
