@@ -200,6 +200,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         else if (RecentTouchTeam == 1 - Footballer->TeamIndex)
             Target.X -= AttackSign * FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f);
 
+        // Forward players make a modest run beyond the ball during attributed
+        // attacking possession. Keep defenders/midfield formation unchanged.
+        if (RecentTouchTeam == Footballer->TeamIndex && Slot >= 9 && Slot <= 10 &&
+            Ball->GetActorLocation().X * AttackSign > 0.f &&
+            Footballer->GetActorLocation().X * AttackSign <
+                Ball->GetActorLocation().X * AttackSign + 1200.f)
+        {
+            Target.X += AttackSign * FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f);
+        }
+
         // Hold the authored back line within a tunable attacking/recovery band.
         if (Slot >= 1 && Slot <= 4 && RecentTouchTeam == 1 - Footballer->TeamIndex)
         {
