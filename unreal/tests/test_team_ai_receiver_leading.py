@@ -23,6 +23,7 @@ class ReceiverLeadingTests(unittest.TestCase):
         self.assertIn("Opp->GetActorLocation(), Ball->GetActorLocation() + Delta)", passes)
         self.assertIn("Direction = Delta.GetSafeNormal2D()", passes)
         self.assertIn("const FVector PredictedReceiver = Ball->GetActorLocation() + Delta", passes)
+        self.assertIn("PredictedReceiver.ContainsNaN()", passes)
         self.assertIn("FMath::Abs(PredictedReceiver.X) > HalfLength - 100.f", passes)
         self.assertIn("FMath::Abs(PredictedReceiver.Y) > HalfWidth - 100.f", passes)
         self.assertIn("WidePenalty", passes)
