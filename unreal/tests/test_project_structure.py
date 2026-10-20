@@ -119,7 +119,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("MarkingSearchRadiusCm", source)
         self.assertIn("MarkingInfluence", source)
         self.assertIn("bIsPrimaryPresser = true", source)
-        self.assertIn("!bIsPrimaryPresser && IsValid(Ball)", source)
+        self.assertIn("!bIsPrimaryPresser && !bIsSecondaryPresser && IsValid(Ball)", source)
         self.assertIn("BestPassScore", source)
         self.assertIn("FVector2D::DotProduct", source)
         self.assertIn("Ball->KickByPlayer(Footballer, Direction, BestPassScore", source)
