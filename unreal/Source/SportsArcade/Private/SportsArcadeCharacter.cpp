@@ -255,7 +255,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         const FVector FacingDir = GetActorForwardVector().GetSafeNormal2D();
         // Shielding keeps the ball nearer the facing foot rather than
         // pushing it straight along the current running trajectory.
-        const float TravelWeight = bShieldHeld ? 0.45f : 0.75f;
+        // Tired players rely more on their body facing than momentum when
+        // controlling a ball through tight turns.
+        const float ControlStaminaCapacity = FMath::Max(MaxStamina *
+            (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
+        const float ControlFatigue = FMath::Clamp(CurrentStamina / ControlStaminaCapacity, 0.f, 1.f);
+        const float TravelWeight = (bShieldHeld ? 0.45f : 0.75f) *
+            FMath::Lerp(0.85f, 1.f, ControlFatigue);
         const FVector BlendedTouchDir = (TravelDir * TravelWeight +
             FacingDir * (1.f - TravelWeight)).GetSafeNormal2D();
         if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&
