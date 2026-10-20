@@ -92,3 +92,9 @@ AI passing/marking candidate filtering now also skips teammate or opponent actor
 ## October 20 — bounded off-ball support and defensive recovery
 
 Outfield AI now makes a small forward shift for the team most recently attributed a ball touch, or a small recovery shift if the opponents last touched it. This is a lightweight approximation of possession, **not** an authoritative possession state: a deflection, clearance or loose ball can misclassify it. Adjustable defaults are 220 cm attacking support and 150 cm defensive recovery, clamped to 500 cm; pitch bounds remain enforced after tactical movement. Existing primary-presser behavior overrides this shape shift. Source contracts: `unreal/tests/test_team_ai_shape_shift.py`. Unreal runtime evaluation, player coordination and true possession arbitration remain future work.
+
+## October 20 — near-ball passing-lane support
+
+The existing non-goalkeeper team AI now considers a lateral outlet shift when an attributed teammate last touched the ball and the support runner is within 24 m. It searches nearby opponents around the intended formation target; if one is close, it offsets laterally away from that opponent using editor-tunable settings (`PassingSupportLateralShiftCm`, 350 cm default; `PassingSupportOpponentSearchCm`, 1000 cm default). Offsets are bounded and final target coordinates remain pitch-clamped. The primary ball presser's chase target still overrides the support adjustment. Invalid opponent locations or teammates are ignored in the associated geometry/primary-pressure selection.
+
+This uses last-touch attribution only as a weak proxy for possession, not a ball-control certainty. It does not establish advanced passing-pattern coordination, offside awareness or animation. Added source contracts in `test_team_ai_shape_shift.py` and `test_team_ai_ball_integrity.py`; Unreal Editor runtime playtests and navigation/physics balancing are still outstanding.
