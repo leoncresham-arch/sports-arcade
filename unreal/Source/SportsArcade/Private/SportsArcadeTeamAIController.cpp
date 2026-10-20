@@ -455,7 +455,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
         }
-        if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)
+        if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f &&
+            FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) <= 115.f)
         {
             // Reuse the same threat direction as the carrier's movement target.
             const float SafeLateralSign = CarrierEscapeSide;
