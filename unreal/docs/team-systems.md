@@ -164,3 +164,7 @@ While a valid AI ball carrier is near its attributed touch, it now scans opposin
 ### October 20 — dribble and movement alignment
 
 When the AI ball carrier selects a lateral escape touch around a nearby defender, its navigation target now shifts 180 cm into that same lane. The desired touch velocity is also moderated from 380 cm/s in open space to 280 cm/s when avoiding a nearby defender. These are provisional heuristics, not collision-proof shielding or animations; source tests were expanded and native UE gameplay evaluation remains pending.
+
+### October 20 — dribble direction consistency
+
+The controlled ball carrier now checks its lateral escape direction on each AI decision, including frames when the ball-touch cooldown is active. Both its navigation target and subsequent controlled touch use the same nearest-defender escape direction, so a player no longer straightens its running path between touches. The duplicated opponent scan was removed from the touch action. Regression coverage updated in `unreal/tests/test_team_ai_ball_carrier_dribble.py`; this remains unverified in Unreal gameplay.
