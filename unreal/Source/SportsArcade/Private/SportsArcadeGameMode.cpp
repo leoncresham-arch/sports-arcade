@@ -361,6 +361,9 @@ void ASportsArcadeGameMode::ResetMatch()
     bExtraTimeSecondHalf = false;
     ExtraTimeElapsedSeconds = 0.f;
     ActivePenaltyShootout = nullptr;
+    StagedPenaltyTaker = nullptr;
+    bPenaltyKickStaged = false;
+    bPenaltyKickTaken = false;
     StageKickoff(0);
     OnMatchReset.Broadcast();
 }
@@ -726,6 +729,9 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
     BoundCup = nullptr;
     BoundCupFixtureIndex = INDEX_NONE;
     ActivePenaltyShootout = nullptr;
+    StagedPenaltyTaker = nullptr;
+    bPenaltyKickStaged = false;
+    bPenaltyKickTaken = false;
     BoundSeason = Season;
     BoundFixtureIndex = FixtureIndex;
     SelectedHomeClubId = Fixture.HomeClubId;
@@ -945,6 +951,9 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
     if (Tie.HomeClubId != SelectedHomeClubId || Tie.AwayClubId != SelectedAwayClubId)
         return false;
     ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
+    StagedPenaltyTaker = nullptr;
+    bPenaltyKickStaged = false;
+    bPenaltyKickTaken = false;
     return IsValid(ActivePenaltyShootout);
 }
 
