@@ -213,6 +213,15 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             const FVector ToBall = BallLocation - MyLocation;
             const float ContactDistanceSq = ToBall.SizeSquared();
             if (ContactDistanceSq >= ClosestDribbleDistanceSq) continue;
+            // A loose ball racing past the player should not be pulled back
+            // by automatic foot control. Deliberate interceptions and tackles
+            // remain available through their separate challenge actions.
+            const FVector BallTravel = It->GetVelocity();
+            if (BallTravel.ContainsNaN()) continue;
+            const FVector RelativeBallTravel = BallTravel - MyVelocity;
+            if (RelativeBallTravel.SizeSquared2D() > FMath::Square(1150.f) &&
+                FVector::DotProduct(RelativeBallTravel.GetSafeNormal2D(),
+                    ToBall.GetSafeNormal2D()) > 0.3f) continue;
             // Controlled touches require the ball to be in front of the
             // player's actual travel direction, not just their mesh facing.
             const FVector TravelDirection = MyVelocity.GetSafeNormal2D();
