@@ -15,7 +15,7 @@ class InterceptionLeadTests(unittest.TestCase):
         self.assertIn("SeparationCm / FMath::Clamp(PresserTravelSpeedCmPerSec, 100.f, 1000.f)", part)
         self.assertIn("FMath::Clamp(BallPredictionSeconds, 0.f, 0.5f)", part)
         self.assertIn("BallVelocity * GroundLeadSeconds", part)
-        self.assertIn("bAirborne ? FMath::Min(LeadSeconds, 0.12f) : LeadSeconds", part)
+        self.assertIn("BallVelocity.Z > 100.f ? 0.f : FMath::Min(LeadSeconds, 0.12f)", part)
         self.assertIn("Footballer->GetActorLocation().Z) > 150.f", part)
         self.assertIn("if (Predicted.ContainsNaN()) { StopMovement(); return; }", part)
         self.assertIn("Ball->GetVelocity().GetClampedToMaxSize(3500.f)", part)
