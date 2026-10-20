@@ -88,6 +88,8 @@ private:
     void TakeStagedRestart();
     void AwardRestartToHome();
     void AwardRestartToAway();
+    void StageShootoutPenalty();
+    void KickShootoutPenalty();
     void PassBall();
     void ShootBall();
     void ChipBall();
