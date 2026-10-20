@@ -407,6 +407,21 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector Delta = Mate->GetActorLocation() - Ball->GetActorLocation();
                 if (Delta.SizeSquared2D() < FMath::Square(350.f) ||
                     Delta.SizeSquared2D() >= BestOutletDistanceSq) continue;
+                // Reject outlets already marked at very close range.
+                bool bReceiverMarked = false;
+                for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+                {
+                    if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                        Opp->TeamIndex == Footballer->TeamIndex ||
+                        Opp->GetActorLocation().ContainsNaN()) continue;
+                    if (FVector::DistSquared2D(Opp->GetActorLocation(), Mate->GetActorLocation()) <
+                        FMath::Square(180.f))
+                    {
+                        bReceiverMarked = true;
+                        break;
+                    }
+                }
+                if (bReceiverMarked) continue;
                 BestOutlet = Mate;
                 BestOutletDistanceSq = Delta.SizeSquared2D();
             }
