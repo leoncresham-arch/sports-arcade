@@ -675,8 +675,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // denying an easy inward cut while retaining goalside cover.
             const float InfieldMarkingShift = FMath::Clamp(
                 FMath::Abs(MarkingPoint.Y) - 1100.f, 0.f, 1800.f) * 0.14f;
+            // Reduce exaggerated central drift close to our own goal:
+            // prioritize tracking the immediate threat over generic lane cover.
+            const float OwnGoalX = DefenderAttackSign > 0.f ? -HalfLength : HalfLength;
+            const float GoalDistance = FMath::Abs(MarkingPoint.X - OwnGoalX);
+            const float UrgentGoalCover = FMath::Clamp(GoalDistance / 1200.f, 0.35f, 1.f);
             const float CentralCoverY = MarkingPoint.Y -
-                FMath::Sign(MarkingPoint.Y) * InfieldMarkingShift;
+                FMath::Sign(MarkingPoint.Y) * InfieldMarkingShift * UrgentGoalCover;
             const FVector GoalSideMarkingPoint = MarkingPoint -
                 FVector(DefenderAttackSign * GoalSideOffset, MarkingPoint.Y - CentralCoverY, 0.f);
             Target = FMath::Lerp(Target, FVector(GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y, 0.f),
