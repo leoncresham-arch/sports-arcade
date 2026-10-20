@@ -1002,6 +1002,23 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     if (!Taker->SetActorLocation(TakerSpot, false, nullptr, ETeleportType::TeleportPhysics))
         return false;
     Taker->GetCharacterMovement()->StopMovementImmediately();
+    // Stage the opposing keeper near the middle of the defended goal line.
+    // This does not yet imply a dive, save or refereed keeper movement.
+    for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
+    {
+        if (Roster->TeamIndex != 1 - Team) continue;
+        for (ASportsArcadeCharacter* Keeper : Roster->Players)
+        {
+            if (!IsValid(Keeper) || Keeper->GetWorld() != GetWorld() ||
+                Keeper->TeamIndex != 1 - Team || Keeper->LineupSlot != 0) continue;
+            const float GoalX = Team == 0 ? PitchHalfLengthCm - 90.f : -PitchHalfLengthCm + 90.f;
+            const FVector GoalLinePosition(GoalX, 0.f, Keeper->GetActorLocation().Z);
+            if (Keeper->SetActorLocation(GoalLinePosition, false, nullptr, ETeleportType::TeleportPhysics))
+                Keeper->GetCharacterMovement()->StopMovementImmediately();
+            break;
+        }
+        break;
+    }
     MatchBall->PlaceAtRest(Spot);
     StagedPenaltySpot = Spot;
     StagedPenaltyTaker = Taker;
