@@ -160,3 +160,7 @@ A self-attributed ball carrier also sets a short attacking movement target ahead
 ## October 20 — opponent-aware controlled dribble
 
 While a valid AI ball carrier is near its attributed touch, it now scans opposing outfield actors within 500 cm of the ball and biases its next controlled touch laterally away from the nearest defender in or near the forward path. The forward component remains, while the lateral component is limited to 0.6 in the desired-velocity vector; existing physics contact and cooldown protections still apply. This is an early avoidance heuristic, not obstacle-aware pathfinding, shielding, feints or professional-quality dribbling. Source regression: `unreal/tests/test_team_ai_ball_carrier_dribble.py`. Real Unreal 5.5 playtests are pending.
+
+### October 20 — dribble and movement alignment
+
+When the AI ball carrier selects a lateral escape touch around a nearby defender, its navigation target now shifts 180 cm into that same lane. The desired touch velocity is also moderated from 380 cm/s in open space to 280 cm/s when avoiding a nearby defender. These are provisional heuristics, not collision-proof shielding or animations; source tests were expanded and native UE gameplay evaluation remains pending.
