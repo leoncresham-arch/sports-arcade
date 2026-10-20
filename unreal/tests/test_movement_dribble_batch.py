@@ -34,6 +34,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("TravelDir * TravelWeight", CHARACTER)
         self.assertIn("FacingDir * (1.f - TravelWeight)", CHARACTER)
         self.assertIn("bShieldHeld ? 0.45f : 0.75f", CHARACTER)
+        self.assertIn("FMath::Lerp(0.85f, 1.f, ControlFatigue)", CHARACTER)
+        self.assertIn("CurrentStamina / ControlStaminaCapacity", CHARACTER)
         self.assertIn("!BlendedTouchDir.IsNearlyZero()", CHARACTER)
         self.assertIn("ApplyControlledTouch(this, BlendedTouchDir", CHARACTER)
 
