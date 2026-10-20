@@ -23,6 +23,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("Target.Y = Ball->GetActorLocation().Y + SideSign * 250.f", part)
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f", part)
         self.assertIn("FMath::Sign(Ball->GetActorLocation().Y) * 350.f", part)
+        self.assertLess(part.index("if (FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f)"), len(part))
+        self.assertIn("}\n            // A wide ball carrier always needs an infield outlet", part)
 
     def test_off_ball_marking_protects_central_lane(self):
         code = SOURCE.read_text(encoding="utf-8")
