@@ -365,6 +365,38 @@ void ASportsArcadeGameMode::ResetMatch()
     OnMatchReset.Broadcast();
 }
 
+bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
+{
+    if (!GetWorld() || !bBallOutOfPlay || bHalfTime || bMatchFinished ||
+        PendingRestartType != ESportsArcadeRestartType::Undetermined ||
+        (AwardedTeam != 0 && AwardedTeam != 1) || !IsValid(MatchBall))
+        return false;
+
+    const bool bTouchlineExit =
+        FMath::Abs(PendingRestartLocation.Y) >= PitchHalfWidthCm - 100.f;
+    if (bTouchlineExit)
+    {
+        PendingRestartType = ESportsArcadeRestartType::ThrowIn;
+    }
+    else
+    {
+        const int32 DefendingTeam = PendingRestartLocation.X > 0.f ? 1 : 0;
+        PendingRestartType = AwardedTeam == DefendingTeam
+            ? ESportsArcadeRestartType::GoalKick : ESportsArcadeRestartType::CornerKick;
+        const float SideX = PendingRestartLocation.X > 0.f ? 1.f : -1.f;
+        const float SideY = MatchBall->GetActorLocation().Y >= 0.f ? 1.f : -1.f;
+        PendingRestartLocation = PendingRestartType == ESportsArcadeRestartType::CornerKick
+            ? FVector(SideX * (PitchHalfLengthCm - 60.f),
+                SideY * (PitchHalfWidthCm - 60.f), MatchBall->BallRadiusCm + 2.f)
+            : FVector(SideX * (PitchHalfLengthCm - 500.f),
+                SideY * 500.f, MatchBall->BallRadiusCm + 2.f);
+    }
+    PendingRestartTeam = AwardedTeam;
+    PendingRestartTaker = FindRestartTaker(AwardedTeam, PendingRestartLocation);
+    bManualRestartStaged = false;
+    return IsValid(PendingRestartTaker);
+}
+
 bool ASportsArcadeGameMode::CanResumePendingRestart() const
 {
     return bBallOutOfPlay && !bHalfTime && !bMatchFinished && GetWorld() &&
