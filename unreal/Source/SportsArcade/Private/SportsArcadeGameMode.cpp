@@ -430,6 +430,9 @@ bool ASportsArcadeGameMode::CanResumePendingRestart() const
         PendingRestartType != ESportsArcadeRestartType::None &&
         PendingRestartType != ESportsArcadeRestartType::Undetermined &&
         (PendingRestartTeam == 0 || PendingRestartTeam == 1) &&
+        !PendingRestartLocation.ContainsNaN() &&
+        FMath::Abs(PendingRestartLocation.X) <= PitchHalfLengthCm &&
+        FMath::Abs(PendingRestartLocation.Y) <= PitchHalfWidthCm &&
         IsValid(MatchBall) && IsValid(PendingRestartTaker) &&
         PendingRestartTaker->GetWorld() == GetWorld() &&
         PendingRestartTaker->TeamIndex == PendingRestartTeam;
