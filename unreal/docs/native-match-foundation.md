@@ -101,3 +101,11 @@ Extract match clock and refereeing into testable game state for replication, add
 - Then press B to stage the awarded restart, followed by M if manual mode is enabled. Referee decisions are rejected unless the restart is undetermined and an eligible taker exists.
 - The registered Blueprint OnRestartAwarded event is broadcast after a successful decision. UI can inspect PendingRestartType/Team/Location/Taker.
 - These are debugging/prototype keyboard controls rather than complete match officiating or menu UX.
+
+
+## October 20 — opt-in physical knockout shootout sequence
+- A drawn knockout tie still requires completed extra time. With `bRequirePhysicalPenaltyKicks` enabled, `StageCupPenaltyKick()` positions the next awarded kicker behind a penalty spot and places the ball at rest; `CanStageCupPenaltyKick()` exposes eligibility to Blueprint.
+- `KickStagedCupPenalty(Direction)` requires the proper team, finite forward-oriented direction, valid player/ball and a ball close to its referee-assigned spot. A valid attributed physics impulse marks that attempt as taken.
+- `IsCupPenaltyAwaitingResult()` lets UI prompt a referee to record scored/missed outcome through `RecordCupPenaltyAttempt`. The impulse does not automatically count as a goal; this is an interim manual ruling until physics/keeper/referee goals are implemented.
+- `GetStagedCupPenaltyTaker()` gives camera and presentation Blueprints the prepared footballer. Staged references and mark are cleared on reset, mode changes, shootout start and recorded result.
+- Removed duplicated GameMode penalty method definitions and added a source-contract regression to prevent reintroduction. Source CI is not an Unreal Engine native build.
