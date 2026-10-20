@@ -27,8 +27,9 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("bEffectiveShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("FatigueSpeedFactor * ShieldAccelerationFactor", CHARACTER)
         self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
-        self.assertIn("(bShieldHeld ? 0.55f : 1.f)", CHARACTER)
+        self.assertIn("(bShieldControl ? 0.55f : 1.f)", CHARACTER)
         self.assertIn("DribbleTouchInterval * 0.70f", CHARACTER)
+        self.assertIn("bShieldControl = bShieldHeld && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("TouchCooldownRemaining = TouchInterval", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
 
@@ -48,7 +49,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
     def test_dribble_touches_blend_forward_facing_with_travel(self):
         self.assertIn("TravelDir * TravelWeight", CHARACTER)
         self.assertIn("FacingDir * (1.f - TravelWeight)", CHARACTER)
-        self.assertIn("bShieldHeld ? 0.45f : 0.75f", CHARACTER)
+        self.assertIn("bShieldControl ? 0.45f : 0.75f", CHARACTER)
         self.assertIn("FMath::Lerp(0.85f, 1.f, ControlFatigue)", CHARACTER)
         self.assertIn("CurrentStamina / ControlStaminaCapacity", CHARACTER)
         self.assertIn("!BlendedTouchDir.IsNearlyZero()", CHARACTER)
