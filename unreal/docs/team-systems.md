@@ -379,3 +379,5 @@ Manual controlled touches now blend current travel direction (75%) and player fa
 ### October 20 — shield handling pass
 
 Shielding now adopts the same controlled-braking behavior as jockeying. Manual controlled touches also bias toward player-facing direction while shield is held (55% facing, 45% travel), instead of using the normal 25% facing / 75% travel weighting. Regression assertions updated; the behavior remains an uncompiled, animation-agnostic foundation.
+
+Midfield attacking support now maintains a minimum 250 cm lateral separation where possible from its team's carrier, alternating the side by lineup slot to offer an elementary passing triangle while maintaining the existing 175 cm rear support line. Source regression added; formation/pathfinding balance is not verified in Unreal.
