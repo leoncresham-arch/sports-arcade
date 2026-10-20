@@ -69,6 +69,12 @@ class StandingTackleRecoveryTests(unittest.TestCase):
         self.assertLess(self.tackle.index("const float TackleEnergyFactor"),
                         self.tackle.index("CurrentStamina = FMath::Max(0.f, CurrentStamina -"))
 
+    def test_successful_tackle_delays_followup_auto_dribble(self):
+        self.assertIn("if (CandidateBall->KickByPlayer(this, ChallengeDirection,", self.tackle)
+        self.assertIn("TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.35f)", self.tackle)
+        self.assertLess(self.tackle.index("if (CandidateBall->KickByPlayer"),
+                        self.tackle.index("TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.35f)"))
+
     def test_kicks_once_with_attributed_contact(self):
         self.assertIn("CandidateBall->KickByPlayer(this, ChallengeDirection,", self.tackle)
         self.assertIn("PlayerAttributes->Tackling", self.tackle)
