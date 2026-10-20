@@ -72,3 +72,11 @@ During an active *physical* shootout penalty, the defending keeper's provisional
 ### October 20 — penalty parry eligibility
 
 A provisional keeper parry is now disallowed when the ball is farther than 35 cm beyond the keeper plane, outside the implemented 220 cm reach above the keeper actor origin, or has nonfinite location/velocity telemetry. Invalid telemetry also stops keeper path requests. Existing cooldown, incoming-shot and close-contact checks remain. These guardrails do not simulate diving, collision volumes, handling, or actual Unreal physics saves; engine compilation and match tests are still pending.
+
+## October 20 — goalkeeper positioning batch (normal play and physical penalties)
+
+Both goalkeeper pathways now use conservative, ball-velocity-based anticipation. During physical penalties, the defending goalkeeper only pursues a shot that is moving toward the defended goal; a backwards-moving or stalled ball returns the target toward the goal centre instead of producing an unnecessary lateral chase. Tracking is bounded by the actual GameMode half-goal width, less a 55 cm safety margin (and a 300 cm cap). Save eligibility continues to require an approaching ball, keeper proximity and reachable height, with editor-tunable minimum incoming speed, maximum parry height and post-plane overrun allowance.
+
+In ordinary matches the keeper can predict an approaching shot at the keeper's X plane for up to 1.5 seconds; otherwise it retains conservative positional tracking. Regular match lateral targets also obey configured goal width. Both paths refuse nonfinite ball telemetry rather than feeding it into navigation. Source regression tests: `test_penalty_keeper_prediction.py` and `test_goalkeeper_match_anticipation.py`.
+
+**Validation boundary:** These are source-only behavior and safety contracts. Real UE5.5 C++ compilation, animation, physics save quality, keeper navmesh movement and packaging remain unverified; tests have not been executed by a native Unreal editor. This is not a complete goalkeeper handling, catching or diving system.
