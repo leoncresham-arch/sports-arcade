@@ -122,3 +122,7 @@ Attacking lineup slots 9 and 10 now use opposing lane offsets while making their
 ## October 20 — predicted receiver passing
 
 During AI ball contact, candidate receivers are now led using a short 0.25-second velocity projection (receiver ground speed capped at 650 cm/s). The forward scoring, selected pass direction and opponent passing-lane segment use the predicted position. Invalid receiver velocity is excluded. This is a provisional movement heuristic, not a ball-flight solver; timing, interception and Unreal compilation require runtime testing. Source regression: `unreal/tests/test_team_ai_receiver_leading.py`.
+
+## October 20 — distance-scaled AI pass strength
+
+Candidate AI passes now use the selected receiver's predicted distance to choose a bounded impulse rather than the same power for short and long passes. The initial formula is 900 + 0.24 × receiver distance (in cm), clamped from 1000 to 1800 kg·cm/s; fallback clearances remain 1700. The primary presser still checks reach height before attempting ball contact. Source regressions in `unreal/tests/test_team_ai_receiver_leading.py` cover the calculation. Physics tuning, actual completion rates, and Unreal Engine 5.5 compilation are unverified.
