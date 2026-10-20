@@ -12,6 +12,8 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("BestOutlet = Mate", block)
         self.assertIn("Ball->KickByPlayer(Footballer, Direction", block)
         self.assertIn("OutletScore > BestOutletScore", block)
+        self.assertIn("SidelinePenalty", block)
+        self.assertIn("HalfWidth - 450.f", block)
         self.assertIn("Delta.X * AttackSign * 0.35f", block)
         self.assertIn("FMath::Square(160.f)", block)
         self.assertIn("FMath::Clamp(950.f + OutletDistanceCm * 0.22f, 1000.f, 1550.f)", block)
