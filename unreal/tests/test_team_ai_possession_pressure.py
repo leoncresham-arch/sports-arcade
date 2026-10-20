@@ -27,6 +27,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f", part)
         self.assertIn("bRetreatingPass", part)
         self.assertIn("bFastLateralSwitch", part)
+        self.assertIn("bCarrierUnderPressure", part)
+        self.assertIn("FMath::Square(220.f)", part)
         self.assertIn("FMath::Abs(SupportBallVelocity.Y) > 1100.f", part)
         self.assertIn("SupportBallVelocity.X * AttackSign < -450.f", part)
         self.assertIn("const float SupportDepth =", part)
