@@ -347,7 +347,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                             Opp->GetActorLocation().ContainsNaN()) continue;
                         // An unblocked pass can still be intercepted at the receiver.
                         const float ReceiverSeparation = FVector::Dist2D(
-                            Opp->GetActorLocation(), Teammate->GetActorLocation());
+                            Opp->GetActorLocation(), Ball->GetActorLocation() + Delta);
                         if (ReceiverSeparation < 210.f)
                         {
                             bBlocked = true;
