@@ -225,3 +225,7 @@ User-initiated standing tackles now commit their recovery cooldown on input, inc
 ### October 20 — fatigue-sensitive footwork
 
 Low stamina now scales both character top speed and acceleration smoothly from 72% at empty capacity to full movement performance at 40% or greater of available stamina. This works alongside existing pace and acceleration ratings and the sprint-exhaustion lockout. Jockey movement uses 2800 cm/s² braking deceleration instead of the standard 2100 cm/s², for tighter defensive stopping without changing normal run braking. Added `unreal/tests/test_fatigue_movement.py`; no native Unreal compile or player animation validation yet.
+
+### October 20 — manual/AI controlled-touch arbitration
+
+The automatic walking-dribble touch in `SportsArcadeCharacter::Tick` now runs for player-controlled pawns only; AI pawns continue to execute controlled touches through their existing tactical controller and cooldown rules. For local human ball contact, the character also checks whether a friendly footballer is closer to the grounded ball within a 115 cm horizontal/vertical contact envelope. If so, the manual dribble impulse is skipped so simultaneous foot proximity does not force a contested friendly takeover. These are heuristics, not a server-authoritative possession system; source tests are in `unreal/tests/test_manual_dribble_arbitration.py`, and UE native playtests are pending.
