@@ -12,6 +12,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("Gap.X * AttackSign < -100.f", part)
         self.assertIn("SafeLateralSign = Gap.Y >= 0.f ? -1.f : 1.f", part)
         self.assertIn("const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f)", part)
+        self.assertIn("Target.Y += SafeLateralSign * 180.f", part)
 
     def test_dribble_requires_attributed_nearby_carrier_and_cooldown(self):
         code = SOURCE.read_text(encoding="utf-8")
