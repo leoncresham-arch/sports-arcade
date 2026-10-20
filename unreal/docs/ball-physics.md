@@ -17,3 +17,7 @@ The `ASportsArcadeBall` Unreal C++ actor provides a sphere collision body with p
 - The Unreal reference Sphere mesh is approximately 100 cm wide; scaling `BallRadiusCm / 50` is only correct for the engine basic shape.
 - `ResetToCentre` returns to **the actor's starting location**, not necessarily world origin. The name is retained for gameplay intent; place the actor at the centre spot for kickoff.
 - The ball's physics must be tested against the pitch and production goal nets inside Unreal; static source checks cannot validate the behavior.
+
+## October 20 — ball placement and contact integrity
+
+Player-attributed kicks now reject nonfinite player/ball positions; controlled touches also reject nonfinite physics velocity. Referee ball placement rejects nonfinite target coordinates, and resetting to the initial spawn position refuses invalid spawn coordinates. Source regression contracts are in `unreal/tests/test_ball_contact_position_integrity.py`. These guards are committed source only, not an Unreal Engine compile or physics playtest.
