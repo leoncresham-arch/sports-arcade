@@ -242,6 +242,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool StageCupPenaltyKick();
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    bool CanStageCupPenaltyKick() const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool KickStagedCupPenalty(const FVector& Direction);
 
