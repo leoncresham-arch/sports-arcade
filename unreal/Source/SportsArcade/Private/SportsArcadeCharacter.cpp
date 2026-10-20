@@ -465,6 +465,7 @@ void ASportsArcadeCharacter::TackleBall()
     float ClosestDistanceSq = FMath::Square(150.f);
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
+        if (!IsValid(*It)) continue;
         const FVector BallLocation = It->GetActorLocation();
         if (BallLocation.ContainsNaN()) continue;
         const FVector Direction = BallLocation - DefenderLocation;
