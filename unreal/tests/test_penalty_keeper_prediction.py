@@ -19,6 +19,8 @@ class PenaltyKeeperPredictionTests(unittest.TestCase):
         self.assertIn("TravelSeconds >= 0.f && TravelSeconds <= 1.5f", penalty)
         self.assertIn("BallPosition.Y + BallVelocity.Y * TravelSeconds", penalty)
         self.assertIn("FMath::Clamp(AnticipatedY, -300.f, 300.f)", penalty)
+        self.assertIn("Match->GetSuggestedCupPenaltyOutcome() != INDEX_NONE", penalty)
+        self.assertLess(penalty.index("GetSuggestedCupPenaltyOutcome()"), penalty.index("for (TActorIterator<ASportsArcadeBall>"))
         self.assertIn("Keeper->LineupSlot != 0", penalty)
         self.assertIn("Keeper->TeamIndex != Match->GetCupPenaltyDefendingTeam()", penalty)
 
