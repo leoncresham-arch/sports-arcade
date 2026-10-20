@@ -164,7 +164,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             for (TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld()); MateIt; ++MateIt)
             {
                 const ASportsArcadeCharacter* Mate = *MateIt;
-                if (Mate == this || Mate->TeamIndex != TeamIndex ||
+                if (!IsValid(Mate) || Mate == this || Mate->GetWorld() != GetWorld() ||
+                    Mate->TeamIndex != TeamIndex ||
                     Mate->GetActorLocation().ContainsNaN()) continue;
                 const FVector MateToBall = BallLocation - Mate->GetActorLocation();
                 if (FMath::Abs(MateToBall.Z) <= 115.f &&
@@ -183,7 +184,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             for (TActorIterator<ASportsArcadeCharacter> OppIt(GetWorld()); OppIt; ++OppIt)
             {
                 const ASportsArcadeCharacter* Opponent = *OppIt;
-                if (Opponent->TeamIndex == TeamIndex || Opponent->GetWorld() != GetWorld() ||
+                if (!IsValid(Opponent) || Opponent == this ||
+                    Opponent->TeamIndex == TeamIndex || Opponent->GetWorld() != GetWorld() ||
                     Opponent->GetActorLocation().ContainsNaN()) continue;
                 const FVector OppToBall = BallLocation - Opponent->GetActorLocation();
                 if (FMath::Abs(OppToBall.Z) <= 115.f &&
