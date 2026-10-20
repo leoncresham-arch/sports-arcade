@@ -41,6 +41,14 @@ class PenaltyShootoutTests(unittest.TestCase):
         ):
             self.assertIn(fragment, CPP)
 
+    def test_next_shooter_lineup_rotation_contract(self):
+        header = (ROOT / "Source/SportsArcade/Public/SportsArcadePenaltyShootout.h").read_text()
+        self.assertIn("GetNextKickerLineupSlot() const;", header)
+        self.assertIn("PreferredSlots[Attempts % UE_ARRAY_COUNT(PreferredSlots)]", CPP)
+        slots = (9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+        self.assertEqual(len(set(slots)), 11)
+        self.assertEqual(slots[11 % len(slots)], slots[0])
+
     def test_sudden_death_only_after_both_kicks(self):
         tied = [(x % 2, True) for x in range(10)]
         valid, champion = simulate(tied + [(0, True)])
