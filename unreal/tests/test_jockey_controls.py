@@ -10,7 +10,7 @@ class TestJockeyControls(unittest.TestCase):
         self.assertIn('ActionName="Jockey",Key=LeftAlt', ini)
         self.assertIn('void ASportsArcadeCharacter::BeginJockey()', cpp)
         self.assertIn('void ASportsArcadeCharacter::EndJockey()', cpp)
-        self.assertIn('!bJockeyHeld && bSprintHeld', cpp)
+        self.assertIn('!bJockeyHeld && !bShieldHeld && bSprintHeld', cpp)
         self.assertIn('float JockeySpeed = 275.f;', header)
 
 if __name__ == '__main__':
