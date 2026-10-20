@@ -342,6 +342,9 @@ private:
     bool bHasPreviousPenaltyBallPosition = false;
     FVector PreviousPenaltyBallPosition = FVector::ZeroVector;
     int32 SuggestedCupPenaltyOutcome = INDEX_NONE;
+    float PhysicalPenaltyObservationSeconds = 0.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Cup|Penalties", meta=(ClampMin="1.0"))
+    float PhysicalPenaltyObservationTimeoutSeconds = 8.f;
     void ObservePhysicalCupPenalty();
     bool bCupResultRecorded = false;
     bool bCupExtraTimePlayed = false;
