@@ -404,7 +404,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Mate->GetWorld() != GetWorld() ||
                     Mate->TeamIndex != Footballer->TeamIndex ||
                     Mate->GetActorLocation().ContainsNaN()) continue;
-                const FVector Delta = Mate->GetActorLocation() - Ball->GetActorLocation();
+                const FVector MateVelocity = Mate->GetVelocity();
+                if (MateVelocity.ContainsNaN()) continue;
+                const FVector Delta = Mate->GetActorLocation() + MateVelocity.GetClampedToMaxSize2D(650.f) * 0.20f - Ball->GetActorLocation();
                 const float DistanceSq = Delta.SizeSquared2D();
                 if (DistanceSq < FMath::Square(350.f) || DistanceSq > FMath::Square(2200.f)) continue;
                 // Reject outlets already marked at very close range.
