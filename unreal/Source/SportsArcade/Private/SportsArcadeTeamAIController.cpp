@@ -134,14 +134,31 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     bool bIsPrimaryPresser = false;
     if (IsValid(Ball) && Slot == 0)
     {
-        // Sweeper-keeper starter positioning: lateral tracking and bounded advance.
-        const float AnticipatedY = Ball->GetActorLocation().Y + Ball->GetVelocity().Y * FMath::Clamp(GoalkeeperAnticipationSeconds, 0.f, 1.f);
-        Target.Y = FMath::Clamp(AnticipatedY * 0.20f, -GoalkeeperLateralRangeCm, GoalkeeperLateralRangeCm);
-        const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-        Target.X += TowardsPlay * FMath::Clamp((HalfLength - FMath::Abs(Ball->GetActorLocation().X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
-        // Initial close-range keeper clearance; full diving/parry systems will replace this.
+        // Never issue a navigation target from nonfinite physics telemetry.
+        const FVector BallPosition = Ball->GetActorLocation();
         const FVector BallVelocity = Ball->GetVelocity();
-        const bool bIncomingShot = BallVelocity.X * TowardsPlay < -175.f;
+        if (BallPosition.ContainsNaN() || BallVelocity.ContainsNaN())
+        {
+            StopMovement();
+            return;
+        }
+        // Track approaching shots more decisively while retaining a conservative
+        // central stance for ordinary midfield possession.
+        const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
+        const bool bIncomingShot = BallVelocity.X * TowardsPlay <
+            -FMath::Max(0.f, GoalkeeperShotMinSpeedCmPerSec);
+        const float ApproachSeconds = bIncomingShot &&
+            FMath::Abs(BallVelocity.X) > KINDA_SMALL_NUMBER
+            ? (Footballer->GetActorLocation().X - BallPosition.X) / BallVelocity.X : -1.f;
+        const bool bPredictedArrival = ApproachSeconds >= 0.f && ApproachSeconds <= 1.5f;
+        const float AnticipatedY = bPredictedArrival
+            ? BallPosition.Y + BallVelocity.Y * ApproachSeconds
+            : (BallPosition.Y + BallVelocity.Y * FMath::Clamp(GoalkeeperAnticipationSeconds, 0.f, 1.f)) * 0.20f;
+        const float LateralRange = FMath::Min(FMath::Max(0.f, GoalkeeperLateralRangeCm),
+            FMath::Max(0.f, IsValid(Match) ? Match->GoalHalfWidthCm - 55.f : 311.f));
+        Target.Y = FMath::Clamp(AnticipatedY, -LateralRange, LateralRange);
+        Target.X += TowardsPlay * FMath::Clamp((HalfLength - FMath::Abs(BallPosition.X)) * 0.12f, 0.f, GoalkeeperAdvanceCm);
+        // Initial close-range keeper clearance; full diving/parry systems will replace this.
         if (ActionCooldownRemaining <= 0.f &&
             FVector::DistSquared2D(Footballer->GetActorLocation(), Ball->GetActorLocation()) < FMath::Square(ContactRangeCm + 75.f) &&
             Ball->GetActorLocation().Z < 200.f &&
