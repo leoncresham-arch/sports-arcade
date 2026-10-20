@@ -248,8 +248,14 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         const float TravelSpeed = GetVelocity().Size2D();
         const float TouchSpeedFactor = FMath::Lerp(0.65f, 1.15f,
             FMath::Clamp(TravelSpeed / FMath::Max(SprintSpeed, 1.f), 0.f, 1.f));
-        if (IsValid(ClosestDribbleBall) &&
-            ClosestDribbleBall->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
+        // Smooth foot touches toward the footballer's facing during sharp
+        // turns, so the ball follows a controlled arc instead of immediately
+        // snapping to the new movement vector.
+        const FVector TravelDir = GetVelocity().GetSafeNormal2D();
+        const FVector FacingDir = GetActorForwardVector().GetSafeNormal2D();
+        const FVector BlendedTouchDir = (TravelDir * 0.75f + FacingDir * 0.25f).GetSafeNormal2D();
+        if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&
+            ClosestDribbleBall->ApplyControlledTouch(this, BlendedTouchDir *
                 (240.f * (bShieldHeld ? 0.55f : 1.f) * TouchSpeedFactor *
                     FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
                     (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
