@@ -7,6 +7,12 @@ HEADER = ROOT / "Public/SportsArcadeTeamAIController.h"
 SOURCE = ROOT / "Private/SportsArcadeTeamAIController.cpp"
 
 class SecondaryPressTests(unittest.TestCase):
+    def test_secondary_pressure_target_survives_marking(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("bool bIsSecondaryPresser = false;", code)
+        self.assertIn("bIsSecondaryPresser = true;", code)
+        self.assertIn("!bIsPrimaryPresser && !bIsSecondaryPresser", code)
+
     def test_tunable_shadowing_limits(self):
         header = HEADER.read_text(encoding="utf-8")
         self.assertIn("SecondaryPressureRadiusCm = 1700.f", header)
