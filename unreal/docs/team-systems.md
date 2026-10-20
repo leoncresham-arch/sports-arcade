@@ -381,3 +381,5 @@ Manual controlled touches now blend current travel direction (75%) and player fa
 Shielding now adopts the same controlled-braking behavior as jockeying. Manual controlled touches also bias toward player-facing direction while shield is held (55% facing, 45% travel), instead of using the normal 25% facing / 75% travel weighting. Regression assertions updated; the behavior remains an uncompiled, animation-agnostic foundation.
 
 Midfield attacking support now maintains a minimum 250 cm lateral separation where possible from its team's carrier, alternating the side by lineup slot to offer an elementary passing triangle while maintaining the existing 175 cm rear support line. Source regression added; formation/pathfinding balance is not verified in Unreal.
+
+Midfield passing-triangle support now preserves a player's established side of the ball when widening a narrow passing lane. For near-central alignment it still alternates by lineup slot. This corrects a case in which fixed slot-side assignment could pull a midfielder across the carrier and shrink the lateral lane. Source regression updated; runtime team tactics remain unverified.
