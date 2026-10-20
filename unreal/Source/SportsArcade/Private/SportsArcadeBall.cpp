@@ -58,6 +58,8 @@ void ASportsArcadeBall::Kick(const FVector& Direction, float StrengthKgCmPerSec)
 {
     if (!CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
+        CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN() ||
+        CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN() ||
         !FMath::IsFinite(StrengthKgCmPerSec) || StrengthKgCmPerSec <= 0.f)
     {
         return;
