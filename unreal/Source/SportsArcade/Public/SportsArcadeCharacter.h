@@ -90,6 +90,8 @@ private:
     void AwardRestartToAway();
     void StageShootoutPenalty();
     void KickShootoutPenalty();
+    void AwardPenaltyGoal();
+    void AwardPenaltyMiss();
     void PassBall();
     void ShootBall();
     void ChipBall();
