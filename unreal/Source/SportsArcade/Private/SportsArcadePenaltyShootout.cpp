@@ -18,6 +18,15 @@ int32 USportsArcadePenaltyShootout::GetNextKickingTeam() const
     return HomeAttempts == AwayAttempts ? 0 : 1;
 }
 
+int32 USportsArcadePenaltyShootout::GetNextKickerLineupSlot() const
+{
+    const int32 Team = GetNextKickingTeam();
+    if (Team != 0 && Team != 1) return INDEX_NONE;
+    const int32 Attempts = Team == 0 ? HomeAttempts : AwayAttempts;
+    static const int32 PreferredSlots[] = {9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+    return PreferredSlots[Attempts % UE_ARRAY_COUNT(PreferredSlots)];
+}
+
 bool USportsArcadePenaltyShootout::RecordAttempt(int32 TeamIndex, bool bScored)
 {
     if (TeamIndex != GetNextKickingTeam()) return false;
