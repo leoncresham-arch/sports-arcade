@@ -221,3 +221,7 @@ The goalmouth threat bonus is restricted to attackers in the central 1800 cm of 
 ### October 20 — standing tackle contest safety
 
 User-initiated standing tackles now commit their recovery cooldown on input, including whiffs; previously a miss could be immediately retried. The tackle chooses the closest finite, in-range, forward-facing ground ball rather than taking the first ball in actor iteration order. It refuses a ball with a recorded friendly last touch and also refuses a ball currently within 115 cm horizontally and vertically of another friendly footballer, even if the last attributed touch belongs to an opponent. Successful contact continues to use `KickByPlayer` and tackling ratings. This proximity heuristic is not a possession authority or foul/referee decision. Added `unreal/tests/test_standing_tackle_recovery.py` source contracts. Native Unreal compile and collision playtests remain unverified.
+
+### October 20 — fatigue-sensitive footwork
+
+Low stamina now scales both character top speed and acceleration smoothly from 72% at empty capacity to full movement performance at 40% or greater of available stamina. This works alongside existing pace and acceleration ratings and the sprint-exhaustion lockout. Jockey movement uses 2800 cm/s² braking deceleration instead of the standard 2100 cm/s², for tighter defensive stopping without changing normal run braking. Added `unreal/tests/test_fatigue_movement.py`; no native Unreal compile or player animation validation yet.
