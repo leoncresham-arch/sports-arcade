@@ -235,6 +235,16 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool StartCupPenaltyShootout();
 
+    /** Optional physics-backed shootout workflow. Result still requires explicit referee judgment. */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Cup|Penalties")
+    bool bRequirePhysicalPenaltyKicks = false;
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
+    bool StageCupPenaltyKick();
+
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
+    bool KickStagedCupPenalty(const FVector& Direction);
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored);
 
@@ -277,6 +287,10 @@ private:
     TObjectPtr<USportsArcadeCupSave> BoundCup;
     UPROPERTY(Transient)
     TObjectPtr<USportsArcadePenaltyShootout> ActivePenaltyShootout;
+    UPROPERTY(Transient)
+    TObjectPtr<ASportsArcadeCharacter> StagedPenaltyTaker;
+    bool bPenaltyKickStaged = false;
+    bool bPenaltyKickTaken = false;
     bool bCupResultRecorded = false;
     bool bCupExtraTimePlayed = false;
     bool bExtraTimeActive = false;
