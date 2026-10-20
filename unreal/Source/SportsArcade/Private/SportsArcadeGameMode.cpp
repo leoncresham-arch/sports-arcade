@@ -100,7 +100,8 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
     if (IsCupPenaltyAwaitingResult() && FMath::IsFinite(DeltaSeconds) && DeltaSeconds > 0.f)
         PhysicalPenaltyObservationSeconds += DeltaSeconds;
     ObservePhysicalCupPenalty();
-    if (bMatchFinished || bHalfTime || bBallOutOfPlay || DeltaSeconds <= 0.f || !GetWorld()) return;
+    if (bMatchFinished || bHalfTime || bBallOutOfPlay ||
+        !FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f || !GetWorld()) return;
 
     if (!IsValid(MatchBall))
     {
