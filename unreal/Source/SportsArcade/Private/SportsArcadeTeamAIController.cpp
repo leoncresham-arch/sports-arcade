@@ -514,6 +514,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector BallVelocity = Ball->GetVelocity().ContainsNaN() ? FVector::ZeroVector :
                 Ball->GetVelocity().GetClampedToMaxSize(3500.f);
             FVector Predicted = Ball->GetActorLocation() + BallVelocity * LeadSeconds;
+            if (Predicted.ContainsNaN()) { StopMovement(); return; }
             Target = FVector(FMath::Clamp(Predicted.X, -HalfLength + 100.f, HalfLength - 100.f),
                 FMath::Clamp(Predicted.Y, -HalfWidth + 100.f, HalfWidth - 100.f), 0.f);
             // No controlled kick attempts while the ball is too high to reach.
