@@ -26,6 +26,7 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("ContactDistance3DSq = ToBall.SizeSquared()", block)
         self.assertIn("PlayerVelocity.ContainsNaN()", block)
         self.assertIn("bOpponentClearlyCloser", block)
+        self.assertIn("OppToBall.Size2D() + 25.f < FMath::Sqrt(DistanceSq)", block)
         self.assertIn("bTeammateClearlyCloser", block)
         self.assertIn("BestBall->ApplyControlledTouch(this", block)
         self.assertIn("Facing * 0.65f", block)
