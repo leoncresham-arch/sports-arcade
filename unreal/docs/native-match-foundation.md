@@ -123,3 +123,9 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - The opt-in physically staged shootout attempts a deterministic 11-player lineup-slot rotation, preferring slots 9, 10, 8, 7, 6, 5, 4, 3, 2, 1, then 0 (goalkeeper). No authored footballer is used again until the cycle wraps at the 12th attempt for the same team.
 - The prototype falls back to a valid nearby teammate when the selected lineup slot is not authored; full roster/eligibility enforcement, injuries, send-offs and substitutes remain future referee work.
 - The current Unreal source and Python contracts support the arrangement but actual positional staging and match balance require UE5.5 Editor validation.
+
+
+## October 20 — shootout goalkeeper and shooter staging
+- Physical penalty staging now places an authored defending goalkeeper (lineup slot 0, opposite team) at the center of the defended goal line, without asserting that a save or dive is implemented.
+- The shooter is rotated to face the attacking goal (+X for home and -X for away), so the **O** keyboard action uses an intentionally goalward forward vector.
+- Both positions are provisional level-space mechanics requiring in-engine collision, camera, rigging, keeper movement, contact and animation testing.
