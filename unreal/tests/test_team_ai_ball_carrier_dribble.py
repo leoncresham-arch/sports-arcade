@@ -4,6 +4,15 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_dribble_steers_away_from_nearest_defender(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        part = code.split("if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)", 1)[1].split(
+            "if (!bTeammateNearbyBall", 1)[0]
+        self.assertIn("NearestThreatSq", part)
+        self.assertIn("Gap.X * AttackSign < -100.f", part)
+        self.assertIn("SafeLateralSign = Gap.Y >= 0.f ? -1.f : 1.f", part)
+        self.assertIn("const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f)", part)
+
     def test_dribble_requires_attributed_nearby_carrier_and_cooldown(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("const bool bSelfControllingBall",1)[1].split(
