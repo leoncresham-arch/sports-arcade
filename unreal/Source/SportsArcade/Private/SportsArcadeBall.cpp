@@ -91,7 +91,7 @@ void ASportsArcadeBall::StopMotion()
 
 void ASportsArcadeBall::PlaceAtRest(const FVector& WorldPosition)
 {
-    if (!CollisionSphere) return;
+    if (!CollisionSphere || WorldPosition.ContainsNaN()) return;
     SetActorLocation(WorldPosition, false, nullptr, ETeleportType::TeleportPhysics);
     StopMotion();
     LastTouchPlayer.Reset();
