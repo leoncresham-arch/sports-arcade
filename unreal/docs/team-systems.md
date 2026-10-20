@@ -204,3 +204,5 @@ General outfield marking now aims toward an opponent's projected position using 
 The marking point also maintains an initial 120 cm goalside offset relative to the opponent's predicted movement, before existing blend and pitch clamping. Source regression updated; this offset is not yet dynamically tuned by defensive formation or tackling state.
 
 General marking now ignores a nearest opponent positioned more than 900 cm behind the ball in the team's defensive orientation, reducing pursuit of players away from the immediate threat. This is an approximation and must be checked in formation playtests.
+
+Goalside marking separation is now scaled to 12% of the marker-to-attacker distance, clamped to 80–180 cm, rather than a single 120 cm offset. This is an initial tunable behavior subject to engine playtests.
