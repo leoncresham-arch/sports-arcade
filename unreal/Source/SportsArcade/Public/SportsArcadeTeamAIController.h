@@ -26,6 +26,14 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="500.0"))
     float DefensiveRecoveryShiftCm = 150.f;
     
+    /** Keep the defensive back line from following the ball too far upfield. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Defence", meta=(ClampMin="0.0", ClampMax="2500.0"))
+    float DefensiveLineMaximumAdvanceCm = 1300.f;
+
+    /** Limit how far the defensive line drops toward its own goal. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Defence", meta=(ClampMin="0.0", ClampMax="2000.0"))
+    float DefensiveLineRecoveryDepthCm = 650.f;
+    
     /** Maximum distance for an AI teammate to occupy a lateral passing lane. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="1200.0"))
     float PassingSupportLateralShiftCm = 350.f;
