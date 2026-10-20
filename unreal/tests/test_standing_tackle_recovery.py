@@ -51,6 +51,14 @@ class StandingTackleRecoveryTests(unittest.TestCase):
                       "ChallengeDirection = Forward"):
             self.assertIn(token, self.tackle)
 
+    def test_fast_receding_balls_are_out_of_standing_tackle_reach(self):
+        for token in ("BallVelocity.ContainsNaN()",
+                      "BallVelocity.SizeSquared2D() > FMath::Square(1200.f)",
+                      "FVector2D::DotProduct(FVector2D(Direction), FVector2D(BallVelocity)) > 0.f"):
+            self.assertIn(token, self.tackle)
+        self.assertLess(self.tackle.index("BallVelocity.ContainsNaN()"),
+                        self.tackle.index("CandidateBall = *It;"))
+
     def test_endurance_scales_tackle_strength(self):
         for token in ("TackleCapacity = FMath::Max(MaxStamina",
                       "FMath::Clamp(CurrentStamina, 0.f, TackleCapacity)",
