@@ -23,7 +23,7 @@ class FatigueMovementTests(unittest.TestCase):
 
     def test_jockey_brakes_more_sharply_without_changing_regular_braking(self):
         code = SOURCE.read_text(encoding="utf-8")
-        self.assertIn("bJockeyHeld && bPlayActive ? 2800.f : 2100.f", code)
+        self.assertIn("(bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f", code)
         self.assertIn("bJockeyHeld && bPlayActive ? JockeySpeed", code)
 
 if __name__ == "__main__":
