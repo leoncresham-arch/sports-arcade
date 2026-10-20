@@ -97,6 +97,8 @@ void ASportsArcadeGameMode::BeginPlay()
 void ASportsArcadeGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if (IsCupPenaltyAwaitingResult() && FMath::IsFinite(DeltaSeconds) && DeltaSeconds > 0.f)
+        PhysicalPenaltyObservationSeconds += DeltaSeconds;
     ObservePhysicalCupPenalty();
     if (bMatchFinished || bHalfTime || bBallOutOfPlay || DeltaSeconds <= 0.f || !GetWorld()) return;
 
@@ -366,6 +368,7 @@ void ASportsArcadeGameMode::ResetMatch()
     StagedPenaltySpot = FVector::ZeroVector;
     bHasPreviousPenaltyBallPosition = false;
     SuggestedCupPenaltyOutcome = INDEX_NONE;
+    PhysicalPenaltyObservationSeconds = 0.f;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     StageKickoff(0);
@@ -737,6 +740,7 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
     StagedPenaltySpot = FVector::ZeroVector;
     bHasPreviousPenaltyBallPosition = false;
     SuggestedCupPenaltyOutcome = INDEX_NONE;
+    PhysicalPenaltyObservationSeconds = 0.f;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     BoundSeason = Season;
@@ -962,6 +966,7 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
     StagedPenaltySpot = FVector::ZeroVector;
     bHasPreviousPenaltyBallPosition = false;
     SuggestedCupPenaltyOutcome = INDEX_NONE;
+    PhysicalPenaltyObservationSeconds = 0.f;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     return IsValid(ActivePenaltyShootout);
@@ -1037,6 +1042,7 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     StagedPenaltySpot = Spot;
     bHasPreviousPenaltyBallPosition = false;
     SuggestedCupPenaltyOutcome = INDEX_NONE;
+    PhysicalPenaltyObservationSeconds = 0.f;
     StagedPenaltyTaker = Taker;
     bPenaltyKickStaged = true;
     bPenaltyKickTaken = false;
@@ -1148,6 +1154,10 @@ void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
     if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
         FMath::Abs(Current.Y) > PitchHalfWidthCm + MatchBall->BallRadiusCm)
         SuggestedCupPenaltyOutcome = 0;
+    if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
+        PhysicalPenaltyObservationSeconds >= PhysicalPenaltyObservationTimeoutSeconds &&
+        MatchBall->GetVelocity().SizeSquared() < FMath::Square(60.f))
+        SuggestedCupPenaltyOutcome = 0;
     PreviousPenaltyBallPosition = Current;
     if (SuggestedCupPenaltyOutcome != INDEX_NONE)
         OnCupPenaltyOutcomeSuggested.Broadcast(Team, SuggestedCupPenaltyOutcome == 1);
@@ -1205,6 +1215,7 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
     StagedPenaltySpot = FVector::ZeroVector;
     bHasPreviousPenaltyBallPosition = false;
     SuggestedCupPenaltyOutcome = INDEX_NONE;
+    PhysicalPenaltyObservationSeconds = 0.f;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     const int32 Winner = ActivePenaltyShootout->WinningTeam;
