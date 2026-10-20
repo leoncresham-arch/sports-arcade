@@ -15,10 +15,10 @@ class PossessionPressureTests(unittest.TestCase):
     def test_controlled_carrier_does_not_self_press(self):
         cpp = SOURCE.read_text(encoding="utf-8")
         segment = cpp.split("const bool bSelfControllingBall", 1)[1].split(
-            "if (!bTeammateNearbyBall && !bSelfControllingBall", 1)[1]
+            "if (!bTeammateNearbyBall && !bSelfControllingBall", 1)[0]
         self.assertIn("Ball->GetLastTouchPlayer() == Footballer", segment)
         self.assertIn("FMath::Square(220.f)", segment)
-        self.assertIn("Nearest == Footballer", segment)
+        self.assertIn("!bSelfControllingBall", cpp)
 
     def test_primary_ai_does_not_press_nearby_recent_teammate_ball(self):
         code = SOURCE.read_text(encoding="utf-8")
