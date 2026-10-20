@@ -143,3 +143,9 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - `OnCupPenaltyReviewed(KickingTeam, bScored)` fires after the shootout state successfully records the referee's score/miss ruling, allowing future HUD tally updates.
 - `CanKickStagedCupPenalty()` validates readiness for the actual kick. `GetStagedCupPenaltyTaker()` hides stale or already-kicked takers. Both staging and kicking reject mismatched/advanced cup fixtures.
 - Goalkeeper physics parry attempts are gated on ball velocity directed toward the defended goal. Source CI is not an Unreal Engine 5.5 runtime or compile test.
+
+
+## October 20 — referee-assist penalty flight observations
+- Each physically kicked cup penalty is sampled by GameMode.Tick even while regulation play is stopped at full-time. A segment crossing the defended goal plane between the posts and below the bar produces a *suggested* goal (1); exiting outside the posts/over the bar or the touchline suggests a miss (0). Any earlier touchline exit wins over a later apparent goal-plane crossing in the same simulation step.
+- `GetSuggestedCupPenaltyOutcome()` returns -1 while observation is pending or out of scope, 0 for a likely miss, 1 for a likely goal. `OnCupPenaltyOutcomeSuggested(KickingTeam, bScored)` fires once when a suggestion becomes available.
+- This telemetry is explicitly non-authoritative; the match still requires the referee to confirm with F7/F8 / `ResolvePhysicalCupPenalty()`. Keeper parries, deflections and complex physics need actual Windows UE 5.5 testing before the result can be automated.
