@@ -386,6 +386,13 @@ void ASportsArcadeCharacter::TackleBall()
     // A missed standing tackle is still a committed defensive action; repeated
     // presses must not bypass the recovery window while the ball approaches.
     TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
+    const float TackleCapacity = FMath::Max(MaxStamina *
+        (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
+    CurrentStamina = FMath::Clamp(CurrentStamina, 0.f, TackleCapacity);
+    // Exhaustion reduces a defender's challenge strength; spending stamina
+    // happens even on a miss, but the impulse uses pre-attempt endurance.
+    const float TackleEnergyFactor = FMath::Lerp(0.6f, 1.f,
+        FMath::Clamp(CurrentStamina / (TackleCapacity * 0.35f), 0.f, 1.f));
     CurrentStamina = FMath::Max(0.f, CurrentStamina - FMath::Max(0.f, TackleStaminaCost));
     const FVector DefenderLocation = GetActorLocation();
     const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
@@ -452,7 +459,7 @@ void ASportsArcadeCharacter::TackleBall()
             }
         }
         CandidateBall->KickByPlayer(this, ChallengeDirection,
-            850.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f),
+            850.f * TackleEnergyFactor * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f),
             175.f);
     }
 }
