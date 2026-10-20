@@ -537,3 +537,11 @@ The user strongly insists on sustained autonomous development **within each acti
 - New `CanKickStagedCupPenalty()` centralizes physical penalty state, current taker, referee ball mark and bound cup fixture validation. Both staging and kicking reject a cup bracket that changed since the shootout was bound.
 - Penalty keeper AI only attempts the provisional contact parry for balls moving toward its defended goal, not any nearby ball.
 - Python static source regression tests added/updated and GitHub source checks monitored. The native UE 5.5 build and real goalkeeper/penalty behavior remain unverified and must not be described as playable or validated until run locally.
+
+
+## October 20 — continued shootout safety and UI events
+- Improved physical shootout readiness: `CanKickStagedCupPenalty()` now checks the current penalty taker, same-world actor validity, still-bound cup fixture, proper team and referee ball-spot tolerance. UI `GetStagedCupPenaltyTaker()` no longer returns a taken/stale penalty kicker.
+- `CanStageCupPenaltyKick()` also rejects stale or advanced bracket fixtures, before physically staging another shot.
+- Goalkeeper provisional penalty parry only reacts to balls travelling toward the defended goal; this is not automatic score/save adjudication.
+- Added Blueprint `OnPhysicalPenaltyKicked` event when physics kick succeeds, separate from `OnCupPenaltyReviewed(KickingTeam, bScored)` after official score/miss recording. Regression tests updated and static source CI verified.
+- Continue next gameplay items in existing repo. UE 5.5 Windows compile, movement, and source/native automation remain to be run on a real Unreal installation.
