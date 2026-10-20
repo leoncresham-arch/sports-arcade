@@ -1022,6 +1022,15 @@ bool ASportsArcadeGameMode::IsCupPenaltyAwaitingResult() const
         IsCupTieBreakRequired() && IsValid(ActivePenaltyShootout);
 }
 
+bool ASportsArcadeGameMode::ResolvePhysicalCupPenalty(bool bScored)
+{
+    if (!IsCupPenaltyAwaitingResult() || !IsValid(ActivePenaltyShootout))
+        return false;
+    const int32 KickingTeam = ActivePenaltyShootout->GetNextKickingTeam();
+    if (KickingTeam != 0 && KickingTeam != 1) return false;
+    return RecordCupPenaltyAttempt(KickingTeam, bScored);
+}
+
 bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bScored)
 {
     // Validate the bound fixture BEFORE consuming an attempt. An invalid or
