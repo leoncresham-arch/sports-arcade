@@ -192,3 +192,5 @@ Pressure outlet scoring now adds a penalty for projected receiving positions wit
 Normal AI pass selection also penalizes predicted receiver locations within 400 cm of the sideline. This joins existing opponent-proximity and progress scoring, without disallowing productive wide passes outright. Regression coverage: `test_team_ai_receiver_leading.py`.
 
 Defender interception prediction now uses a zero-velocity fallback if ball velocity is nonfinite, keeping the pursuit target finite without modifying ball physics. The interception source-contract test checks this safeguard. Native movement and engine tests still need execution.
+
+AI forward dribble requests now check the ball is within the same 115 cm vertical reach boundary enforced by `ApplyControlledTouch`, preventing futile high-ball attempts at the caller. Source regression contracts were updated; native match behavior remains untested.
