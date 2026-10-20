@@ -63,6 +63,19 @@ class MatchControlsAndPhasesTest(unittest.TestCase):
         self.assertIn("Mode->GetStagedCupPenaltyTaker()", cpp)
         self.assertIn("Mode->KickStagedCupPenalty(Taker->GetActorForwardVector())", cpp)
 
+    def test_keyboard_referee_scores_physical_penalty(self):
+        ini = read("Config/DefaultInput.ini")
+        header = read("Source/SportsArcade/Public/SportsArcadeCharacter.h")
+        cpp = read("Source/SportsArcade/Private/SportsArcadeCharacter.cpp")
+        for action, key, handler, result in (
+            ("PenaltyGoalReview", "F7", "AwardPenaltyGoal", "true"),
+            ("PenaltyMissReview", "F8", "AwardPenaltyMiss", "false"),
+        ):
+            self.assertIn(f'ActionName="{action}",Key={key}', ini)
+            self.assertIn(f"void {handler}();", header)
+            self.assertIn(f'BindAction(TEXT("{action}")', cpp)
+            self.assertIn(f"Mode->ResolvePhysicalCupPenalty({result});", cpp)
+
     def test_successful_shots_increment_team_stats(self):
         header = read("Source/SportsArcade/Public/SportsArcadeGameMode.h")
         game = read("Source/SportsArcade/Private/SportsArcadeGameMode.cpp")
