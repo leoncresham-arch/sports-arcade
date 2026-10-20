@@ -19,6 +19,9 @@ class StandingTackleRecoveryTests(unittest.TestCase):
         self.assertLess(tackle.index("TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds"),
                         tackle.index("for (TActorIterator<ASportsArcadeBall>"))
         self.assertIn("TackleCooldownRemaining > 0.f", tackle)
+        self.assertIn("CurrentStamina = FMath::Max(0.f, CurrentStamina - FMath::Max(0.f, TackleStaminaCost))", tackle)
+        self.assertLess(tackle.index("CurrentStamina = FMath::Max(0.f, CurrentStamina -"),
+                        tackle.index("for (TActorIterator<ASportsArcadeBall>"))
 
     def test_safely_selects_nearest_reachable_forward_ball(self):
         for token in ("ClosestDistanceSq = FMath::Square(150.f)",
