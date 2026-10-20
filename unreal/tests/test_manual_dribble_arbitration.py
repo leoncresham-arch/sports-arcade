@@ -38,7 +38,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("ClosestDribbleDistanceSq", self.tick)
         self.assertIn("ContactDistanceSq >= ClosestDribbleDistanceSq", self.tick)
         self.assertIn("ClosestDribbleBall = *It", self.tick)
-        self.assertIn("if (IsValid(ClosestDribbleBall) &&", self.tick)
+        self.assertIn("if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&", self.tick)
 
     def test_opponent_closer_to_ball_blocks_automatic_steal(self):
         for token in ("bOpponentHasCloserControl",
@@ -46,7 +46,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
                       "!IsValid(Opponent)",
                       "Opponent->GetWorld() != GetWorld()",
                       "OppToBall.SizeSquared2D() < FMath::Square(95.f)",
-                      "OppToBall.SizeSquared2D() < MyBallDistanceSq",
+                      "bOpponentClearlyCloser",
                       "if (bOpponentHasCloserControl) continue"):
             self.assertIn(token, self.tick)
         self.assertLess(self.tick.index("if (bOpponentHasCloserControl) continue"),
