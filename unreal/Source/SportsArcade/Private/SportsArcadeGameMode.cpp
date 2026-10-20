@@ -1021,8 +1021,11 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
 bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
 {
     if (!bRequirePhysicalPenaltyKicks || !bPenaltyKickStaged || bPenaltyKickTaken ||
-        !IsCupTieBreakRequired() || !IsValid(StagedPenaltyTaker) ||
-        !IsValid(MatchBall) || Direction.ContainsNaN() || Direction.IsNearlyZero())
+        !IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
+        !IsValid(StagedPenaltyTaker) || !IsValid(MatchBall) ||
+        StagedPenaltyTaker->GetWorld() != GetWorld() ||
+        StagedPenaltyTaker->TeamIndex != ActivePenaltyShootout->GetNextKickingTeam() ||
+        Direction.ContainsNaN() || Direction.IsNearlyZero())
         return false;
     if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Direction.GetSafeNormal(),
         ProvisionalRestartImpulse * 1.6f, 210.f)) return false;
