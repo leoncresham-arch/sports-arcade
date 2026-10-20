@@ -391,10 +391,17 @@ bool ASportsArcadeGameMode::AwardUndeterminedRestart(int32 AwardedTeam)
             : FVector(SideX * (PitchHalfLengthCm - 500.f),
                 SideY * 500.f, MatchBall->BallRadiusCm + 2.f);
     }
+    ASportsArcadeCharacter* Taker = FindRestartTaker(AwardedTeam, PendingRestartLocation);
+    if (!IsValid(Taker))
+    {
+        // Referee can retry after roster setup; never consume the unknown award.
+        PendingRestartType = ESportsArcadeRestartType::Undetermined;
+        return false;
+    }
     PendingRestartTeam = AwardedTeam;
-    PendingRestartTaker = FindRestartTaker(AwardedTeam, PendingRestartLocation);
+    PendingRestartTaker = Taker;
     bManualRestartStaged = false;
-    return IsValid(PendingRestartTaker);
+    return true;
 }
 
 bool ASportsArcadeGameMode::CanResumePendingRestart() const
