@@ -278,6 +278,14 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     int32 GetSuggestedCupPenaltyOutcome() const;
 
+    /** Seconds since the physical kick; zero when no attempt is awaiting review. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    float GetCupPenaltyObservationElapsedSeconds() const;
+
+    /** Remaining seconds until the referee-assist hard cap, not an automatic ruling. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    float GetCupPenaltyObservationRemainingSeconds() const;
+
     /** Explicit referee confirmation of the nonauthoritative ball-flight suggestion. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool ConfirmSuggestedCupPenaltyOutcome();
