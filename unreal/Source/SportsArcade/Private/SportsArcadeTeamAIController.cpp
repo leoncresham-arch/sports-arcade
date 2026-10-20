@@ -237,6 +237,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         {
             const float SupportGap = (Ball->GetActorLocation().X - Target.X) * AttackSign;
             Target.X += AttackSign * FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f);
+            // The supporting midfielder should not overrun the available
+            // passing lane and stand farther forward than the ball carrier.
+            const float MaximumSupportX = Ball->GetActorLocation().X -
+                AttackSign * 175.f;
+            Target.X = AttackSign > 0.f
+                ? FMath::Min(Target.X, MaximumSupportX)
+                : FMath::Max(Target.X, MaximumSupportX);
         }
 
         // Hold the authored back line within a tunable attacking/recovery band.
