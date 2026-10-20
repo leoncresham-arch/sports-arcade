@@ -40,7 +40,9 @@ class StandingTackleRecoveryTests(unittest.TestCase):
 
     def test_challenge_deflects_from_nearby_opponent_without_backwards_kick(self):
         for token in ("PreviousCarrier = CandidateBall->GetLastTouchPlayer()",
+                      "PreviousCarrier->GetWorld() == GetWorld()",
                       "PreviousCarrier->TeamIndex != TeamIndex",
+                      "FMath::Square(220.f)",
                       "Forward * 0.65f + Away * 0.35f",
                       "FVector::DotProduct(ChallengeDirection, Forward) < 0.35f",
                       "ChallengeDirection = Forward"):
