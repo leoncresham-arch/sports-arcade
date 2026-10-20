@@ -655,7 +655,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float GoalProximityCm = FMath::Abs(It->GetActorLocation().X + MarkingDirection * HalfLength);
             const bool bCentralGoalThreat = FMath::Abs(It->GetActorLocation().Y) < 1800.f;
             const float GoalDangerWeight = GoalProximityCm < 1600.f && bCentralGoalThreat ? 0.75f : 1.f;
-            const float ThreatDistance = Distance * (bDeepDefensiveThreat ? 0.85f : 1.f) * GoalDangerWeight;
+            // Prefer actively advancing runs over stationary opposition when
+            // competing nearby marking assignments have similar distances.
+            const FVector ThreatVelocity = It->GetVelocity();
+            const bool bDirectGoalRun = !ThreatVelocity.ContainsNaN() &&
+                ThreatVelocity.X * MarkingDirection < -180.f &&
+                GoalProximityCm < 2500.f;
+            const float ThreatDistance = Distance * (bDeepDefensiveThreat ? 0.85f : 1.f) *
+                GoalDangerWeight * (bDirectGoalRun ? 0.82f : 1.f);
             if (ThreatDistance < NearestOpponentDistance)
             {
                 Opponent = *It;
