@@ -36,6 +36,14 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float PressureRadiusCm = 2100.f;
+    
+    /** Closest additional defender shadows the ball when the opposition last touched it. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Defence", meta=(ClampMin="0.0", ClampMax="3000.0"))
+    float SecondaryPressureRadiusCm = 1700.f;
+
+    /** Keep the supporting defender behind the lead presser, not on the same spot. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Defence", meta=(ClampMin="0.0", ClampMax="1000.0"))
+    float SecondaryPressureStandOffCm = 450.f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float GoalkeeperLateralRangeCm = 280.f;
