@@ -540,6 +540,20 @@ void ASportsArcadeCharacter::ReceiveBall()
             }
         }
         if (bOpponentClearlyCloser) continue;
+        bool bTeammateClearlyCloser = false;
+        for (TActorIterator<ASportsArcadeCharacter> Mate(GetWorld()); Mate; ++Mate)
+        {
+            if (!IsValid(*Mate) || Mate == this || Mate->GetWorld() != GetWorld() ||
+                Mate->TeamIndex != TeamIndex || Mate->GetActorLocation().ContainsNaN()) continue;
+            const FVector MateToBall = It->GetActorLocation() - Mate->GetActorLocation();
+            if (FMath::Abs(MateToBall.Z) < 115.f && MateToBall.SizeSquared2D() < DistanceSq &&
+                MateToBall.SizeSquared2D() < FMath::Square(110.f))
+            {
+                bTeammateClearlyCloser = true;
+                break;
+            }
+        }
+        if (bTeammateClearlyCloser) continue;
         BestDistanceSq = DistanceSq;
         BestBall = *It;
     }
