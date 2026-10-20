@@ -40,6 +40,7 @@ class PenaltyFlightObservationTests(unittest.TestCase):
 
     def test_settled_ball_timeout_is_suggestion_only(self):
         self.assertIn("PhysicalPenaltyObservationSeconds >= PhysicalPenaltyObservationTimeoutSeconds", SOURCE)
+        self.assertIn("Current.X * GoalDirection < -(PitchHalfLengthCm + MatchBall->BallRadiusCm)", SOURCE)
         self.assertIn("MatchBall->GetVelocity().SizeSquared() < FMath::Square(60.f)", SOURCE)
         self.assertIn("FMath::IsFinite(DeltaSeconds) && DeltaSeconds > 0.f", SOURCE)
         self.assertEqual(SOURCE.count("PhysicalPenaltyObservationSeconds = 0.f;"), 5)
