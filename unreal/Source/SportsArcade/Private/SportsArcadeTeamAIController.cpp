@@ -356,7 +356,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                         ReceiverPressurePenalty = FMath::Max(ReceiverPressurePenalty,
                             FMath::Max(0.f, 450.f - ReceiverSeparation) * 0.8f);
                         const FVector2D Start(Ball->GetActorLocation());
-                        const FVector2D End(Teammate->GetActorLocation());
+                        const FVector2D End(Ball->GetActorLocation() + Delta);
                         const FVector2D Segment = End - Start;
                         const float Alpha = FMath::Clamp(FVector2D::DotProduct(FVector2D(Opp->GetActorLocation()) - Start, Segment) /
                             FMath::Max(Segment.SizeSquared(), 1.f), 0.f, 1.f);
