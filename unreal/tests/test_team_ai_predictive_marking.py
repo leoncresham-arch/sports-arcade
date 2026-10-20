@@ -10,6 +10,7 @@ class PredictiveMarkingTests(unittest.TestCase):
         section = source.split("// A conservative defensive shadow", 1)[1].split(
             "// Never forward invalid authored formation", 1)[0]
         self.assertIn("const FVector OpponentVelocity = Opponent->GetVelocity()", section)
+        self.assertIn("if (MarkingPoint.ContainsNaN()) { StopMovement(); return; }", section)
         self.assertIn("OpponentVelocity.ContainsNaN() ? FVector::ZeroVector", section)
         self.assertIn("OpponentVelocity.GetClampedToMaxSize2D(650.f) * 0.20f", section)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
