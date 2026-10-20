@@ -18,6 +18,14 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float FormationAdvanceFactor = 0.25f;
 
+    /** Small forward support shift when our side most recently touched the ball. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="500.0"))
+    float AttackingSupportShiftCm = 220.f;
+
+    /** Conservative retreat when the opposition was last credited with touch. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="500.0"))
+    float DefensiveRecoveryShiftCm = 150.f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float PressureRadiusCm = 2100.f;
 
