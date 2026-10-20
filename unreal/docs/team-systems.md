@@ -339,3 +339,7 @@ Off-ball AI marking now biases a defender's goal-side shadow laterally toward th
 ### October 20 — off-ball marking telemetry guard
 
 Off-ball AI now rejects a nonfinite opponent-predicted marking point before computing goal-side and central-lane cover or issuing a navigation request. This guards against invalid composed location/velocity data. Source regression updated; native Unreal compilation and movement testing remain outstanding.
+
+### October 20 — urgent goalmouth marking
+
+When a marked opponent approaches the defending goal, the off-ball AI reduces its generic lateral infield-shading adjustment (bounded between 35% and 100% of the normal shift), prioritizing direct goal-side coverage. Existing target interpolation and pitch limits remain. This is a source-level tactical heuristic awaiting native Unreal navigation and playtesting.
