@@ -154,3 +154,5 @@ Secondary supporting defenders now retain their shadow-pressure target instead o
 ## October 20 — initial autonomous ball-carry touch
 
 An AI outfielder who is the recent, nearby ball toucher can now apply a modest forward physics-based controlled touch while the existing action cooldown is ready. The touch requests 380 cm/s toward the opposing goal, uses the ball's existing `ApplyControlledTouch` contact and height checks, and sets a shortened cooldown after a successful touch. This is a basic forward dribble, not contextual shielding, skill moves, collision-aware dribbling or guaranteed control. Source regression: `unreal/tests/test_team_ai_ball_carrier_dribble.py`; native gameplay, controller movement and ball-contact tuning remain unverified.
+
+A self-attributed ball carrier also sets a short attacking movement target ahead of the ball (280 cm) and protects that target from the generic marking stage between touch impulses. This remains a simple forward-carry heuristic pending Unreal movement and collision testing.
