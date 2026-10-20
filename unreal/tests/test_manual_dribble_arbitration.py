@@ -15,6 +15,15 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", self.tick)
         self.assertIn("It->ApplyControlledTouch(this", self.tick)
 
+    def test_nonfinite_dribble_telemetry_blocks_touch(self):
+        for token in ("if (!IsValid(*It)) continue",
+                      "MyLocation.ContainsNaN()",
+                      "MyVelocity.ContainsNaN()",
+                      "MyFacing.ContainsNaN()",
+                      "MyFacing.GetSafeNormal2D().IsNearlyZero()",
+                      "MyVelocity.GetSafeNormal2D()"):
+            self.assertIn(token, self.tick)
+
     def test_opponent_closer_to_ball_blocks_automatic_steal(self):
         for token in ("bOpponentHasCloserControl",
                       "Opponent->TeamIndex == TeamIndex",
