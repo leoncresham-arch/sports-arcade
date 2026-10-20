@@ -22,6 +22,8 @@ class ReceiverLeadingTests(unittest.TestCase):
         self.assertIn("const FVector2D End(Ball->GetActorLocation() + Delta)", passes)
         self.assertIn("Opp->GetActorLocation(), Ball->GetActorLocation() + Delta)", passes)
         self.assertIn("Direction = Delta.GetSafeNormal2D()", passes)
+        self.assertIn("WidePenalty", passes)
+        self.assertIn("HalfWidth - 400.f", passes)
 
 
 if __name__ == "__main__":
