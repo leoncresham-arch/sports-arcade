@@ -513,3 +513,12 @@ The user strongly insists on sustained autonomous development **within each acti
 - Added OnRestartAwarded Blueprint event and F5/F6 keyboard decisions for home/away; B stages restart and M takes it when manual mode is configured. Kickoff reinitialization clears stale manual setup.
 - Fixed provisional automatic corner direction so it aims back into the box. Restart eligibility validates nonfinite and out-of-pitch referee marks and full 3D ball position; B can restage a drifting dead ball.
 - Source/CI regression checks and corresponding docs updated; native UE5.5 compilation and gameplay validation are still outstanding. Continue the existing 100-item launch scope, without asking for approval after individual commits.
+
+
+## October 20 — physical shootout and C++ consistency continuation
+- Opt-in `bRequirePhysicalPenaltyKicks` now supports staging the ball and taker at a penalty spot, kicking with validated goalward velocity, checking the staged mark and player team/world, and manually judging the scored/missed outcome before progressing cup shootout state.
+- Prototype Windows controls: **P** prepare kicker, **O** kick, **F7** record goal, **F8** record miss. The 11-player shooter-slot rotation prevents repeated use of one authored player during the first cycle; incomplete rosters fall back to an eligible nearby team member.
+- Blueprint queries: `CanStageCupPenaltyKick()`, `IsCupPenaltyAwaitingResult()`, `GetStagedCupPenaltyTaker()`; referee action `ResolvePhysicalCupPenalty(bScored)`.
+- Reconciled accidental duplicate `StageCupPenaltyKick` and `KickStagedCupPenalty` native definitions and redundant result-state resets. Added `test_game_mode_duplicate_definitions.py` to catch repeated C++ GameMode methods in CI.
+- Updated cup, control and physics-related source checks. GitHub Actions verifies Python/source contracts, **not** a native Unreal Engine 5.5 build or physics gameplay. Further scope: engine build, penalty goalkeeper responses, real goal/miss sensors, legal set-piece animations, player eligibility, AI and live 11v11 match play.
+- Continue implementing directly in the existing `main` branch, maintain no-paid-services and no-restart policy, and keep starting additional approved work rather than stopping at each commit.
