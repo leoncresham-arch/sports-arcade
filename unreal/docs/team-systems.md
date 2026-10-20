@@ -267,3 +267,7 @@ Successful standing tackles now impose a 0.35-second local automatic dribble-tou
 ### October 20 — contested dribble actor validation
 
 Manual possession-proximity scans now reject invalid teammate and opponent actor references and players from a different world before reading their position. This hardens level transition and actor teardown edge cases, while retaining spatial contest arbitration. Regression contracts in `test_manual_dribble_arbitration.py`; native Unreal playtesting still pending.
+
+### October 20 — consistent sprint release
+
+Releasing sprint now recomputes movement speed using the same rated stamina/capacity and 72%-100% fatigue scaling as the regular movement tick. It also preserves jockey speed while jockey is held instead of momentarily switching to normal jog. Source tests cover immediate sprint-release behavior; no Unreal runtime input validation yet.
