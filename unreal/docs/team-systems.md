@@ -343,3 +343,7 @@ Off-ball AI now rejects a nonfinite opponent-predicted marking point before comp
 ### October 20 — urgent goalmouth marking
 
 When a marked opponent approaches the defending goal, the off-ball AI reduces its generic lateral infield-shading adjustment (bounded between 35% and 100% of the normal shift), prioritizing direct goal-side coverage. Existing target interpolation and pitch limits remain. This is a source-level tactical heuristic awaiting native Unreal navigation and playtesting.
+
+### October 20 — direct-run defensive assignment batch
+
+Off-ball marking now increases the goal-side offset by up to 45 cm when a marked opponent is running directly toward the defending goal (horizontal velocity threshold 150 cm/s), within the existing 80–180 cm total bounds. When deciding which nearby opponent to mark, the defender also favors direct runs toward goal within 2500 cm of the goal line, applying an 0.82 priority factor to their distance score (only for valid finite velocity). Together with the goalmouth-sensitive central-shading reduction, these changes improve the tactical foundation while retaining the current AI controller and pitch constraints. Python source contract tests were updated; native UE5.5 compilation and gameplay behavior remain unverified.
