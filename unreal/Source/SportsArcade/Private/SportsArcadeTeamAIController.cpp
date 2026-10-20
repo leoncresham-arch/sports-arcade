@@ -200,8 +200,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         const bool bAttributedControl = IsValid(LastToucher) &&
             LastToucher->GetWorld() == GetWorld() &&
             !LastToucher->GetActorLocation().ContainsNaN() &&
+            // Aerial and separated loose balls must not masquerade as
+            // retained team possession based solely on touch history.
+            FMath::Abs(LastToucher->GetActorLocation().Z -
+                Ball->GetActorLocation().Z) <= 135.f &&
             FVector::DistSquared2D(LastToucher->GetActorLocation(),
-                Ball->GetActorLocation()) <= FMath::Square(300.f);
+                Ball->GetActorLocation()) <= FMath::Square(220.f);
         const int32 RecentTouchTeam = bAttributedControl
             ? Ball->GetLastTouchTeamIndex() : INDEX_NONE;
         const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
