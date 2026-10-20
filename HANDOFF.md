@@ -559,3 +559,9 @@ The user strongly insists on sustained autonomous development **within each acti
 - Press **F9** to explicitly accept a valid suggested goal/miss using `ConfirmSuggestedCupPenaltyOutcome()`, or **F7/F8** to override with an independently reviewed goal/miss. No automatic result commitment.
 - Added regression reference geometry covering goal, high, wide, reverse goal direction and an earlier touchline crossing. Source CI passed for these additions. Native Unreal 5.5 runtime and physics are not verified.
 - Continue original repo/main with full 11v11 scope, practical goalkeeper, referee and penalty improvements, avoiding per-task permission prompts.
+
+
+## October 20 — settled-ball penalty observation and next-chat checkpoint
+- The nonauthoritative physical penalty outcome observer suggests a miss if a kicked ball settles below 60 cm/s after a configurable 8-second window without a goal crossing, or exits over the opposite goal line after a parry. Referee confirmation via F9 or overrides F7/F8 are still mandatory.
+- Added `PhysicalPenaltyObservationTimeoutSeconds`, lifecycle timer resets, source regression tests, and documented behavior in `unreal/docs/native-match-foundation.md`. Static GitHub CI is used; native UE5.5 compile/play remains pending.
+- This chat is long: a short handoff to a fresh active writer is appropriate. All substantive history stays in GitHub. Read HANDOFF.md and the current roadmap, architecture, native match and automation docs; do not restart, create another repository, redesign, change engine or wait for authorization after every scope item. Continue consecutive approved batches and commit/test/fix directly on main.
