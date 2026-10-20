@@ -208,6 +208,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
         {
             Target.X += AttackSign * FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f);
+            // Two advanced runners approach from different channels.
+            Target.Y += (Slot == 9 ? -1.f : 1.f) *
+                FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f);
         }
 
         // Hold the authored back line within a tunable attacking/recovery band.
