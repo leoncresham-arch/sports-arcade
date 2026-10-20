@@ -346,7 +346,23 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
         {
-            const FVector DribbleDirection(AttackSign, 0.f, 0.f);
+            // Avoid pushing a controlled ball directly into a nearby defender.
+            float NearestThreatSq = FMath::Square(500.f);
+            float SafeLateralSign = 0.f;
+            for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+            {
+                if (!IsValid(*Opp) || Opp->TeamIndex == Footballer->TeamIndex ||
+                    Opp->GetWorld() != GetWorld() || Opp->GetActorLocation().ContainsNaN()) continue;
+                const FVector Gap = Opp->GetActorLocation() - Ball->GetActorLocation();
+                if (Gap.X * AttackSign < -100.f) continue;
+                const float DistanceSq = Gap.SizeSquared2D();
+                if (DistanceSq < NearestThreatSq)
+                {
+                    NearestThreatSq = DistanceSq;
+                    SafeLateralSign = Gap.Y >= 0.f ? -1.f : 1.f;
+                }
+            }
+            const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f);
             if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * 380.f, ContactRangeCm + 75.f))
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds * 0.5f, 0.15f);
         }
