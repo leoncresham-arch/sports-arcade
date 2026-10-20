@@ -315,6 +315,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // only a proxy, so retain pressure once the ball has separated.
         const bool bTeammateNearbyBall = RecentTouchTeam == Footballer->TeamIndex &&
             IsValid(Ball->GetLastTouchPlayer()) &&
+            Ball->GetLastTouchPlayer() != Footballer &&
             !Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() &&
             FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
                 Ball->GetActorLocation()) < FMath::Square(220.f);
