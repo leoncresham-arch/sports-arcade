@@ -21,6 +21,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("Slot % 2 == 0 ? 1.f : -1.f", part)
         self.assertIn("FMath::Sign(LateralSeparation)", part)
         self.assertIn("Target.Y = Ball->GetActorLocation().Y + SideSign * 250.f", part)
+        self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f", part)
+        self.assertIn("FMath::Sign(Ball->GetActorLocation().Y) * 350.f", part)
 
     def test_off_ball_marking_protects_central_lane(self):
         code = SOURCE.read_text(encoding="utf-8")
