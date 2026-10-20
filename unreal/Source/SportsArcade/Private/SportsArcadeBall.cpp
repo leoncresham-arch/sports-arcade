@@ -118,6 +118,7 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
         DesiredVelocity.ContainsNaN() ||
         Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
         CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN() ||
+        CollisionSphere->GetPhysicsAngularVelocityInDegrees().ContainsNaN() ||
         FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxDistanceCm))
     {
         return false;
