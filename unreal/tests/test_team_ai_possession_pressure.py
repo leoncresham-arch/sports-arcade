@@ -17,6 +17,15 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("MarkingPoint.Y - CentralCoverY", section)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", section)
 
+    def test_team_support_does_not_claim_airborne_or_separated_ball(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("const bool bAttributedControl", 1)[1].split(
+            "const int32 RecentTouchTeam", 1
+        )[0]
+        self.assertIn("LastToucher->GetActorLocation().Z", section)
+        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", section)
+        self.assertIn("FMath::Square(220.f)", section)
+
     def test_defensive_marking_does_not_override_attacking_support(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// A conservative defensive shadow", 1)[1].split(
