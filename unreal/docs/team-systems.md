@@ -237,3 +237,5 @@ Standing-tackle impulses now bias the ball away from its most recent opposing to
 Holding defensive jockey input now suppresses automatic walking-dribble contact on the local player, avoiding unintended ball impulses while positioning defensively. Explicit pass, shot and tackle controls retain their separate contact checks. Source tests updated; native feel and animation tests remain outstanding.
 
 Directional standing-tackle deflection now checks that the previously attributed opposing player remains in the same world and within 220 cm horizontally of the challenged ball. Distant historical last touches no longer skew the deflection vector; the fallback is the defender's forward direction. Source tests updated; native gameplay still requires Unreal validation.
+
+Standing tackles now consume a configurable 5 stamina points on the attempt, including a missed challenge, clamped at zero. Combined with cooldown and low-stamina foot-speed/acceleration penalties this discourages repeated lunges. The balance value is provisional until physical UE playtests. Source contracts cover debit-before-contact and cooldown behavior.
