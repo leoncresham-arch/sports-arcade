@@ -216,3 +216,8 @@ When several valid players are markable, a deep goal-threatening opponent receiv
 Goal-area attackers are weighted more heavily in defensive selection: opponents within 1600 cm of the defending goal line receive a 0.75 squared-distance multiplier in addition to the deep-threat priority. This is preliminary spatial scoring, subject to native playtests.
 
 The goalmouth threat bonus is restricted to attackers in the central 1800 cm of pitch width, avoiding over-prioritization of wide attackers near the end line. Source tests check both spatial gates.
+
+
+### October 20 — standing tackle contest safety
+
+User-initiated standing tackles now commit their recovery cooldown on input, including whiffs; previously a miss could be immediately retried. The tackle chooses the closest finite, in-range, forward-facing ground ball rather than taking the first ball in actor iteration order. It refuses a ball with a recorded friendly last touch and also refuses a ball currently within 115 cm horizontally and vertically of another friendly footballer, even if the last attributed touch belongs to an opponent. Successful contact continues to use `KickByPlayer` and tackling ratings. This proximity heuristic is not a possession authority or foul/referee decision. Added `unreal/tests/test_standing_tackle_recovery.py` source contracts. Native Unreal compile and collision playtests remain unverified.
