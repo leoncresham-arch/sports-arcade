@@ -1123,6 +1123,7 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
         bCupResultRecorded = BoundCup->RecordWinner(
             Winner == 0 ? SelectedHomeClubId : SelectedAwayClubId);
     }
+    OnCupPenaltyReviewed.Broadcast(KickingTeam, bScored);
     return true;
 }
 
