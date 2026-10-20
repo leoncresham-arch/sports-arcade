@@ -12,6 +12,8 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("BestOutlet = Mate", block)
         self.assertIn("Ball->KickByPlayer(Footballer, Direction", block)
         self.assertIn("BestOutletDistanceSq = Delta.SizeSquared2D()", block)
+        self.assertIn("FMath::Square(180.f)", block)
+        self.assertIn("if (bReceiverMarked) continue", block)
         self.assertIn("ActionCooldownRemaining = FMath::Max", block)
 
     def test_nearby_challenge_holds_controlled_touch(self):
