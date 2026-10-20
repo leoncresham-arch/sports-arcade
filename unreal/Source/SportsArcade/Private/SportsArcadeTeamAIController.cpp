@@ -240,8 +240,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector SupportBallVelocity = Ball->GetVelocity();
             const bool bRetreatingPass = !SupportBallVelocity.ContainsNaN() &&
                 SupportBallVelocity.X * AttackSign < -450.f;
+            // A fast switch of play also calls for midfield shape retention
+            // before attempting a new forward supporting run.
+            const bool bFastLateralSwitch = !SupportBallVelocity.ContainsNaN() &&
+                FMath::Abs(SupportBallVelocity.Y) > 1100.f;
             const float SupportGap = (Ball->GetActorLocation().X - Target.X) * AttackSign;
-            Target.X += AttackSign * (bRetreatingPass ? 0.f : FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f));
+            Target.X += AttackSign * ((bRetreatingPass || bFastLateralSwitch) ? 0.f : FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f));
             // The supporting midfielder should not overrun the available
             // passing lane and stand farther forward than the ball carrier.
             const float MaximumSupportX = Ball->GetActorLocation().X -
