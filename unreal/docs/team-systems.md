@@ -383,3 +383,7 @@ Shielding now adopts the same controlled-braking behavior as jockeying. Manual c
 Midfield attacking support now maintains a minimum 250 cm lateral separation where possible from its team's carrier, alternating the side by lineup slot to offer an elementary passing triangle while maintaining the existing 175 cm rear support line. Source regression added; formation/pathfinding balance is not verified in Unreal.
 
 Midfield passing-triangle support now preserves a player's established side of the ball when widening a narrow passing lane. For near-central alignment it still alternates by lineup slot. This corrects a case in which fixed slot-side assignment could pull a midfielder across the carrier and shrink the lateral lane. Source regression updated; runtime team tactics remain unverified.
+
+### October 20 — fatigue-aware controlled touches
+
+Manual controlled-touch steering now scales travel-versus-facing blend by the player's normalized remaining stamina, reducing momentum-dominant dribbling when exhausted, while preserving the established shielding bias. Movement stamina rating affects the denominator; the blend remains bounded. Static regression updated, native Unreal physics/animation tests outstanding.
