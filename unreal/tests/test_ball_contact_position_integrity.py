@@ -13,6 +13,13 @@ class BallContactPositionIntegrityTests(unittest.TestCase):
         self.assertIn("GetActorLocation().ContainsNaN()", part)
         self.assertLess(part.index("ContainsNaN()"), part.index("LastTouchPlayer = Player"))
 
+    def test_referee_placement_rejects_nonfinite_mark(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        body = code.split("void ASportsArcadeBall::PlaceAtRest(", 1)[1].split(
+            "void ASportsArcadeBall::ResetToCentre()", 1)[0]
+        self.assertIn("WorldPosition.ContainsNaN()", body)
+        self.assertLess(body.index("WorldPosition.ContainsNaN()"), body.index("SetActorLocation("))
+
     def test_controlled_touch_rejects_bad_velocity(self):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
