@@ -25,6 +25,9 @@ class PredictiveMarkingTests(unittest.TestCase):
         self.assertIn("FMath::Abs(It->GetActorLocation().Y) < 1800.f", section)
         self.assertIn("bDeepDefensiveThreat ? 0.85f : 1.f", section)
         self.assertIn("NearestOpponentDistance = ThreatDistance", section)
+        self.assertIn("ThreatVelocity.X * MarkingDirection < -180.f", section)
+        self.assertIn("GoalProximityCm < 2500.f", section)
+        self.assertIn("bDirectGoalRun ? 0.82f : 1.f", section)
         self.assertIn("FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f)", section)
         self.assertIn("-HalfLength * 0.45f", section)
 
