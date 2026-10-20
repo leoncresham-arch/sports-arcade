@@ -12,6 +12,7 @@ SOURCE = ROOT / "Private/SportsArcadeTeamAIController.cpp"
 class ForwardRunTests(unittest.TestCase):
     def test_editor_adjustable_run_limit(self):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
+        self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
     def test_runs_require_attributed_attack_and_forward_slots(self):
         code = SOURCE.read_text(encoding="utf-8")
@@ -23,6 +24,8 @@ class ForwardRunTests(unittest.TestCase):
             "Slot >= 9 && Slot <= 10",
             "Ball->GetActorLocation().X * AttackSign > 0.f",
             "FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f)",
+            "Slot == 9 ? -1.f : 1.f",
+            "FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f)",
         ):
             self.assertIn(contract, section)
 
