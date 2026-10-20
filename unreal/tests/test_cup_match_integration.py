@@ -132,6 +132,8 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("FSportsArcadeMatchPhaseEvent OnPhysicalPenaltyKicked;", header)
         self.assertIn("OnPhysicalPenaltyKicked.Broadcast();", cpp)
         self.assertIn("FSportsArcadePenaltyReviewedEvent OnCupPenaltyReviewed;", header)
+        self.assertIn("FSportsArcadePenaltyReviewedEvent OnCupPenaltyOutcomeSuggested;", header)
+        self.assertIn("OnCupPenaltyOutcomeSuggested.Broadcast(Team, SuggestedCupPenaltyOutcome == 1);", cpp)
         self.assertIn("OnCupPenaltyReviewed.Broadcast(KickingTeam, bScored);", cpp)
         self.assertLess(cpp.index("bPenaltyKickTaken = true;"), cpp.index("OnPhysicalPenaltyKicked.Broadcast();"))
         self.assertIn("StagedPenaltyTaker->TeamIndex == ActivePenaltyShootout->GetNextKickingTeam()", cpp)
