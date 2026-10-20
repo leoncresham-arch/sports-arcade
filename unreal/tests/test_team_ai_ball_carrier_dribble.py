@@ -8,11 +8,11 @@ class BallCarrierDribbleTests(unittest.TestCase):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)", 1)[1].split(
             "if (!bTeammateNearbyBall", 1)[0]
-        self.assertIn("NearestThreatSq", part)
-        self.assertIn("Gap.X * AttackSign < -100.f", part)
-        self.assertIn("SafeLateralSign = Gap.Y >= 0.f ? -1.f : 1.f", part)
+        self.assertIn("const float SafeLateralSign = CarrierEscapeSide", part)
+        self.assertIn("ThreatOffset.X * AttackSign < -100.f", code)
+        self.assertIn("CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f)", part)
-        self.assertIn("Target.Y += SafeLateralSign * 180.f", part)
+        self.assertIn("Target.Y += CarrierEscapeSide * 180.f", code)
         self.assertIn("SafeLateralSign == 0.f ? 380.f : 280.f", part)
         self.assertIn("DribbleDirection * DribbleSpeed", part)
 
