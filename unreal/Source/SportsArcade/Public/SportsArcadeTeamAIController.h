@@ -86,9 +86,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float BallPredictionSeconds = 0.20f;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Passing", meta=(ClampMin="0.0", ClampMax="0.8"))
-    float ReceiverLeadSeconds = 0.25f;
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float ContactRangeCm = 145.f;
 
