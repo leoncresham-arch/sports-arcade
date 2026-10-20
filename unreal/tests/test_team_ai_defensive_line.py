@@ -12,6 +12,7 @@ class DefensiveLineTests(unittest.TestCase):
         header = HEADER.read_text()
         self.assertIn("DefensiveLineMaximumAdvanceCm = 1300.f", header)
         self.assertIn("DefensiveLineRecoveryDepthCm = 650.f", header)
+        self.assertIn("DefensiveLineLateralDisplacementCm = 650.f", header)
 
     def test_back_line_restrained_only_when_opposition_last_touched(self):
         code = SOURCE.read_text()
@@ -23,6 +24,8 @@ class DefensiveLineTests(unittest.TestCase):
         self.assertIn("FMath::Clamp(RelativeX, -Retreat, Advance)", section)
         self.assertIn("DefensiveLineMaximumAdvanceCm", section)
         self.assertIn("DefensiveLineRecoveryDepthCm", section)
+        self.assertIn("BasePosition.Y * HalfWidth / 3400.f", section)
+        self.assertIn("FMath::Clamp(Target.Y, BaseY - LateralLimit, BaseY + LateralLimit)", section)
 
 
 if __name__ == "__main__":
