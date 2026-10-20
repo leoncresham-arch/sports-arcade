@@ -508,6 +508,8 @@ bool ASportsArcadeGameMode::TakeManualRestart(const FVector& KickDirection)
 void ASportsArcadeGameMode::StageKickoff(int32 TakingTeam)
 {
     if (TakingTeam != 0 && TakingTeam != 1) return;
+    // Kickoff creates a new restart, never inherit an old staged set piece.
+    bManualRestartStaged = false;
     if (!IsValid(MatchBall) && GetWorld())
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
