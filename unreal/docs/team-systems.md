@@ -249,3 +249,5 @@ Standing-tackle candidate screening now ignores a ball moving horizontally faste
 ### October 20 — contested human dribble touch
 
 The local player's automatic dribble touch now skips a ball when an opponent in the same world is within 95 cm horizontally / 115 cm vertically of the ball and is closer to it than the human-controlled player. This supplements friendly proximity arbitration and makes possession challenges depend on spatial advantage rather than allowing automatic proximity steals. Explicit tackling remains separate. The filter is heuristic, not authoritative possession or animation-level contact. Source regression coverage is in `test_manual_dribble_arbitration.py`; native UE gameplay remains unverified.
+
+Manual pass/shot/chip candidate selection now excludes nonfinite, vertically unreachable (>120 cm) and behind-the-player balls before choosing the nearest valid target. This avoids choosing a nearest but unkickable reference ball while ignoring another valid candidate. Final `KickByPlayer` checks remain authoritative for contact distance and physics validity. Source contract updated; UE playtest pending.
