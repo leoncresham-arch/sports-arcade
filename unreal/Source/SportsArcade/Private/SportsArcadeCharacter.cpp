@@ -82,6 +82,7 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("KickCupPenalty"), IE_Pressed, this, &ASportsArcadeCharacter::KickShootoutPenalty);
     PlayerInputComponent->BindAction(TEXT("PenaltyGoalReview"), IE_Pressed, this, &ASportsArcadeCharacter::AwardPenaltyGoal);
     PlayerInputComponent->BindAction(TEXT("PenaltyMissReview"), IE_Pressed, this, &ASportsArcadeCharacter::AwardPenaltyMiss);
+    PlayerInputComponent->BindAction(TEXT("ConfirmPenaltySuggestion"), IE_Pressed, this, &ASportsArcadeCharacter::ConfirmPenaltySuggestion);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -335,6 +336,12 @@ void ASportsArcadeCharacter::AwardPenaltyMiss()
     {
         Mode->ResolvePhysicalCupPenalty(false);
     }
+}
+
+void ASportsArcadeCharacter::ConfirmPenaltySuggestion()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+        Mode->ConfirmSuggestedCupPenaltyOutcome();
 }
 
 void ASportsArcadeCharacter::TackleBall()
