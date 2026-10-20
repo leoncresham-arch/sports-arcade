@@ -503,8 +503,13 @@ void ASportsArcadeCharacter::TackleBall()
                     ChallengeDirection = Forward;
             }
         }
-        CandidateBall->KickByPlayer(this, ChallengeDirection,
+        if (CandidateBall->KickByPlayer(this, ChallengeDirection,
             850.f * TackleEnergyFactor * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f),
-            175.f);
+            175.f))
+        {
+            // After a successful challenge, don't immediately reclaim the ball
+            // through the ordinary walking-dribble touch on the next frame.
+            TouchCooldownRemaining = FMath::Max(TouchCooldownRemaining, 0.35f);
+        }
     }
 }
