@@ -116,6 +116,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         StopMovement();
         return;
     }
+    // Reject nonfinite physical telemetry before formation, pressing, marking
+    // and pass-choice logic can submit AI navigation or physics impulses.
+    if (IsValid(Ball) && (Ball->GetActorLocation().ContainsNaN() ||
+        Ball->GetVelocity().ContainsNaN()))
+    {
+        StopMovement();
+        return;
+    }
 
     // Match-phase movement should not inherit stale navigation requests from halftime.
     const int32 MembershipIndex = Roster->Players.IndexOfByKey(Footballer);
@@ -192,7 +200,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // A human-controlled footballer is not an available autonomous
             // presser; otherwise every nearby AI teammate could stay passive.
             if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld() ||
-                Candidate->TeamIndex != Footballer->TeamIndex || Candidate->LineupSlot == 0 ||
+                Candidate->TeamIndex != Footballer->TeamIndex ||
+                (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
+                    Roster->Players.IndexOfByKey(Candidate) == 0) ||
                 !Cast<ASportsArcadeTeamAIController>(Candidate->GetController())) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
             if (Distance < BestDistance)
