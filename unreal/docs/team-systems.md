@@ -116,3 +116,5 @@ Defender slots 1–4 now also limit their lateral movement relative to the autho
 ## October 20 — provisional attacking forward runs
 
 When a team was most recently credited with touching the ball and play is in the attacking half, authored advanced lineup slots 9 and 10 can make bounded forward runs when they are not already far beyond the ball. The editor-tunable `ForwardRunOffsetCm` defaults to 650 cm and is clamped to 1500 cm. Final targets remain pitch-clamped. The player-selection logic still relies on weak last-touch attribution rather than verified possession, and does not implement offside awareness or tactical combination runs. A source-only regression test is in `unreal/tests/test_team_ai_forward_runs.py`; Unreal compilation and on-pitch evaluation are pending.
+
+Attacking lineup slots 9 and 10 now use opposing lane offsets while making their provisional runs, rather than converging on a single line. `ForwardRunLaneSeparationCm` defaults to 250 cm and is bounded to 800 cm. These offsets are still superseded by nearby ball-pressing logic and final pitch-bound checks; they do not implement offside awareness or sophisticated run timing.
