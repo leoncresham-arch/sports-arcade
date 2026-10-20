@@ -362,10 +362,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     SafeLateralSign = Gap.Y >= 0.f ? -1.f : 1.f;
                 }
             }
+            // Slow the forward push near an obstacle rather than force a full-speed touch.
+            const float DribbleSpeed = SafeLateralSign == 0.f ? 380.f : 280.f;
             const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f);
             // Keep the runner's movement aligned with the chosen escape lane.
             Target.Y += SafeLateralSign * 180.f;
-            if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * 380.f, ContactRangeCm + 75.f))
+            if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * DribbleSpeed, ContactRangeCm + 75.f))
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds * 0.5f, 0.15f);
         }
         if (!bTeammateNearbyBall && !bSelfControllingBall &&
