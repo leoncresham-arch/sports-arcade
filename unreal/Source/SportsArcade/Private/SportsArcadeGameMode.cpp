@@ -1055,6 +1055,14 @@ ASportsArcadeCharacter* ASportsArcadeGameMode::GetStagedCupPenaltyTaker() const
         ? StagedPenaltyTaker.Get() : nullptr;
 }
 
+int32 ASportsArcadeGameMode::GetCupPenaltyDefendingTeam() const
+{
+    if (!IsCupPenaltyAwaitingResult() || !IsValid(ActivePenaltyShootout))
+        return INDEX_NONE;
+    const int32 ShootingTeam = ActivePenaltyShootout->GetNextKickingTeam();
+    return ShootingTeam == 0 || ShootingTeam == 1 ? 1 - ShootingTeam : INDEX_NONE;
+}
+
 bool ASportsArcadeGameMode::IsCupPenaltyAwaitingResult() const
 {
     return bRequirePhysicalPenaltyKicks && bPenaltyKickTaken &&
