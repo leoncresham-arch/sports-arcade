@@ -363,3 +363,7 @@ Coordinated AI team-possession support and second-pressure gating now require th
 ### October 20 — midfield attacking support
 
 AI central midfield slots 5–8 now shift up to 450 cm forward to create a short passing option when their team has proximity-validated possession in the attacking half and the player is within 2400 cm of the ball. This adds a bounded transition movement without changing formation assignment or requiring a new tactical director. Source test added; UE movement/navmesh and passing evaluation are pending.
+
+### October 20 — manual shield controls and close-touch pacing
+
+The existing human footballer now exposes an editable/Blueprint-readable shielding state via IsShieldingBall, engaged with Left Control and cleared on release or kickoff reset. Shielding suppresses sprinting, caps running to the configurable jockey pace and reduces automatic close-dribble touch impulse to 55% of the normal value. This is an input/gameplay foundation only: opponent body collisions, animation-based shielding, physical ball protection, fouls and native controls must still be implemented and tested in Unreal.
