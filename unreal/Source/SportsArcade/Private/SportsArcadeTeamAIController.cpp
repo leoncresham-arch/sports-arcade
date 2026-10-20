@@ -53,27 +53,32 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 break;
             }
             const float KeeperPlaneX = Keeper->GetActorLocation().X;
-            const float TravelSeconds = FMath::Abs(BallVelocity.X) > 175.f
+            const float GoalwardSign = Keeper->TeamIndex == 1 ? 1.f : -1.f;
+            const bool bIncomingPenalty = BallVelocity.X * GoalwardSign >
+                FMath::Max(0.f, GoalkeeperShotMinSpeedCmPerSec);
+            const float TravelSeconds = bIncomingPenalty
                 ? (KeeperPlaneX - BallPosition.X) / BallVelocity.X : -1.f;
             const bool bApproachingKeeper = TravelSeconds >= 0.f && TravelSeconds <= 1.5f;
             const float AnticipatedY = bApproachingKeeper
-                ? BallPosition.Y + BallVelocity.Y * TravelSeconds : BallPosition.Y;
-            Target.Y = FMath::Clamp(AnticipatedY, -300.f, 300.f);
+                ? BallPosition.Y + BallVelocity.Y * TravelSeconds : 0.f;
+            // Remain close to the line until the shot is actually heading here.
+            const float LateralLimit = FMath::Min(300.f, FMath::Max(0.f, Match->GoalHalfWidthCm - 55.f));
+            Target.Y = FMath::Clamp(AnticipatedY, -LateralLimit, LateralLimit);
             if (FVector::DistSquared2D(Target, Keeper->GetActorLocation()) > FMath::Square(60.f))
                 MoveToLocation(Target, 60.f, true, true, false, true, nullptr, true);
-            const float GoalwardSign = Keeper->TeamIndex == 1 ? 1.f : -1.f;
-            const bool bIncomingPenalty = BallVelocity.X * GoalwardSign > 175.f;
             // Do not parry a ball that has already passed the keeper's goal
             // plane, or a speculative ball outside plausible save height.
-            const bool bBallInFront = (BallPosition.X - KeeperPlaneX) * GoalwardSign <= 35.f;
+            const bool bBallInFront = (BallPosition.X - KeeperPlaneX) * GoalwardSign <=
+                FMath::Max(0.f, GoalkeeperParryOverrunAllowanceCm);
             const bool bReachableHeight = BallPosition.Z >= 0.f &&
-                BallPosition.Z - Keeper->GetActorLocation().Z <= 220.f;
-            if (bIncomingPenalty && bBallInFront && bReachableHeight &&
+                BallPosition.Z - Keeper->GetActorLocation().Z <= FMath::Max(0.f, GoalkeeperParryHeightCm);
+            if (bIncomingPenalty && bApproachingKeeper && bBallInFront && bReachableHeight &&
                 ActionCooldownRemaining <= 0.f &&
                 FVector::DistSquared(Keeper->GetActorLocation(), Ball->GetActorLocation()) <
                     FMath::Square(ContactRangeCm + 50.f))
             {
-                const FVector Parry(0.f, Ball->GetActorLocation().Y >= 0.f ? 1.f : -1.f, 0.25f);
+                // Direct the rebound toward a sideline, away from central danger.
+                const FVector Parry(0.f, BallPosition.Y >= 0.f ? 1.f : -1.f, 0.25f);
                 if (Ball->KickByPlayer(Keeper, Parry, 2300.f, ContactRangeCm + 50.f))
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
             }
