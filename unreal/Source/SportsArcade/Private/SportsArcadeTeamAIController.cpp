@@ -27,6 +27,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // physical penalty attempt. All outfield AI remain stopped.
     if (IsValid(Match) && Match->IsCupPenaltyAwaitingResult())
     {
+        if (Match->GetSuggestedCupPenaltyOutcome() != INDEX_NONE)
+        {
+            StopMovement();
+            return;
+        }
         ASportsArcadeCharacter* Keeper = Cast<ASportsArcadeCharacter>(GetPawn());
         if (!IsValid(Keeper) || Keeper->LineupSlot != 0 ||
             Keeper->TeamIndex != Match->GetCupPenaltyDefendingTeam())
