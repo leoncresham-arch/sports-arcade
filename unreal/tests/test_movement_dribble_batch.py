@@ -5,6 +5,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1] / "Source/SportsArcade"
 CHARACTER = (ROOT / "Private/SportsArcadeCharacter.cpp").read_text(encoding="utf-8")
 HEADER = (ROOT / "Public/SportsArcadeCharacter.h").read_text(encoding="utf-8")
+ATTRIBUTES = (ROOT / "Public/SportsArcadePlayerAttributes.h").read_text(encoding="utf-8")
 
 class MovementDribbleBatchTests(unittest.TestCase):
     def test_manual_shielding_is_input_driven_and_caps_pace(self):
@@ -16,6 +17,12 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("!bShieldHeld && bSprintHeld", CHARACTER)
         self.assertIn("(bShieldHeld ? 0.55f : 1.f)", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
+
+    def test_agility_rating_modulates_turn_speed_with_fatigue(self):
+        self.assertIn("int32 Agility = 65", ATTRIBUTES)
+        self.assertIn("RatingFactor(PlayerAttributes->Agility)", CHARACTER)
+        self.assertIn("540.f * AgilityFactor * FatigueSpeedFactor", CHARACTER)
+        self.assertIn("260.f, 760.f", CHARACTER)
 
     def test_turn_braking_responds_to_opposed_travel_and_input(self):
         self.assertIn("FVector::DotProduct(TravelDirection, IntendedDirection) < 0.f", CHARACTER)
