@@ -19,6 +19,7 @@ class SecondaryPressTests(unittest.TestCase):
         )[0]
         self.assertIn("Nearest != Footballer", part)
         self.assertIn("Second == Footballer", part)
+        self.assertIn("Slot > 4 || bDefensiveEmergency", part)
         self.assertIn("Candidate == Nearest", part)
         self.assertIn("Candidate->LineupSlot == 0", part)
         self.assertIn("Roster->Players.IndexOfByKey(Candidate) == 0", part)
