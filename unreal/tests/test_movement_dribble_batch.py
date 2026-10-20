@@ -20,6 +20,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn('BindAction(TEXT("Shield"), IE_Pressed', CHARACTER)
         self.assertIn('BindAction(TEXT("Shield"), IE_Released', CHARACTER)
         self.assertIn("!bShieldHeld && bSprintHeld", CHARACTER)
+        self.assertIn("bShieldHeld && bPlayActive ? 0.72f : 1.f", CHARACTER)
+        self.assertIn("FatigueSpeedFactor * ShieldAccelerationFactor", CHARACTER)
         self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
         self.assertIn("(bShieldHeld ? 0.55f : 1.f)", CHARACTER)
         self.assertIn("DribbleTouchInterval * 0.70f", CHARACTER)
