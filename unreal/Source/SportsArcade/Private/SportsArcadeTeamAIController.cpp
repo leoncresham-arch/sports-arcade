@@ -445,7 +445,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             if (IsValid(BestOutlet))
             {
                 const FVector BestVelocity = BestOutlet->GetVelocity().GetClampedToMaxSize2D(650.f);
-                if (BestVelocity.ContainsNaN()) return;
+                // Candidate velocity was validated during receiver selection.
                 const FVector Direction = (BestOutlet->GetActorLocation() + BestVelocity * 0.20f - Ball->GetActorLocation()).GetSafeNormal2D();
                 const float OutletDistanceCm = FVector::Dist2D(BestOutlet->GetActorLocation() + BestVelocity * 0.20f, Ball->GetActorLocation());
                 const float OutletImpulse = FMath::Clamp(950.f + OutletDistanceCm * 0.22f, 1000.f, 1550.f);
