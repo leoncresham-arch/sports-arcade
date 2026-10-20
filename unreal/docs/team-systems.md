@@ -323,3 +323,7 @@ When the predicted ball position is within 650 cm of a touchline, the supporting
 Secondary pressing now anticipates inward-moving balls by shading toward the central escape lane, including when a ball starts away from the touchline; predictions are rejected when nonfinite. Primary press interception navigation likewise checks the predicted destination before issuing a movement target. These changes retain the existing anticipation speed caps, lateral support separation and pitch clamping. Regression tests cover both paths; actual Unreal 5.5 compilation, animation/contact alignment and match-play balancing remain unverified.
 
 Goalkeeper incoming-shot prediction now caps validated ball speed at 4500 cm/s before estimating goal-line arrival and lateral interception, limiting exaggerated keeper shifts under extreme finite physics impulses. The raw velocity is still screened for nonfinite data. Added a goalkeeper regression assertion; real UE keeper movement and saves remain unverified.
+
+### October 20 — defender prediction refinement
+
+Secondary AI support only treats a ball as moving inward when it is at least 500 cm off center and has more than 150 cm/s lateral inward velocity, avoiding oversized reactions to tiny movement. The nearest ground presser shortens its prediction horizon to 0.12 seconds while the ball is more than 150 cm above its own position, reducing over-aggressive pursuit of aerial extrapolations. These are provisional source-level heuristics awaiting Unreal playtesting; corresponding regression contracts were updated.
