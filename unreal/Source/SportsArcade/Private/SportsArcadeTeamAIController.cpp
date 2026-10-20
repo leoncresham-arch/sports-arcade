@@ -200,6 +200,34 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         else if (RecentTouchTeam == 1 - Footballer->TeamIndex)
             Target.X -= AttackSign * FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f);
 
+        // Make nearby non-keeper support runners offer a clear lateral outlet.
+        // Shift away from the nearest opponent only when our team last touched
+        // the ball; cap the adjustment to retain the authored formation.
+        if (RecentTouchTeam == Footballer->TeamIndex &&
+            FVector::DistSquared2D(Footballer->GetActorLocation(), Ball->GetActorLocation()) <
+                FMath::Square(2400.f))
+        {
+            float ClosestOpponentSq = FMath::Square(FMath::Clamp(PassingSupportOpponentSearchCm, 0.f, 2000.f));
+            const ASportsArcadeCharacter* NearestOpponent = nullptr;
+            for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+            {
+                if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                    Opp->TeamIndex == Footballer->TeamIndex ||
+                    Opp->GetActorLocation().ContainsNaN()) continue;
+                const float DistanceSq = FVector::DistSquared2D(Opp->GetActorLocation(), Target);
+                if (DistanceSq < ClosestOpponentSq)
+                {
+                    ClosestOpponentSq = DistanceSq;
+                    NearestOpponent = *Opp;
+                }
+            }
+            if (NearestOpponent)
+            {
+                const float Side = Target.Y >= NearestOpponent->GetActorLocation().Y ? 1.f : -1.f;
+                Target.Y += Side * FMath::Clamp(PassingSupportLateralShiftCm, 0.f, 1200.f);
+            }
+        }
+
         // Only the closest eligible outfielder presses; others maintain support shape.
         ASportsArcadeCharacter* Nearest = nullptr;
         float BestDistance = TNumericLimits<float>::Max();
