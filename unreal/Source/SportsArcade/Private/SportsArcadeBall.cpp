@@ -71,6 +71,7 @@ bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVect
     if (!IsValid(Player) || Player->GetWorld() != GetWorld() || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
         !FMath::IsFinite(StrengthKgCmPerSec) || StrengthKgCmPerSec <= 0.f ||
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
+        Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
         !FMath::IsFinite(MaxContactDistanceCm) || MaxContactDistanceCm <= 0.f ||
         FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxContactDistanceCm))
     {
@@ -112,6 +113,8 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     if (!IsValid(Player) || Player->GetWorld() != GetWorld() || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
         !FMath::IsFinite(MaxDistanceCm) || MaxDistanceCm <= 0.f ||
         DesiredVelocity.ContainsNaN() ||
+        Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
+        CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN() ||
         FVector::DistSquared(Player->GetActorLocation(), GetActorLocation()) > FMath::Square(MaxDistanceCm))
     {
         return false;
