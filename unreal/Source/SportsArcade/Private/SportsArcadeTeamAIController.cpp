@@ -406,10 +406,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Mate->GetActorLocation().ContainsNaN()) continue;
                 const FVector Delta = Mate->GetActorLocation() - Ball->GetActorLocation();
                 if (Delta.SizeSquared2D() < FMath::Square(350.f) ||
-                    Delta.SizeSquared2D() > FMath::Square(2200.f)) continue;
-                if (Ball->KickByPlayer(Footballer, Delta.GetSafeNormal2D(), 1200.f, ContactRangeCm + 75.f))
+                    Delta.SizeSquared2D() >= BestOutletDistanceSq) continue;
+                BestOutlet = Mate;
+                BestOutletDistanceSq = Delta.SizeSquared2D();
+            }
+            if (IsValid(BestOutlet))
+            {
+                const FVector Direction = (BestOutlet->GetActorLocation() - Ball->GetActorLocation()).GetSafeNormal2D();
+                if (Ball->KickByPlayer(Footballer, Direction, 1200.f, ContactRangeCm + 75.f))
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
-                break;
             }
         }
         if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)
