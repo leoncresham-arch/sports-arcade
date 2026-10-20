@@ -5,6 +5,13 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class PossessionPressureTests(unittest.TestCase):
+    def test_defensive_marking_does_not_override_attacking_support(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// A conservative defensive shadow", 1)[1].split(
+            "ASportsArcadeCharacter* Opponent = nullptr", 1
+        )[0]
+        self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
+
     def test_primary_ai_does_not_press_nearby_recent_teammate_ball(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("const bool bTeammateNearbyBall", 1)[1].split(
