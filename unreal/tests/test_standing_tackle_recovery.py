@@ -33,6 +33,9 @@ class StandingTackleRecoveryTests(unittest.TestCase):
 
     def test_does_not_dispossess_own_nearby_player(self):
         for token in ("LastTouch->TeamIndex == TeamIndex",
+                      "LastTouch->GetWorld() == GetWorld()",
+                      "LastTouchOffset.SizeSquared2D() < FMath::Square(135.f)",
+                      "FMath::Abs(LastTouchOffset.Z) < 115.f",
                       "TActorIterator<ASportsArcadeCharacter>",
                       "Other->TeamIndex != TeamIndex",
                       "!IsValid(Other)",
@@ -42,6 +45,12 @@ class StandingTackleRecoveryTests(unittest.TestCase):
             self.assertIn(token, self.tackle)
         self.assertLess(self.tackle.index("if (bTeammateControllingBall) continue;"),
                         self.tackle.index("CandidateBall = *It;"))
+
+    def test_historical_friendly_touch_does_not_permanently_protect_loose_ball(self):
+        self.assertIn("const FVector LastTouchOffset = BallLocation - LastTouch->GetActorLocation()", self.tackle)
+        self.assertIn("if (LastTouchOffset.SizeSquared2D() < FMath::Square(135.f)", self.tackle)
+        self.assertLess(self.tackle.index("LastTouchOffset.SizeSquared2D()"),
+                        self.tackle.index("bool bTeammateControllingBall"))
 
     def test_challenge_deflects_from_nearby_opponent_without_backwards_kick(self):
         for token in ("PreviousCarrier = CandidateBall->GetLastTouchPlayer()",
