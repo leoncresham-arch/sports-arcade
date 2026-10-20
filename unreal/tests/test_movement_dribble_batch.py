@@ -31,7 +31,9 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("float TurnBrakingWeight = 0.35f", HEADER)
 
     def test_dribble_touches_blend_forward_facing_with_travel(self):
-        self.assertIn("TravelDir * 0.75f + FacingDir * 0.25f", CHARACTER)
+        self.assertIn("TravelDir * TravelWeight", CHARACTER)
+        self.assertIn("FacingDir * (1.f - TravelWeight)", CHARACTER)
+        self.assertIn("bShieldHeld ? 0.45f : 0.75f", CHARACTER)
         self.assertIn("!BlendedTouchDir.IsNearlyZero()", CHARACTER)
         self.assertIn("ApplyControlledTouch(this, BlendedTouchDir", CHARACTER)
 
