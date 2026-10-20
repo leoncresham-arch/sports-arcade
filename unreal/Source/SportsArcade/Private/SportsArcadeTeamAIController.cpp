@@ -244,8 +244,23 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // before attempting a new forward supporting run.
             const bool bFastLateralSwitch = !SupportBallVelocity.ContainsNaN() &&
                 FMath::Abs(SupportBallVelocity.Y) > 1100.f;
+            // Avoid shifting midfield forward when the current carrier is
+            // facing a live close-range challenge.
+            bool bCarrierUnderPressure = false;
+            for (TActorIterator<ASportsArcadeCharacter> Threat(GetWorld()); Threat; ++Threat)
+            {
+                if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
+                    Threat->TeamIndex == Footballer->TeamIndex ||
+                    Threat->GetActorLocation().ContainsNaN()) continue;
+                if (FVector::DistSquared2D(Threat->GetActorLocation(),
+                    Ball->GetActorLocation()) < FMath::Square(220.f))
+                {
+                    bCarrierUnderPressure = true;
+                    break;
+                }
+            }
             const float SupportGap = (Ball->GetActorLocation().X - Target.X) * AttackSign;
-            Target.X += AttackSign * ((bRetreatingPass || bFastLateralSwitch) ? 0.f : FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f));
+            Target.X += AttackSign * ((bRetreatingPass || bFastLateralSwitch || bCarrierUnderPressure) ? 0.f : FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f));
             // The supporting midfielder should not overrun the available
             // passing lane and stand farther forward than the ball carrier.
             const float MaximumSupportX = Ball->GetActorLocation().X -
