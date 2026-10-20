@@ -532,7 +532,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                         }
                     }
                     if (bBlocked) continue;
-                    const float Score = Delta.X * AttackSign - Distance * 0.25f - ReceiverPressurePenalty;
+                    // Penalize risky receiving positions near the sideline.
+                    const float ReceiverY = Ball->GetActorLocation().Y + Delta.Y;
+                    const float WidePenalty = FMath::Max(0.f,
+                        FMath::Abs(ReceiverY) - (HalfWidth - 400.f)) * 0.35f;
+                    const float Score = Delta.X * AttackSign - Distance * 0.25f -
+                        ReceiverPressurePenalty - WidePenalty;
                     if (Score > BestPassScore)
                     {
                         BestPassScore = Score;
