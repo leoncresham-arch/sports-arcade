@@ -670,7 +670,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Stay goalside of the moving attacker when recovering defensively.
             const float DefenderAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
             const float GoalSideOffset = FMath::Clamp(FVector::Dist2D(Footballer->GetActorLocation(), MarkingPoint) * 0.12f, 80.f, 180.f);
-            const FVector GoalSideMarkingPoint = MarkingPoint - FVector(DefenderAttackSign * GoalSideOffset, 0.f, 0.f);
+            // Bias marking toward the central lane when the attacker is wide,
+            // denying an easy inward cut while retaining goalside cover.
+            const float InfieldMarkingShift = FMath::Clamp(
+                FMath::Abs(MarkingPoint.Y) - 1100.f, 0.f, 1800.f) * 0.14f;
+            const float CentralCoverY = MarkingPoint.Y -
+                FMath::Sign(MarkingPoint.Y) * InfieldMarkingShift;
+            const FVector GoalSideMarkingPoint = MarkingPoint -
+                FVector(DefenderAttackSign * GoalSideOffset, MarkingPoint.Y - CentralCoverY, 0.f);
             Target = FMath::Lerp(Target, FVector(GoalSideMarkingPoint.X, GoalSideMarkingPoint.Y, 0.f),
                 FMath::Clamp(MarkingInfluence, 0.f, 0.5f));
         }
