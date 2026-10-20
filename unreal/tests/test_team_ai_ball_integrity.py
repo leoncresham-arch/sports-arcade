@@ -10,6 +10,15 @@ SRC = (Path(__file__).resolve().parents[1] /
 
 
 class TeamAIBallIntegrityTests(unittest.TestCase):
+    def test_final_navigation_target_rejects_nonfinite_formation_data(self):
+        code = SRC.read_text(encoding="utf-8")
+        guard = code.index("if (Target.ContainsNaN() || Footballer->GetActorLocation().ContainsNaN())")
+        pitch = code.index("Target.X = FMath::Clamp(Target.X", guard)
+        navigate = code.index("MoveToLocation(Target, 125.f", guard)
+        self.assertLess(guard, pitch)
+        self.assertLess(pitch, navigate)
+        self.assertIn("StopMovement();", code[guard:pitch])
+
     def test_bad_ball_telemetry_stops_navigation_before_field_player_logic(self):
         code = SRC.read_text(encoding="utf-8")
         roster = code.index("if (!IsValid(Roster))")
