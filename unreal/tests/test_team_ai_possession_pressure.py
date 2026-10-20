@@ -12,6 +12,12 @@ class PossessionPressureTests(unittest.TestCase):
         )[0]
         self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
 
+    def test_secondary_presser_shadows_within_pitch_bounds(self):
+        cpp = SOURCE.read_text(encoding="utf-8")
+        section = cpp.split("if (Second == Footballer &&", 1)[1].split("bIsSecondaryPresser = true", 1)[0]
+        self.assertIn("Target.X = FMath::Clamp(Target.X, -HalfLength + 100.f, HalfLength - 100.f)", section)
+        self.assertIn("Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 100.f, HalfWidth - 100.f)", section)
+
     def test_controlled_carrier_does_not_self_press(self):
         cpp = SOURCE.read_text(encoding="utf-8")
         segment = cpp.split("const bool bSelfControllingBall", 1)[1].split(
