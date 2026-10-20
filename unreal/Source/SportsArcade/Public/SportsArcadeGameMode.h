@@ -278,6 +278,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     int32 GetSuggestedCupPenaltyOutcome() const;
 
+    /** Explicit referee confirmation of the nonauthoritative ball-flight suggestion. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
+    bool ConfirmSuggestedCupPenaltyOutcome();
+
     /** Offline referee review: record outcome only after a physical attempt. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool ResolvePhysicalCupPenalty(bool bScored);
