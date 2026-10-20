@@ -506,3 +506,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - CanTakeManualRestart now prevents manually taking a restarter when ball physics has moved the staged ball more than 60 cm from the assigned mark.
 - ResumeAfterBallOut leaves an already valid setup unchanged, but B can restage a drifted dead ball. This fixes a deadlock risk introduced by ball-location enforcement.
 - Source checks for recovery passed at 3087177a. Continue native Unreal rules and actual match gameplay testing when UE hardware is available.
+
+
+## October 20 — referee review and usable Windows recovery controls
+- Added AwardUndeterminedRestart(AwardedTeam) to recover unknown-last-touch dead balls only after an explicit home/away decision. It converts the original boundary into a throw-in, goal kick or corner and picks a valid taker, preferring goalkeeper on goal kicks. If no taker exists, restores the original unknown decision and mark for retry.
+- Added OnRestartAwarded Blueprint event and F5/F6 keyboard decisions for home/away; B stages restart and M takes it when manual mode is configured. Kickoff reinitialization clears stale manual setup.
+- Fixed provisional automatic corner direction so it aims back into the box. Restart eligibility validates nonfinite and out-of-pitch referee marks and full 3D ball position; B can restage a drifting dead ball.
+- Source/CI regression checks and corresponding docs updated; native UE5.5 compilation and gameplay validation are still outstanding. Continue the existing 100-item launch scope, without asking for approval after individual commits.
