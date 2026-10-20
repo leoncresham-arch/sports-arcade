@@ -210,3 +210,5 @@ Goalside marking separation is now scaled to 12% of the marker-to-attacker dista
 Marking threat filtering retains opponents deep in the defending team's own half (beyond 45% of half-pitch length) even when more than 900 cm behind the ball; this prevents losing track of goal-threatening attackers during loose-ball recovery.
 
 The defensive marking search radius is now runtime-clamped to 0–3000 cm; very large misconfigured values cannot create unconstrained opposition searches. The existing Unreal setting remains editable.
+
+When several valid players are markable, a deep goal-threatening opponent receives a modest 15% squared-distance weighting in opponent selection. This prioritizes urgent defensive cover without abandoning the search-radius limit.
