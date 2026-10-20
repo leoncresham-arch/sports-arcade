@@ -148,3 +148,5 @@ Defensive marking also resumes when the attributed teammate has moved beyond the
 ## October 20 — controlled ball-carrier pressing exclusion
 
 The primary presser now excludes itself when it is the recorded last toucher and remains within 220 cm of the ball under the proximity-validated attribution. This avoids treating a footballer actively controlling the ball as an opponent to chase. Separate suppression for a nearby teammate remains. Loose-ball recovery continues when last-touch proximity is lost. Source-only regression: `test_team_ai_possession_pressure.py`. Ball-carrier dribbling and native match integration remain unfinished and require in-editor testing.
+
+Secondary supporting defenders now retain their shadow-pressure target instead of having it overwritten by the subsequent generic marking stage. The `bIsSecondaryPresser` flag is local to each AI decision and prevents that conflict without changing regular marking eligibility. Source regression checks were added to `test_team_ai_secondary_press.py`; UE navigation playtesting remains pending.
