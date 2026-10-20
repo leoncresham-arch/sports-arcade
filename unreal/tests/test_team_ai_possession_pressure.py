@@ -17,6 +17,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("AttackSign * 175.f", part)
         self.assertIn("FMath::Min(Target.X, MaximumSupportX)", part)
         self.assertIn("FMath::Max(Target.X, MaximumSupportX)", part)
+        self.assertIn("FMath::Abs(LateralSeparation) < 250.f", part)
+        self.assertIn("Slot % 2 == 0 ? 1.f : -1.f", part)
 
     def test_off_ball_marking_protects_central_lane(self):
         code = SOURCE.read_text(encoding="utf-8")
