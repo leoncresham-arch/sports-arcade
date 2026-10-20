@@ -6,7 +6,9 @@ SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/Spor
 class BallCarrierDribbleTests(unittest.TestCase):
     def test_nearby_challenge_holds_controlled_touch(self):
         code = SOURCE.read_text(encoding="utf-8")
-        self.assertIn("Approach.SizeSquared2D() < FMath::Square(150.f)", code)
+        self.assertIn("FMath::Clamp(DribbleChallengeRadiusCm, 50.f, 400.f)", code)
+        header = SOURCE.parents[1] / "Public/SportsArcadeTeamAIController.h"
+        self.assertIn("DribbleChallengeRadiusCm = 150.f", header.read_text(encoding="utf-8"))
         self.assertIn("bImmediateChallenge = true", code)
         self.assertIn("!bImmediateChallenge && ActionCooldownRemaining <= 0.f", code)
 
