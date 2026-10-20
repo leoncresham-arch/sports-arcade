@@ -575,8 +575,12 @@ void ASportsArcadeCharacter::ReceiveBall()
         BestDistanceSq = DistanceSq;
         BestBall = *It;
     }
-    if (IsValid(BestBall) &&
-        BestBall->ApplyControlledTouch(this, Facing * (bShieldHeld ? 30.f : 65.f),
+    // A moving receiver cushions the ball into their path; stationary
+    // receivers retain a gentle facing touch.
+    const FVector ReceiveDirection = (Facing * 0.65f +
+        PlayerVelocity.GetSafeNormal2D() * 0.35f).GetSafeNormal2D();
+    if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
+        BestBall->ApplyControlledTouch(this, ReceiveDirection * (bShieldHeld ? 30.f : 65.f),
             FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
     {
         TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
