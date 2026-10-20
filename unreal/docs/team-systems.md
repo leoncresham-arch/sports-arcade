@@ -375,3 +375,7 @@ Character movement now uses an original editable 1–99 Agility attribute to sca
 ### October 20 — turning-ball control and midfield pass availability
 
 Manual controlled touches now blend current travel direction (75%) and player facing (25%), improving directional touch continuity while turning. Attacking midfield support targets also remain at least 175 cm behind the ball in the current attacking direction, avoiding an overrun that removes an easy supporting pass. Regression contracts added for both paths. This advances items 1 and 3, but neither system is complete without Unreal runtime tests and animation/contact integration.
+
+### October 20 — shield handling pass
+
+Shielding now adopts the same controlled-braking behavior as jockeying. Manual controlled touches also bias toward player-facing direction while shield is held (55% facing, 45% travel), instead of using the normal 25% facing / 75% travel weighting. Regression assertions updated; the behavior remains an uncompiled, animation-agnostic foundation.
