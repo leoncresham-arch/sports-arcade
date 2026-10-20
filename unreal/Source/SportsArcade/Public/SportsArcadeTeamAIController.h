@@ -25,6 +25,14 @@ public:
     /** Conservative retreat when the opposition was last credited with touch. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="500.0"))
     float DefensiveRecoveryShiftCm = 150.f;
+    
+    /** Maximum distance for an AI teammate to occupy a lateral passing lane. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="1200.0"))
+    float PassingSupportLateralShiftCm = 350.f;
+
+    /** Opponent proximity used to choose the less congested supporting side. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI|Shape", meta=(ClampMin="0.0", ClampMax="2000.0"))
+    float PassingSupportOpponentSearchCm = 1000.f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|AI")
     float PressureRadiusCm = 2100.f;
