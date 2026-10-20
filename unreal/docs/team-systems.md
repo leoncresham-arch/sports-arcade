@@ -409,3 +409,7 @@ Player control now includes an explicit Receive action bound to I. Unlike automa
 ### October 20 — larger gameplay controls follow-up
 
 Deliberate receiving now considers ball velocity relative to the footballer's own finite movement, allowing practical moving interceptions while retaining the existing 1800 cm/s relative-speed limit, contested touch checks, and cooldown. Planted braking now scales with running speed so slow shuffles are not over-braked. Midfield support performs a final behind-ball depth check after formation channel adjustments, protecting the minimum 175 cm passing option. Source regression tests updated. No UE5.5 native compile, motion-capture/foot-contact animation, or Windows match playtest has been performed.
+
+### October 20 — receiving reach and transition response
+
+Deliberate receiving now requires full 3D ball-to-player distance within the controlled-touch reach in addition to contact-height checks, avoiding impossible touches on elevated passes. The central-midfield forward-support shift is suspended during fast backward-moving passes (ball velocity more than 450 cm/s against attacking direction), preventing a surge in the wrong phase of possession. Regression contracts added. These changes still require native Unreal evaluation.
