@@ -1002,6 +1002,8 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     if (!Taker->SetActorLocation(TakerSpot, false, nullptr, ETeleportType::TeleportPhysics))
         return false;
     Taker->GetCharacterMovement()->StopMovementImmediately();
+    // Align the shooter's forward axis with the goal for keyboard prototype kicks.
+    Taker->SetActorRotation(FRotator(0.f, Team == 0 ? 0.f : 180.f, 0.f));
     // Stage the opposing keeper near the middle of the defended goal line.
     // This does not yet imply a dive, save or refereed keeper movement.
     for (TActorIterator<ASportsArcadeTeamRoster> Roster(GetWorld()); Roster; ++Roster)
