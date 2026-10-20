@@ -317,3 +317,7 @@ Secondary AI pressing now maintains a minimum 120 cm lateral shadow displacement
 ### October 20 — secondary pressing infield containment
 
 When the predicted ball position is within 650 cm of a touchline, the supporting AI defender now shades its lateral positioning towards the pitch interior. Away from the sidelines, its existing same-side support behavior remains. Ball lead, minimum 120 cm shadow and boundary clamping are preserved. Source regression updated; UE navigation/gameplay verification is pending.
+
+### October 20 — coordinated defender intercept safeguards
+
+Secondary pressing now anticipates inward-moving balls by shading toward the central escape lane, including when a ball starts away from the touchline; predictions are rejected when nonfinite. Primary press interception navigation likewise checks the predicted destination before issuing a movement target. These changes retain the existing anticipation speed caps, lateral support separation and pitch clamping. Regression tests cover both paths; actual Unreal 5.5 compilation, animation/contact alignment and match-play balancing remain unverified.
