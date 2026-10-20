@@ -393,7 +393,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 }
             }
         }
-        if (bSelfControllingBall && bImmediateChallenge && ActionCooldownRemaining <= 0.f)
+        if (bSelfControllingBall && bImmediateChallenge && ActionCooldownRemaining <= 0.f &&
+            FMath::Abs(Footballer->GetActorLocation().Z - Ball->GetActorLocation().Z) < 135.f)
         {
             for (ASportsArcadeCharacter* Mate : Roster->Players)
             {
