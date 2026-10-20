@@ -421,7 +421,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // A conservative defensive shadow towards the closest nearby opponent.
     // Pressing footballer already has the ball as target and must not be pulled away.
     if (Slot != 0 && !bIsPrimaryPresser && IsValid(Ball) &&
-        Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex &&
+        (Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex ||
+            !IsValid(Ball->GetLastTouchPlayer()) ||
+            Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() ||
+            FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
+                Ball->GetActorLocation()) > FMath::Square(300.f)) &&
         FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
     {
         ASportsArcadeCharacter* Opponent = nullptr;
