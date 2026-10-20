@@ -129,3 +129,10 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - Physical penalty staging now places an authored defending goalkeeper (lineup slot 0, opposite team) at the center of the defended goal line, without asserting that a save or dive is implemented.
 - The shooter is rotated to face the attacking goal (+X for home and -X for away), so the **O** keyboard action uses an intentionally goalward forward vector.
 - Both positions are provisional level-space mechanics requiring in-engine collision, camera, rigging, keeper movement, contact and animation testing.
+
+
+## October 20 — physical shootout eligibility and keeper contact
+- `CanKickStagedCupPenalty()` now provides the authoritative Blueprint/keyboard readiness check: active undecided shootout, correct living taker/team/world, not already kicked, and ball within 60 cm of the assigned spot in 3D. `KickStagedCupPenalty()` reuses it before validating the strike vector.
+- `GetStagedCupPenaltyTaker()` no longer exposes a taker after the attempt has been struck or when the actor belongs to another Unreal world, preventing repeat keyboard kicks against a stale pointer.
+- Shootout goalkeeper provisional physics parries require an incoming ball travelling toward the defended goal, not just a nearby loose ball. Score or miss remains a human-reviewed event rather than automatically inferred.
+- GitHub CI performs static Python source checks. Native Unreal Engine 5.5 compiling, goalkeeper physics and penalty outcomes are not yet verified.
