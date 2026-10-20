@@ -193,7 +193,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         Target.Y += FMath::Clamp(Ball->GetActorLocation().Y - Target.Y, -1800.f, 1800.f) * Advance;
         // Last-touch attribution is a weak possession signal, not a guarantee:
         // use only small shape adjustments, never override primary pressing.
-        const int32 RecentTouchTeam = Ball->GetLastTouchTeamIndex();
+        // A last touch without nearby control is a loose ball, not possession.
+        const ASportsArcadeCharacter* LastToucher = Ball->GetLastTouchPlayer();
+        const bool bAttributedControl = IsValid(LastToucher) &&
+            LastToucher->GetWorld() == GetWorld() &&
+            !LastToucher->GetActorLocation().ContainsNaN() &&
+            FVector::DistSquared2D(LastToucher->GetActorLocation(),
+                Ball->GetActorLocation()) <= FMath::Square(300.f);
+        const int32 RecentTouchTeam = bAttributedControl
+            ? Ball->GetLastTouchTeamIndex() : INDEX_NONE;
         const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         if (RecentTouchTeam == Footballer->TeamIndex)
             Target.X += AttackSign * FMath::Clamp(AttackingSupportShiftCm, 0.f, 500.f);
