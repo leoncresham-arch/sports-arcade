@@ -153,8 +153,9 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     const bool bPlayActive = !IsValid(MatchMode) || (!MatchMode->bHalfTime && !MatchMode->bMatchFinished && !MatchMode->bBallOutOfPlay);
     if (bPlayActive && IsPlayerControlled() && !bJockeyHeld &&
-        TouchCooldownRemaining <= 0.f &&
-        GetVelocity().SizeSquared2D() > 400.f)
+        TouchCooldownRemaining <= 0.f && GetWorld() &&
+        !GetVelocity().ContainsNaN() &&
+        GetVelocity().SizeSquared2D() > FMath::Square(100.f))
     {
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
         {
