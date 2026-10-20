@@ -29,6 +29,9 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("Ball->GetLastTouchPlayer() != Footballer", section)
         self.assertIn("!Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN()", section)
         self.assertIn("FMath::Square(220.f)", section)
+        self.assertIn("Ball->GetLastTouchPlayer()->GetWorld() == GetWorld()", section)
+        self.assertIn("FMath::Abs(Ball->GetLastTouchPlayer()->GetActorLocation().Z -", section)
+        self.assertIn("Ball->GetActorLocation().Z) <= 115.f", section)
         self.assertIn("if (!bTeammateNearbyBall && !bSelfControllingBall", code)
 
 if __name__ == "__main__":
