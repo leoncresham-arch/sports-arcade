@@ -531,6 +531,11 @@ void ASportsArcadeCharacter::ReceiveBall()
         // Judge the ball's approach relative to the receiving player rather
         // than its absolute speed: moving receivers can trap a matching pass.
         const FVector RelativeBallVelocity = It->GetVelocity() - PlayerVelocity;
+        // Require the receiver to be near the actual contact point in 3D,
+        // not merely underneath an elevated ball's ground projection.
+        const float ContactDistance3DSq = ToBall.SizeSquared();
+        if (ContactDistance3DSq > FMath::Square(FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
+            continue;
         if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
             RelativeBallVelocity.SizeSquared2D() > FMath::Square(1800.f) ||
             FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
