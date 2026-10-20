@@ -50,6 +50,7 @@ void ASportsArcadeCharacter::ResetToKickoffPosition()
     GetCharacterMovement()->StopMovementImmediately();
     bSprintHeld = false;
     bJockeyHeld = false;
+    bShieldHeld = false;
     bSprintExhausted = false;
     CurrentStamina = FMath::Max(MaxStamina * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
     TouchCooldownRemaining = 0.f;
@@ -71,6 +72,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("Tackle"), IE_Pressed, this, &ASportsArcadeCharacter::TackleBall);
     PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Pressed, this, &ASportsArcadeCharacter::BeginJockey);
     PlayerInputComponent->BindAction(TEXT("Jockey"), IE_Released, this, &ASportsArcadeCharacter::EndJockey);
+    PlayerInputComponent->BindAction(TEXT("Shield"), IE_Pressed, this, &ASportsArcadeCharacter::BeginShield);
+    PlayerInputComponent->BindAction(TEXT("Shield"), IE_Released, this, &ASportsArcadeCharacter::EndShield);
     PlayerInputComponent->BindAction(TEXT("SwitchPlayer"), IE_Pressed, this, &ASportsArcadeCharacter::SwitchPlayer);
     PlayerInputComponent->BindAction(TEXT("ResumeSecondHalf"), IE_Pressed, this, &ASportsArcadeCharacter::ResumeMatchAfterHalfTime);
     PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
@@ -120,6 +123,16 @@ void ASportsArcadeCharacter::EndJockey()
     bJockeyHeld = false;
 }
 
+void ASportsArcadeCharacter::BeginShield()
+{
+    bShieldHeld = true;
+}
+
+void ASportsArcadeCharacter::EndShield()
+{
+    bShieldHeld = false;
+}
+
 void ASportsArcadeCharacter::EndSprint()
 {
     bSprintHeld = false;
@@ -134,7 +147,7 @@ void ASportsArcadeCharacter::EndSprint()
     const bool bPlayActive = !IsValid(MatchMode) ||
         (!MatchMode->bHalfTime && !MatchMode->bMatchFinished && !MatchMode->bBallOutOfPlay);
     GetCharacterMovement()->MaxWalkSpeed =
-        (bJockeyHeld && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor;
+        ((bJockeyHeld || bShieldHeld) && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor;
 }
 
 float ASportsArcadeCharacter::GetStaminaNormalized() const
@@ -237,7 +250,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             FMath::Clamp(TravelSpeed / FMath::Max(SprintSpeed, 1.f), 0.f, 1.f));
         if (IsValid(ClosestDribbleBall) &&
             ClosestDribbleBall->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
-                (240.f * TouchSpeedFactor * FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
+                (240.f * (bShieldHeld ? 0.55f : 1.f) * TouchSpeedFactor *
+                    FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
                     (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
         {
             TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
@@ -252,7 +266,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         bSprintExhausted = false;
     }
     const bool bMoving = GetVelocity().SizeSquared2D() > FMath::Square(10.f);
-    const bool bSprinting = bPlayActive && !bJockeyHeld && bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
+    const bool bSprinting = bPlayActive && !bJockeyHeld && !bShieldHeld && bSprintHeld && bMoving && !bSprintExhausted && CurrentStamina > 0.f;
     if (bSprinting)
     {
         CurrentStamina = FMath::Max(0.f, CurrentStamina - SprintDrainPerSecond * DeltaSeconds);
@@ -269,8 +283,9 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float StaminaFraction = CurrentStamina / Capacity;
     const float FatigueSpeedFactor = FMath::Lerp(0.72f, 1.f,
         FMath::Clamp(StaminaFraction / 0.4f, 0.f, 1.f));
-    GetCharacterMovement()->MaxWalkSpeed = (bJockeyHeld && bPlayActive ? JockeySpeed :
-        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed)) *
+    GetCharacterMovement()->MaxWalkSpeed = (bShieldHeld && bPlayActive ? JockeySpeed :
+        (bJockeyHeld && bPlayActive ? JockeySpeed :
+        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed))) *
         PaceFactor * FatigueSpeedFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor * FatigueSpeedFactor;
