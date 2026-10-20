@@ -38,6 +38,7 @@ enum class ESportsArcadeMatchPhase : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FSportsArcadeGoalScoredEvent, int32, HomeScore, int32, AwayScore, bool, bOwnGoal);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSportsArcadeMatchPhaseEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSportsArcadeBallOutEvent, FVector, ExitLocation, int32, LastTouchTeam);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSportsArcadePenaltyReviewedEvent, int32, KickingTeam, bool, bScored);
 
 /** PC-first technical foundation. Match rules will be implemented after art vertical slice. */
 UCLASS()
@@ -92,6 +93,9 @@ public:
     /** Fired when the physics-backed cup penalty is actually struck. */
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Cup|Penalties")
     FSportsArcadeMatchPhaseEvent OnPhysicalPenaltyKicked;
+
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Cup|Penalties")
+    FSportsArcadePenaltyReviewedEvent OnCupPenaltyReviewed;
 
     /** Prototype stoppage: requires a referee restart implementation. */
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
