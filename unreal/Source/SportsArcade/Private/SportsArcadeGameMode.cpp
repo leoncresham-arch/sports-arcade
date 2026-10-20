@@ -1005,8 +1005,13 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
         return false;
     const FSportsArcadeCupFixture& Tie = BoundCup->CurrentRoundFixtures[BoundCupFixtureIndex];
     if (Tie.HomeClubId != SelectedHomeClubId || Tie.AwayClubId != SelectedAwayClubId ||
+        (bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken) ||
         !ActivePenaltyShootout->RecordAttempt(KickingTeam, bScored))
         return false;
+    // Never reuse a taken kick for the next shootout turn.
+    StagedPenaltyTaker = nullptr;
+    bPenaltyKickStaged = false;
+    bPenaltyKickTaken = false;
     const int32 Winner = ActivePenaltyShootout->WinningTeam;
     if (Winner == 0 || Winner == 1)
     {
