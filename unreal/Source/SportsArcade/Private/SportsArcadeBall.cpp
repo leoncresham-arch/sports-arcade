@@ -99,7 +99,7 @@ void ASportsArcadeBall::PlaceAtRest(const FVector& WorldPosition)
 
 void ASportsArcadeBall::ResetToCentre()
 {
-    if (!CollisionSphere)
+    if (!CollisionSphere || InitialSpawnLocation.ContainsNaN())
     {
         return;
     }
