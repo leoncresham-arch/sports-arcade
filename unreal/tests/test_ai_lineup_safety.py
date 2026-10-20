@@ -22,6 +22,16 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn("Delta.X * AttackSign < -650.f", code)
         self.assertIn("Teammate->GetWorld() != GetWorld()", code)
 
+    def test_goalkeeper_only_reacts_during_physical_penalties(self):
+        code = AI.read_text()
+        self.assertIn("Match->IsCupPenaltyAwaitingResult()", code)
+        self.assertIn("Keeper->TeamIndex != Match->GetCupPenaltyDefendingTeam()", code)
+        self.assertIn("Keeper->LineupSlot != 0", code)
+        self.assertIn("MoveToLocation(Target, 60.f", code)
+        self.assertIn("Ball->KickByPlayer(Keeper, Parry", code)
+        self.assertLess(code.index("Match->IsCupPenaltyAwaitingResult()"),
+                        code.index("Match->bMatchFinished || Match->bBallOutOfPlay"))
+
     def test_invalid_lineup_stops_navigation(self):
         code = AI.read_text()
         self.assertIn('if (MembershipIndex == INDEX_NONE || Slot < 0 || Slot > 10 ||', code)
