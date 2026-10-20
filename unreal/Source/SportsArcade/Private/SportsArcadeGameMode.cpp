@@ -1027,14 +1027,20 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     return true;
 }
 
+bool ASportsArcadeGameMode::CanKickStagedCupPenalty() const
+{
+    return bRequirePhysicalPenaltyKicks && bPenaltyKickStaged && !bPenaltyKickTaken &&
+        IsCupTieBreakRequired() && IsValid(ActivePenaltyShootout) &&
+        IsValid(StagedPenaltyTaker) && IsValid(MatchBall) && GetWorld() &&
+        StagedPenaltyTaker->GetWorld() == GetWorld() &&
+        StagedPenaltyTaker->TeamIndex == ActivePenaltyShootout->GetNextKickingTeam() &&
+        FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot) <=
+            FMath::Square(60.f);
+}
+
 bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
 {
-    if (!bRequirePhysicalPenaltyKicks || !bPenaltyKickStaged || bPenaltyKickTaken ||
-        !IsCupTieBreakRequired() || !IsValid(ActivePenaltyShootout) ||
-        !IsValid(StagedPenaltyTaker) || !IsValid(MatchBall) ||
-        StagedPenaltyTaker->GetWorld() != GetWorld() ||
-        StagedPenaltyTaker->TeamIndex != ActivePenaltyShootout->GetNextKickingTeam() ||
-        FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot) > FMath::Square(60.f) ||
+    if (!CanKickStagedCupPenalty() ||
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
         Direction.X * (StagedPenaltyTaker->TeamIndex == 0 ? 1.f : -1.f) <= 0.f)
         return false;
