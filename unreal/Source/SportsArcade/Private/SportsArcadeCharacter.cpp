@@ -349,21 +349,54 @@ void ASportsArcadeCharacter::TackleBall()
     const ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (!GetWorld() || TackleCooldownRemaining > 0.f ||
         (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished || MatchMode->bBallOutOfPlay))) return;
+
+    // A missed standing tackle is still a committed defensive action; repeated
+    // presses must not bypass the recovery window while the ball approaches.
+    TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
+    const FVector DefenderLocation = GetActorLocation();
+    const FVector Forward = GetActorForwardVector().GetSafeNormal2D();
+    if (DefenderLocation.ContainsNaN() || Forward.IsNearlyZero()) return;
+
+    ASportsArcadeBall* CandidateBall = nullptr;
+    float ClosestDistanceSq = FMath::Square(150.f);
     for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
     {
-        const FVector Direction = It->GetActorLocation() - GetActorLocation();
-        if (Direction.SizeSquared2D() < FMath::Square(150.f) &&
-            FMath::Abs(Direction.Z) < 110.f &&
-            FVector::DotProduct(GetActorForwardVector(), Direction.GetSafeNormal2D()) > 0.25f)
+        const FVector BallLocation = It->GetActorLocation();
+        if (BallLocation.ContainsNaN()) continue;
+        const FVector Direction = BallLocation - DefenderLocation;
+        const float DistanceSq = Direction.SizeSquared2D();
+        if (DistanceSq >= ClosestDistanceSq || FMath::Abs(Direction.Z) >= 110.f ||
+            FVector::DotProduct(Forward, Direction.GetSafeNormal2D()) <= 0.25f) continue;
+
+        ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
+        if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
+
+        // Last touch is not possession: avoid knocking the ball away from a
+        // nearby teammate even after an opponent's older recorded touch.
+        bool bTeammateControllingBall = false;
+        for (TActorIterator<ASportsArcadeCharacter> PlayerIt(GetWorld()); PlayerIt; ++PlayerIt)
         {
-            ASportsArcadeCharacter* LastTouch = It->GetLastTouchPlayer();
-            if (IsValid(LastTouch) && LastTouch->TeamIndex == TeamIndex) continue;
-            if (It->KickByPlayer(this, GetActorForwardVector().GetSafeNormal2D(),
-                850.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f), 175.f))
+            ASportsArcadeCharacter* Other = *PlayerIt;
+            if (Other == this || Other->TeamIndex != TeamIndex ||
+                Other->GetActorLocation().ContainsNaN()) continue;
+            const FVector OtherToBall = BallLocation - Other->GetActorLocation();
+            if (OtherToBall.SizeSquared2D() < FMath::Square(115.f) &&
+                FMath::Abs(OtherToBall.Z) < 115.f)
             {
-                TackleCooldownRemaining = FMath::Max(TackleCooldownSeconds, 0.1f);
+                bTeammateControllingBall = true;
                 break;
             }
         }
+        if (bTeammateControllingBall) continue;
+
+        CandidateBall = *It;
+        ClosestDistanceSq = DistanceSq;
+    }
+
+    if (IsValid(CandidateBall))
+    {
+        CandidateBall->KickByPlayer(this, Forward,
+            850.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Tackling) : 1.f),
+            175.f);
     }
 }
