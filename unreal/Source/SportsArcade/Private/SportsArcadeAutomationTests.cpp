@@ -118,6 +118,16 @@ bool FSportsArcadePenaltyShootoutAutomation::RunTest(const FString& Parameters)
     Shootout->HomeScored = 1;
     TestEqual(TEXT("Goals cannot exceed attempts"),
         Shootout->GetNextKickingTeam(), INDEX_NONE);
+    Shootout->ResetShootout();
+    Shootout->HomeAttempts = 11;
+    Shootout->AwayAttempts = 11;
+    Shootout->HomeScored = 7;
+    Shootout->AwayScored = 7;
+    TestEqual(TEXT("Twelfth home kick wraps to opening striker"),
+        Shootout->GetNextKickerLineupSlot(), 9);
+    Shootout->HomeAttempts = 12;
+    TestEqual(TEXT("Twelfth away kick also wraps to opening striker"),
+        Shootout->GetNextKickerLineupSlot(), 9);
     return true;
 }
 
