@@ -391,3 +391,5 @@ Manual controlled-touch steering now scales travel-versus-facing blend by the pl
 ### October 20 — infield midfielder outlet near touchline
 
 When the ball carrier is within 600 cm of a touchline, a supporting midfielder now positions 350 cm toward the pitch center to give a safer inside passing option rather than spreading beyond the sideline. Other midfield support remains on the player's existing side where possible. Tests assert the boundary-specific branch; native UE tactical validation pending.
+
+Touchline support correction: the midfielder's 350 cm inward outlet is now applied irrespective of the earlier 250 cm lateral separation test. Wide carriers therefore receive the same central option even when midfield formation already happens to be offset to the side. Source regression updated; UE runtime validation remains pending.
