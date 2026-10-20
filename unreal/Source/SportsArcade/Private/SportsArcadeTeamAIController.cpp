@@ -326,7 +326,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         const bool bTeammateNearbyBall = RecentTouchTeam == Footballer->TeamIndex &&
             IsValid(Ball->GetLastTouchPlayer()) &&
             Ball->GetLastTouchPlayer() != Footballer &&
+            Ball->GetLastTouchPlayer()->GetWorld() == GetWorld() &&
             !Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() &&
+            FMath::Abs(Ball->GetLastTouchPlayer()->GetActorLocation().Z -
+                Ball->GetActorLocation().Z) <= 115.f &&
             FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
                 Ball->GetActorLocation()) < FMath::Square(220.f);
         // A controlled opponent ball deserves pressure; when the ball is loose,
