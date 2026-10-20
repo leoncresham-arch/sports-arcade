@@ -214,9 +214,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                     Opponent->TeamIndex == TeamIndex || Opponent->GetWorld() != GetWorld() ||
                     Opponent->GetActorLocation().ContainsNaN()) continue;
                 const FVector OppToBall = BallLocation - Opponent->GetActorLocation();
+                // A planted shielding carrier can contest a marginally closer
+                // opponent, but never override a clearly superior foot contact.
+                const bool bOpponentClearlyCloser = OppToBall.Size2D() + (bShieldHeld ? 25.f : 0.f) <
+                    FMath::Sqrt(MyBallDistanceSq);
                 if (FMath::Abs(OppToBall.Z) <= 115.f &&
                     OppToBall.SizeSquared2D() < FMath::Square(95.f) &&
-                    OppToBall.SizeSquared2D() < MyBallDistanceSq)
+                    bOpponentClearlyCloser)
                 {
                     bOpponentHasCloserControl = true;
                     break;
