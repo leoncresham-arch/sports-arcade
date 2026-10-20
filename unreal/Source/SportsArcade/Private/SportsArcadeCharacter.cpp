@@ -266,6 +266,9 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
     ASportsArcadeBall* NearestBall = nullptr;
     float NearestDistanceSquared = FMath::Square(BallControlReachCm);
     const FVector PlayerLocation = GetActorLocation();
+    const FVector PlayerFacing = GetActorForwardVector();
+    if (PlayerLocation.ContainsNaN() || PlayerFacing.ContainsNaN() ||
+        PlayerFacing.GetSafeNormal2D().IsNearlyZero()) return;
     for (TActorIterator<ASportsArcadeBall> It(World); It; ++It)
     {
         if (!IsValid(*It)) continue;
@@ -273,7 +276,7 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
         if (BallPosition.ContainsNaN() || PlayerLocation.ContainsNaN()) continue;
         const FVector Offset = BallPosition - PlayerLocation;
         if (FMath::Abs(Offset.Z) > 120.f ||
-            FVector::DotProduct(GetActorForwardVector().GetSafeNormal2D(),
+            FVector::DotProduct(PlayerFacing.GetSafeNormal2D(),
                 Offset.GetSafeNormal2D()) <= 0.15f) continue;
         const float DistanceSquared = Offset.SizeSquared();
         if (DistanceSquared <= NearestDistanceSquared)
