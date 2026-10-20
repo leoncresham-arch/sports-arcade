@@ -239,7 +239,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     float ReceiverPressurePenalty = 0.f;
                     for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
                     {
-                        if (!IsValid(*Opp) || Opp->TeamIndex == Footballer->TeamIndex) continue;
+                        if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                            Opp->TeamIndex == Footballer->TeamIndex) continue;
                         // An unblocked pass can still be intercepted at the receiver.
                         const float ReceiverSeparation = FVector::Dist2D(
                             Opp->GetActorLocation(), Teammate->GetActorLocation());
@@ -291,7 +292,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         float NearestOpponentDistance = FMath::Square(FMath::Max(0.f, MarkingSearchRadiusCm));
         for (TActorIterator<ASportsArcadeCharacter> It(GetWorld()); It; ++It)
         {
-            if (!IsValid(*It) || It->TeamIndex == Footballer->TeamIndex) continue;
+            if (!IsValid(*It) || It->GetWorld() != GetWorld() ||
+                It->TeamIndex == Footballer->TeamIndex) continue;
             const float Distance = FVector::DistSquared2D(Footballer->GetActorLocation(), It->GetActorLocation());
             if (Distance < NearestOpponentDistance)
             {
