@@ -530,3 +530,10 @@ The user strongly insists on sustained autonomous development **within each acti
 - Rotation selection moved to USportsArcadePenaltyShootout::GetNextKickerLineupSlot, with 11 authored slots before repeat and fallback for incomplete rosters; native C++ Automation Test source asserts opening and next shooter slots.
 - Added duplicate GameMode C++ definition source test, geometry, state reset and keyboard-source regressions; repaired prior static test failures.
 - Native Unreal Engine 5.5 compilation, staged actor physics, navigation, camera and gameplay remain unverified. Continue approved referee/penalty mechanics and full 11v11 source work without repeated authorization.
+
+
+## October 20 — further physical penalty and goalkeeper integrity
+- `GetStagedCupPenaltyTaker` now hides invalid, foreign-world and already-kicked player references.
+- New `CanKickStagedCupPenalty()` centralizes physical penalty state, current taker, referee ball mark and bound cup fixture validation. Both staging and kicking reject a cup bracket that changed since the shootout was bound.
+- Penalty keeper AI only attempts the provisional contact parry for balls moving toward its defended goal, not any nearby ball.
+- Python static source regression tests added/updated and GitHub source checks monitored. The native UE 5.5 build and real goalkeeper/penalty behavior remain unverified and must not be described as playable or validated until run locally.
