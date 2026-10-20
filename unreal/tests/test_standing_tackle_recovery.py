@@ -28,7 +28,8 @@ class StandingTackleRecoveryTests(unittest.TestCase):
                       "DistanceSq >= ClosestDistanceSq",
                       "FMath::Abs(Direction.Z) >= 110.f",
                       "FVector::DotProduct(Forward, Direction.GetSafeNormal2D()) <= 0.25f",
-                      "BallLocation.ContainsNaN()"):
+                      "BallLocation.ContainsNaN()",
+                      "if (!IsValid(*It)) continue"):
             self.assertIn(token, self.tackle)
 
     def test_does_not_dispossess_own_nearby_player(self):
