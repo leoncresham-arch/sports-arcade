@@ -157,3 +157,9 @@ The result is adjudicated manually for now; ball impulses and keeper outcomes ar
 - Python reference regressions cover goal mouth, wide, high, away-end and touchline-first geometry. Native Unreal Editor execution and goal/keeper physics remain unverified.
 
 - `CanConfirmSuggestedCupPenaltyOutcome()` is exposed to Blueprint so a referee approval control can be disabled while a physical penalty has no valid observed suggestion. F9 and the Blueprint confirmation action share that eligibility check; explicit manual F7/F8 rulings remain unaffected.
+
+
+## October 20 — settled-ball penalty observation recovery
+- A physically taken shootout attempt that never crosses a goal or touchline can now yield a provisional **miss** suggestion once its ball settles below 60 cm/s after a configurable observation window (default eight seconds). A parry rolling over the opposite goal line also suggests a miss.
+- The observation timer and suggested result are cleared at the next penalty, resets, cup transitions and when the referee records the result. The timeout fires a suggestion only, never an automatic shootout attempt or cup result.
+- Python source-regression checks passed; duration, contact and physics response must be tuned after UE 5.5 runtime testing.
