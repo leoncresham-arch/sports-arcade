@@ -256,7 +256,8 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
 {
     UWorld* World = GetWorld();
     ASportsArcadeGameMode* MatchMode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
-    if (!World || ImpulseStrength <= 0.f || StrikeCooldownRemaining > 0.f ||
+    if (!World || !FMath::IsFinite(ImpulseStrength) || ImpulseStrength <= 0.f ||
+        StrikeCooldownRemaining > 0.f ||
         (IsValid(MatchMode) && (MatchMode->bHalfTime || MatchMode->bMatchFinished || MatchMode->bBallOutOfPlay)))
     {
         return;
@@ -286,8 +287,10 @@ void ASportsArcadeCharacter::StrikeNearbyBall(float ImpulseStrength, bool bIsSho
     {
         const FVector ToBall = NearestBall->GetActorLocation() - PlayerLocation;
         // Aim with the current movement input when available; standing players use facing.
-        const FVector InputAim = GetLastMovementInputVector().GetSafeNormal2D();
+        const FVector MovementAim = GetLastMovementInputVector();
+        const FVector InputAim = MovementAim.ContainsNaN() ? FVector::ZeroVector : MovementAim.GetSafeNormal2D();
         const FVector Forward = InputAim.IsNearlyZero() ? GetActorForwardVector().GetSafeNormal2D() : InputAim;
+        if (Forward.ContainsNaN() || Forward.IsNearlyZero()) return;
         if (FMath::Abs(ToBall.Z) <= 120.f && FVector::DotProduct(GetActorForwardVector().GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.15f)
         {
             // A shot gains moderate lift; a ground pass stays flat.
