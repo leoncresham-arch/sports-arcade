@@ -344,6 +344,27 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target = Ball->GetActorLocation() + FVector(AttackSign * 280.f, 0.f, -Ball->GetActorLocation().Z);
             bIsPrimaryPresser = true; // Retain carrier target through generic marking.
         }
+        // Preserve the chosen lateral escape lane between cooldown-gated touches.
+        float CarrierEscapeSide = 0.f;
+        if (bSelfControllingBall)
+        {
+            float ThreatDistanceSquared = FMath::Square(500.f);
+            for (TActorIterator<ASportsArcadeCharacter> Threat(GetWorld()); Threat; ++Threat)
+            {
+                if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
+                    Threat->TeamIndex == Footballer->TeamIndex ||
+                    Threat->GetActorLocation().ContainsNaN()) continue;
+                const FVector ThreatOffset = Threat->GetActorLocation() - Ball->GetActorLocation();
+                if (ThreatOffset.X * AttackSign < -100.f) continue;
+                const float DistanceSquared = ThreatOffset.SizeSquared2D();
+                if (DistanceSquared < ThreatDistanceSquared)
+                {
+                    ThreatDistanceSquared = DistanceSquared;
+                    CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f;
+                }
+            }
+            Target.Y += CarrierEscapeSide * 180.f;
+        }
         if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
         {
             // Avoid pushing a controlled ball directly into a nearby defender.
@@ -366,7 +387,6 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float DribbleSpeed = SafeLateralSign == 0.f ? 380.f : 280.f;
             const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f);
             // Keep the runner's movement aligned with the chosen escape lane.
-            Target.Y += SafeLateralSign * 180.f;
             if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * DribbleSpeed, ContactRangeCm + 75.f))
                 ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds * 0.5f, 0.15f);
         }
