@@ -257,6 +257,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     ? FMath::Sign(LateralSeparation)
                     : (Slot % 2 == 0 ? 1.f : -1.f);
                 Target.Y = Ball->GetActorLocation().Y + SideSign * 250.f;
+                // At a touchline, prefer a supporting option toward midfield
+                // rather than a wide pass into the edge of the pitch.
+                if (FMath::Abs(Ball->GetActorLocation().Y) > HalfWidth - 600.f)
+                {
+                    Target.Y = Ball->GetActorLocation().Y -
+                        FMath::Sign(Ball->GetActorLocation().Y) * 350.f;
+                }
             }
         }
 
