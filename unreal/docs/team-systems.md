@@ -367,3 +367,7 @@ AI central midfield slots 5–8 now shift up to 450 cm forward to create a short
 ### October 20 — manual shield controls and close-touch pacing
 
 The existing human footballer now exposes an editable/Blueprint-readable shielding state via IsShieldingBall, engaged with Left Control and cleared on release or kickoff reset. Shielding suppresses sprinting, caps running to the configurable jockey pace and reduces automatic close-dribble touch impulse to 55% of the normal value. This is an input/gameplay foundation only: opponent body collisions, animation-based shielding, physical ball protection, fouls and native controls must still be implemented and tested in Unreal.
+
+### October 20 — agility and planted turn responsiveness
+
+Character movement now uses an original editable 1–99 Agility attribute to scale character rotation rate, with fatigue reducing turning responsiveness; yaw turn rate is capped 260–760 degrees/s. A new source regression verifies rating connection. Visual foot planting, directional animation blends and physics-tuned acceleration still need genuine Unreal implementation and PC playtesting.
