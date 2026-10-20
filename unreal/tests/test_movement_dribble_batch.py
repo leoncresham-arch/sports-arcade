@@ -17,6 +17,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("!bShieldHeld && bSprintHeld", CHARACTER)
         self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
         self.assertIn("(bShieldHeld ? 0.55f : 1.f)", CHARACTER)
+        self.assertIn("DribbleTouchInterval * 0.70f", CHARACTER)
+        self.assertIn("TouchCooldownRemaining = TouchInterval", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
 
     def test_agility_rating_modulates_turn_speed_with_fatigue(self):
