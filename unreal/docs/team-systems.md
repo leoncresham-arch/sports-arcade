@@ -275,3 +275,7 @@ Releasing sprint now recomputes movement speed using the same rated stamina/capa
 ### October 20 — deliberate manual dribble movement
 
 Human automatic dribble touches now require a valid world, finite velocity and more than 100 cm/s horizontal movement. The former 20 cm/s effective threshold could trigger minor ball impulses during nearly stationary player movement. This keeps explicit passes, shots and tackles available while preventing incidental slow foot-contact automation. Source regression added; UE playtesting and tuning remain pending.
+
+### October 20 — directional player-controlled dribbling
+
+Automatic human dribble contacts now require the player to travel toward the ball (positive 0.2 planar dot-product threshold) as well as face it (existing 0.35 threshold). This prevents backwards or sideways momentum from nudging a ball in front of the mesh and better separates foot-contact intent from facing. Source checks in `test_manual_dribble_arbitration.py`; native movement and animation alignment remains unverified.
