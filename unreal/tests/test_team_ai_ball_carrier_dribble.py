@@ -13,6 +13,8 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f)", part)
         self.assertIn("Target.Y += CarrierEscapeSide * 180.f", code)
+        self.assertIn("HalfWidth - 250.f", code)
+        self.assertIn("CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("SafeLateralSign == 0.f ? 380.f : 280.f", part)
         self.assertIn("DribbleDirection * DribbleSpeed", part)
 
