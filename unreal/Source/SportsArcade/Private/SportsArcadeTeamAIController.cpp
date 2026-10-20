@@ -209,6 +209,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float Retreat = FMath::Clamp(DefensiveLineRecoveryDepthCm, 0.f, 2000.f);
             const float RelativeX = (Target.X - BaseX) * AttackSign;
             Target.X = BaseX + AttackSign * FMath::Clamp(RelativeX, -Retreat, Advance);
+            const float BaseY = BasePosition.Y * HalfWidth / 3400.f;
+            const float LateralLimit = FMath::Clamp(DefensiveLineLateralDisplacementCm, 0.f, 1500.f);
+            Target.Y = FMath::Clamp(Target.Y, BaseY - LateralLimit, BaseY + LateralLimit);
         }
 
         // Make nearby non-keeper support runners offer a clear lateral outlet.
