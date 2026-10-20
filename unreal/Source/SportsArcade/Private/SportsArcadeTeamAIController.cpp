@@ -398,6 +398,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         {
             ASportsArcadeCharacter* BestOutlet = nullptr;
             float BestOutletScore = -BIG_NUMBER;
+            FVector BestOutletTarget = FVector::ZeroVector;
             for (ASportsArcadeCharacter* Mate : Roster->Players)
             {
                 if (!IsValid(Mate) || Mate == Footballer ||
@@ -440,14 +441,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 {
                     BestOutletScore = OutletScore;
                     BestOutlet = Mate;
+                    BestOutletTarget = Ball->GetActorLocation() + Delta;
                 }
             }
             if (IsValid(BestOutlet))
             {
-                const FVector BestVelocity = BestOutlet->GetVelocity().GetClampedToMaxSize2D(650.f);
-                // Candidate velocity was validated during receiver selection.
-                const FVector Direction = (BestOutlet->GetActorLocation() + BestVelocity * 0.20f - Ball->GetActorLocation()).GetSafeNormal2D();
-                const float OutletDistanceCm = FVector::Dist2D(BestOutlet->GetActorLocation() + BestVelocity * 0.20f, Ball->GetActorLocation());
+                // Release to the same finite target screened during selection.
+                const FVector ReleaseDelta = BestOutletTarget - Ball->GetActorLocation();
+                const FVector Direction = ReleaseDelta.GetSafeNormal2D();
+                const float OutletDistanceCm = ReleaseDelta.Size2D();
                 const float OutletImpulse = FMath::Clamp(950.f + OutletDistanceCm * 0.22f, 1000.f, 1550.f);
                 if (Ball->KickByPlayer(Footballer, Direction, OutletImpulse, ContactRangeCm + 75.f))
                     ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
