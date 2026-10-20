@@ -94,3 +94,10 @@ Extract match clock and refereeing into testable game state for replication, add
 - Provisional automatic corner kicks now aim inward toward the penalty area at either goal end instead of following team attack direction out of play.
 - Restart eligibility rejects nonfinite referee marks and marks outside the configured pitch length/width, as well as 3D ball drift from staged positions.
 - Source contracts cover event order, corner direction and restart location constraints; Unreal runtime rules and authored presentation still need validation.
+
+
+## October 20 — keyboard referee decisions for the Windows prototype
+- For a stopped undecided out-of-play event, F5 awards possession to home and F6 to away. The GameMode infers provisional throw-in/corner/goal-kick from crossing side and the selected side; it does not automatically fabricate the last touch.
+- Then press B to stage the awarded restart, followed by M if manual mode is enabled. Referee decisions are rejected unless the restart is undetermined and an eligible taker exists.
+- The registered Blueprint OnRestartAwarded event is broadcast after a successful decision. UI can inspect PendingRestartType/Team/Location/Taker.
+- These are debugging/prototype keyboard controls rather than complete match officiating or menu UX.
