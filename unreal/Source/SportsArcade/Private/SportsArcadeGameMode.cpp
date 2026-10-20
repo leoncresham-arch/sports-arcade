@@ -364,6 +364,8 @@ void ASportsArcadeGameMode::ResetMatch()
     ActivePenaltyShootout = nullptr;
     StagedPenaltyTaker = nullptr;
     StagedPenaltySpot = FVector::ZeroVector;
+    bHasPreviousPenaltyBallPosition = false;
+    SuggestedCupPenaltyOutcome = INDEX_NONE;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     StageKickoff(0);
@@ -733,6 +735,8 @@ bool ASportsArcadeGameMode::BindSeasonFixture(USportsArcadeSeasonSave* Season, i
     ActivePenaltyShootout = nullptr;
     StagedPenaltyTaker = nullptr;
     StagedPenaltySpot = FVector::ZeroVector;
+    bHasPreviousPenaltyBallPosition = false;
+    SuggestedCupPenaltyOutcome = INDEX_NONE;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     BoundSeason = Season;
@@ -956,6 +960,8 @@ bool ASportsArcadeGameMode::StartCupPenaltyShootout()
     ActivePenaltyShootout = NewObject<USportsArcadePenaltyShootout>(this);
     StagedPenaltyTaker = nullptr;
     StagedPenaltySpot = FVector::ZeroVector;
+    bHasPreviousPenaltyBallPosition = false;
+    SuggestedCupPenaltyOutcome = INDEX_NONE;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     return IsValid(ActivePenaltyShootout);
@@ -1029,6 +1035,8 @@ bool ASportsArcadeGameMode::StageCupPenaltyKick()
     }
     MatchBall->PlaceAtRest(Spot);
     StagedPenaltySpot = Spot;
+    bHasPreviousPenaltyBallPosition = false;
+    SuggestedCupPenaltyOutcome = INDEX_NONE;
     StagedPenaltyTaker = Taker;
     bPenaltyKickStaged = true;
     bPenaltyKickTaken = false;
@@ -1062,6 +1070,8 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
         Shot.Z < -0.05f || Shot.Z > 0.65f) return false;
     if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Shot,
         ProvisionalRestartImpulse * 1.6f, 210.f)) return false;
+    PreviousPenaltyBallPosition = MatchBall->GetActorLocation();
+    bHasPreviousPenaltyBallPosition = true;
     bPenaltyKickTaken = true;
     OnPhysicalPenaltyKicked.Broadcast();
     return true;
@@ -1167,6 +1177,8 @@ bool ASportsArcadeGameMode::RecordCupPenaltyAttempt(int32 KickingTeam, bool bSco
     // The referee records the physical outcome; never infer a score from impulse alone.
     StagedPenaltyTaker = nullptr;
     StagedPenaltySpot = FVector::ZeroVector;
+    bHasPreviousPenaltyBallPosition = false;
+    SuggestedCupPenaltyOutcome = INDEX_NONE;
     bPenaltyKickStaged = false;
     bPenaltyKickTaken = false;
     const int32 Winner = ActivePenaltyShootout->WinningTeam;
