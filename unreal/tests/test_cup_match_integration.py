@@ -92,6 +92,7 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("bRequirePhysicalPenaltyKicks", header)
         self.assertIn("bPenaltyKickStaged = true;", cpp)
         self.assertIn("bPenaltyKickTaken = true;", cpp)
+        self.assertIn("StagedPenaltyTaker->TeamIndex != ActivePenaltyShootout->GetNextKickingTeam()", cpp)
         self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
         self.assertIn("StagedPenaltyTaker = nullptr;", cpp)
 
