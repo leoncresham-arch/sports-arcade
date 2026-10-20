@@ -371,3 +371,7 @@ The existing human footballer now exposes an editable/Blueprint-readable shieldi
 ### October 20 — agility and planted turn responsiveness
 
 Character movement now uses an original editable 1–99 Agility attribute to scale character rotation rate, with fatigue reducing turning responsiveness; yaw turn rate is capped 260–760 degrees/s. A new source regression verifies rating connection. Visual foot planting, directional animation blends and physics-tuned acceleration still need genuine Unreal implementation and PC playtesting.
+
+### October 20 — turning-ball control and midfield pass availability
+
+Manual controlled touches now blend current travel direction (75%) and player facing (25%), improving directional touch continuity while turning. Attacking midfield support targets also remain at least 175 cm behind the ball in the current attacking direction, avoiding an overrun that removes an easy supporting pass. Regression contracts added for both paths. This advances items 1 and 3, but neither system is complete without Unreal runtime tests and animation/contact integration.
