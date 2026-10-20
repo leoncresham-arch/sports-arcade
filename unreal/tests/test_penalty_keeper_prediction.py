@@ -22,6 +22,16 @@ class PenaltyKeeperPredictionTests(unittest.TestCase):
         self.assertIn("Keeper->LineupSlot != 0", penalty)
         self.assertIn("Keeper->TeamIndex != Match->GetCupPenaltyDefendingTeam()", penalty)
 
+    def test_parry_requires_ball_ahead_and_reachable(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        penalty = code.split("if (IsValid(Match) && Match->IsCupPenaltyAwaitingResult())", 1)[1].split(
+            "if (IsValid(Match) && (Match->bHalfTime", 1
+        )[0]
+        self.assertIn("(BallPosition.X - KeeperPlaneX) * GoalwardSign <= 35.f", penalty)
+        self.assertIn("BallPosition.Z - Keeper->GetActorLocation().Z <= 220.f", penalty)
+        self.assertIn("bIncomingPenalty && bBallInFront && bReachableHeight", penalty)
+        self.assertIn("Ball->KickByPlayer(Keeper", penalty)
+
     def test_invalid_frame_deltas_do_not_tick_ai_cooldowns(self):
         code = SOURCE.read_text(encoding="utf-8")
         before = code.split("void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)", 1)[1].split(
