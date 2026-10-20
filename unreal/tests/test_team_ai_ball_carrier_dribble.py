@@ -12,6 +12,8 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("FMath::Square(220.f)", section)
         self.assertIn("bSelfControllingBall && ActionCooldownRemaining <= 0.f", section)
         self.assertIn("Ball->ApplyControlledTouch(Footballer", section)
+        self.assertIn("Target = Ball->GetActorLocation() + FVector(AttackSign * 280.f", section)
+        self.assertIn("bIsPrimaryPresser = true", section)
         self.assertIn("ActionCooldownRemaining = FMath::Max", section)
 
 if __name__ == "__main__":
