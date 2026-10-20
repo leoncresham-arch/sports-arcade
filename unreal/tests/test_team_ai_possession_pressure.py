@@ -12,6 +12,14 @@ class PossessionPressureTests(unittest.TestCase):
         )[0]
         self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
 
+    def test_controlled_carrier_does_not_self_press(self):
+        cpp = SOURCE.read_text(encoding="utf-8")
+        segment = cpp.split("const bool bSelfControllingBall", 1)[1].split(
+            "bIsPrimaryPresser = true", 1)[0]
+        self.assertIn("Ball->GetLastTouchPlayer() == Footballer", segment)
+        self.assertIn("FMath::Square(220.f)", segment)
+        self.assertIn("!bSelfControllingBall", segment)
+
     def test_primary_ai_does_not_press_nearby_recent_teammate_ball(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("const bool bTeammateNearbyBall", 1)[1].split(
