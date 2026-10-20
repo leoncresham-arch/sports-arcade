@@ -1062,6 +1062,7 @@ bool ASportsArcadeGameMode::KickStagedCupPenalty(const FVector& Direction)
     if (!MatchBall->KickByPlayer(StagedPenaltyTaker, Shot,
         ProvisionalRestartImpulse * 1.6f, 210.f)) return false;
     bPenaltyKickTaken = true;
+    OnPhysicalPenaltyKicked.Broadcast();
     return true;
 }
 
