@@ -252,6 +252,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
     bool IsCupPenaltyAwaitingResult() const;
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Cup|Penalties")
+    int32 GetCupPenaltyDefendingTeam() const;
+
     /** Offline referee review: record outcome only after a physical attempt. */
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Cup|Penalties")
     bool ResolvePhysicalCupPenalty(bool bScored);
