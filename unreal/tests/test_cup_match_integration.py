@@ -120,6 +120,8 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot)", cpp)
         self.assertIn("bPenaltyKickTaken = true;", cpp)
         self.assertIn("StagedPenaltyTaker->TeamIndex == ActivePenaltyShootout->GetNextKickingTeam()", cpp)
+        self.assertIn("BoundCup->CurrentRoundWinners.Num() == BoundCupFixtureIndex", cpp)
+        self.assertIn("CurrentRoundFixtures[BoundCupFixtureIndex].HomeClubId == SelectedHomeClubId", cpp)
         self.assertIn("bool CanKickStagedCupPenalty() const;", header)
         self.assertIn("if (!CanKickStagedCupPenalty()", cpp)
         self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
