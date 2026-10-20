@@ -76,6 +76,9 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("bool StageCupPenaltyKick();", header)
         self.assertIn("bool CanStageCupPenaltyKick() const;", header)
         self.assertIn("if (!CanStageCupPenaltyKick()) return false;", cpp)
+        self.assertIn("BoundCup->CurrentRoundWinners.Num() != BoundCupFixtureIndex", cpp)
+        self.assertIn("Fixture.HomeClubId == SelectedHomeClubId", cpp)
+        self.assertIn("Fixture.AwayClubId == SelectedAwayClubId", cpp)
         self.assertIn("bool KickStagedCupPenalty(const FVector& Direction);", header)
         self.assertIn("bool bRequirePhysicalPenaltyKicks = false;", header)
         stage = cpp.split("bool ASportsArcadeGameMode::StageCupPenaltyKick()", 1)[1].split("\n}", 1)[0]
