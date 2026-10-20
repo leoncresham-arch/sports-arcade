@@ -81,6 +81,8 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("StrikeNearbyBall", source)
         self.assertIn("TActorIterator<ASportsArcadeBall>", source)
         self.assertIn("NearestBall->KickByPlayer(this, StrikeDirection, ImpulseStrength, BallControlReachCm)", source)
+        self.assertIn("if (BallPosition.ContainsNaN() || PlayerLocation.ContainsNaN()) continue;", source)
+        self.assertIn("if (FMath::Abs(Offset.Z) > 120.f", source)
 
     def test_native_footballer_ratings(self):
         header = read("Source/SportsArcade/Public/SportsArcadePlayerAttributes.h")
