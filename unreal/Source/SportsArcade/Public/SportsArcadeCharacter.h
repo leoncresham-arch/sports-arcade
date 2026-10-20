@@ -81,6 +81,8 @@ private:
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
     float SprintDrainPerSecond = 18.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
+    float ShieldStaminaDrainPerSecond = 4.f;
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
     float StaminaRecoveryPerSecond = 12.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
     float StaminaToResumeSprint = 15.f;
