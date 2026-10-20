@@ -32,7 +32,10 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("Facing * 0.65f", block)
         self.assertIn("PlayerVelocity.GetSafeNormal2D() * 0.35f", block)
         self.assertIn("!ReceiveDirection.IsNearlyZero()", block)
-        self.assertIn("bShieldHeld ? 30.f : 65.f", block)
+        self.assertIn("bReceiveShieldControl ? 30.f : 65.f", block)
+        self.assertIn("RatingFactor(PlayerAttributes->BallControl)", block)
+        self.assertIn("FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)", block)
+        self.assertIn("bReceiveShieldControl = bShieldHeld && CurrentStamina > 0.f", block)
         self.assertIn("TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f)", block)
 
 if __name__ == "__main__":
