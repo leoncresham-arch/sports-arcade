@@ -21,3 +21,7 @@ The `ASportsArcadeBall` Unreal C++ actor provides a sphere collision body with p
 ## October 20 — ball placement and contact integrity
 
 Player-attributed kicks now reject nonfinite player/ball positions; controlled touches also reject nonfinite physics velocity. Referee ball placement rejects nonfinite target coordinates, and resetting to the initial spawn position refuses invalid spawn coordinates. Source regression contracts are in `unreal/tests/test_ball_contact_position_integrity.py`. These guards are committed source only, not an Unreal Engine compile or physics playtest.
+
+## October 20 — corrupted angular simulation state
+
+Player-attributed kicks and controlled dribble touches reject nonfinite Chaos linear or angular velocity before adding impulse or updating last-touch attribution. This is a defensive simulation integrity check, not a replacement for runtime physics diagnostics. Regression contracts are in `unreal/tests/test_ball_contact_position_integrity.py`; native Unreal tests remain pending.
