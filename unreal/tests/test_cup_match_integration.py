@@ -86,6 +86,15 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
         self.assertIn("bPenaltyKickTaken = false;", cpp)
 
+    def test_opt_in_physical_penalties_require_a_strike_before_result(self):
+        self.assertIn("bool StageCupPenaltyKick();", header)
+        self.assertIn("bool KickStagedCupPenalty(const FVector& Direction);", header)
+        self.assertIn("bRequirePhysicalPenaltyKicks", header)
+        self.assertIn("bPenaltyKickStaged = true;", cpp)
+        self.assertIn("bPenaltyKickTaken = true;", cpp)
+        self.assertIn("(bRequirePhysicalPenaltyKicks && !bPenaltyKickTaken)", cpp)
+        self.assertIn("StagedPenaltyTaker = nullptr;", cpp)
+
     def test_penalty_winner_resolves_draw(self):
         self.assertIn("StartCupPenaltyShootout", header)
         self.assertIn("RecordCupPenaltyAttempt", header)
