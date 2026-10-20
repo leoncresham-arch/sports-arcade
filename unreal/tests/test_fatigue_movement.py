@@ -13,6 +13,14 @@ class FatigueMovementTests(unittest.TestCase):
         self.assertIn("PaceFactor * FatigueSpeedFactor", code)
         self.assertIn("1600.f * AccelerationFactor * FatigueSpeedFactor", code)
 
+    def test_sprint_release_respects_fatigue_and_jockey(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        block = code.split("void ASportsArcadeCharacter::EndSprint()", 1)[1].split(
+            "float ASportsArcadeCharacter::GetStaminaNormalized()", 1)[0]
+        self.assertIn("CurrentStamina / (Capacity * 0.4f)", block)
+        self.assertIn("(bJockeyHeld && bPlayActive ? JockeySpeed : JogSpeed)", block)
+        self.assertIn("PaceFactor * FatigueSpeedFactor", block)
+
     def test_jockey_brakes_more_sharply_without_changing_regular_braking(self):
         code = SOURCE.read_text(encoding="utf-8")
         self.assertIn("bJockeyHeld && bPlayActive ? 2800.f : 2100.f", code)
