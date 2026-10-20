@@ -35,6 +35,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Movement")
     bool IsJockeying() const { return bJockeyHeld; }
 
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Football")
+    bool IsShieldingBall() const { return bShieldHeld; }
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Team")
     int32 TeamIndex = 0;
 
@@ -70,6 +73,7 @@ private:
     bool bSprintHeld = false;
     bool bSprintExhausted = false;
     bool bJockeyHeld = false;
+    bool bShieldHeld = false;
     UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Sports Arcade|Movement", meta=(AllowPrivateAccess="true"))
     float CurrentStamina = 100.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="1.0"))
@@ -98,6 +102,8 @@ private:
     void ChipBall();
     void TackleBall();
     void BeginJockey();
+    void BeginShield();
+    void EndShield();
     void EndJockey();
     float TackleCooldownRemaining = 0.f;
     float StrikeCooldownRemaining = 0.f;
