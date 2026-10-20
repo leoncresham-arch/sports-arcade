@@ -126,3 +126,7 @@ During AI ball contact, candidate receivers are now led using a short 0.25-secon
 ## October 20 — distance-scaled AI pass strength
 
 Candidate AI passes now use the selected receiver's predicted distance to choose a bounded impulse rather than the same power for short and long passes. The initial formula is 900 + 0.24 × receiver distance (in cm), clamped from 1000 to 1800 kg·cm/s; fallback clearances remain 1700. The primary presser still checks reach height before attempting ball contact. Source regressions in `unreal/tests/test_team_ai_receiver_leading.py` cover the calculation. Physics tuning, actual completion rates, and Unreal Engine 5.5 compilation are unverified.
+
+## October 20 — distance-aware ball interception
+
+Primary outfield AI pressers now scale short-horizon ball interception prediction using distance to the ball and an initial assumed 500 cm/s travel speed. Lead time remains bounded by the configured ball-prediction interval and a 0.5-second ceiling. This avoids over-leading the ball at close range. The algorithm remains a simple kinematic heuristic, not a pathfinder travel-time or collision solver. Source contract: `unreal/tests/test_team_ai_interception_lead.py`; actual native Unreal compilation and tactical playtesting remain pending.
