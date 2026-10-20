@@ -253,7 +253,11 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         // snapping to the new movement vector.
         const FVector TravelDir = GetVelocity().GetSafeNormal2D();
         const FVector FacingDir = GetActorForwardVector().GetSafeNormal2D();
-        const FVector BlendedTouchDir = (TravelDir * 0.75f + FacingDir * 0.25f).GetSafeNormal2D();
+        // Shielding keeps the ball nearer the facing foot rather than
+        // pushing it straight along the current running trajectory.
+        const float TravelWeight = bShieldHeld ? 0.45f : 0.75f;
+        const FVector BlendedTouchDir = (TravelDir * TravelWeight +
+            FacingDir * (1.f - TravelWeight)).GetSafeNormal2D();
         if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&
             ClosestDribbleBall->ApplyControlledTouch(this, BlendedTouchDir *
                 (240.f * (bShieldHeld ? 0.55f : 1.f) * TouchSpeedFactor *
