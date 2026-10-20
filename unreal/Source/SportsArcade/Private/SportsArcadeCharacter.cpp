@@ -157,6 +157,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         !GetVelocity().ContainsNaN() &&
         GetVelocity().SizeSquared2D() > FMath::Square(100.f))
     {
+        ASportsArcadeBall* ClosestDribbleBall = nullptr;
+        float ClosestDribbleDistanceSq = FMath::Square(FMath::Max(DribbleTouchRangeCm, 0.f));
         for (TActorIterator<ASportsArcadeBall> It(GetWorld()); It; ++It)
         {
             // Autonomous teammates use their own AI decision/cooldown logic.
@@ -209,17 +211,23 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             }
             if (bOpponentHasCloserControl) continue;
             const FVector ToBall = BallLocation - MyLocation;
+            const float ContactDistanceSq = ToBall.SizeSquared();
+            if (ContactDistanceSq >= ClosestDribbleDistanceSq) continue;
             // Controlled touches require the ball to be in front of the
             // player's actual travel direction, not just their mesh facing.
             const FVector TravelDirection = MyVelocity.GetSafeNormal2D();
             if (FVector::DotProduct(MyFacing.GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.35f &&
-                FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f &&
-                It->ApplyControlledTouch(this, TravelDirection *
-                    (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
+                FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f)
             {
-                TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
-                break;
+                ClosestDribbleDistanceSq = ContactDistanceSq;
+                ClosestDribbleBall = *It;
             }
+        }
+        if (IsValid(ClosestDribbleBall) &&
+            ClosestDribbleBall->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
+                (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
+        {
+            TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
         }
     }
 
