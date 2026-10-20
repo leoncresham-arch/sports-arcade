@@ -80,3 +80,9 @@ Both goalkeeper pathways now use conservative, ball-velocity-based anticipation.
 In ordinary matches the keeper can predict an approaching shot at the keeper's X plane for up to 1.5 seconds; otherwise it retains conservative positional tracking. Regular match lateral targets also obey configured goal width. Both paths refuse nonfinite ball telemetry rather than feeding it into navigation. Source regression tests: `test_penalty_keeper_prediction.py` and `test_goalkeeper_match_anticipation.py`.
 
 **Validation boundary:** These are source-only behavior and safety contracts. Real UE5.5 C++ compilation, animation, physics save quality, keeper navmesh movement and packaging remain unverified; tests have not been executed by a native Unreal editor. This is not a complete goalkeeper handling, catching or diving system.
+
+## October 20 — off-ball decision integrity
+
+The existing team AI controller now rejects nonfinite ball location or velocity before field-player pressing, formation-shift, passing, and marking decisions, stopping pending navigation instead of submitting invalid targets or ball impulses. Primary-pressure selection excludes goalkeeper slot zero consistently whether the roster uses explicit lineup slots or authored roster order. Opponent actors used in passing-lane evaluation and marking must belong to the controller's current Unreal world. These safeguards are covered by `unreal/tests/test_team_ai_ball_integrity.py` source-contract tests; they do not establish runtime behavior or gameplay balance.
+
+**Next implementation priorities:** split tactical responsibility from navigation, implement coordinated team possession/defensive lines and pressure support, add in-engine unit/functional tests, and tune against a genuine Unreal 5.5 PC playtest. Continue without treating unavailable PC engine testing as a source-code blocker.
