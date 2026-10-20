@@ -15,8 +15,9 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("Target.Y += CarrierEscapeSide * 180.f", code)
         self.assertIn("HalfWidth - 250.f", code)
         self.assertIn("CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f", code)
-        self.assertIn("SafeLateralSign == 0.f ? 380.f : 280.f", part)
+        self.assertIn("bDribbleLaneCrowded ? 280.f : 380.f", part)
         self.assertIn("DribbleDirection * DribbleSpeed", part)
+        self.assertIn("CarrierEscapeSide != 0.f", code)
 
     def test_dribble_requires_attributed_nearby_carrier_and_cooldown(self):
         code = SOURCE.read_text(encoding="utf-8")
