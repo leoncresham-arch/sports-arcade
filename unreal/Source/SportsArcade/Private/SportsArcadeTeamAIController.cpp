@@ -371,12 +371,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             }
             Target.Y += CarrierEscapeSide * 180.f;
         }
+        // Delay the controlled touch if a defender is directly in the running lane.
+        // Navigation remains active while the footballer chooses an escape route.
+        const bool bDribbleLaneCrowded = bSelfControllingBall &&
+            CarrierEscapeSide != 0.f;
         if (bSelfControllingBall && ActionCooldownRemaining <= 0.f)
         {
             // Reuse the same threat direction as the carrier's movement target.
             const float SafeLateralSign = CarrierEscapeSide;
             // Slow the forward push near an obstacle rather than force a full-speed touch.
-            const float DribbleSpeed = SafeLateralSign == 0.f ? 380.f : 280.f;
+            const float DribbleSpeed = bDribbleLaneCrowded ? 280.f : 380.f;
             const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f);
             // Keep the runner's movement aligned with the chosen escape lane.
             if (Ball->ApplyControlledTouch(Footballer, DribbleDirection * DribbleSpeed, ContactRangeCm + 75.f))
