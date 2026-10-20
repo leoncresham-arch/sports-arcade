@@ -97,6 +97,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Cup|Penalties")
     FSportsArcadePenaltyReviewedEvent OnCupPenaltyReviewed;
 
+    /** Heuristic goal/miss observation for review, not an official ruling. */
+    UPROPERTY(BlueprintAssignable, Category="Sports Arcade|Cup|Penalties")
+    FSportsArcadePenaltyReviewedEvent OnCupPenaltyOutcomeSuggested;
+
     /** Prototype stoppage: requires a referee restart implementation. */
     UPROPERTY(BlueprintReadOnly, Category="Sports Arcade|Match")
     bool bBallOutOfPlay = false;
