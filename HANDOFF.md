@@ -522,3 +522,11 @@ The user strongly insists on sustained autonomous development **within each acti
 - Reconciled accidental duplicate `StageCupPenaltyKick` and `KickStagedCupPenalty` native definitions and redundant result-state resets. Added `test_game_mode_duplicate_definitions.py` to catch repeated C++ GameMode methods in CI.
 - Updated cup, control and physics-related source checks. GitHub Actions verifies Python/source contracts, **not** a native Unreal Engine 5.5 build or physics gameplay. Further scope: engine build, penalty goalkeeper responses, real goal/miss sensors, legal set-piece animations, player eligibility, AI and live 11v11 match play.
 - Continue implementing directly in the existing `main` branch, maintain no-paid-services and no-restart policy, and keep starting additional approved work rather than stopping at each commit.
+
+
+## October 20 — physical penalty loop and goalkeeper AI extension
+- Physical cup penalties remain opt-in and explicitly refereed. Windows P stages, O kicks, F7 records scored, F8 records missed; the shot's physics impulse never silently counts as a goal. Added UI getters for staging, defending team and awaiting outcome.
+- Staging places the attacking taker facing the goal and the defending keeper near the goal line. Keeper AI has a provisional shootout-only lateral tracking and close-contact parry; all other footballer AI remain stopped at full-time. This is not a realistic keeper dive/animation or verified save decision.
+- Rotation selection moved to USportsArcadePenaltyShootout::GetNextKickerLineupSlot, with 11 authored slots before repeat and fallback for incomplete rosters; native C++ Automation Test source asserts opening and next shooter slots.
+- Added duplicate GameMode C++ definition source test, geometry, state reset and keyboard-source regressions; repaired prior static test failures.
+- Native Unreal Engine 5.5 compilation, staged actor physics, navigation, camera and gameplay remain unverified. Continue approved referee/penalty mechanics and full 11v11 source work without repeated authorization.
