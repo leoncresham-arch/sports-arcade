@@ -20,6 +20,11 @@ class TeamAIBallIntegrityTests(unittest.TestCase):
         self.assertIn("Ball->GetVelocity().ContainsNaN()", code[guard:selection])
         self.assertIn("StopMovement();", code[guard:selection])
 
+    def test_opponents_have_valid_world_before_scoring_pass_and_marking(self):
+        code = SRC.read_text(encoding="utf-8")
+        self.assertIn("Opp->GetWorld() != GetWorld()", code)
+        self.assertIn("It->GetWorld() != GetWorld()", code)
+
     def test_pressing_excludes_goalkeeper_using_correct_roster_slot_mode(self):
         code = SRC.read_text(encoding="utf-8")
         section = code.split("for (ASportsArcadeCharacter* Candidate : Roster->Players)", 1)[1].split(
