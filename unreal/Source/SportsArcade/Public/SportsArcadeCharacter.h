@@ -143,6 +143,14 @@ private:
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0"))
     float JockeySpeed = 275.f;
 
+    /** Extra braking on abrupt changes in travel direction. */
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Movement", meta=(ClampMin="0.0", ClampMax="1.0"))
+    float TurnBrakingWeight = 0.35f;
+
+    /** Scales controlled dribble impulse by current running speed. */
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.1", ClampMax="2.0"))
+    float RunningDribbleTouchScale = 1.f;
+
     void MoveForward(float Value);
     void MoveRight(float Value);
 };
