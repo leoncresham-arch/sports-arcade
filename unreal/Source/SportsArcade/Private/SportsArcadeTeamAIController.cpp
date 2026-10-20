@@ -145,12 +145,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     {
         // Never issue a navigation target from nonfinite physics telemetry.
         const FVector BallPosition = Ball->GetActorLocation();
-        const FVector BallVelocity = Ball->GetVelocity();
-        if (BallPosition.ContainsNaN() || BallVelocity.ContainsNaN())
+        const FVector RawBallVelocity = Ball->GetVelocity();
+        if (BallPosition.ContainsNaN() || RawBallVelocity.ContainsNaN())
         {
             StopMovement();
             return;
         }
+        const FVector BallVelocity = RawBallVelocity.GetClampedToMaxSize(4500.f);
         // Track approaching shots more decisively while retaining a conservative
         // central stance for ordinary midfield possession.
         const float TowardsPlay = Footballer->TeamIndex == 0 ? 1.f : -1.f;
