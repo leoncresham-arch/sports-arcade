@@ -104,3 +104,7 @@ This uses last-touch attribution only as a weak proxy for possession, not a ball
 When the opposing team was last credited with touching the ball, the second-closest autonomous outfielder may support the primary presser. It targets a bounded position behind and to one side of the ball rather than duplicating the primary pressure point. This is optional tunable source behavior: `SecondaryPressureRadiusCm` defaults to 1700 cm and `SecondaryPressureStandOffCm` to 450 cm. The selection excludes the primary presser, goalkeeper, invalid/world-mismatched pawns and human-controlled footballers. Match field boundaries still clamp the final navigation target. Source-contract coverage lives in `unreal/tests/test_team_ai_secondary_press.py`.
 
 Last-touch attribution is not genuine possession tracking. This is an initial coordinated defending heuristic requiring real Unreal 5.5 compilation, navmesh tests, tactical gameplay balance, and future possession arbitration.
+
+## Defensive line continuation — October 20
+
+Slots 1–4 now use bounded recovery/advance relative to formation positions when the opponent last touched the ball. Defaults: 650 cm retreat and 1300 cm advance. Defenders only become a secondary presser when the ball is deep in their own half. This is provisional AI; native compilation and balance testing remain pending. Source tests: `test_team_ai_defensive_line.py`, `test_team_ai_secondary_press.py`.
