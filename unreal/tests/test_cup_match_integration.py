@@ -103,6 +103,11 @@ class CupMatchIntegration(unittest.TestCase):
         self.assertIn("const int32 AttemptNumber = Team == 0", cpp)
         self.assertIn("PreferredSlots[AttemptNumber % UE_ARRAY_COUNT(PreferredSlots)]", cpp)
         self.assertIn("Candidate->LineupSlot == ShooterSlot", cpp)
+        rotation = [9, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        self.assertEqual(len(rotation), 11)
+        self.assertEqual(len(set(rotation)), 11)
+        self.assertEqual([rotation[i % len(rotation)] for i in range(11)], rotation)
+        self.assertEqual(rotation[11 % len(rotation)], rotation[0])
         self.assertEqual(cpp.count("StagedPenaltySpot = FVector::ZeroVector;"), 4)
         self.assertIn("FVector::DistSquared(MatchBall->GetActorLocation(), StagedPenaltySpot)", cpp)
         self.assertIn("bPenaltyKickTaken = true;", cpp)
