@@ -248,6 +248,11 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         const float TravelSpeed = GetVelocity().Size2D();
         const float TouchSpeedFactor = FMath::Lerp(0.65f, 1.15f,
             FMath::Clamp(TravelSpeed / FMath::Max(SprintSpeed, 1.f), 0.f, 1.f));
+        // A shielding ball carrier makes more frequent, smaller touches so
+        // close retention does not depend only on a reduced impulse.
+        const float TouchInterval = bShieldHeld
+            ? FMath::Max(DribbleTouchInterval * 0.70f, 0.05f)
+            : FMath::Max(DribbleTouchInterval, 0.05f);
         // Smooth foot touches toward the footballer's facing during sharp
         // turns, so the ball follows a controlled arc instead of immediately
         // snapping to the new movement vector.
@@ -270,7 +275,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                     FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
                     (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
         {
-            TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
+            TouchCooldownRemaining = TouchInterval;
         }
     }
 
