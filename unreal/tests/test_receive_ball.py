@@ -28,6 +28,9 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("bOpponentClearlyCloser", block)
         self.assertIn("bTeammateClearlyCloser", block)
         self.assertIn("BestBall->ApplyControlledTouch(this", block)
+        self.assertIn("Facing * 0.65f", block)
+        self.assertIn("PlayerVelocity.GetSafeNormal2D() * 0.35f", block)
+        self.assertIn("!ReceiveDirection.IsNearlyZero()", block)
         self.assertIn("bShieldHeld ? 30.f : 65.f", block)
         self.assertIn("TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f)", block)
 
