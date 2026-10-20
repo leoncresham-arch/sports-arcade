@@ -29,6 +29,11 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
                       "MyVelocity.GetSafeNormal2D()"):
             self.assertIn(token, self.tick)
 
+    def test_automatic_touch_needs_forward_travel_alignment(self):
+        self.assertIn("const FVector TravelDirection = MyVelocity.GetSafeNormal2D()", self.tick)
+        self.assertIn("FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f", self.tick)
+        self.assertIn("It->ApplyControlledTouch(this, TravelDirection *", self.tick)
+
     def test_opponent_closer_to_ball_blocks_automatic_steal(self):
         for token in ("bOpponentHasCloserControl",
                       "Opponent->TeamIndex == TeamIndex",
