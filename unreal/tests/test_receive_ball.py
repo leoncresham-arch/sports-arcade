@@ -21,6 +21,8 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay", block)
         self.assertIn("FMath::Abs(ToBall.Z) > 115.f", block)
         self.assertIn("FMath::Square(1800.f)", block)
+        self.assertIn("RelativeBallVelocity = It->GetVelocity() - GetVelocity()", block)
+        self.assertIn("RelativeBallVelocity.SizeSquared2D()", block)
         self.assertIn("bOpponentClearlyCloser", block)
         self.assertIn("bTeammateClearlyCloser", block)
         self.assertIn("BestBall->ApplyControlledTouch(this", block)
