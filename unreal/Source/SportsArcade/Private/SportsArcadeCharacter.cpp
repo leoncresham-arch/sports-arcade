@@ -406,6 +406,13 @@ void ASportsArcadeCharacter::TackleBall()
         if (BallLocation.ContainsNaN()) continue;
         const FVector Direction = BallLocation - DefenderLocation;
         const float DistanceSq = Direction.SizeSquared2D();
+        // A standing tackle cannot connect with a ball already racing away
+        // beyond the defender's practical foot-contact velocity.
+        const FVector BallVelocity = It->GetVelocity();
+        if (BallVelocity.ContainsNaN() ||
+            (BallVelocity.SizeSquared2D() > FMath::Square(1200.f) &&
+             FVector2D::DotProduct(FVector2D(Direction), FVector2D(BallVelocity)) > 0.f))
+            continue;
         if (DistanceSq >= ClosestDistanceSq || FMath::Abs(Direction.Z) >= 110.f ||
             FVector::DotProduct(Forward, Direction.GetSafeNormal2D()) <= 0.25f) continue;
 
