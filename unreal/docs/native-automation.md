@@ -26,3 +26,8 @@ Further work: add in-engine match actor tests, startup/kickoff coverage, SaveGam
 - Native CupSaveIntegrity automation checks a four-team cup, rejects incorrect completed-tie counts and round indices, then completes a valid final and checks champion identity.
 - Cup save/load, winner mutations, next-fixture UI and progress now use ValidateProgress to avoid accepting or displaying corrupt brackets. The 2–64-team bracket invariant determines expected completed ties and current round.
 - Python CI tests source wiring; running the native automation still requires a local Unreal Engine 5.5 Editor build.
+
+
+## October 20 — kicker rotation test expansion
+The native `SportsArcade.Rules.PenaltyShootout` automation scenario now checks the deterministic first-kicker lineup slot for each team and the second home penalty-taker slot. The slot selection lives in `USportsArcadePenaltyShootout::GetNextKickerLineupSlot()` instead of being duplicated in GameMode.
+This is prepared C++ Unreal Automation Test source. GitHub CI confirms test inventory/contracts, but a real Unreal Engine 5.5 Editor run is still required to validate compilation and test behavior.
