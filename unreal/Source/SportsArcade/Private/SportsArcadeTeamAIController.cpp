@@ -200,6 +200,17 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         else if (RecentTouchTeam == 1 - Footballer->TeamIndex)
             Target.X -= AttackSign * FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f);
 
+        // Hold the authored back line within a tunable attacking/recovery band.
+        if (Slot >= 1 && Slot <= 4 && RecentTouchTeam == 1 - Footballer->TeamIndex)
+        {
+            const FVector BasePosition = Roster->GetFormationPosition(Slot);
+            const float BaseX = BasePosition.X * HalfLength / 5250.f;
+            const float Advance = FMath::Clamp(DefensiveLineMaximumAdvanceCm, 0.f, 2500.f);
+            const float Retreat = FMath::Clamp(DefensiveLineRecoveryDepthCm, 0.f, 2000.f);
+            const float RelativeX = (Target.X - BaseX) * AttackSign;
+            Target.X = BaseX + AttackSign * FMath::Clamp(RelativeX, -Retreat, Advance);
+        }
+
         // Make nearby non-keeper support runners offer a clear lateral outlet.
         // Shift away from the nearest opponent only when our team last touched
         // the ball; cap the adjustment to retain the authored formation.
