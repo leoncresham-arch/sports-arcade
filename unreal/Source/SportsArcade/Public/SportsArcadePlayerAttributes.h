@@ -13,6 +13,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Ratings", meta=(ClampMin="1", ClampMax="99"))
     int32 Acceleration = 65;
+    /** Responsiveness of planted turns and facing direction changes. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Ratings", meta=(ClampMin="1", ClampMax="99"))
+    int32 Agility = 65;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Ratings", meta=(ClampMin="1", ClampMax="99"))
     int32 SprintSpeed = 65;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sports Arcade|Ratings", meta=(ClampMin="1", ClampMax="99"))
