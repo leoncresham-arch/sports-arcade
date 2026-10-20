@@ -105,6 +105,9 @@ private:
     float StrikeCooldownSeconds = 0.28f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float TackleCooldownSeconds = 0.85f;
+    /** Standing challenges consume endurance, including missed attempts. */
+    UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
+    float TackleStaminaCost = 5.f;
     float TouchCooldownRemaining = 0.f;
     UPROPERTY(EditDefaultsOnly, Category="Sports Arcade|Football", meta=(ClampMin="0.0"))
     float DribbleTouchInterval = 0.18f;
