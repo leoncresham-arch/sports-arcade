@@ -1114,11 +1114,23 @@ void ASportsArcadeGameMode::ObservePhysicalCupPenalty()
             Travel.X * GoalDirection > 0.f)
         {
             const FVector Crossing = PreviousPenaltyBallPosition + Travel * CrossingFraction;
+            // A touchline crossed earlier in the same physics step invalidates
+            // an apparent goal behind the side boundary.
+            const float TouchlineEdge = PitchHalfWidthCm + MatchBall->BallRadiusCm;
+            bool bTouchlineFirst = FMath::Abs(PreviousPenaltyBallPosition.Y) > TouchlineEdge;
+            if (FMath::Abs(Travel.Y) > KINDA_SMALL_NUMBER)
+            {
+                const float Touchline = Travel.Y > 0.f ? TouchlineEdge : -TouchlineEdge;
+                const float TouchlineFraction =
+                    (Touchline - PreviousPenaltyBallPosition.Y) / Travel.Y;
+                bTouchlineFirst = bTouchlineFirst ||
+                    (TouchlineFraction >= 0.f && TouchlineFraction < CrossingFraction);
+            }
             const bool bInsidePosts =
                 FMath::Abs(Crossing.Y) + MatchBall->BallRadiusCm < GoalHalfWidthCm;
             const bool bUnderBar = Crossing.Z >= MatchBall->BallRadiusCm &&
                 Crossing.Z + MatchBall->BallRadiusCm < CrossbarHeightCm;
-            SuggestedCupPenaltyOutcome = bInsidePosts && bUnderBar ? 1 : 0;
+            SuggestedCupPenaltyOutcome = !bTouchlineFirst && bInsidePosts && bUnderBar ? 1 : 0;
         }
     }
     if (SuggestedCupPenaltyOutcome == INDEX_NONE &&
