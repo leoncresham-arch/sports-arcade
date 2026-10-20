@@ -92,6 +92,7 @@ private:
     void KickShootoutPenalty();
     void AwardPenaltyGoal();
     void AwardPenaltyMiss();
+    void ConfirmPenaltySuggestion();
     void PassBall();
     void ShootBall();
     void ChipBall();
