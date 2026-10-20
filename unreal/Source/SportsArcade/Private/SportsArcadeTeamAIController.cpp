@@ -393,6 +393,22 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 }
             }
         }
+        if (bSelfControllingBall && bImmediateChallenge && ActionCooldownRemaining <= 0.f)
+        {
+            for (ASportsArcadeCharacter* Mate : Roster->Players)
+            {
+                if (!IsValid(Mate) || Mate == Footballer ||
+                    Mate->GetWorld() != GetWorld() ||
+                    Mate->TeamIndex != Footballer->TeamIndex ||
+                    Mate->GetActorLocation().ContainsNaN()) continue;
+                const FVector Delta = Mate->GetActorLocation() - Ball->GetActorLocation();
+                if (Delta.SizeSquared2D() < FMath::Square(350.f) ||
+                    Delta.SizeSquared2D() > FMath::Square(2200.f)) continue;
+                if (Ball->KickByPlayer(Footballer, Delta.GetSafeNormal2D(), 1200.f, ContactRangeCm + 75.f))
+                    ActionCooldownRemaining = FMath::Max(ActionCooldownSeconds, 0.15f);
+                break;
+            }
+        }
         if (bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f)
         {
             // Reuse the same threat direction as the carrier's movement target.
