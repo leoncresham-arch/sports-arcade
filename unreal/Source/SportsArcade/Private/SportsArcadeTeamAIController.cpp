@@ -409,6 +409,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 if (MateVelocity.ContainsNaN()) continue;
                 const FVector Delta = Mate->GetActorLocation() + MateVelocity.GetClampedToMaxSize2D(650.f) * 0.20f - Ball->GetActorLocation();
                 const float DistanceSq = Delta.SizeSquared2D();
+                // Reject a degenerate escape direction before scoring the outlet.
+                if (Delta.ContainsNaN() || DistanceSq <= KINDA_SMALL_NUMBER) continue;
                 const FVector PredictedOutlet = Ball->GetActorLocation() + Delta;
                 if (PredictedOutlet.ContainsNaN() ||
                     FMath::Abs(PredictedOutlet.X) > HalfLength - 100.f ||
