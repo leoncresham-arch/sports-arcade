@@ -95,9 +95,12 @@ bool FSportsArcadePenaltyShootoutAutomation::RunTest(const FString& Parameters)
     if (!Shootout) return false;
 
     TestEqual(TEXT("Home kicks first"), Shootout->GetNextKickingTeam(), 0);
+    TestEqual(TEXT("Opening shooter slot"), Shootout->GetNextKickerLineupSlot(), 9);
     TestTrue(TEXT("Home first attempt"), Shootout->RecordAttempt(0, true));
+    TestEqual(TEXT("Away first shooter slot"), Shootout->GetNextKickerLineupSlot(), 9);
     TestFalse(TEXT("Cannot kick twice"), Shootout->RecordAttempt(0, false));
     TestTrue(TEXT("Away reply"), Shootout->RecordAttempt(1, false));
+    TestEqual(TEXT("Home second shooter slot"), Shootout->GetNextKickerLineupSlot(), 10);
     TestTrue(TEXT("Home second attempt"), Shootout->RecordAttempt(0, true));
     TestTrue(TEXT("Away second miss"), Shootout->RecordAttempt(1, false));
     TestTrue(TEXT("Home third attempt"), Shootout->RecordAttempt(0, true));
