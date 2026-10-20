@@ -223,9 +223,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                 ClosestDribbleBall = *It;
             }
         }
+        const float TravelSpeed = GetVelocity().Size2D();
+        const float TouchSpeedFactor = FMath::Lerp(0.65f, 1.15f,
+            FMath::Clamp(TravelSpeed / FMath::Max(SprintSpeed, 1.f), 0.f, 1.f));
         if (IsValid(ClosestDribbleBall) &&
             ClosestDribbleBall->ApplyControlledTouch(this, GetVelocity().GetSafeNormal2D() *
-                (240.f * (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
+                (240.f * TouchSpeedFactor * FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
+                    (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
         {
             TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.05f);
         }
@@ -262,7 +266,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor * FatigueSpeedFactor;
     // Defensive jockeying uses shorter, more controllable stops than open running.
-    GetCharacterMovement()->BrakingDecelerationWalking = bJockeyHeld && bPlayActive ? 2800.f : 2100.f;
+    const FVector TravelDirection = GetVelocity().GetSafeNormal2D();
+    const FVector IntendedDirection = GetLastMovementInputVector().GetSafeNormal2D();
+    const bool bHardTurn = !TravelDirection.IsNearlyZero() && !IntendedDirection.IsNearlyZero() &&
+        FVector::DotProduct(TravelDirection, IntendedDirection) < 0.f;
+    const float TurnBraking = bHardTurn ? FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) * 1200.f : 0.f;
+    GetCharacterMovement()->BrakingDecelerationWalking =
+        (bJockeyHeld && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
 }
 
 void ASportsArcadeCharacter::PassBall()
