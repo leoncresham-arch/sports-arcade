@@ -76,6 +76,8 @@ void ASportsArcadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
     PlayerInputComponent->BindAction(TEXT("RestartMatch"), IE_Pressed, this, &ASportsArcadeCharacter::RestartExhibitionMatch);
     PlayerInputComponent->BindAction(TEXT("RestartBallOut"), IE_Pressed, this, &ASportsArcadeCharacter::RestartAfterBallOut);
     PlayerInputComponent->BindAction(TEXT("TakeManualRestart"), IE_Pressed, this, &ASportsArcadeCharacter::TakeStagedRestart);
+    PlayerInputComponent->BindAction(TEXT("AwardRestartHome"), IE_Pressed, this, &ASportsArcadeCharacter::AwardRestartToHome);
+    PlayerInputComponent->BindAction(TEXT("AwardRestartAway"), IE_Pressed, this, &ASportsArcadeCharacter::AwardRestartToAway);
 }
 
 void ASportsArcadeCharacter::MoveForward(float Value)
@@ -277,6 +279,22 @@ void ASportsArcadeCharacter::TakeStagedRestart()
         {
             Mode->TakeManualRestart(Mode->PendingRestartTaker->GetActorForwardVector());
         }
+    }
+}
+
+void ASportsArcadeCharacter::AwardRestartToHome()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->AwardUndeterminedRestart(0);
+    }
+}
+
+void ASportsArcadeCharacter::AwardRestartToAway()
+{
+    if (ASportsArcadeGameMode* Mode = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this)))
+    {
+        Mode->AwardUndeterminedRestart(1);
     }
 }
 
