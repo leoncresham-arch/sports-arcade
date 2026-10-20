@@ -35,7 +35,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
     def test_turn_braking_responds_to_opposed_travel_and_input(self):
         self.assertIn("FVector::DotProduct(TravelDirection, IntendedDirection)", CHARACTER)
         self.assertIn("TurnResistance = FMath::Clamp((0.5f - TurnAlignment) / 1.5f", CHARACTER)
-        self.assertIn("1200.f * TurnResistance", CHARACTER)
+        self.assertIn("1200.f * TurnResistance * TurnSpeedFactor", CHARACTER)
+        self.assertIn("GetVelocity().Size2D() / 350.f", CHARACTER)
         self.assertIn("float TurnBrakingWeight = 0.35f", HEADER)
 
     def test_dribble_touches_blend_forward_facing_with_travel(self):
