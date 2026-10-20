@@ -397,3 +397,5 @@ Touchline support correction: the midfielder's 350 cm inward outlet is now appli
 ### October 20 — movement turn braking and close shielding cadence
 
 Directional turn braking now varies continuously with the angle between velocity and requested movement, rather than switching suddenly at a ninety-degree threshold. Manual shielding now triggers smaller close-ball touches at 70% of the normal touch interval (minimum 0.05 seconds), with the previously lowered touch force retained. Source regression updated; UE5.5 compilation, animation and runtime collision balance are outstanding.
+
+Coordinated midfielder support additionally clamps its lateral target within 1100 cm of the slot's scaled formation Y position. This prevents cross-field attacking support from unintentionally pulling a midfielder out of their tactical corridor while retaining the earlier behind-ball and infield-outlet priorities. Source regression expanded; actual native AI movement and pathfinding still require verification.
