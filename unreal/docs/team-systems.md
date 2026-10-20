@@ -347,3 +347,7 @@ When a marked opponent approaches the defending goal, the off-ball AI reduces it
 ### October 20 — direct-run defensive assignment batch
 
 Off-ball marking now increases the goal-side offset by up to 45 cm when a marked opponent is running directly toward the defending goal (horizontal velocity threshold 150 cm/s), within the existing 80–180 cm total bounds. When deciding which nearby opponent to mark, the defender also favors direct runs toward goal within 2500 cm of the goal line, applying an 0.82 priority factor to their distance score (only for valid finite velocity). Together with the goalmouth-sensitive central-shading reduction, these changes improve the tactical foundation while retaining the current AI controller and pitch constraints. Python source contract tests were updated; native UE5.5 compilation and gameplay behavior remain unverified.
+
+### October 20 — central and diagonal runner defense
+
+Off-ball defenders now weight actively advancing central attackers (within 1000 cm of midfield's Y axis) more urgently when selecting an opponent to mark. A tracked attacker moving rapidly towards goal and diagonally infield triggers an additional 75 cm infield coverage shift (with final navigation pitch bounds retained). This develops direct-run recognition beyond the preceding goal-side adjustment. Source-contract tests cover both decisions; native Unreal runtime behavior remains unverified.
