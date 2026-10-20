@@ -253,3 +253,7 @@ The local player's automatic dribble touch now skips a ball when an opponent in 
 Manual pass/shot/chip candidate selection now excludes nonfinite, vertically unreachable (>120 cm) and behind-the-player balls before choosing the nearest valid target. This avoids choosing a nearest but unkickable reference ball while ignoring another valid candidate. Final `KickByPlayer` checks remain authoritative for contact distance and physics validity. Source contract updated; UE playtest pending.
 
 Manual pass/shot/chip now rejects nonfinite strength, treats nonfinite player movement input as absent, falls back to facing, and refuses a nonfinite or zero resultant strike direction. These are defensive numerical checks, not a guarantee of physical correctness. Source contracts updated, with actual UE5.5 engine validation pending.
+
+### October 20 — manual strike numerical validation
+
+Manual pass, shot and chip inputs now validate finite strike strength, movement input, player location, player facing and resultant aim before applying a ball impulse. Invalid movement input falls back to valid facing, while invalid facing prevents selection outright. Source regression tests were updated to match guarded normalization and contact screening. Source CI is not native Unreal compilation or gameplay validation.
