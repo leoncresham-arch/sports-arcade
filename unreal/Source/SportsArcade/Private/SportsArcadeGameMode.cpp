@@ -472,7 +472,11 @@ void ASportsArcadeGameMode::ResumeAfterBallOut()
             ? FVector(PendingRestartTeam == 0 ? 1.f : -1.f, 0.f, 0.08f)
             : PendingRestartType == ESportsArcadeRestartType::ThrowIn
                 ? FVector(0.f, -FMath::Sign(PendingRestartLocation.Y), 0.25f)
-                : FVector(PendingRestartTeam == 0 ? 1.f : -1.f, -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
+                : PendingRestartType == ESportsArcadeRestartType::CornerKick
+                    ? FVector(PendingRestartLocation.X >= 0.f ? -1.f : 1.f,
+                        PendingRestartLocation.Y >= 0.f ? -0.65f : 0.65f, 0.20f)
+                    : FVector(PendingRestartTeam == 0 ? 1.f : -1.f,
+                        -PendingRestartLocation.Y / PitchHalfWidthCm, 0.22f);
         if (!MatchBall->KickByPlayer(PendingRestartTaker, Direction, ProvisionalRestartImpulse, 210.f))
         {
             return;
