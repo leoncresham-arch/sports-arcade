@@ -398,6 +398,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 FMath::Clamp(MarkingInfluence, 0.f, 0.5f));
         }
     }
+    // Never forward invalid authored formation or marking targets to navigation.
+    if (Target.ContainsNaN() || Footballer->GetActorLocation().ContainsNaN())
+    {
+        StopMovement();
+        return;
+    }
     Target.X = FMath::Clamp(Target.X, -HalfLength + 150.f, HalfLength - 150.f);
     Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 150.f, HalfWidth - 150.f);
     // Avoid submitting an identical path request when already inside the acceptance radius.
