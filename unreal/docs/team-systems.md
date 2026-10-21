@@ -433,3 +433,7 @@ The midfield forward support offset now pauses when an opponent is within 220 cm
 ### October 20 — stamina-gated shielding and rated reception
 
 Automatic close-control touch force and touch cadence now apply the shielding bonus only while stamina remains above zero; first-touch cushioning similarly loses its shielding advantage when exhausted. Explicit reception additionally uses the footballer's BallControl attribute with a bounded rating factor (0.6–1.4). Source tests updated; native Unreal gameplay remains unverified.
+
+### October 21 — controlled receiving and defensive pressure
+
+Deliberate first-touch direction now blends toward running direction proportionately to player travel speed, reducing unintended dribble direction changes from nearly stationary velocity noise. Midfielder pressure evaluation now requires opposing footballers to be within 135 cm vertically of the ball as well as 220 cm horizontally, avoiding irrelevant airborne contact attribution. Static regression checks updated. Native UE5.5 compilation and match validation remain outstanding.
