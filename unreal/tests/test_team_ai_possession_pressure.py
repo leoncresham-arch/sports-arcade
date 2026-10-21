@@ -30,6 +30,7 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("const FVector OutletDelta", part)
         self.assertIn("OutletDelta.SizeSquared2D() >= FMath::Square(190.f)", part)
         self.assertIn("Blocker->GetActorLocation().Y + ClearSide * 220.f", part)
+        self.assertIn("FMath::Abs(ClearY - Blocker->GetActorLocation().Y) >= 175.f", part)
         self.assertIn("bRetreatingPass", part)
         self.assertIn("bFastLateralSwitch", part)
         self.assertIn("bCarrierUnderPressure", part)
