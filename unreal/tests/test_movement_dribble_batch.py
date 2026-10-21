@@ -27,12 +27,18 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("bEffectiveShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("bCanMaintainShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("FatigueSpeedFactor * ShieldAccelerationFactor", CHARACTER)
-        self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
+        self.assertIn("((bJockeyHeld || bEffectiveShield) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
         self.assertIn("(bShieldControl ? 0.55f : 1.f)", CHARACTER)
         self.assertIn("DribbleTouchInterval * 0.70f", CHARACTER)
         self.assertIn("bShieldControl = bShieldHeld && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("TouchCooldownRemaining = TouchInterval", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
+
+    def test_cornering_limits_acceleration_without_infinite_shield_braking(self):
+        self.assertIn("const float CutAccelerationFactor", CHARACTER)
+        self.assertIn("TurnResistance * TurnSpeedFactor", CHARACTER)
+        self.assertIn("GetCharacterMovement()->MaxAcceleration *= CutAccelerationFactor", CHARACTER)
+        self.assertIn("(bJockeyHeld || bEffectiveShield) && bPlayActive ? 2800.f : 2100.f", CHARACTER)
 
     def test_sprint_pivot_penalty_is_bounded_and_agility_sensitive(self):
         self.assertIn("const float SprintTurnAngle", CHARACTER)
