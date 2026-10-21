@@ -253,7 +253,9 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
             OnBallOutOfPlay.Broadcast(Position, LastTeam);
             return;
         }
-        PreviousBallPosition = MatchBall->GetActorLocation();
+        // Keep the validated physics sample as the next frame's reference.
+        // Re-reading the actor here could produce a different crossing start.
+        PreviousBallPosition = Position;
         bHasPreviousBallPosition = true;
     }
     if (bExtraTimeActive)
