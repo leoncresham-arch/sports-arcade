@@ -402,6 +402,12 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         FMath::Clamp(0.70f + 0.12f * AgilityFactor, 0.70f, 0.94f),
         TurnResistance * TurnSpeedFactor);
     GetCharacterMovement()->MaxAcceleration *= CutAccelerationFactor;
+    // Tired footballers lose a little more agility during a hard cut,
+    // but recover ordinary acceleration on straight movement.
+    const float TiredCutPenalty = FMath::Lerp(0.88f, 1.f,
+        FMath::Clamp(StaminaFraction / 0.35f, 0.f, 1.f));
+    GetCharacterMovement()->MaxAcceleration *=
+        FMath::Lerp(1.f, TiredCutPenalty, TurnResistance * TurnSpeedFactor);
 }
 
 void ASportsArcadeCharacter::PassBall()
