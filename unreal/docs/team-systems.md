@@ -479,3 +479,7 @@ Midfield support runners now move their passing outlet laterally away from an op
 ### October 21 — exhausted first touch and blocked passing outlets
 
 Receiving under pressure now scales imperfect cushioning by current endurance (1.12–1.35 multiplier rather than a fixed rushed-touch factor). Midfield support only accepts an opponent-avoidance relocation if the final clamped target provides at least 175 cm clearance; a corridor boundary can otherwise negate the suggested sidestep. Regression tests updated.
+
+### October 21 — close-control shielding and sprint release
+
+The manual controlled-touch direction now moves slightly away from the nearest opposing challenger within 260 cm during effective shielding (75% original intended direction plus 25% away from threat). Standard dribbling remains unchanged. On sprint release, depleted stamina now correctly prevents the exhausted shielding pace benefit. Source regression tests have been updated.
