@@ -463,3 +463,7 @@ The deliberate receiving action now verifies that a selected ball still exists a
 ### October 21 — cornering and progressive midfield runs
 
 Footballer acceleration now reduces smoothly through sharp momentum-bearing turns, with Agility rating moderating the penalty. Shield-specific braking is disabled upon exhaustion. Attacking midfield forward shifts now scale gradually with available depth rather than snapping to the full forward offset as soon as the carrier gains possession. Source tests cover the changes; true UE 5.5 compile, foot placement and match AI verification remain unavailable in the current environment.
+
+### October 21 — controlled-touch physics impulse
+
+The shared native ball physics controlled-touch path now caps each velocity correction between 180 and 280 cm/s according to incoming ball horizontal speed. This keeps slow first touches softer, still permits a firmer cushioning impulse on fast passes, and preserves finite-data and player-contact guards. The change is shared by manual reception, human dribble and AI controlled touches; source regression added. The gameplay balance and frame-to-frame feel must be tested in Unreal/Chaos before accepting as finished.
