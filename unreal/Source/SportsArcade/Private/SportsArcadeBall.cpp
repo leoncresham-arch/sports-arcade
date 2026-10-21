@@ -148,7 +148,17 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     const float TouchDeltaCap = FMath::Lerp(180.f, 280.f,
         FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f)) *
         FMath::Lerp(1.f, 0.65f, ReceptionDifficulty);
-    const FVector TouchDelta = Correction.GetClampedToMaxSize(TouchDeltaCap);
+    // A hard reverse touch cannot be performed as easily as a cushioning
+    // touch along the incoming ball trajectory. Apply a modest additional
+    // control penalty only when intent is strongly opposite its travel.
+    const FVector IncomingDirection = FVector(Current.X, Current.Y, 0.f).GetSafeNormal2D();
+    const FVector RequestedDirection = HorizontalTarget.GetSafeNormal2D();
+    const float ReverseAlignment = FVector::DotProduct(IncomingDirection, RequestedDirection);
+    const float ReverseDifficulty = IncomingSpeed > 300.f && !RequestedDirection.IsNearlyZero()
+        ? FMath::Clamp((-ReverseAlignment - 0.35f) / 0.65f, 0.f, 1.f)
+        : 0.f;
+    const FVector TouchDelta = Correction.GetClampedToMaxSize(
+        TouchDeltaCap * FMath::Lerp(1.f, 0.75f, ReverseDifficulty));
     if (TouchDelta.ContainsNaN()) return false;
     // Do not award a new possession touch for a negligible/no-op impulse.
     // This protects last-touch ownership from stationary repeated input.
