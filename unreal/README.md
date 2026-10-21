@@ -206,3 +206,9 @@ Source-level audit of the Unreal 5.5 project descriptor, enabled plugins, Game/E
 - Keyboard/mapped movement axes reject nonfinite input and clamp input strength to [-1, 1]; character simulation ignores nonfinite elapsed time.
 - Ground-controlled first-touch requested horizontal ball speed is bounded to 1400 cm/s before the existing per-contact physics impulse cap. This is a gameplay tuning safeguard, not a verified simulation speed or real-world football model.
 - Static regression files: `tests/test_team_ai_mark_assignment.py` and `tests/test_movement_and_touch_bounds.py`. These test source contracts, not UE 5.5 engine compatibility or in-game behavior.
+
+### Further October 21 gameplay source batch
+
+- Ground first-touch correction now diminishes against especially fast incoming balls (900–3000 cm/s), while keeping the established finite/contact/ownership gates.
+- Footballer rotation speed now scales down modestly at higher sprint momentum, retaining agility, fatigue, and capped turn-speed behavior.
+- Regression tests expanded under `tests/test_movement_and_touch_bounds.py`; source-only, **not** Unreal native validation.
