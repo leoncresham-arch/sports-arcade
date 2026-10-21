@@ -134,8 +134,14 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     const FVector HorizontalTarget(DesiredVelocity.X, DesiredVelocity.Y, 0.f);
     const FVector Current = CollisionSphere->GetPhysicsLinearVelocity();
     const FVector Correction = HorizontalTarget - FVector(Current.X, Current.Y, 0.f);
-    // Controlled touches accelerate the rolling ball; they do not teleport it.
-    CollisionSphere->AddImpulse(Correction.GetClampedToMaxSize(280.f) * BallMassKg);
+    // A gentle ball needs less impulse than a fast incoming pass, but a
+    // controlled touch cannot instantly reverse a full-speed football.
+    const float IncomingSpeed = FVector(Current.X, Current.Y, 0.f).Size();
+    const float TouchDeltaCap = FMath::Lerp(180.f, 280.f,
+        FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f));
+    const FVector TouchDelta = Correction.GetClampedToMaxSize(TouchDeltaCap);
+    if (TouchDelta.ContainsNaN()) return false;
+    CollisionSphere->AddImpulse(TouchDelta * BallMassKg);
     LastTouchPlayer = Player;
     return true;
 }
