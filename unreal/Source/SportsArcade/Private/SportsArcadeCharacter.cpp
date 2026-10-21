@@ -589,8 +589,11 @@ void ASportsArcadeCharacter::ReceiveBall()
     const float ReceiveControlFactor = PlayerAttributes ?
         USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f;
     const bool bReceiveShieldControl = bShieldHeld && CurrentStamina > 0.f;
-    const FVector ReceiveDirection = (Facing * 0.65f +
-        PlayerVelocity.GetSafeNormal2D() * 0.35f).GetSafeNormal2D();
+    // Carry momentum only when the player is actually moving; it must not
+    // contaminate a stationary reception with near-zero velocity noise.
+    const float ReceiveMovementBlend = FMath::Clamp(PlayerVelocity.Size2D() / 300.f, 0.f, 1.f);
+    const FVector ReceiveDirection = (Facing * (1.f - 0.35f * ReceiveMovementBlend) +
+        PlayerVelocity.GetSafeNormal2D() * (0.35f * ReceiveMovementBlend)).GetSafeNormal2D();
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
         BestBall->ApplyControlledTouch(this, ReceiveDirection *
             ((bReceiveShieldControl ? 30.f : 65.f) * FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)),
