@@ -662,7 +662,13 @@ void ASportsArcadeCharacter::ReceiveBall()
             break;
         }
     }
-    const float PressureTouchFactor = bReceiveUnderPressure ? 1.2f : 1.f;
+    // Exhausted players struggle more to settle passes under pressure,
+    // while a rested receiver can cushion without an exaggerated rebound.
+    const float ReceiveCapacity = FMath::Max(MaxStamina *
+        (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Stamina) : 1.f), 1.f);
+    const float ReceiveStaminaRatio = FMath::Clamp(CurrentStamina / ReceiveCapacity, 0.f, 1.f);
+    const float PressureTouchFactor = bReceiveUnderPressure
+        ? FMath::Lerp(1.35f, 1.12f, ReceiveStaminaRatio) : 1.f;
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
         BestBall->ApplyControlledTouch(this, ReceiveDirection *
             ((bReceiveShieldControl ? 30.f : 65.f) * CushionFactor *
