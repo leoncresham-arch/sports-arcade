@@ -279,7 +279,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 }
             }
             const float SupportGap = (Ball->GetActorLocation().X - Target.X) * AttackSign;
-            Target.X += AttackSign * ((bRetreatingPass || bFastLateralSwitch || bCarrierUnderPressure) ? 0.f : FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f));
+            // Scale the advance continuously by the availability of the
+            // passing lane; abrupt long runs leave large midfield holes.
+            const float SupportAdvance = FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f);
+            const float ForwardSupportScale = (bRetreatingPass || bFastLateralSwitch || bCarrierUnderPressure)
+                ? 0.f : FMath::Clamp(SupportGap / 1200.f, 0.f, 1.f);
+            Target.X += AttackSign * SupportAdvance * ForwardSupportScale;
             // The supporting midfielder should not overrun the available
             // passing lane and stand farther forward than the ball carrier.
             const float MaximumSupportX = Ball->GetActorLocation().X -
