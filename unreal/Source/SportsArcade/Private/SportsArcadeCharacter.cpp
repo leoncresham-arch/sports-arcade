@@ -148,7 +148,7 @@ void ASportsArcadeCharacter::EndSprint()
     const bool bPlayActive = !IsValid(MatchMode) ||
         (!MatchMode->bHalfTime && !MatchMode->bMatchFinished && !MatchMode->bBallOutOfPlay);
     GetCharacterMovement()->MaxWalkSpeed =
-        ((bJockeyHeld || bShieldHeld) && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor;
+        ((bJockeyHeld || (bShieldHeld && CurrentStamina > 0.f)) && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor;
 }
 
 float ASportsArcadeCharacter::GetStaminaNormalized() const
