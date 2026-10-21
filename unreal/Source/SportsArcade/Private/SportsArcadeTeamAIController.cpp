@@ -252,8 +252,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
                     Threat->TeamIndex == Footballer->TeamIndex ||
                     Threat->GetActorLocation().ContainsNaN()) continue;
-                if (FVector::DistSquared2D(Threat->GetActorLocation(),
-                    Ball->GetActorLocation()) < FMath::Square(220.f))
+                const FVector ThreatDelta = Threat->GetActorLocation() - Ball->GetActorLocation();
+                // Airborne opponents and ground-level challenges must not
+                // trigger identical carrier-pressure decisions.
+                if (FMath::Abs(ThreatDelta.Z) <= 135.f &&
+                    ThreatDelta.SizeSquared2D() < FMath::Square(220.f))
                 {
                     bCarrierUnderPressure = true;
                     break;
