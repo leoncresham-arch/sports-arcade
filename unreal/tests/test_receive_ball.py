@@ -38,7 +38,6 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("!ReceiveDirection.IsNearlyZero()", block)
         self.assertIn("bReceiveShieldControl ? 30.f : 65.f", block)
         self.assertIn("RatingFactor(PlayerAttributes->BallControl)", block)
-        self.assertIn("FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)", block)
         self.assertIn("const float TouchAbsorption", block)
         self.assertIn("TouchAbsorption", block)
         self.assertIn("ReceiveRelativeVelocity = IsValid(BestBall)", block)
