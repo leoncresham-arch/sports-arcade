@@ -40,7 +40,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("const float AgilityTurnFactor", CHARACTER)
         self.assertIn("SprintSpeed * SprintTurnPace", CHARACTER)
         self.assertIn("GetVelocity().Size2D() / 250.f", CHARACTER)
-        self.assertIn("TurnPaceLoss * SprintMomentum", CHARACTER)
+        self.assertIn("FMath::Max(TurnPaceLoss, SprintPivotSeverity) * SprintMomentum", CHARACTER)
+        self.assertIn("(-SprintTurnAngle + 0.25f) / 1.25f", CHARACTER)
         self.assertIn("0.72f, 0.9f", CHARACTER)
 
     def test_agility_rating_modulates_turn_speed_with_fatigue(self):
