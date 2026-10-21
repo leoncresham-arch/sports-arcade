@@ -493,3 +493,7 @@ Hard-cut acceleration now receives a bounded additional endurance penalty (up to
 ### October 21 — shielding skill and support pitch limits
 
 Protective dribbling touches now incorporate the player's BallControl attribute in the bounded opponent-avoidance blend (4–36%). Midfield outlet sidesteps clamp to within 180 cm of the sidelines after corridor selection, keeping the support target on the playing surface. Source regression tests updated.
+
+### October 21 — supporting passing-lane obstruction
+
+Supporting central midfield targets now check opposing footballers along the straight ball-to-target pass segment (145 cm screening radius and 135 cm vertical tolerance) and may offset their target laterally by 240 cm while respecting both the formation corridor and touchline margins. This complements existing target-point clearance. Shielding direction also scales with BallControl rating. Static source regressions have been extended; gameplay integration testing is a separate later phase.
