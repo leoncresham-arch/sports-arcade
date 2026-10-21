@@ -512,3 +512,7 @@ A defender no longer automatically yields a runner to a closer teammate if that 
 ### Deterministic pressers
 
 Primary and secondary pressing selection now uses authored lineup slots to break squared-distance ties within 1 cm², rather than actor-array traversal order. This stabilizes which autonomous player closes down the ball in nearly equidistant situations. The change leaves the human-control exclusion, keeper exclusion, pressing cooldown and formation rules intact. It does not yet implement pressing triggers or a fully tactical pressing coordinator.
+
+### Out-of-pitch opponent marker safety
+
+Defensive marking ignores opposing actor coordinates more than 150 cm beyond the configured pitch X/Y boundaries, preventing stray actors or provisional out-of-bounds sequences from drawing an automated marker away from the active defensive shape. Normal marking, pressing, and referee stoppage precedence remain unchanged. Regression: `tests/test_team_ai_mark_assignment.py`; UE gameplay verification remains pending.
