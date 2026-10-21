@@ -255,7 +255,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector ThreatDelta = Threat->GetActorLocation() - Ball->GetActorLocation();
                 // Airborne opponents and ground-level challenges must not
                 // trigger identical carrier-pressure decisions.
-                if (FMath::Abs(ThreatDelta.Z) <= 135.f &&
+                // A threat who is already moving away from the ball is less
+                // urgent than one closing onto the carrier's first touch.
+                const FVector ThreatVelocity = Threat->GetVelocity();
+                const bool bThreatReceding = !ThreatVelocity.ContainsNaN() &&
+                    FVector::DotProduct(ThreatVelocity.GetSafeNormal2D(),
+                        (-ThreatDelta).GetSafeNormal2D()) < -0.45f &&
+                    ThreatVelocity.SizeSquared2D() > FMath::Square(350.f);
+                if (!bThreatReceding && FMath::Abs(ThreatDelta.Z) <= 135.f &&
                     ThreatDelta.SizeSquared2D() < FMath::Square(220.f))
                 {
                     bCarrierUnderPressure = true;
