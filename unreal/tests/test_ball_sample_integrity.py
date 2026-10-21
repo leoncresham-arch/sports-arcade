@@ -7,6 +7,11 @@ SOURCE = (Path(__file__).resolve().parents[1] / "Source" / "SportsArcade" /
 
 
 class MatchBallSampleIntegrityTests(unittest.TestCase):
+    def test_following_frame_reuses_validated_sample(self):
+        tick = SOURCE.split("void ASportsArcadeGameMode::Tick(float DeltaSeconds)", 1)[1]
+        self.assertIn("PreviousBallPosition = Position;", tick)
+        self.assertNotIn("PreviousBallPosition = MatchBall->GetActorLocation();", tick)
+
     def test_nonfinite_samples_reset_crossing_history(self):
         tick = SOURCE.split("void ASportsArcadeGameMode::Tick(float DeltaSeconds)", 1)[1]
         sample = tick.split("const FVector Position = MatchBall->GetActorLocation();", 1)[1]
