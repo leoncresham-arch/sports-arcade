@@ -140,8 +140,14 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     // A gentle ball needs less impulse than a fast incoming pass, but a
     // controlled touch cannot instantly reverse a full-speed football.
     const float IncomingSpeed = FVector(Current.X, Current.Y, 0.f).Size();
+    // Ground reception at sprinting speed is harder to cushion cleanly.
+    // Lower the permitted single-touch velocity correction under a fast
+    // incoming pass; repeated contact is still governed by player cooldown.
+    const float ReceptionDifficulty = FMath::Clamp(
+        (IncomingSpeed - 900.f) / 2100.f, 0.f, 1.f);
     const float TouchDeltaCap = FMath::Lerp(180.f, 280.f,
-        FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f));
+        FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f)) *
+        FMath::Lerp(1.f, 0.65f, ReceptionDifficulty);
     const FVector TouchDelta = Correction.GetClampedToMaxSize(TouchDeltaCap);
     if (TouchDelta.ContainsNaN()) return false;
     // Do not award a new possession touch for a negligible/no-op impulse.
