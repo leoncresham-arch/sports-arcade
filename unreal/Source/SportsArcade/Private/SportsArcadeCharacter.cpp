@@ -333,7 +333,10 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
         ? FMath::Lerp(1.f, FMath::Clamp(0.72f + 0.10f * AgilityTurnFactor, 0.72f, 0.9f),
             TurnPaceLoss * SprintMomentum)
         : 1.f;
-    GetCharacterMovement()->MaxWalkSpeed = (bShieldHeld && bPlayActive ? JockeySpeed :
+    // Exhausted ball carriers no longer receive the protective low-pace
+    // movement profile; the shield action remains held but ineffective.
+    const bool bCanMaintainShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f;
+    GetCharacterMovement()->MaxWalkSpeed = (bCanMaintainShield ? JockeySpeed :
         (bJockeyHeld && bPlayActive ? JockeySpeed :
         (bSprinting && !bSprintExhausted ? SprintSpeed * SprintTurnPace : JogSpeed))) *
         PaceFactor * FatigueSpeedFactor;
