@@ -449,3 +449,7 @@ Max sprint pace now temporarily decreases during acute reversals or heavy pivots
 Acute sprint pivot speed reductions now scale by footballer momentum rather than applying full penalty as the footballer begins moving. The midfield carrier-pressure check now disregards clearly receding defenders (moving away above 350 cm/s) while retaining vertical contact and 220 cm proximity constraints. Static regression contracts updated. Unreal compile and runtime verification remain outstanding.
 
 Explicit receiving now adjusts output touch speed according to player-relative incoming ball speed, bounded at 65–100% of the previous target. Faster passes receive a softer forward touch; the physics impulse and contact radius remain constrained by the existing ball component. Added regression coverage, pending native Unreal evaluation.
+
+### October 21 — ball-relative pressing and touch absorption
+
+Midfielder support pressure now evaluates defender closing movement relative to the current ball motion, in addition to distance, height and clear recession; this reduces false pressure decisions during lateral ball movement. First-touch output now separates skill-sensitive cushioning from the incoming-speed factor: higher BallControl ratings generate a more restrained settling touch. All changes are source-level and still require Unreal native compile and playtests.
