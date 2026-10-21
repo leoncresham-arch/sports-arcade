@@ -141,6 +141,9 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
         FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f));
     const FVector TouchDelta = Correction.GetClampedToMaxSize(TouchDeltaCap);
     if (TouchDelta.ContainsNaN()) return false;
+    // Do not award a new possession touch for a negligible/no-op impulse.
+    // This protects last-touch ownership from stationary repeated input.
+    if (TouchDelta.SizeSquared2D() < FMath::Square(1.f)) return false;
     CollisionSphere->AddImpulse(TouchDelta * BallMassKg);
     LastTouchPlayer = Player;
     return true;
