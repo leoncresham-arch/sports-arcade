@@ -583,7 +583,11 @@ void ASportsArcadeCharacter::ReceiveBall()
             RelativeBallVelocity.SizeSquared2D() > FMath::Square(450.f) &&
             FVector::DotProduct(RelativeBallVelocity.GetSafeNormal2D(),
                 ToBall.GetSafeNormal2D()) > 0.35f;
+        // A fast-rising or falling ball requires a deliberate aerial trap
+        // animation, not the current ground-foot receive action.
+        const bool bFastVerticalBall = FMath::Abs(It->GetVelocity().Z) > 420.f;
         if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
+            bFastVerticalBall ||
             RelativeBallVelocity.SizeSquared2D() > FMath::Square(1800.f) ||
             bFastRecedingReceiveBall ||
             FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
