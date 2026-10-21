@@ -849,6 +849,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Do not claim distant attackers outside the original marking
             // search radius just because urgency weighting lowers their score.
             if (Distance > FMath::Square(FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f))) continue;
+            const FVector ThreatPosition = It->GetActorLocation();
+            if (FMath::Abs(ThreatPosition.X) > HalfLength + 150.f ||
+                FMath::Abs(ThreatPosition.Y) > HalfWidth + 150.f) continue;
             // Assign a marker to the closest available autonomous outfielder.
             // Independent controllers use the same distance and lineup-slot
             // tie-break, so two defenders do not routinely chase one runner
