@@ -329,6 +329,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector OutletDelta = Target - Blocker->GetActorLocation();
                 if (FMath::Abs(OutletDelta.Z) > 135.f ||
                     OutletDelta.SizeSquared2D() >= FMath::Square(190.f)) continue;
+                // A blocker sprinting away from the outlet is unlikely to
+                // close that passing window by the time support arrives.
+                const FVector BlockerVelocity = Blocker->GetVelocity();
+                if (!BlockerVelocity.ContainsNaN() &&
+                    BlockerVelocity.SizeSquared2D() > FMath::Square(380.f) &&
+                    FVector::DotProduct(BlockerVelocity.GetSafeNormal2D(),
+                        OutletDelta.GetSafeNormal2D()) < -0.5f) continue;
                 const float ClearSide = FMath::Abs(OutletDelta.Y) > 10.f
                     ? FMath::Sign(OutletDelta.Y) : (Slot % 2 == 0 ? 1.f : -1.f);
                 const float ClearY = FMath::Clamp(
