@@ -25,6 +25,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("ShieldStaminaDrainPerSecond, 0.f) * DeltaSeconds", CHARACTER)
         self.assertIn("ShieldStaminaDrainPerSecond = 4.f", HEADER)
         self.assertIn("bEffectiveShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f", CHARACTER)
+        self.assertIn("bCanMaintainShield = bShieldHeld && bPlayActive && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("FatigueSpeedFactor * ShieldAccelerationFactor", CHARACTER)
         self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f)", CHARACTER)
         self.assertIn("(bShieldControl ? 0.55f : 1.f)", CHARACTER)
