@@ -34,7 +34,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("bShieldControl = bShieldHeld && CurrentStamina > 0.f", CHARACTER)
         self.assertIn("ShieldTouchDir = (BlendedTouchDir * (1.f - ProtectionWeight) +", CHARACTER)
         self.assertIn("NearestThreatSq = FMath::Square(260.f)", CHARACTER)
-        self.assertIn("FMath::Lerp(0.08f, 0.30f, ThreatProximity)", CHARACTER)
+        self.assertIn("FMath::Lerp(0.08f, 0.30f, ThreatProximity) * ShieldSkill", CHARACTER)
+        self.assertIn("ShieldSkill = PlayerAttributes", CHARACTER)
         self.assertIn("TouchCooldownRemaining = TouchInterval", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
 
