@@ -93,9 +93,9 @@ void ASportsArcadeCharacter::MoveForward(float Value)
 {
     const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay)) return;
-    if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
+    if (FMath::IsFinite(Value) && FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
-        AddMovementInput(FVector::ForwardVector, Value);
+        AddMovementInput(FVector::ForwardVector, FMath::Clamp(Value, -1.f, 1.f));
     }
 }
 
@@ -103,9 +103,9 @@ void ASportsArcadeCharacter::MoveRight(float Value)
 {
     const ASportsArcadeGameMode* Match = Cast<ASportsArcadeGameMode>(UGameplayStatics::GetGameMode(this));
     if (IsValid(Match) && (Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay)) return;
-    if (FMath::Abs(Value) > KINDA_SMALL_NUMBER)
+    if (FMath::IsFinite(Value) && FMath::Abs(Value) > KINDA_SMALL_NUMBER)
     {
-        AddMovementInput(FVector::RightVector, Value);
+        AddMovementInput(FVector::RightVector, FMath::Clamp(Value, -1.f, 1.f));
     }
 }
 
@@ -160,7 +160,7 @@ float ASportsArcadeCharacter::GetStaminaNormalized() const
 void ASportsArcadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if (DeltaSeconds <= 0.f) return;
+    if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;
     TouchCooldownRemaining = FMath::Max(0.f, TouchCooldownRemaining - DeltaSeconds);
     TackleCooldownRemaining = FMath::Max(0.f, TackleCooldownRemaining - DeltaSeconds);
     StrikeCooldownRemaining = FMath::Max(0.f, StrikeCooldownRemaining - DeltaSeconds);
