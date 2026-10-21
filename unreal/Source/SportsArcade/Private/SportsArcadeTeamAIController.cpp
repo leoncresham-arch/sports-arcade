@@ -319,6 +319,23 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector MidfieldBase = Roster->GetFormationPosition(Slot);
             const float MidfieldBaseY = MidfieldBase.Y * HalfWidth / 3400.f;
             Target.Y = FMath::Clamp(Target.Y, MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
+            // Avoid choosing the exact position of an opponent screening
+            // the passing outlet. Deflect within the midfielder's corridor.
+            for (TActorIterator<ASportsArcadeCharacter> Blocker(GetWorld()); Blocker; ++Blocker)
+            {
+                if (!IsValid(*Blocker) || Blocker->GetWorld() != GetWorld() ||
+                    Blocker->TeamIndex == Footballer->TeamIndex ||
+                    Blocker->GetActorLocation().ContainsNaN()) continue;
+                const FVector OutletDelta = Target - Blocker->GetActorLocation();
+                if (FMath::Abs(OutletDelta.Z) > 135.f ||
+                    OutletDelta.SizeSquared2D() >= FMath::Square(190.f)) continue;
+                const float ClearSide = FMath::Abs(OutletDelta.Y) > 10.f
+                    ? FMath::Sign(OutletDelta.Y) : (Slot % 2 == 0 ? 1.f : -1.f);
+                Target.Y = FMath::Clamp(
+                    Blocker->GetActorLocation().Y + ClearSide * 220.f,
+                    MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
+                break;
+            }
             // A support runner must stay behind the ball even after the
             // formation corridor adjustment and later tactical offsets.
             const float SupportDepth = (Ball->GetActorLocation().X - Target.X) * AttackSign;
