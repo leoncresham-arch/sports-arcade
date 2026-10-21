@@ -27,3 +27,8 @@ Player-attributed kicks now reject nonfinite player/ball positions; controlled t
 Player-attributed kicks and controlled dribble touches reject nonfinite Chaos linear or angular velocity before adding impulse or updating last-touch attribution. This is a defensive simulation integrity check, not a replacement for runtime physics diagnostics. Regression contracts are in `unreal/tests/test_ball_contact_position_integrity.py`; native Unreal tests remain pending.
 
 The general `Kick` entry point now also rejects nonfinite current linear and angular physics velocities before adding impulse, protecting callers that do not use player-attributed contact. Source regression coverage was extended accordingly.
+
+
+## October 21 — fast incoming ball reception
+
+Ground-controlled touch now reduces its maximum single-contact velocity correction by up to 35% when receiving a ball travelling faster than 900 cm/s (fully applied at 3000 cm/s). The preceding finite-velocity, contact-height, distance, maximum target-speed and no-op ownership checks remain in place. This is a provisional tunable-feel heuristic; it does not simulate deforming footwear, full-body traps, foot animation, or verified native ball dynamics. Source regression: `tests/test_movement_and_touch_bounds.py`.
