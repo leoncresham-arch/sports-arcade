@@ -295,7 +295,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             }
             if (!AwayFromThreat.IsNearlyZero())
             {
-                ShieldTouchDir = (BlendedTouchDir * 0.75f + AwayFromThreat * 0.25f).GetSafeNormal2D();
+                // Nearer defenders demand stronger protection, while a
+                // distant opponent should barely alter the player's touch.
+                const float ThreatProximity = 1.f -
+                    FMath::Clamp(FMath::Sqrt(NearestThreatSq) / 260.f, 0.f, 1.f);
+                const float ProtectionWeight = FMath::Lerp(0.08f, 0.30f, ThreatProximity);
+                ShieldTouchDir = (BlendedTouchDir * (1.f - ProtectionWeight) +
+                    AwayFromThreat * ProtectionWeight).GetSafeNormal2D();
             }
         }
         if (IsValid(ClosestDribbleBall) && !ShieldTouchDir.IsNearlyZero() &&
