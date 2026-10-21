@@ -262,7 +262,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     FVector::DotProduct(ThreatVelocity.GetSafeNormal2D(),
                         (-ThreatDelta).GetSafeNormal2D()) < -0.45f &&
                     ThreatVelocity.SizeSquared2D() > FMath::Square(350.f);
-                if (!bThreatReceding && FMath::Abs(ThreatDelta.Z) <= 135.f &&
+                // Defenders merely passing through the zone without
+                // closing should not force the support group to freeze.
+                const FVector RelativeThreatVelocity = ThreatVelocity.ContainsNaN()
+                    ? FVector::ZeroVector : ThreatVelocity - SupportBallVelocity;
+                const bool bThreatClosing = RelativeThreatVelocity.IsNearlyZero() ||
+                    FVector::DotProduct(RelativeThreatVelocity.GetSafeNormal2D(),
+                        (-ThreatDelta).GetSafeNormal2D()) > 0.10f;
+                if (!bThreatReceding && bThreatClosing &&
+                    FMath::Abs(ThreatDelta.Z) <= 135.f &&
                     ThreatDelta.SizeSquared2D() < FMath::Square(220.f))
                 {
                     bCarrierUnderPressure = true;
