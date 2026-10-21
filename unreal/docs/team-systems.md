@@ -497,3 +497,10 @@ Protective dribbling touches now incorporate the player's BallControl attribute 
 ### October 21 — supporting passing-lane obstruction
 
 Supporting central midfield targets now check opposing footballers along the straight ball-to-target pass segment (145 cm screening radius and 135 cm vertical tolerance) and may offset their target laterally by 240 cm while respecting both the formation corridor and touchline margins. This complements existing target-point clearance. Shielding direction also scales with BallControl rating. Static source regressions have been extended; gameplay integration testing is a separate later phase.
+
+
+## October 21 — coordinated defensive marking ownership
+
+The existing nearest-threat marking now arbitrates each potential opposing runner against the defending roster. An eligible autonomous outfielder yields that particular mark when a valid same-world AI teammate is closer to the runner; equal-distance ties use the authored lineup slot. The keeper and human-controlled pawns are not assigned automatic outfield marking ownership. If no runner is assigned, the defender stays on the existing formation / defensive-line target rather than blindly converging on another defender's assignment. The actual goal-side position, infield protection, finite-target checks, pressing and second-press behaviors are unchanged.
+
+This is a lightweight deterministic local decision, **not** a full centralized tactical marking coordinator. It does not guarantee global one-to-one matching, account for every direct pressing assignment, or make offside/line tracking authoritative. Python source-contract checks in `unreal/tests/test_team_ai_mark_assignment.py` protect the guards; only native UE gameplay tests can validate actual defensive spacing.
