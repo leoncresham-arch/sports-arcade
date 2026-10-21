@@ -345,7 +345,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // keep the original station instead of running into a marker.
                 if (FMath::Abs(ClearY - Blocker->GetActorLocation().Y) >= 175.f)
                 {
-                    Target.Y = ClearY;
+                    // Avoid redirecting midfield support beyond the playable
+                    // pitch edge after formation-channel correction.
+                    Target.Y = FMath::Clamp(ClearY, -HalfWidth + 180.f, HalfWidth - 180.f);
                     break;
                 }
             }
