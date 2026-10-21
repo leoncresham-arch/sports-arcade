@@ -299,7 +299,10 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                 // distant opponent should barely alter the player's touch.
                 const float ThreatProximity = 1.f -
                     FMath::Clamp(FMath::Sqrt(NearestThreatSq) / 260.f, 0.f, 1.f);
-                const float ProtectionWeight = FMath::Lerp(0.08f, 0.30f, ThreatProximity);
+                const float ShieldSkill = PlayerAttributes
+                    ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f;
+                const float ProtectionWeight = FMath::Clamp(
+                    FMath::Lerp(0.08f, 0.30f, ThreatProximity) * ShieldSkill, 0.04f, 0.36f);
                 ShieldTouchDir = (BlendedTouchDir * (1.f - ProtectionWeight) +
                     AwayFromThreat * ProtectionWeight).GetSafeNormal2D();
             }
