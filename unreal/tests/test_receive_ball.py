@@ -20,6 +20,8 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("TouchCooldownRemaining > 0.f", block)
         self.assertIn("Match->bHalfTime || Match->bMatchFinished || Match->bBallOutOfPlay", block)
         self.assertIn("FMath::Abs(ToBall.Z) > 115.f", block)
+        self.assertIn("bFastVerticalBall", block)
+        self.assertIn("FMath::Abs(It->GetVelocity().Z) > 420.f", block)
         self.assertIn("FMath::Square(1800.f)", block)
         self.assertIn("RelativeBallVelocity = It->GetVelocity() - PlayerVelocity", block)
         self.assertIn("RelativeBallVelocity.SizeSquared2D()", block)
