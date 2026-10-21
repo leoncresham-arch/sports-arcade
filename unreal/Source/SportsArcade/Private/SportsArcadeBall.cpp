@@ -131,7 +131,10 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     {
         return false;
     }
-    const FVector HorizontalTarget(DesiredVelocity.X, DesiredVelocity.Y, 0.f);
+    // Limit contact intent to a plausible ground-control speed. This bounds
+    // accidental overspeed commands independently from the physics delta cap.
+    const FVector HorizontalTarget = FVector(DesiredVelocity.X, DesiredVelocity.Y, 0.f)
+        .GetClampedToMaxSize2D(1400.f);
     const FVector Current = CollisionSphere->GetPhysicsLinearVelocity();
     const FVector Correction = HorizontalTarget - FVector(Current.X, Current.Y, 0.f);
     // A gentle ball needs less impulse than a fast incoming pass, but a
