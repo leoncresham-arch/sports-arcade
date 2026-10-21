@@ -44,6 +44,8 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("const float TouchAbsorption", block)
         self.assertIn("bReceiveUnderPressure", block)
         self.assertIn("PressureTouchFactor", block)
+        self.assertIn("ReceiveStaminaRatio", block)
+        self.assertIn("FMath::Lerp(1.35f, 1.12f, ReceiveStaminaRatio)", block)
         self.assertIn("FMath::Square(250.f)", block)
         self.assertIn("TouchAbsorption", block)
         self.assertIn("ReceiveRelativeVelocity = IsValid(BestBall)", block)
