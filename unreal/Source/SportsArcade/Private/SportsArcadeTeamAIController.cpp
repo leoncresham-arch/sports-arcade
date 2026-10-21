@@ -839,6 +839,34 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Do not claim distant attackers outside the original marking
             // search radius just because urgency weighting lowers their score.
             if (Distance > FMath::Square(FMath::Clamp(MarkingSearchRadiusCm, 0.f, 3000.f))) continue;
+            // Assign a marker to the closest available autonomous outfielder.
+            // Independent controllers use the same distance and lineup-slot
+            // tie-break, so two defenders do not routinely chase one runner
+            // while another attacker remains uncovered. Pressers and keepers
+            // are excluded; player-controlled defenders retain manual agency.
+            bool bAnotherTeammateOwnsMark = false;
+            for (ASportsArcadeCharacter* Teammate : Roster->Players)
+            {
+                if (!IsValid(Teammate) || Teammate == Footballer ||
+                    Teammate->GetWorld() != GetWorld() ||
+                    Teammate->TeamIndex != Footballer->TeamIndex ||
+                    !Cast<ASportsArcadeTeamAIController>(Teammate->GetController()) ||
+                    Teammate->GetActorLocation().ContainsNaN()) continue;
+                const int32 TeammateSlot = Roster->bUseExplicitLineupSlots
+                    ? Teammate->LineupSlot : Roster->Players.IndexOfByKey(Teammate);
+                if (TeammateSlot == 0 || TeammateSlot < 0 || TeammateSlot > 10) continue;
+                const float TheirDistance = FVector::DistSquared2D(
+                    Teammate->GetActorLocation(), It->GetActorLocation());
+                const bool bCloserTeammate = TheirDistance + 1.f < Distance;
+                const bool bTieBreak = FMath::Abs(TheirDistance - Distance) <= 1.f &&
+                    TeammateSlot < Slot;
+                if (bCloserTeammate || bTieBreak)
+                {
+                    bAnotherTeammateOwnsMark = true;
+                    break;
+                }
+            }
+            if (bAnotherTeammateOwnsMark) continue;
             if (ThreatDistance < NearestOpponentDistance)
             {
                 Opponent = *It;
