@@ -443,3 +443,7 @@ Deliberate receiving additionally rejects high-speed balls travelling away from 
 ### October 21 — sprint pivot response
 
 Max sprint pace now temporarily decreases during acute reversals or heavy pivots, with the penalty bounded and partially mitigated by the footballer's Agility rating. Jog, jockey and shielding speeds remain on their independent paths, and existing turn braking and fatigue modifiers still apply. Static regression added; native compile, animations and tuning are pending.
+
+### October 21 — pivot momentum and closing threats
+
+Acute sprint pivot speed reductions now scale by footballer momentum rather than applying full penalty as the footballer begins moving. The midfield carrier-pressure check now disregards clearly receding defenders (moving away above 350 cm/s) while retaining vertical contact and 220 cm proximity constraints. Static regression contracts updated. Unreal compile and runtime verification remain outstanding.
