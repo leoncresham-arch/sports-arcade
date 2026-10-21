@@ -366,7 +366,13 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float TurnBraking = FMath::Clamp(TurnBrakingWeight, 0.f, 1.f) *
         1200.f * TurnResistance * TurnSpeedFactor;
     GetCharacterMovement()->BrakingDecelerationWalking =
-        ((bJockeyHeld || bShieldHeld) && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
+        ((bJockeyHeld || bEffectiveShield) && bPlayActive ? 2800.f : 2100.f) + TurnBraking;
+    // Resist instantaneous changes of direction while carrying sprint momentum,
+    // with agility preserving more acceleration through sharp cuts.
+    const float CutAccelerationFactor = FMath::Lerp(1.f,
+        FMath::Clamp(0.70f + 0.12f * AgilityFactor, 0.70f, 0.94f),
+        TurnResistance * TurnSpeedFactor);
+    GetCharacterMovement()->MaxAcceleration *= CutAccelerationFactor;
 }
 
 void ASportsArcadeCharacter::PassBall()
