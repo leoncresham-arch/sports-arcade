@@ -455,3 +455,7 @@ Explicit receiving now adjusts output touch speed according to player-relative i
 Midfielder support pressure now evaluates defender closing movement relative to the current ball motion, in addition to distance, height and clear recession; this reduces false pressure decisions during lateral ball movement. First-touch output now separates skill-sensitive cushioning from the incoming-speed factor: higher BallControl ratings generate a more restrained settling touch. All changes are source-level and still require Unreal native compile and playtests.
 
 Exhausted manual shield carriers no longer receive the special reduced max-walk-speed movement profile; alongside previously disabled acceleration and touch advantages, this keeps shielding behavior consistently endurance-gated. The existing fatigue speed modifier still applies. Regression updated.
+
+### October 21 — finite physics guard and movement turn severity
+
+The deliberate receiving action now verifies that a selected ball still exists and its relative velocity remains finite before producing a touch. Midfield support classification likewise guards against non-finite ball-relative defender motion. Momentum-based sprint pivot penalties now explicitly account for acute reversals. Static source regressions expanded; native Unreal compilation and gameplay tests remain open.
