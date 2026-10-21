@@ -508,3 +508,7 @@ This is a lightweight deterministic local decision, **not** a full centralized t
 ### Marking allocation refinement
 
 A defender no longer automatically yields a runner to a closer teammate if that teammate has an alternative opponent more than 75 cm closer. This is intended to reduce uncovered secondary runs in two-attacker situations while preserving distance-based default ownership and fallback formation coverage. This local heuristic is not globally optimal assignment and can still produce clashes; coordinated tactics and UE playtests are outstanding.
+
+### Deterministic pressers
+
+Primary and secondary pressing selection now uses authored lineup slots to break squared-distance ties within 1 cm², rather than actor-array traversal order. This stabilizes which autonomous player closes down the ball in nearly equidistant situations. The change leaves the human-control exclusion, keeper exclusion, pressing cooldown and formation rules intact. It does not yet implement pressing triggers or a fully tactical pressing coordinator.
