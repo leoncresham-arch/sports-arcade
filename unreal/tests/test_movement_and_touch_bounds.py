@@ -8,6 +8,12 @@ BALL = (ROOT / "SportsArcadeBall.cpp").read_text(encoding="utf-8")
 
 
 class MovementBallSafetyTests(unittest.TestCase):
+    def test_sprint_momentum_limits_rotation_rate(self):
+        self.assertIn("const float SprintRotationFactor = bSprinting && !bSprintExhausted", CHARACTER)
+        self.assertIn("FMath::Clamp(GetVelocity().Size2D() / 650.f, 0.f, 1.f)", CHARACTER)
+        self.assertIn("AgilityFactor * FatigueSpeedFactor *", CHARACTER)
+        self.assertIn("SprintRotationFactor, 260.f, 760.f", CHARACTER)
+
     def test_forward_and_lateral_axes_are_finite_and_clamped(self):
         for direction in ("Forward", "Right"):
             start = CHARACTER.index("void ASportsArcadeCharacter::Move" + direction)
