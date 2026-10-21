@@ -24,6 +24,13 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("TeammateSlot < Slot", SOURCE)
         self.assertIn("if (bAnotherTeammateOwnsMark) continue;", SOURCE)
 
+    def test_other_runner_coverage_not_suppressed_by_busy_teammate(self):
+        self.assertIn("bTeammateHasCloserThreat", SOURCE)
+        self.assertIn("TActorIterator<ASportsArcadeCharacter> OtherThreat(GetWorld())", SOURCE)
+        self.assertIn("OtherThreat->TeamIndex == Footballer->TeamIndex", SOURCE)
+        self.assertIn("AlternativeDistance + FMath::Square(75.f) < TheirDistance", SOURCE)
+        self.assertIn("if (!bTeammateHasCloserThreat)", SOURCE)
+
     def test_goal_side_and_formation_cover_preserved(self):
         self.assertIn("const FVector GoalSideMarkingPoint", SOURCE)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", SOURCE)
