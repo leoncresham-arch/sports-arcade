@@ -437,3 +437,5 @@ Automatic close-control touch force and touch cadence now apply the shielding bo
 ### October 21 — controlled receiving and defensive pressure
 
 Deliberate first-touch direction now blends toward running direction proportionately to player travel speed, reducing unintended dribble direction changes from nearly stationary velocity noise. Midfielder pressure evaluation now requires opposing footballers to be within 135 cm vertically of the ball as well as 220 cm horizontally, avoiding irrelevant airborne contact attribution. Static regression checks updated. Native UE5.5 compilation and match validation remain outstanding.
+
+Deliberate receiving additionally rejects high-speed balls travelling away from the receiver (relative speed above 450 cm/s and departing direction), avoiding implausible foot-traps of already-escaping passes. Source regression extended; UE contact timing still needs real playtesting.
