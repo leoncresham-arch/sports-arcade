@@ -28,6 +28,7 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("bRetreatingPass", part)
         self.assertIn("bFastLateralSwitch", part)
         self.assertIn("bCarrierUnderPressure", part)
+        self.assertIn("FMath::Abs(ThreatDelta.Z) <= 135.f", part)
         self.assertIn("FMath::Square(220.f)", part)
         self.assertIn("FMath::Abs(SupportBallVelocity.Y) > 1100.f", part)
         self.assertIn("SupportBallVelocity.X * AttackSign < -450.f", part)
