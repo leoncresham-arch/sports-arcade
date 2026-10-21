@@ -14,6 +14,8 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("Slot >= 5 && Slot <= 8", part)
         self.assertIn("FMath::Square(2400.f)", part)
         self.assertIn("FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f)", part)
+        self.assertIn("ForwardSupportScale", part)
+        self.assertIn("SupportAdvance * ForwardSupportScale", part)
         self.assertIn("AttackSign * 175.f", part)
         self.assertIn("FMath::Min(Target.X, MaximumSupportX)", part)
         self.assertIn("FMath::Max(Target.X, MaximumSupportX)", part)
