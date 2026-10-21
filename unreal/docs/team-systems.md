@@ -469,3 +469,7 @@ Footballer acceleration now reduces smoothly through sharp momentum-bearing turn
 The shared native ball physics controlled-touch path now caps each velocity correction between 180 and 280 cm/s according to incoming ball horizontal speed. This keeps slow first touches softer, still permits a firmer cushioning impulse on fast passes, and preserves finite-data and player-contact guards. The change is shared by manual reception, human dribble and AI controlled touches; source regression added. The gameplay balance and frame-to-frame feel must be tested in Unreal/Chaos before accepting as finished.
 
 Ground-foot receiving now also rejects balls with over 420 cm/s vertical speed. Volleys, header/chest/thigh trapping and grounded-vs-airborne control selection require dedicated animation and future native UE simulation. A source regression covers this deliberate boundary.
+
+### October 21 — contested receiving and touch ownership
+
+The ground-foot receiving path now introduces a 20% touch-speed penalty when a nearby defender is within 250 cm at viable contact height, modelling a rushed touch without silently transferring possession. The physics component now refuses to update last touch for impulses below 1 cm/s horizontal correction. Regression checks were added. This remains a gameplay foundation and requires native UE collision, animation and match testing.
