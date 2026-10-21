@@ -447,3 +447,5 @@ Max sprint pace now temporarily decreases during acute reversals or heavy pivots
 ### October 21 — pivot momentum and closing threats
 
 Acute sprint pivot speed reductions now scale by footballer momentum rather than applying full penalty as the footballer begins moving. The midfield carrier-pressure check now disregards clearly receding defenders (moving away above 350 cm/s) while retaining vertical contact and 220 cm proximity constraints. Static regression contracts updated. Unreal compile and runtime verification remain outstanding.
+
+Explicit receiving now adjusts output touch speed according to player-relative incoming ball speed, bounded at 65–100% of the previous target. Faster passes receive a softer forward touch; the physics impulse and contact radius remain constrained by the existing ball component. Added regression coverage, pending native Unreal evaluation.
