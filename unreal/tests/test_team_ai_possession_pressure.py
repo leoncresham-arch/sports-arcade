@@ -30,6 +30,7 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("bCarrierUnderPressure", part)
         self.assertIn("bThreatReceding", part)
         self.assertIn("bThreatClosing", part)
+        self.assertIn("!RelativeThreatVelocity.ContainsNaN()", part)
         self.assertIn("ThreatVelocity - SupportBallVelocity", part)
         self.assertIn("ThreatVelocity.SizeSquared2D() > FMath::Square(350.f)", part)
         self.assertIn("FMath::Abs(ThreatDelta.Z) <= 135.f", part)
