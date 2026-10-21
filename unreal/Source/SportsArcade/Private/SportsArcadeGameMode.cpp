@@ -116,6 +116,15 @@ void ASportsArcadeGameMode::Tick(float DeltaSeconds)
     if (IsValid(MatchBall))
     {
         const FVector Position = MatchBall->GetActorLocation();
+        // Invalid physics samples cannot be used for crossing interpolation.
+        // Forget a broken previous segment instead of manufacturing a goal.
+        if (Position.ContainsNaN())
+        {
+            bHasPreviousBallPosition = false;
+            return;
+        }
+        if (bHasPreviousBallPosition && PreviousBallPosition.ContainsNaN())
+            bHasPreviousBallPosition = false;
         if (bHasPreviousBallPosition)
         {
             // Entire football must cross a 105 m pitch goal line between posts and below bar.
