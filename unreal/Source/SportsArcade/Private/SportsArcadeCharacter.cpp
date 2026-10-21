@@ -549,8 +549,15 @@ void ASportsArcadeCharacter::ReceiveBall()
         const float ContactDistance3DSq = ToBall.SizeSquared();
         if (ContactDistance3DSq > FMath::Square(FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
             continue;
+        // When a ball is moving fast, only attempt a first touch when its
+        // relative trajectory reaches the player, not while escaping away.
+        const bool bFastRecedingReceiveBall =
+            RelativeBallVelocity.SizeSquared2D() > FMath::Square(450.f) &&
+            FVector::DotProduct(RelativeBallVelocity.GetSafeNormal2D(),
+                ToBall.GetSafeNormal2D()) > 0.35f;
         if (DistanceSq >= BestDistanceSq || FMath::Abs(ToBall.Z) > 115.f ||
             RelativeBallVelocity.SizeSquared2D() > FMath::Square(1800.f) ||
+            bFastRecedingReceiveBall ||
             FVector::DotProduct(Facing, ToBall.GetSafeNormal2D()) < -0.15f) continue;
 
         bool bOpponentClearlyCloser = false;
