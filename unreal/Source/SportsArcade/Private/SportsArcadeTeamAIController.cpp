@@ -343,11 +343,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
                 // If the formation boundary prevents meaningful clearance,
                 // keep the original station instead of running into a marker.
-                if (FMath::Abs(ClearY - Blocker->GetActorLocation().Y) >= 175.f)
+                // First resolve the pitch limit, then verify the resulting
+                // position actually clears the blocking opponent.
+                const float PlayableClearY = FMath::Clamp(ClearY,
+                    -HalfWidth + 180.f, HalfWidth - 180.f);
+                if (FMath::Abs(PlayableClearY - Blocker->GetActorLocation().Y) >= 175.f)
                 {
-                    // Avoid redirecting midfield support beyond the playable
-                    // pitch edge after formation-channel correction.
-                    Target.Y = FMath::Clamp(ClearY, -HalfWidth + 180.f, HalfWidth - 180.f);
+                    Target.Y = PlayableClearY;
                     break;
                 }
             }
