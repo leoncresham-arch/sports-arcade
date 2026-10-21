@@ -39,6 +39,9 @@ class ReceiveBallTests(unittest.TestCase):
         self.assertIn("bReceiveShieldControl ? 30.f : 65.f", block)
         self.assertIn("RatingFactor(PlayerAttributes->BallControl)", block)
         self.assertIn("FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)", block)
+        self.assertIn("ReceiveRelativeVelocity = IsValid(BestBall)", block)
+        self.assertIn("ReceiveRelativeVelocity.Size2D() / 1800.f", block)
+        self.assertIn("CushionFactor *", block)
         self.assertIn("bReceiveShieldControl = bShieldHeld && CurrentStamina > 0.f", block)
         self.assertIn("TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f)", block)
 
