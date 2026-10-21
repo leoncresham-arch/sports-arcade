@@ -33,6 +33,13 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("TouchCooldownRemaining = TouchInterval", CHARACTER)
         self.assertIn("bShieldHeld = false", CHARACTER)
 
+    def test_sprint_pivot_penalty_is_bounded_and_agility_sensitive(self):
+        self.assertIn("const float SprintTurnAngle", CHARACTER)
+        self.assertIn("const float TurnPaceLoss", CHARACTER)
+        self.assertIn("const float AgilityTurnFactor", CHARACTER)
+        self.assertIn("SprintSpeed * SprintTurnPace", CHARACTER)
+        self.assertIn("0.72f, 0.9f", CHARACTER)
+
     def test_agility_rating_modulates_turn_speed_with_fatigue(self):
         self.assertIn("int32 Agility = 65", ATTRIBUTES)
         self.assertIn("RatingFactor(PlayerAttributes->Agility)", CHARACTER)
