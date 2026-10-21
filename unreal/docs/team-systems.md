@@ -439,3 +439,7 @@ Automatic close-control touch force and touch cadence now apply the shielding bo
 Deliberate first-touch direction now blends toward running direction proportionately to player travel speed, reducing unintended dribble direction changes from nearly stationary velocity noise. Midfielder pressure evaluation now requires opposing footballers to be within 135 cm vertically of the ball as well as 220 cm horizontally, avoiding irrelevant airborne contact attribution. Static regression checks updated. Native UE5.5 compilation and match validation remain outstanding.
 
 Deliberate receiving additionally rejects high-speed balls travelling away from the receiver (relative speed above 450 cm/s and departing direction), avoiding implausible foot-traps of already-escaping passes. Source regression extended; UE contact timing still needs real playtesting.
+
+### October 21 — sprint pivot response
+
+Max sprint pace now temporarily decreases during acute reversals or heavy pivots, with the penalty bounded and partially mitigated by the footballer's Agility rating. Jog, jockey and shielding speeds remain on their independent paths, and existing turn braking and fatigue modifiers still apply. Static regression added; native compile, animations and tuning are pending.
