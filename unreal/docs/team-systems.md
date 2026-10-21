@@ -475,3 +475,7 @@ Ground-foot receiving now also rejects balls with over 420 cm/s vertical speed. 
 The ground-foot receiving path now introduces a 20% touch-speed penalty when a nearby defender is within 250 cm at viable contact height, modelling a rushed touch without silently transferring possession. The physics component now refuses to update last touch for impulses below 1 cm/s horizontal correction. Regression checks were added. This remains a gameplay foundation and requires native UE collision, animation and match testing.
 
 Midfield support runners now move their passing outlet laterally away from an opponent occupying the target within 190 cm, with clearance bounded by the authored midfield corridor. This is a positional heuristic, not full pathfinding or passing-lane raycast analysis. Source regression added.
+
+### October 21 — exhausted first touch and blocked passing outlets
+
+Receiving under pressure now scales imperfect cushioning by current endurance (1.12–1.35 multiplier rather than a fixed rushed-touch factor). Midfield support only accepts an opponent-avoidance relocation if the final clamped target provides at least 175 cm clearance; a corridor boundary can otherwise negate the suggested sidestep. Regression tests updated.
