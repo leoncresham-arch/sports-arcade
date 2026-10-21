@@ -19,6 +19,7 @@ class SecondaryPressTests(unittest.TestCase):
         self.assertIn("SecondaryPressureStandOffCm = 450.f", header)
 
     def test_equal_distance_pressers_use_lineup_slot_tie_break(self):
+        AI_CPP = SOURCE.read_text(encoding="utf-8")
         self.assertIn("Distance < BestDistance - 1.f", AI_CPP)
         self.assertIn("Distance < SecondDistance - 1.f", AI_CPP)
         self.assertIn("FMath::Abs(Distance - BestDistance) <= 1.f", AI_CPP)
