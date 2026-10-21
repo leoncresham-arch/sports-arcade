@@ -32,3 +32,8 @@ The general `Kick` entry point now also rejects nonfinite current linear and ang
 ## October 21 — fast incoming ball reception
 
 Ground-controlled touch now reduces its maximum single-contact velocity correction by up to 35% when receiving a ball travelling faster than 900 cm/s (fully applied at 3000 cm/s). The preceding finite-velocity, contact-height, distance, maximum target-speed and no-op ownership checks remain in place. This is a provisional tunable-feel heuristic; it does not simulate deforming footwear, full-body traps, foot animation, or verified native ball dynamics. Source regression: `tests/test_movement_and_touch_bounds.py`.
+
+
+## October 21 — reversing an incoming ball
+
+Controlled ground contact additionally reduces the one-touch correction by as much as 25% when the player's target direction is strongly opposite the incoming ball trajectory and its speed exceeds 300 cm/s. A stationary or compatible-direction touch retains the ordinary reception cap. This limits instantaneous spin-free reversals while retaining physics impulse ownership and finite input validation. It is not an animated backheel, a full friction model, or a native Unreal gameplay test.
