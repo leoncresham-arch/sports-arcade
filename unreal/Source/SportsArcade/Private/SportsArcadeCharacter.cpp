@@ -617,9 +617,16 @@ void ASportsArcadeCharacter::ReceiveBall()
     const float ReceiveMovementBlend = FMath::Clamp(PlayerVelocity.Size2D() / 300.f, 0.f, 1.f);
     const FVector ReceiveDirection = (Facing * (1.f - 0.35f * ReceiveMovementBlend) +
         PlayerVelocity.GetSafeNormal2D() * (0.35f * ReceiveMovementBlend)).GetSafeNormal2D();
+    // A strong incoming pass is cushioned more firmly than a slow roll.
+    // A gentle arrival can retain slightly more forward touch speed.
+    const FVector ReceiveRelativeVelocity = IsValid(BestBall)
+        ? BestBall->GetVelocity() - PlayerVelocity : FVector::ZeroVector;
+    const float CushionFactor = FMath::Lerp(1.f, 0.65f,
+        FMath::Clamp(ReceiveRelativeVelocity.Size2D() / 1800.f, 0.f, 1.f));
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
         BestBall->ApplyControlledTouch(this, ReceiveDirection *
-            ((bReceiveShieldControl ? 30.f : 65.f) * FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)),
+            ((bReceiveShieldControl ? 30.f : 65.f) * CushionFactor *
+                FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)),
             FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
     {
         TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
