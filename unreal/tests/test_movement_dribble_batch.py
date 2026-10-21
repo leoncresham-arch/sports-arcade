@@ -50,7 +50,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
     def test_physics_touch_delta_scales_and_remains_bounded(self):
         self.assertIn("IncomingSpeed / 1000.f", BALL_CPP)
         self.assertIn("FMath::Lerp(180.f, 280.f", BALL_CPP)
-        self.assertIn("Correction.GetClampedToMaxSize(TouchDeltaCap)", BALL_CPP)
+        self.assertIn("Correction.GetClampedToMaxSize(\n        TouchDeltaCap * FMath::Lerp(1.f, 0.75f, ReverseDifficulty))", BALL_CPP)
         self.assertIn("TouchDelta.ContainsNaN()", BALL_CPP)
         self.assertIn("TouchDelta.SizeSquared2D() < FMath::Square(1.f)", BALL_CPP)
 
