@@ -42,6 +42,8 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("const float CutAccelerationFactor", CHARACTER)
         self.assertIn("TurnResistance * TurnSpeedFactor", CHARACTER)
         self.assertIn("GetCharacterMovement()->MaxAcceleration *= CutAccelerationFactor", CHARACTER)
+        self.assertIn("const float TiredCutPenalty", CHARACTER)
+        self.assertIn("TurnResistance * TurnSpeedFactor", CHARACTER)
         self.assertIn("(bJockeyHeld || bEffectiveShield) && bPlayActive ? 2800.f : 2100.f", CHARACTER)
 
     def test_physics_touch_delta_scales_and_remains_bounded(self):
