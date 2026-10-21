@@ -624,6 +624,9 @@ void ASportsArcadeCharacter::ReceiveBall()
     // A gentle arrival can retain slightly more forward touch speed.
     const FVector ReceiveRelativeVelocity = IsValid(BestBall)
         ? BestBall->GetVelocity() - PlayerVelocity : FVector::ZeroVector;
+    // The selected ball may have moved or become invalid since selection;
+    // never apply an impulse based on non-finite physics telemetry.
+    if (!IsValid(BestBall) || ReceiveRelativeVelocity.ContainsNaN()) return;
     const float CushionFactor = FMath::Lerp(1.f, 0.65f,
         FMath::Clamp(ReceiveRelativeVelocity.Size2D() / 1800.f, 0.f, 1.f));
     // Skilled receivers absorb fast passes more cleanly: poorer first touch
