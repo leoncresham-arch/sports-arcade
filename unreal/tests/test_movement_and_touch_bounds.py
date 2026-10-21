@@ -21,6 +21,12 @@ class MovementBallSafetyTests(unittest.TestCase):
         self.assertIn("if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;",
                       CHARACTER[start:start + 250])
 
+    def test_fast_incoming_ball_reduces_single_touch_correction(self):
+        self.assertIn("const float ReceptionDifficulty = FMath::Clamp(", BALL)
+        self.assertIn("(IncomingSpeed - 900.f) / 2100.f", BALL)
+        self.assertIn("FMath::Lerp(1.f, 0.65f, ReceptionDifficulty)", BALL)
+        self.assertIn("Correction.GetClampedToMaxSize(TouchDeltaCap)", BALL)
+
     def test_ground_touch_intent_and_impulse_are_bounded(self):
         start = BALL.index("bool ASportsArcadeBall::ApplyControlledTouch")
         body = BALL[start:]
