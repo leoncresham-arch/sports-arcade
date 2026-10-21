@@ -148,7 +148,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("DribbleTouchRangeCm", footballer)
         self.assertIn("TackleBall", footballer)
         self.assertIn("bPlayActive && IsPlayerControlled() && !bJockeyHeld", footballer)
-        self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor", footballer)
+        self.assertIn("((bJockeyHeld || (bShieldHeld && CurrentStamina > 0.f)) && bPlayActive ? JockeySpeed : JogSpeed) * PaceFactor * FatigueSpeedFactor", footballer)
         self.assertIn("Match->bHalfTime || Match->bMatchFinished", footballer)
         self.assertIn("MatchMode->bHalfTime || MatchMode->bMatchFinished", footballer)
         self.assertIn("TackleCooldownRemaining", footballer)
