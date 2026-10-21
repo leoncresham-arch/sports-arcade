@@ -459,3 +459,7 @@ Exhausted manual shield carriers no longer receive the special reduced max-walk-
 ### October 21 — finite physics guard and movement turn severity
 
 The deliberate receiving action now verifies that a selected ball still exists and its relative velocity remains finite before producing a touch. Midfield support classification likewise guards against non-finite ball-relative defender motion. Momentum-based sprint pivot penalties now explicitly account for acute reversals. Static source regressions expanded; native Unreal compilation and gameplay tests remain open.
+
+### October 21 — cornering and progressive midfield runs
+
+Footballer acceleration now reduces smoothly through sharp momentum-bearing turns, with Agility rating moderating the penalty. Shield-specific braking is disabled upon exhaustion. Attacking midfield forward shifts now scale gradually with available depth rather than snapping to the full forward offset as soon as the carrier gains possession. Source tests cover the changes; true UE 5.5 compile, foot placement and match AI verification remain unavailable in the current environment.
