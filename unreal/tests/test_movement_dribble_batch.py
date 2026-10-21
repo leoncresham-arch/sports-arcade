@@ -5,6 +5,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1] / "Source/SportsArcade"
 CHARACTER = (ROOT / "Private/SportsArcadeCharacter.cpp").read_text(encoding="utf-8")
 HEADER = (ROOT / "Public/SportsArcadeCharacter.h").read_text(encoding="utf-8")
+BALL_CPP = (ROOT / "Private/SportsArcadeBall.cpp").read_text(encoding="utf-8")
 ATTRIBUTES = (ROOT / "Public/SportsArcadePlayerAttributes.h").read_text(encoding="utf-8")
 
 class MovementDribbleBatchTests(unittest.TestCase):
@@ -39,6 +40,12 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("TurnResistance * TurnSpeedFactor", CHARACTER)
         self.assertIn("GetCharacterMovement()->MaxAcceleration *= CutAccelerationFactor", CHARACTER)
         self.assertIn("(bJockeyHeld || bEffectiveShield) && bPlayActive ? 2800.f : 2100.f", CHARACTER)
+
+    def test_physics_touch_delta_scales_and_remains_bounded(self):
+        self.assertIn("IncomingSpeed / 1000.f", BALL_CPP)
+        self.assertIn("FMath::Lerp(180.f, 280.f", BALL_CPP)
+        self.assertIn("Correction.GetClampedToMaxSize(TouchDeltaCap)", BALL_CPP)
+        self.assertIn("TouchDelta.ContainsNaN()", BALL_CPP)
 
     def test_sprint_pivot_penalty_is_bounded_and_agility_sensitive(self):
         self.assertIn("const float SprintTurnAngle", CHARACTER)
