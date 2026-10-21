@@ -623,10 +623,15 @@ void ASportsArcadeCharacter::ReceiveBall()
         ? BestBall->GetVelocity() - PlayerVelocity : FVector::ZeroVector;
     const float CushionFactor = FMath::Lerp(1.f, 0.65f,
         FMath::Clamp(ReceiveRelativeVelocity.Size2D() / 1800.f, 0.f, 1.f));
+    // Skilled receivers absorb fast passes more cleanly: poorer first touch
+    // leaves more residual ball speed rather than magically stopping it.
+    const float ReceiveSkill = FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f);
+    const float TouchAbsorption = FMath::Lerp(1.20f, 0.85f,
+        FMath::Clamp((ReceiveSkill - 0.6f) / 0.8f, 0.f, 1.f));
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
         BestBall->ApplyControlledTouch(this, ReceiveDirection *
             ((bReceiveShieldControl ? 30.f : 65.f) * CushionFactor *
-                FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f)),
+                TouchAbsorption),
             FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
     {
         TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
