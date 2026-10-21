@@ -171,3 +171,7 @@ The optional physical penalty referee assistant now has two independent timeout 
 `unreal/tests/test_penalty_observation_hard_cap.py` asserts the source contract. Validate shootout pacing, field bounds and ball physics in a real UE5.5 editor before calling this gameplay-tested.
 
 The physical shootout referee UI can now read `GetCupPenaltyObservationElapsedSeconds()` and `GetCupPenaltyObservationRemainingSeconds()` in Blueprints. Both return zero outside a kicked attempt awaiting review. The remaining counter reaches zero when a suggestion is already available; this is **not** an automatic score or kick advancement. CI Python tests assert source contracts only, pending genuine Unreal compilation.
+
+### October 21 — defensive physics sample integrity
+
+Match Tick now rejects a nonfinite current ball position and discards a nonfinite previous position before any goal-line or ball-out crossing interpolation. This avoids a malformed physics sample being interpreted as a valid referee crossing. Source regression: `tests/test_ball_sample_integrity.py`. Native Unreal 5.5 engine compilation and actual in-match test remain deferred, not replaced by this check.
