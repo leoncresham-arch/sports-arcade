@@ -324,6 +324,9 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float SprintTurnAngle = (!SprintTravel.IsNearlyZero() && !SprintInput.IsNearlyZero())
         ? FVector::DotProduct(SprintTravel, SprintInput) : 1.f;
     const float TurnPaceLoss = FMath::Clamp((0.35f - SprintTurnAngle) / 1.35f, 0.f, 1.f);
+    // A pivot into the opposite direction is harder to execute at full speed
+    // than a shallow directional correction.
+    const float SprintPivotSeverity = FMath::Clamp((-SprintTurnAngle + 0.25f) / 1.25f, 0.f, 1.f);
     const float AgilityTurnFactor = PlayerAttributes
         ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
     // A pivot penalty is meaningful only once the player has momentum;
@@ -331,7 +334,7 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float SprintMomentum = FMath::Clamp(GetVelocity().Size2D() / 250.f, 0.f, 1.f);
     const float SprintTurnPace = bSprinting
         ? FMath::Lerp(1.f, FMath::Clamp(0.72f + 0.10f * AgilityTurnFactor, 0.72f, 0.9f),
-            TurnPaceLoss * SprintMomentum)
+            FMath::Max(TurnPaceLoss, SprintPivotSeverity) * SprintMomentum)
         : 1.f;
     // Exhausted ball carriers no longer receive the protective low-pace
     // movement profile; the shield action remains held but ineffective.
