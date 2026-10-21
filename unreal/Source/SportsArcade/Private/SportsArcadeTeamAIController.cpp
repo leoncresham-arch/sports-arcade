@@ -445,7 +445,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
                 Candidate->GetActorLocation().ContainsNaN()) continue;
             const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
-            if (Distance < BestDistance)
+            if (Distance < BestDistance - 1.f ||
+                (FMath::Abs(Distance - BestDistance) <= 1.f && IsValid(Nearest) &&
+                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot :
+                    Roster->Players.IndexOfByKey(Candidate)) <
+                 (Roster->bUseExplicitLineupSlots ? Nearest->LineupSlot :
+                    Roster->Players.IndexOfByKey(Nearest))))
             {
                 BestDistance = Distance;
                 Nearest = Candidate;
@@ -472,7 +477,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Candidate->GetActorLocation().ContainsNaN()) continue;
                 const float Distance = FVector::DistSquared2D(
                     Candidate->GetActorLocation(), Ball->GetActorLocation());
-                if (Distance < SecondDistance)
+                if (Distance < SecondDistance - 1.f ||
+                (FMath::Abs(Distance - SecondDistance) <= 1.f && IsValid(Second) &&
+                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot :
+                    Roster->Players.IndexOfByKey(Candidate)) <
+                 (Roster->bUseExplicitLineupSlots ? Second->LineupSlot :
+                    Roster->Players.IndexOfByKey(Second))))
                 {
                     SecondDistance = Distance;
                     Second = Candidate;
