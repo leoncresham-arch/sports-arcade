@@ -31,6 +31,11 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("AlternativeDistance + FMath::Square(75.f) < TheirDistance", SOURCE)
         self.assertIn("if (!bTeammateHasCloserThreat)", SOURCE)
 
+    def test_off_pitch_opponents_are_not_marking_targets(self):
+        self.assertIn("const FVector ThreatPosition = It->GetActorLocation();", SOURCE)
+        self.assertIn("FMath::Abs(ThreatPosition.X) > HalfLength + 150.f", SOURCE)
+        self.assertIn("FMath::Abs(ThreatPosition.Y) > HalfWidth + 150.f", SOURCE)
+
     def test_goal_side_and_formation_cover_preserved(self):
         self.assertIn("const FVector GoalSideMarkingPoint", SOURCE)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", SOURCE)
