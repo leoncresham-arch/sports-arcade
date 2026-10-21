@@ -383,8 +383,16 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float ShieldAccelerationFactor = bEffectiveShield ? 0.72f : 1.f;
     GetCharacterMovement()->MaxAcceleration = 1600.f * AccelerationFactor *
         FatigueSpeedFactor * ShieldAccelerationFactor;
+    // A player carrying sprint momentum cannot pivot as sharply as one
+    // taking measured jockey/shielding steps. Agility still distinguishes
+    // footballers within the existing capped angular-turn envelope.
+    const float SprintRotationFactor = bSprinting && !bSprintExhausted
+        ? FMath::Lerp(1.f, 0.78f,
+            FMath::Clamp(GetVelocity().Size2D() / 650.f, 0.f, 1.f))
+        : 1.f;
     GetCharacterMovement()->RotationRate = FRotator(0.f,
-        FMath::Clamp(540.f * AgilityFactor * FatigueSpeedFactor, 260.f, 760.f), 0.f);
+        FMath::Clamp(540.f * AgilityFactor * FatigueSpeedFactor *
+            SprintRotationFactor, 260.f, 760.f), 0.f);
     // Defensive jockeying uses shorter, more controllable stops than open running.
     const FVector TravelDirection = GetVelocity().GetSafeNormal2D();
     const FVector IntendedDirection = GetLastMovementInputVector().GetSafeNormal2D();
