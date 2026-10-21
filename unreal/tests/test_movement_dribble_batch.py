@@ -79,7 +79,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("bShieldControl ? 0.45f : 0.75f", CHARACTER)
         self.assertIn("FMath::Lerp(0.85f, 1.f, ControlFatigue)", CHARACTER)
         self.assertIn("CurrentStamina / ControlStaminaCapacity", CHARACTER)
-        self.assertIn("!BlendedTouchDir.IsNearlyZero()", CHARACTER)
+        self.assertIn("!ShieldTouchDir.IsNearlyZero()", CHARACTER)
         self.assertIn("ApplyControlledTouch(this, BlendedTouchDir", CHARACTER)
 
     def test_fast_receding_balls_cannot_be_recaptured_automatically(self):
