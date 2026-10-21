@@ -331,10 +331,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     OutletDelta.SizeSquared2D() >= FMath::Square(190.f)) continue;
                 const float ClearSide = FMath::Abs(OutletDelta.Y) > 10.f
                     ? FMath::Sign(OutletDelta.Y) : (Slot % 2 == 0 ? 1.f : -1.f);
-                Target.Y = FMath::Clamp(
+                const float ClearY = FMath::Clamp(
                     Blocker->GetActorLocation().Y + ClearSide * 220.f,
                     MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
-                break;
+                // If the formation boundary prevents meaningful clearance,
+                // keep the original station instead of running into a marker.
+                if (FMath::Abs(ClearY - Blocker->GetActorLocation().Y) >= 175.f)
+                {
+                    Target.Y = ClearY;
+                    break;
+                }
             }
             // A support runner must stay behind the ball even after the
             // formation corridor adjustment and later tactical offsets.
