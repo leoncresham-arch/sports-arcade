@@ -18,7 +18,7 @@ class FatigueMovementTests(unittest.TestCase):
         block = code.split("void ASportsArcadeCharacter::EndSprint()", 1)[1].split(
             "float ASportsArcadeCharacter::GetStaminaNormalized()", 1)[0]
         self.assertIn("CurrentStamina / (Capacity * 0.4f)", block)
-        self.assertIn("((bJockeyHeld || bShieldHeld) && bPlayActive ? JockeySpeed : JogSpeed)", block)
+        self.assertIn("((bJockeyHeld || (bShieldHeld && CurrentStamina > 0.f)) && bPlayActive ? JockeySpeed : JogSpeed)", block)
         self.assertIn("PaceFactor * FatigueSpeedFactor", block)
 
     def test_jockey_brakes_more_sharply_without_changing_regular_braking(self):
