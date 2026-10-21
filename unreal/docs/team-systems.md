@@ -489,3 +489,7 @@ The manual controlled-touch direction now moves slightly away from the nearest o
 Shielded close dribbling now steers away from a defender with strength proportional to their proximity instead of a fixed 25 percent blend. Midfielders also disregard opponents clearly sprinting away from the selected supporting outlet, reducing unnecessary channel changes. Regression source contracts added.
 
 Hard-cut acceleration now receives a bounded additional endurance penalty (up to 12% at low stamina); straight-line acceleration retains its existing fatigue calculation. This provides a separate distinction between sprint endurance and sharp-cut agility. Source regression added.
+
+### October 21 — shielding skill and support pitch limits
+
+Protective dribbling touches now incorporate the player's BallControl attribute in the bounded opponent-avoidance blend (4–36%). Midfield outlet sidesteps clamp to within 180 cm of the sidelines after corridor selection, keeping the support target on the playing surface. Source regression tests updated.
