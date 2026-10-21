@@ -647,10 +647,26 @@ void ASportsArcadeCharacter::ReceiveBall()
     const float ReceiveSkill = FMath::Clamp(ReceiveControlFactor, 0.6f, 1.4f);
     const float TouchAbsorption = FMath::Lerp(1.20f, 0.85f,
         FMath::Clamp((ReceiveSkill - 0.6f) / 0.8f, 0.f, 1.f));
+    // A rushed first touch under close pressure is less precise, without
+    // granting defenders control of the ball via an automatic animation.
+    bool bReceiveUnderPressure = false;
+    for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+    {
+        if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+            Opp->TeamIndex == TeamIndex || Opp->GetActorLocation().ContainsNaN()) continue;
+        const FVector ThreatToReceiver = Opp->GetActorLocation() - PlayerLocation;
+        if (FMath::Abs(ThreatToReceiver.Z) <= 135.f &&
+            ThreatToReceiver.SizeSquared2D() < FMath::Square(250.f))
+        {
+            bReceiveUnderPressure = true;
+            break;
+        }
+    }
+    const float PressureTouchFactor = bReceiveUnderPressure ? 1.2f : 1.f;
     if (IsValid(BestBall) && !ReceiveDirection.IsNearlyZero() &&
         BestBall->ApplyControlledTouch(this, ReceiveDirection *
             ((bReceiveShieldControl ? 30.f : 65.f) * CushionFactor *
-                TouchAbsorption),
+                TouchAbsorption * PressureTouchFactor),
             FMath::Clamp(DribbleTouchRangeCm, 0.f, 170.f)))
     {
         TouchCooldownRemaining = FMath::Max(DribbleTouchInterval, 0.12f);
