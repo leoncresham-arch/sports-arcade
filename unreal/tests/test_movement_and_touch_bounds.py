@@ -27,6 +27,12 @@ class MovementBallSafetyTests(unittest.TestCase):
         self.assertIn("if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;",
                       CHARACTER[start:start + 250])
 
+    def test_reverse_direction_touches_respect_ball_momentum(self):
+        self.assertIn("const float ReverseAlignment = FVector::DotProduct", BALL)
+        self.assertIn("IncomingSpeed > 300.f", BALL)
+        self.assertIn("FMath::Lerp(1.f, 0.75f, ReverseDifficulty)", BALL)
+        self.assertIn("TouchDeltaCap * FMath::Lerp", BALL)
+
     def test_fast_incoming_ball_reduces_single_touch_correction(self):
         self.assertIn("const float ReceptionDifficulty = FMath::Clamp(", BALL)
         self.assertIn("(IncomingSpeed - 900.f) / 2100.f", BALL)
