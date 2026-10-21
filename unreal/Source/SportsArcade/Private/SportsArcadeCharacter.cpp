@@ -317,9 +317,21 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
     const float StaminaFraction = CurrentStamina / Capacity;
     const float FatigueSpeedFactor = FMath::Lerp(0.72f, 1.f,
         FMath::Clamp(StaminaFraction / 0.4f, 0.f, 1.f));
+    // Tight pivots reduce instantaneous sprint pace. Agility partially
+    // mitigates this penalty without bypassing stamina or movement braking.
+    const FVector SprintTravel = GetVelocity().GetSafeNormal2D();
+    const FVector SprintInput = GetLastMovementInputVector().GetSafeNormal2D();
+    const float SprintTurnAngle = (!SprintTravel.IsNearlyZero() && !SprintInput.IsNearlyZero())
+        ? FVector::DotProduct(SprintTravel, SprintInput) : 1.f;
+    const float TurnPaceLoss = FMath::Clamp((0.35f - SprintTurnAngle) / 1.35f, 0.f, 1.f);
+    const float AgilityTurnFactor = PlayerAttributes
+        ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
+    const float SprintTurnPace = bSprinting
+        ? FMath::Lerp(1.f, FMath::Clamp(0.72f + 0.10f * AgilityTurnFactor, 0.72f, 0.9f), TurnPaceLoss)
+        : 1.f;
     GetCharacterMovement()->MaxWalkSpeed = (bShieldHeld && bPlayActive ? JockeySpeed :
         (bJockeyHeld && bPlayActive ? JockeySpeed :
-        (bSprinting && !bSprintExhausted ? SprintSpeed : JogSpeed))) *
+        (bSprinting && !bSprintExhausted ? SprintSpeed * SprintTurnPace : JogSpeed))) *
         PaceFactor * FatigueSpeedFactor;
     const float AccelerationFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Acceleration) : 1.f;
     const float AgilityFactor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Agility) : 1.f;
