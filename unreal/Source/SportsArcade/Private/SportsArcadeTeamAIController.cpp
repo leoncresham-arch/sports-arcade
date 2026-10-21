@@ -353,6 +353,33 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     break;
                 }
             }
+            // Positioning away from a marker is not enough when the straight
+            // pass is screened. Seek a small sideways window, within shape.
+            const FVector CarrierBall = Ball->GetActorLocation();
+            if (FVector::DistSquared2D(CarrierBall, Target) > FMath::Square(250.f))
+            {
+                for (TActorIterator<ASportsArcadeCharacter> LaneIt(GetWorld()); LaneIt; ++LaneIt)
+                {
+                    if (!IsValid(*LaneIt) || LaneIt->GetWorld() != GetWorld() ||
+                        LaneIt->TeamIndex == Footballer->TeamIndex ||
+                        LaneIt->GetActorLocation().ContainsNaN()) continue;
+                    const FVector Defender = LaneIt->GetActorLocation();
+                    const FVector ClosestLanePoint = FMath::ClosestPointOnSegment(
+                        Defender, CarrierBall, Target);
+                    if (FMath::Abs(Defender.Z - ClosestLanePoint.Z) > 135.f ||
+                        FVector::DistSquared2D(Defender, ClosestLanePoint) > FMath::Square(145.f))
+                        continue;
+                    const float CandidateY = FMath::Clamp(
+                        Target.Y + (Target.Y >= Defender.Y ? 240.f : -240.f),
+                        FMath::Max(MidfieldBaseY - 1100.f, -HalfWidth + 180.f),
+                        FMath::Min(MidfieldBaseY + 1100.f, HalfWidth - 180.f));
+                    if (FMath::Abs(CandidateY - Defender.Y) >= 175.f)
+                    {
+                        Target.Y = CandidateY;
+                        break;
+                    }
+                }
+            }
             // A support runner must stay behind the ball even after the
             // formation corridor adjustment and later tactical offsets.
             const float SupportDepth = (Ball->GetActorLocation().X - Target.X) * AttackSign;
