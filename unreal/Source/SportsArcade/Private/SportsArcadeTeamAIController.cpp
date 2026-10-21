@@ -862,8 +862,30 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     TeammateSlot < Slot;
                 if (bCloserTeammate || bTieBreak)
                 {
-                    bAnotherTeammateOwnsMark = true;
-                    break;
+                    // A closer defender may already have a clearly better
+                    // assignment. Preserve coverage for this runner instead
+                    // of conceding every attacker to the same teammate.
+                    bool bTeammateHasCloserThreat = false;
+                    for (TActorIterator<ASportsArcadeCharacter> OtherThreat(GetWorld());
+                         OtherThreat; ++OtherThreat)
+                    {
+                        if (!IsValid(*OtherThreat) || *OtherThreat == *It ||
+                            OtherThreat->GetWorld() != GetWorld() ||
+                            OtherThreat->TeamIndex == Footballer->TeamIndex ||
+                            OtherThreat->GetActorLocation().ContainsNaN()) continue;
+                        const float AlternativeDistance = FVector::DistSquared2D(
+                            Teammate->GetActorLocation(), OtherThreat->GetActorLocation());
+                        if (AlternativeDistance + FMath::Square(75.f) < TheirDistance)
+                        {
+                            bTeammateHasCloserThreat = true;
+                            break;
+                        }
+                    }
+                    if (!bTeammateHasCloserThreat)
+                    {
+                        bAnotherTeammateOwnsMark = true;
+                        break;
+                    }
                 }
             }
             if (bAnotherTeammateOwnsMark) continue;
