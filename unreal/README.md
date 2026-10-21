@@ -198,3 +198,11 @@ The new SportsArcadePlayerAttributes component provides editable 1-99 ratings. S
 ## Windows build readiness (scope items 1–6)
 
 Source-level audit of the Unreal 5.5 project descriptor, enabled plugins, Game/Editor targets, Build.cs module dependencies, Public/Private file pairs, selected Unreal API include contracts and generated-header ordering is now covered by six CI tests in `tests/test_prebuild_readiness.py`. See [prebuild evidence and Windows build steps](docs/prebuild-checklist.md). This establishes static readiness, **not** a native Unreal 5.5 build, successful UHT parse, or an actual editor launch.
+
+
+## October 21 source gameplay hardening
+
+- AI outfielders now defer a potential defensive mark to a closer eligible autonomous teammate, using lineup slots to break close ties. This reduces duplicated marking decisions without overriding human control or modifying goalkeeper duties.
+- Keyboard/mapped movement axes reject nonfinite input and clamp input strength to [-1, 1]; character simulation ignores nonfinite elapsed time.
+- Ground-controlled first-touch requested horizontal ball speed is bounded to 1400 cm/s before the existing per-contact physics impulse cap. This is a gameplay tuning safeguard, not a verified simulation speed or real-world football model.
+- Static regression files: `tests/test_team_ai_mark_assignment.py` and `tests/test_movement_and_touch_bounds.py`. These test source contracts, not UE 5.5 engine compatibility or in-game behavior.
