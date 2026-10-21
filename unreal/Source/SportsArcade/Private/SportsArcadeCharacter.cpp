@@ -275,8 +275,31 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             FMath::Lerp(0.85f, 1.f, ControlFatigue);
         const FVector BlendedTouchDir = (TravelDir * TravelWeight +
             FacingDir * (1.f - TravelWeight)).GetSafeNormal2D();
-        if (IsValid(ClosestDribbleBall) && !BlendedTouchDir.IsNearlyZero() &&
-            ClosestDribbleBall->ApplyControlledTouch(this, BlendedTouchDir *
+        // Protect the ball on the far foot from a defender challenging the
+        // shield, without teleporting the ball or overriding clear contact.
+        FVector ShieldTouchDir = BlendedTouchDir;
+        if (bShieldControl && IsValid(ClosestDribbleBall))
+        {
+            const FVector BallAtFoot = ClosestDribbleBall->GetActorLocation();
+            float NearestThreatSq = FMath::Square(260.f);
+            FVector AwayFromThreat = FVector::ZeroVector;
+            for (TActorIterator<ASportsArcadeCharacter> Threat(GetWorld()); Threat; ++Threat)
+            {
+                if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
+                    Threat->TeamIndex == TeamIndex || Threat->GetActorLocation().ContainsNaN()) continue;
+                const FVector ThreatToBall = BallAtFoot - Threat->GetActorLocation();
+                const float ThreatDistanceSq = ThreatToBall.SizeSquared2D();
+                if (FMath::Abs(ThreatToBall.Z) > 135.f || ThreatDistanceSq >= NearestThreatSq) continue;
+                NearestThreatSq = ThreatDistanceSq;
+                AwayFromThreat = ThreatToBall.GetSafeNormal2D();
+            }
+            if (!AwayFromThreat.IsNearlyZero())
+            {
+                ShieldTouchDir = (BlendedTouchDir * 0.75f + AwayFromThreat * 0.25f).GetSafeNormal2D();
+            }
+        }
+        if (IsValid(ClosestDribbleBall) && !ShieldTouchDir.IsNearlyZero() &&
+            ClosestDribbleBall->ApplyControlledTouch(this, ShieldTouchDir *
                 (240.f * (bShieldControl ? 0.55f : 1.f) * TouchSpeedFactor *
                     FMath::Clamp(RunningDribbleTouchScale, 0.1f, 2.f) *
                     (PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->BallControl) : 1.f)), DribbleTouchRangeCm))
