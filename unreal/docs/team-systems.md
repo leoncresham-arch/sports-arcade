@@ -483,3 +483,7 @@ Receiving under pressure now scales imperfect cushioning by current endurance (1
 ### October 21 — close-control shielding and sprint release
 
 The manual controlled-touch direction now moves slightly away from the nearest opposing challenger within 260 cm during effective shielding (75% original intended direction plus 25% away from threat). Standard dribbling remains unchanged. On sprint release, depleted stamina now correctly prevents the exhausted shielding pace benefit. Source regression tests have been updated.
+
+### October 21 — adaptable shielding and passing lane support
+
+Shielded close dribbling now steers away from a defender with strength proportional to their proximity instead of a fixed 25 percent blend. Midfielders also disregard opponents clearly sprinting away from the selected supporting outlet, reducing unnecessary channel changes. Regression source contracts added.
