@@ -473,3 +473,5 @@ Ground-foot receiving now also rejects balls with over 420 cm/s vertical speed. 
 ### October 21 — contested receiving and touch ownership
 
 The ground-foot receiving path now introduces a 20% touch-speed penalty when a nearby defender is within 250 cm at viable contact height, modelling a rushed touch without silently transferring possession. The physics component now refuses to update last touch for impulses below 1 cm/s horizontal correction. Regression checks were added. This remains a gameplay foundation and requires native UE collision, animation and match testing.
+
+Midfield support runners now move their passing outlet laterally away from an opponent occupying the target within 190 cm, with clearance bounded by the authored midfield corridor. This is a positional heuristic, not full pathfinding or passing-lane raycast analysis. Source regression added.
