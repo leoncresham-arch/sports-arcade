@@ -267,8 +267,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const FVector RelativeThreatVelocity = ThreatVelocity.ContainsNaN()
                     ? FVector::ZeroVector : ThreatVelocity - SupportBallVelocity;
                 const bool bThreatClosing = RelativeThreatVelocity.IsNearlyZero() ||
+                    (!RelativeThreatVelocity.ContainsNaN() &&
                     FVector::DotProduct(RelativeThreatVelocity.GetSafeNormal2D(),
-                        (-ThreatDelta).GetSafeNormal2D()) > 0.10f;
+                        (-ThreatDelta).GetSafeNormal2D()) > 0.10f);
                 if (!bThreatReceding && bThreatClosing &&
                     FMath::Abs(ThreatDelta.Z) <= 135.f &&
                     ThreatDelta.SizeSquared2D() < FMath::Square(220.f))
