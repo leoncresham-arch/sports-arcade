@@ -46,6 +46,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
         self.assertIn("FMath::Lerp(180.f, 280.f", BALL_CPP)
         self.assertIn("Correction.GetClampedToMaxSize(TouchDeltaCap)", BALL_CPP)
         self.assertIn("TouchDelta.ContainsNaN()", BALL_CPP)
+        self.assertIn("TouchDelta.SizeSquared2D() < FMath::Square(1.f)", BALL_CPP)
 
     def test_sprint_pivot_penalty_is_bounded_and_agility_sensitive(self):
         self.assertIn("const float SprintTurnAngle", CHARACTER)
