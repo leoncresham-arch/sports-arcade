@@ -18,6 +18,12 @@ class SecondaryPressTests(unittest.TestCase):
         self.assertIn("SecondaryPressureRadiusCm = 1700.f", header)
         self.assertIn("SecondaryPressureStandOffCm = 450.f", header)
 
+    def test_equal_distance_pressers_use_lineup_slot_tie_break(self):
+        self.assertIn("Distance < BestDistance - 1.f", AI_CPP)
+        self.assertIn("Distance < SecondDistance - 1.f", AI_CPP)
+        self.assertIn("FMath::Abs(Distance - BestDistance) <= 1.f", AI_CPP)
+        self.assertIn("FMath::Abs(Distance - SecondDistance) <= 1.f", AI_CPP)
+
     def test_second_defender_is_distinct_and_excludes_keeper(self):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("// The second-closest autonomous outfielder", 1)[1].split(
