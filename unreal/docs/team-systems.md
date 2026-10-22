@@ -566,3 +566,7 @@ An AI carrier with a detected frontal opponent now expands its lateral escape ta
 ### Ground-height awareness in dribble escape
 
 The AI ball carrier excludes opposing actors more than 150 cm vertically from the ball when choosing the nearest frontal defender for its ground dribble escape lane. Existing opponent distance scaling and sideline steering stay in place. The threshold is a source-level heuristic pending Unreal-native movement and ball contact tests.
+
+### Final touchline check for adaptive dribbling
+
+After scaling the AI carrier's lateral escape offset by opposing-player proximity, the controller now checks the actual proposed lane against the configured pitch's touchline clearance. If the proposed lane would exceed that margin, the carrier shifts toward the pitch interior. Small/custom pitches use a nonnegative clearance bound. Source-level regression only; Unreal pathing and dribble quality remain subject to native validation.
