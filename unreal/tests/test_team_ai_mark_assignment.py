@@ -47,6 +47,11 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth", SOURCE)
         self.assertIn("const bool bDefensiveHalf = bBallInsidePitch", SOURCE)
 
+    def test_high_descending_ball_waits_for_ground_control(self):
+        self.assertIn("const bool bBallBeyondGroundControlHeight =", SOURCE)
+        self.assertIn("CurrentPlayerPosition.Z) > 135.f", SOURCE)
+        self.assertIn("!bBallBeyondGroundControlHeight &&", SOURCE)
+
     def test_rising_ball_does_not_trigger_ground_counter_recovery(self):
         self.assertIn("TransitionBallVelocity.Z > 250.f", SOURCE)
         self.assertIn("bOpponentDrivingCounter && !bBallMovingUpward &&", SOURCE)
