@@ -573,7 +573,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 // should not dictate the grounded dribble escape lane.
                 if (FMath::Abs(ThreatOffset.Z) > 150.f) continue;
                 const float DistanceSquared = ThreatOffset.SizeSquared2D();
-                if (DistanceSquared < ThreatDistanceSquared)
+                // Equal-distance opponents should not arbitrarily flip the
+                // carrier's escape side as actor iteration order changes.
+                if (DistanceSquared + 1.f < ThreatDistanceSquared)
                 {
                     ThreatDistanceSquared = DistanceSquared;
                     // A directly central defender requires an intentional
