@@ -604,3 +604,7 @@ Attacking midfield support shifts (slots 5–8) now require the ball to be withi
 ### Forward-run reset on retreating passes
 
 Advanced attackers in lineup slots 9–10 now delay their existing forward-run burst while a finite ball velocity indicates a backward pass travelling faster than 450 cm/s along their attacking axis. This aligns forward runs with the existing retreat-aware midfield support logic. Native Unreal match simulation and tuning remain pending.
+
+### Advanced forward response to lateral switches
+
+Advanced forward-run bursts in slots 9–10 now pause when the ball travels laterally faster than 1100 cm/s, matching the established midfield shape-retention threshold. This avoids runners committing to the old channel while a high-speed switch crosses the pitch. The existing ball height and backward-pass gates remain. Source regression added; native playtests are pending.
