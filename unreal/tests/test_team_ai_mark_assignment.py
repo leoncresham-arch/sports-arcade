@@ -55,7 +55,7 @@ class TeamMarkAssignmentTests(unittest.TestCase):
     def test_friendly_retreat_does_not_trigger_emergency_recovery(self):
         self.assertIn("const ASportsArcadeCharacter* TransitionToucher", SOURCE)
         self.assertIn("const bool bOpponentDrivingCounter = !bAttributedFriendlyControl;", SOURCE)
-        self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", SOURCE)
+        self.assertIn("TransitionToucher->TeamIndex == Footballer->TeamIndex", SOURCE)
         self.assertIn("bOpponentDrivingCounter &&", SOURCE)
 
     def test_rapid_counterattack_uses_shorter_recovery_horizon(self):
