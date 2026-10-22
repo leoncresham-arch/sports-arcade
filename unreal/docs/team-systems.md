@@ -546,3 +546,7 @@ The rapid counterattack trigger also excludes a nearby same-team last-touch carr
 ### Grounded possession evidence for emergency recovery
 
 Rapid counterattack recovery is suppressed for attributed friendly control only when the last-touch player is on the same team and world, within 220 cm horizontally and 135 cm vertically of the ball. An old aerial touch no longer counts as control merely because of horizontal proximity. This is a conservative source heuristic, not an authoritative possession state; native playtests remain deferred.
+
+### Touch ownership in rapid defensive transitions
+
+The accelerated defensive navigation horizon now requires either an opponent-attributed last touch, an absent last-touch player, or invalid last-touch ownership. A former friendly last touch with a separated ball no longer alone counts as an opponent-led counterattack. This is deliberately conservative and will need true possession-state tracking and Unreal gameplay validation.
