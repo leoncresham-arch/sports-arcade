@@ -516,3 +516,7 @@ Primary and secondary pressing selection now uses authored lineup slots to break
 ### Out-of-pitch opponent marker safety
 
 Defensive marking ignores opposing actor coordinates more than 150 cm beyond the configured pitch X/Y boundaries, preventing stray actors or provisional out-of-bounds sequences from drawing an automated marker away from the active defensive shape. Normal marking, pressing, and referee stoppage precedence remain unchanged. Regression: `tests/test_team_ai_mark_assignment.py`; UE gameplay verification remains pending.
+
+### Custom pitch navigation bounds
+
+Final outfield AI navigation targets now derive nonnegative playable half-extents from the configured match pitch. This avoids reversed clamp bounds when a compact/custom pitch is smaller than the 150 cm safety inset. Full-size regulation fields retain their existing inset. Source contract checks were expanded; native navigation behavior still requires Unreal Editor validation.
