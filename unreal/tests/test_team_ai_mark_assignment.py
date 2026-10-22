@@ -47,6 +47,12 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth", SOURCE)
         self.assertIn("const bool bDefensiveHalf = bBallInsidePitch", SOURCE)
 
+    def test_friendly_retreat_does_not_trigger_emergency_recovery(self):
+        self.assertIn("const ASportsArcadeCharacter* TransitionToucher", SOURCE)
+        self.assertIn("const bool bOpponentDrivingCounter =", SOURCE)
+        self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", SOURCE)
+        self.assertIn("bOpponentDrivingCounter &&", SOURCE)
+
     def test_rapid_counterattack_uses_shorter_recovery_horizon(self):
         self.assertIn("TransitionBallVelocity.X * TeamAttackSign < -650.f", SOURCE)
         self.assertIn("!TransitionBallVelocity.ContainsNaN()", SOURCE)
