@@ -582,7 +582,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             {
                 CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f;
             }
-            Target.Y += CarrierEscapeSide * 180.f;
+            // Under pressure, shift the carrier's navigation lane further
+            // away from the selected opponent without changing ball impulse.
+            const float EscapeLaneOffsetCm = CarrierEscapeSide != 0.f
+                ? FMath::Clamp(180.f + (500.f - FMath::Sqrt(ThreatDistanceSquared)) * 0.4f,
+                    180.f, 320.f) : 0.f;
+            Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;
         }
         // Delay the controlled touch if a defender is directly in the running lane.
         // Navigation remains active while the footballer chooses an escape route.
