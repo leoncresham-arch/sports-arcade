@@ -1001,8 +1001,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // Preserve ordinary shape until aerial flight resolves.
     const bool bBallMovingUpward = !TransitionBallVelocity.ContainsNaN() &&
         TransitionBallVelocity.Z > 250.f;
+    // An airborne ball still descending from a clearance is not a ground
+    // dribble. Do not classify it as a rapid counter until it returns near
+    // the players' contact height.
+    const bool bBallBeyondGroundControlHeight = bBallInsidePitch &&
+        FMath::Abs(Ball->GetActorLocation().Z -
+            CurrentPlayerPosition.Z) > 135.f;
     const bool bRapidDefensiveTransition = bDefensiveHalf &&
         bOpponentDrivingCounter && !bBallMovingUpward &&
+        !bBallBeyondGroundControlHeight &&
         !TransitionBallVelocity.ContainsNaN() &&
         TransitionBallVelocity.X * TeamAttackSign < -650.f;
     const float MaximumDecisionTargetDistanceCm =
