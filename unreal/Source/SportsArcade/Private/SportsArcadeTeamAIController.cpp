@@ -590,6 +590,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float EscapeLaneOffsetCm = CarrierEscapeSide != 0.f
                 ? FMath::Clamp(180.f + (500.f - FMath::Sqrt(ThreatDistanceSquared)) * 0.4f,
                     180.f, 320.f) : 0.f;
+            // Re-check the final infield clearance after distance scaling.
+            // The earlier 350 cm probe may not reflect a custom narrow pitch.
+            const float CarrierSidelineLimit = FMath::Max(0.f, HalfWidth - 250.f);
+            const float ProposedEscapeY = Ball->GetActorLocation().Y +
+                CarrierEscapeSide * EscapeLaneOffsetCm;
+            if (FMath::Abs(ProposedEscapeY) > CarrierSidelineLimit &&
+                CarrierEscapeSide != 0.f)
+            {
+                CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f;
+            }
             Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;
         }
         // Delay the controlled touch if a defender is directly in the running lane.
