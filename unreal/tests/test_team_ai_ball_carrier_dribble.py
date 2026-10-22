@@ -4,6 +4,11 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_near_central_defender_favors_infield_escape(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("FMath::Abs(ThreatOffset.Y) <= 60.f", source)
+        self.assertIn("Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f", source)
+
     def test_escape_displacement_requires_finite_coordinates(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("FMath::IsFinite(BoundedLaneY) && FMath::IsFinite(CurrentLaneY)", source)
