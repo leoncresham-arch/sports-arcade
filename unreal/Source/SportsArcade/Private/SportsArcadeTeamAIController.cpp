@@ -956,6 +956,23 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     const float SafeHalfWidth = FMath::Max(0.f, HalfWidth - 150.f);
     Target.X = FMath::Clamp(Target.X, -SafeHalfLength, SafeHalfLength);
     Target.Y = FMath::Clamp(Target.Y, -SafeHalfWidth, SafeHalfWidth);
+    // A formation target may be inside the pitch yet far beyond the player's
+    // reachable position for this decision step. Keep navigation goals local
+    // enough to re-evaluate when play changes, without teleporting the pawn.
+    const FVector CurrentPlayerPosition = Footballer->GetActorLocation();
+    const FVector PlanarTargetDelta(Target.X - CurrentPlayerPosition.X,
+        Target.Y - CurrentPlayerPosition.Y, 0.f);
+    const float MaximumDecisionTargetDistanceCm = 1800.f;
+    if (PlanarTargetDelta.SizeSquared2D() >
+        FMath::Square(MaximumDecisionTargetDistanceCm))
+    {
+        const FVector BoundedDelta = PlanarTargetDelta.GetClampedToMaxSize2D(
+            MaximumDecisionTargetDistanceCm);
+        Target.X = FMath::Clamp(CurrentPlayerPosition.X + BoundedDelta.X,
+            -SafeHalfLength, SafeHalfLength);
+        Target.Y = FMath::Clamp(CurrentPlayerPosition.Y + BoundedDelta.Y,
+            -SafeHalfWidth, SafeHalfWidth);
+    }
     // Avoid submitting an identical path request when already inside the acceptance radius.
     if (FVector::DistSquared2D(Footballer->GetActorLocation(), Target) <= FMath::Square(125.f))
     {
