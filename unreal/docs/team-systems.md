@@ -562,3 +562,7 @@ Emergency ground-counter navigation also waits when the ball is more than 135 cm
 ### Pressure-sensitive AI dribbling lane
 
 An AI carrier with a detected frontal opponent now expands its lateral escape target from 180 cm up to 320 cm as that threat closes from 500 cm toward contact. This influences movement navigation rather than adding an instantaneous lateral ball impulse. Existing sideline avoidance and challenged-carrier pass outlet logic remain. Source-regression coverage lives in `tests/test_team_ai_ball_carrier_dribble.py`; tuning and path feasibility require future native Unreal gameplay tests.
+
+### Ground-height awareness in dribble escape
+
+The AI ball carrier excludes opposing actors more than 150 cm vertically from the ball when choosing the nearest frontal defender for its ground dribble escape lane. Existing opponent distance scaling and sideline steering stay in place. The threshold is a source-level heuristic pending Unreal-native movement and ball contact tests.
