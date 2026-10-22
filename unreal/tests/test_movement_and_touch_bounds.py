@@ -27,6 +27,13 @@ class MovementBallSafetyTests(unittest.TestCase):
         self.assertIn("if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;",
                       CHARACTER[start:start + 250])
 
+    def test_opposing_receiver_motion_reduces_control_authority(self):
+        self.assertIn("const FVector PlayerTravel = Player->GetVelocity();", BALL)
+        self.assertIn("if (PlayerTravel.ContainsNaN()) return false;", BALL)
+        self.assertIn("const float ClosingSpeed =", BALL)
+        self.assertIn("const float ReceptionMovementFactor = FMath::Lerp(1.f, 0.85f", BALL)
+        self.assertIn("TouchDeltaCap * ReceptionMovementFactor *", BALL)
+
     def test_reverse_direction_touches_respect_ball_momentum(self):
         self.assertIn("const float ReverseAlignment = FVector::DotProduct", BALL)
         self.assertIn("IncomingSpeed > 300.f", BALL)
