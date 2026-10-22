@@ -569,6 +569,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     Threat->GetActorLocation().ContainsNaN()) continue;
                 const FVector ThreatOffset = Threat->GetActorLocation() - Ball->GetActorLocation();
                 if (ThreatOffset.X * AttackSign < -100.f) continue;
+                // A defender far above the carrier (for example mid-jump)
+                // should not dictate the grounded dribble escape lane.
+                if (FMath::Abs(ThreatOffset.Z) > 150.f) continue;
                 const float DistanceSquared = ThreatOffset.SizeSquared2D();
                 if (DistanceSquared < ThreatDistanceSquared)
                 {
