@@ -4,6 +4,12 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_elevated_defender_does_not_distort_ground_escape(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("if (FMath::Abs(ThreatOffset.Z) > 150.f) continue;", source)
+        self.assertLess(source.index("FMath::Abs(ThreatOffset.Z) > 150.f"),
+                        source.index("const float EscapeLaneOffsetCm ="))
+
     def test_carrier_escape_scales_with_frontal_pressure(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("const float EscapeLaneOffsetCm =", source)
