@@ -997,8 +997,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         (!IsValid(TransitionToucher) ||
          TransitionToucher->GetWorld() != GetWorld() ||
          TransitionToucher->TeamIndex != Footballer->TeamIndex);
+    // A strongly rising ball is not a grounded dribble or driven counter.
+    // Preserve ordinary shape until aerial flight resolves.
+    const bool bBallMovingUpward = !TransitionBallVelocity.ContainsNaN() &&
+        TransitionBallVelocity.Z > 250.f;
     const bool bRapidDefensiveTransition = bDefensiveHalf &&
-        bOpponentDrivingCounter &&
+        bOpponentDrivingCounter && !bBallMovingUpward &&
         !TransitionBallVelocity.ContainsNaN() &&
         TransitionBallVelocity.X * TeamAttackSign < -650.f;
     const float MaximumDecisionTargetDistanceCm =
