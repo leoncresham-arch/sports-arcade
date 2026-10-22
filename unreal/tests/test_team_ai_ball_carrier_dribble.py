@@ -4,6 +4,10 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_escape_displacement_requires_finite_coordinates(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("FMath::IsFinite(BoundedLaneY) && FMath::IsFinite(CurrentLaneY)", source)
+
     def test_pressure_escape_clamps_actual_lateral_displacement(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("const float BoundedLaneY = FMath::Clamp(DesiredLaneY,", source)
