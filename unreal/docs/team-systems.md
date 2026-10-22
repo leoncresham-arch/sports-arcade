@@ -528,3 +528,7 @@ The AI controller now caps the distance of each newly requested outfield navigat
 ### Grounded team navigation target
 
 Final AI movement requests now use the current footballer's vertical coordinate after computing formation, cover and bounded planar targets. This prevents a stale or elevated formation Z value from becoming a raw navigation request. Unreal navigation projection, slopes and physical step handling remain engine responsibilities and need native testing. Regression: `tests/test_team_ai_mark_assignment.py`.
+
+### Defensive-half planning interval
+
+The bounded local AI navigation target now uses a shorter 1350 cm horizon when the ball is in the team's defensive half, and the previous 1800 cm horizon while attacking. This increases the frequency of tactical reconsideration during defensive recovery without changing the existing decision timer or pawn movement speed. The feature is source-verified only; UE5.5 navigation still needs gameplay validation.
