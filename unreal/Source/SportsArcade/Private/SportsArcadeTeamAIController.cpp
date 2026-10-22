@@ -973,8 +973,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth;
     const bool bDefensiveHalf = bBallInsidePitch &&
         Ball->GetActorLocation().X * TeamAttackSign < 0.f;
+    // A fast counterattack in our half is not the same as a settled
+    // defensive recovery. Ball travel toward our own goal shortens the
+    // tactical navigation horizon so teammates reassess cover sooner.
+    const FVector TransitionBallVelocity = bBallInsidePitch
+        ? Ball->GetVelocity() : FVector::ZeroVector;
+    const bool bRapidDefensiveTransition = bDefensiveHalf &&
+        !TransitionBallVelocity.ContainsNaN() &&
+        TransitionBallVelocity.X * TeamAttackSign < -650.f;
     const float MaximumDecisionTargetDistanceCm =
-        bDefensiveHalf ? 1350.f : 1800.f;
+        bRapidDefensiveTransition ? 1050.f : (bDefensiveHalf ? 1350.f : 1800.f);
     if (PlanarTargetDelta.SizeSquared2D() >
         FMath::Square(MaximumDecisionTargetDistanceCm))
     {
