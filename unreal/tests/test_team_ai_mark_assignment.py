@@ -41,8 +41,13 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertLess(SOURCE.rindex("Target.Z = CurrentPlayerPosition.Z;"),
                         SOURCE.rindex("MoveToLocation(Target, 125.f"))
 
+    def test_recovery_horizon_shorter_inside_defensive_half(self):
+        self.assertIn("const float TeamAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f", SOURCE)
+        self.assertIn("Ball->GetActorLocation().X * TeamAttackSign < 0.f", SOURCE)
+        self.assertIn("bDefensiveHalf ? 1350.f : 1800.f", SOURCE)
+
     def test_reassessment_horizon_bounds_ai_navigation(self):
-        self.assertIn("const float MaximumDecisionTargetDistanceCm = 1800.f", SOURCE)
+        self.assertIn("bDefensiveHalf ? 1350.f : 1800.f", SOURCE)
         self.assertIn("PlanarTargetDelta.GetClampedToMaxSize2D(", SOURCE)
         self.assertIn("CurrentPlayerPosition.X + BoundedDelta.X", SOURCE)
         self.assertIn("CurrentPlayerPosition.Y + BoundedDelta.Y", SOURCE)
