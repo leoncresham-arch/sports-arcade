@@ -229,6 +229,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Fast lateral switches need a settled receiving phase before
             // both advanced runners attack the previous ball channel.
             FMath::Abs(Ball->GetVelocity().Y) <= 1100.f &&
+            // Runners must be within useful combination-play range;
+            // an attributed teammate on the other side of the pitch is not
+            // a reason to abandon the current attacking formation.
+            FVector::DistSquared2D(Footballer->GetActorLocation(),
+                Ball->GetActorLocation()) <= FMath::Square(3200.f) &&
             Footballer->GetActorLocation().X * AttackSign <
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
         {
