@@ -47,13 +47,18 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth", SOURCE)
         self.assertIn("const bool bDefensiveHalf = bBallInsidePitch", SOURCE)
 
+    def test_rapid_counterattack_uses_shorter_recovery_horizon(self):
+        self.assertIn("TransitionBallVelocity.X * TeamAttackSign < -650.f", SOURCE)
+        self.assertIn("!TransitionBallVelocity.ContainsNaN()", SOURCE)
+        self.assertIn("bRapidDefensiveTransition ? 1050.f", SOURCE)
+
     def test_recovery_horizon_shorter_inside_defensive_half(self):
         self.assertIn("const float TeamAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f", SOURCE)
         self.assertIn("Ball->GetActorLocation().X * TeamAttackSign < 0.f", SOURCE)
-        self.assertIn("bDefensiveHalf ? 1350.f : 1800.f", SOURCE)
+        self.assertIn("bRapidDefensiveTransition ? 1050.f : (bDefensiveHalf ? 1350.f : 1800.f)", SOURCE)
 
     def test_reassessment_horizon_bounds_ai_navigation(self):
-        self.assertIn("bDefensiveHalf ? 1350.f : 1800.f", SOURCE)
+        self.assertIn("bRapidDefensiveTransition ? 1050.f : (bDefensiveHalf ? 1350.f : 1800.f)", SOURCE)
         self.assertIn("PlanarTargetDelta.GetClampedToMaxSize2D(", SOURCE)
         self.assertIn("CurrentPlayerPosition.X + BoundedDelta.X", SOURCE)
         self.assertIn("CurrentPlayerPosition.Y + BoundedDelta.Y", SOURCE)
