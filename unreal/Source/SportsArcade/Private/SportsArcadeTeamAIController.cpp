@@ -962,7 +962,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     const FVector CurrentPlayerPosition = Footballer->GetActorLocation();
     const FVector PlanarTargetDelta(Target.X - CurrentPlayerPosition.X,
         Target.Y - CurrentPlayerPosition.Y, 0.f);
-    const float MaximumDecisionTargetDistanceCm = 1800.f;
+    // A recovering side needs faster compact support in its defensive half;
+    // preserve the usual wider decision horizon while attacking.
+    const float TeamAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
+    const bool bDefensiveHalf = IsValid(Ball) &&
+        Ball->GetActorLocation().X * TeamAttackSign < 0.f;
+    const float MaximumDecisionTargetDistanceCm =
+        bDefensiveHalf ? 1350.f : 1800.f;
     if (PlanarTargetDelta.SizeSquared2D() >
         FMath::Square(MaximumDecisionTargetDistanceCm))
     {
