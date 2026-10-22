@@ -950,8 +950,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         StopMovement();
         return;
     }
-    Target.X = FMath::Clamp(Target.X, -HalfLength + 150.f, HalfLength - 150.f);
-    Target.Y = FMath::Clamp(Target.Y, -HalfWidth + 150.f, HalfWidth - 150.f);
+    // Defensive cover and attacking support must remain inside the actual
+    // match pitch, even when a custom-sized field is configured.
+    const float SafeHalfLength = FMath::Max(0.f, HalfLength - 150.f);
+    const float SafeHalfWidth = FMath::Max(0.f, HalfWidth - 150.f);
+    Target.X = FMath::Clamp(Target.X, -SafeHalfLength, SafeHalfLength);
+    Target.Y = FMath::Clamp(Target.Y, -SafeHalfWidth, SafeHalfWidth);
     // Avoid submitting an identical path request when already inside the acceptance radius.
     if (FVector::DistSquared2D(Footballer->GetActorLocation(), Target) <= FMath::Square(125.f))
     {
