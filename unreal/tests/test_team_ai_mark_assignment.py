@@ -36,6 +36,11 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(ThreatPosition.X) > HalfLength + 150.f", SOURCE)
         self.assertIn("FMath::Abs(ThreatPosition.Y) > HalfWidth + 150.f", SOURCE)
 
+    def test_final_navigation_target_uses_player_ground_plane(self):
+        self.assertIn("Target.Z = CurrentPlayerPosition.Z;", SOURCE)
+        self.assertLess(SOURCE.rindex("Target.Z = CurrentPlayerPosition.Z;"),
+                        SOURCE.rindex("MoveToLocation(Target, 125.f"))
+
     def test_reassessment_horizon_bounds_ai_navigation(self):
         self.assertIn("const float MaximumDecisionTargetDistanceCm = 1800.f", SOURCE)
         self.assertIn("PlanarTargetDelta.GetClampedToMaxSize2D(", SOURCE)
