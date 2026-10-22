@@ -524,3 +524,7 @@ Final outfield AI navigation targets now derive nonnegative playable half-extent
 ### Bounded off-ball navigation horizon
 
 The AI controller now caps the distance of each newly requested outfield navigation target to 1800 cm from the player's current horizontal position, before applying final pitch constraints again. This keeps long formation recovery and attacking support paths subject to periodic tactical reassessment, rather than committing the controller to a distant one-step target. It does not change player teleporting, velocity, animation or pathfinding implementation. Source regression protects the decision target; genuine UE navigation results remain untested.
+
+### Grounded team navigation target
+
+Final AI movement requests now use the current footballer's vertical coordinate after computing formation, cover and bounded planar targets. This prevents a stale or elevated formation Z value from becoming a raw navigation request. Unreal navigation projection, slopes and physical step handling remain engine responsibilities and need native testing. Regression: `tests/test_team_ai_mark_assignment.py`.
