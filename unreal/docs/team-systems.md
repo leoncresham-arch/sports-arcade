@@ -536,3 +536,7 @@ The bounded local AI navigation target now uses a shorter 1350 cm horizon when t
 ### Boundary-aware transition horizons
 
 The shorter defensive-half AI planning horizon now applies only when the ball has finite coordinates within the configured pitch dimensions. Stray, out-of-bounds ball samples do not trigger the defensive transition selector. This remains a source-verified tactical heuristic, not a compiled Unreal match simulation.
+
+### Rapid counterattack recovery
+
+When the ball is valid, inside a team's defensive half, and moving toward its goal faster than 650 cm/s along the pitch axis, the AI local movement target horizon is further reduced from 1350 to 1050 cm. This is a conservative tactical re-planning heuristic; established attack horizons and goalkeeper movement remain unchanged. It is not yet a coordinated counter-press or a UE gameplay-validated behavior.
