@@ -217,6 +217,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // Forward players make a modest run beyond the ball during attributed
         // attacking possession. Keep defenders/midfield formation unchanged.
         if (RecentTouchTeam == Footballer->TeamIndex && Slot >= 9 && Slot <= 10 &&
+            // Wait for a grounded or settling attacking sequence before
+            // asking both forwards to run beyond a high clearance.
+            FMath::Abs(Ball->GetActorLocation().Z -
+                Footballer->GetActorLocation().Z) <= 160.f &&
             Ball->GetActorLocation().X * AttackSign > 0.f &&
             Footballer->GetActorLocation().X * AttackSign <
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
