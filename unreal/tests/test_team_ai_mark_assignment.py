@@ -47,6 +47,10 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth", SOURCE)
         self.assertIn("const bool bDefensiveHalf = bBallInsidePitch", SOURCE)
 
+    def test_old_friendly_touch_is_not_opponent_counter_evidence(self):
+        self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", SOURCE)
+        self.assertIn("const bool bOpponentDrivingCounter = !bAttributedFriendlyControl &&", SOURCE)
+
     def test_aerial_touch_does_not_suppress_defensive_recovery(self):
         self.assertIn("const bool bAttributedFriendlyControl =", SOURCE)
         self.assertIn("TransitionToucher->GetActorLocation().Z -", SOURCE)
@@ -54,7 +58,7 @@ class TeamMarkAssignmentTests(unittest.TestCase):
 
     def test_friendly_retreat_does_not_trigger_emergency_recovery(self):
         self.assertIn("const ASportsArcadeCharacter* TransitionToucher", SOURCE)
-        self.assertIn("const bool bOpponentDrivingCounter = !bAttributedFriendlyControl;", SOURCE)
+        self.assertIn("const bool bOpponentDrivingCounter = !bAttributedFriendlyControl &&", SOURCE)
         self.assertIn("TransitionToucher->TeamIndex == Footballer->TeamIndex", SOURCE)
         self.assertIn("bOpponentDrivingCounter &&", SOURCE)
 
