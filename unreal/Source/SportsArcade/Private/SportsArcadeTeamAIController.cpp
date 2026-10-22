@@ -991,7 +991,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Ball->GetActorLocation().Z) <= 135.f &&
         FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
             Ball->GetActorLocation()) <= FMath::Square(220.f);
-    const bool bOpponentDrivingCounter = !bAttributedFriendlyControl;
+    // A nearby opponent with the last touch is stronger evidence of a
+    // live counterattack than an old unattributed loose-ball trajectory.
+    const bool bOpponentDrivingCounter = !bAttributedFriendlyControl &&
+        (!IsValid(TransitionToucher) ||
+         TransitionToucher->GetWorld() != GetWorld() ||
+         TransitionToucher->TeamIndex != Footballer->TeamIndex);
     const bool bRapidDefensiveTransition = bDefensiveHalf &&
         bOpponentDrivingCounter &&
         !TransitionBallVelocity.ContainsNaN() &&
