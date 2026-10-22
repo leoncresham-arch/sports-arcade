@@ -540,3 +540,5 @@ The shorter defensive-half AI planning horizon now applies only when the ball ha
 ### Rapid counterattack recovery
 
 When the ball is valid, inside a team's defensive half, and moving toward its goal faster than 650 cm/s along the pitch axis, the AI local movement target horizon is further reduced from 1350 to 1050 cm. This is a conservative tactical re-planning heuristic; established attack horizons and goalkeeper movement remain unchanged. It is not yet a coordinated counter-press or a UE gameplay-validated behavior.
+
+The rapid counterattack trigger also excludes a nearby same-team last-touch carrier, avoiding emergency recovery decisions during an attributed teammate's intentional backward carry or pass. A loose ball may still activate the goalward-motion trigger because touch history alone cannot determine current possession.
