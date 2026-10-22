@@ -47,6 +47,10 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth", SOURCE)
         self.assertIn("const bool bDefensiveHalf = bBallInsidePitch", SOURCE)
 
+    def test_rising_ball_does_not_trigger_ground_counter_recovery(self):
+        self.assertIn("TransitionBallVelocity.Z > 250.f", SOURCE)
+        self.assertIn("bOpponentDrivingCounter && !bBallMovingUpward &&", SOURCE)
+
     def test_old_friendly_touch_is_not_opponent_counter_evidence(self):
         self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", SOURCE)
         self.assertIn("const bool bOpponentDrivingCounter = !bAttributedFriendlyControl &&", SOURCE)
