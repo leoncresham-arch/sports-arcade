@@ -14,6 +14,13 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
         self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
+    def test_aerial_clearance_does_not_trigger_grounded_forward_burst(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Forward players make a modest run", 1)[1].split(
+            "// Central midfielders supply", 1
+        )[0]
+        self.assertIn("Footballer->GetActorLocation().Z) <= 160.f", section)
+
     def test_runs_require_attributed_attack_and_forward_slots(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Forward players make a modest run", 1)[1].split(
