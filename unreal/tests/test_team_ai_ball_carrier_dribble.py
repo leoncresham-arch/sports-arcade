@@ -4,6 +4,10 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_defender_distance_selection_has_deadband(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("if (DistanceSquared + 1.f < ThreatDistanceSquared)", source)
+
     def test_near_central_defender_favors_infield_escape(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("FMath::Abs(ThreatOffset.Y) <= 60.f", source)
