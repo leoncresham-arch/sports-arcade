@@ -608,3 +608,7 @@ Advanced attackers in lineup slots 9–10 now delay their existing forward-run b
 ### Advanced forward response to lateral switches
 
 Advanced forward-run bursts in slots 9–10 now pause when the ball travels laterally faster than 1100 cm/s, matching the established midfield shape-retention threshold. This avoids runners committing to the old channel while a high-speed switch crosses the pitch. The existing ball height and backward-pass gates remain. Source regression added; native playtests are pending.
+
+### Local combination-play forward runs
+
+Advanced attacking runs in slots 9–10 now require the footballer to be within 3200 cm of the ball. This keeps far-away forwards anchored in formation during attributed possession on the other side of the pitch, while preserving ball-height, retreating-pass and fast-switch gates. Source regression added; UE native playtesting remains deferred.
