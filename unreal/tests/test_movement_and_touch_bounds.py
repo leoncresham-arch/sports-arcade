@@ -38,7 +38,7 @@ class MovementBallSafetyTests(unittest.TestCase):
         self.assertIn("const float ReverseAlignment = FVector::DotProduct", BALL)
         self.assertIn("IncomingSpeed > 300.f", BALL)
         self.assertIn("FMath::Lerp(1.f, 0.75f, ReverseDifficulty)", BALL)
-        self.assertIn("TouchDeltaCap * FMath::Lerp", BALL)
+        self.assertIn("TouchDeltaCap * ReceptionMovementFactor * FMath::Lerp", BALL)
 
     def test_fast_incoming_ball_reduces_single_touch_correction(self):
         self.assertIn("const float ReceptionDifficulty = FMath::Clamp(", BALL)
