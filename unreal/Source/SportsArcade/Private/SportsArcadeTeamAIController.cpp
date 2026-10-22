@@ -575,7 +575,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 const float DistanceSquared = ThreatOffset.SizeSquared2D();
                 // Equal-distance opponents should not arbitrarily flip the
                 // carrier's escape side as actor iteration order changes.
-                if (DistanceSquared + 1.f < ThreatDistanceSquared)
+                if (DistanceSquared + FMath::Square(10.f) < ThreatDistanceSquared)
                 {
                     ThreatDistanceSquared = DistanceSquared;
                     // A directly central defender requires an intentional
