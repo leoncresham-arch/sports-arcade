@@ -983,12 +983,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // attributed friendly dribble should not trigger emergency shape.
     const ASportsArcadeCharacter* TransitionToucher = bBallInsidePitch
         ? Ball->GetLastTouchPlayer() : nullptr;
-    const bool bOpponentDrivingCounter = !IsValid(TransitionToucher) ||
-        TransitionToucher->GetWorld() != GetWorld() ||
-        TransitionToucher->TeamIndex != Footballer->TeamIndex ||
-        TransitionToucher->GetActorLocation().ContainsNaN() ||
+    const bool bAttributedFriendlyControl = IsValid(TransitionToucher) &&
+        TransitionToucher->GetWorld() == GetWorld() &&
+        TransitionToucher->TeamIndex == Footballer->TeamIndex &&
+        !TransitionToucher->GetActorLocation().ContainsNaN() &&
+        FMath::Abs(TransitionToucher->GetActorLocation().Z -
+            Ball->GetActorLocation().Z) <= 135.f &&
         FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
-            Ball->GetActorLocation()) > FMath::Square(220.f);
+            Ball->GetActorLocation()) <= FMath::Square(220.f);
+    const bool bOpponentDrivingCounter = !bAttributedFriendlyControl;
     const bool bRapidDefensiveTransition = bDefensiveHalf &&
         bOpponentDrivingCounter &&
         !TransitionBallVelocity.ContainsNaN() &&
