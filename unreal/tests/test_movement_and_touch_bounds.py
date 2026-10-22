@@ -37,14 +37,14 @@ class MovementBallSafetyTests(unittest.TestCase):
         self.assertIn("const float ReceptionDifficulty = FMath::Clamp(", BALL)
         self.assertIn("(IncomingSpeed - 900.f) / 2100.f", BALL)
         self.assertIn("FMath::Lerp(1.f, 0.65f, ReceptionDifficulty)", BALL)
-        self.assertIn("Correction.GetClampedToMaxSize(\n        TouchDeltaCap * FMath::Lerp(1.f, 0.75f, ReverseDifficulty))", BALL)
+        self.assertIn("Correction.GetClampedToMaxSize(\n        TouchDeltaCap * ReceptionMovementFactor * FMath::Lerp(1.f, 0.75f, ReverseDifficulty))", BALL)
 
     def test_ground_touch_intent_and_impulse_are_bounded(self):
         start = BALL.index("bool ASportsArcadeBall::ApplyControlledTouch")
         body = BALL[start:]
         self.assertIn("DesiredVelocity.ContainsNaN()", body)
         self.assertIn(".GetClampedToMaxSize2D(1400.f)", body)
-        self.assertIn("Correction.GetClampedToMaxSize(\n        TouchDeltaCap * FMath::Lerp(1.f, 0.75f, ReverseDifficulty))", body)
+        self.assertIn("Correction.GetClampedToMaxSize(\n        TouchDeltaCap * ReceptionMovementFactor * FMath::Lerp(1.f, 0.75f, ReverseDifficulty))", body)
         self.assertIn("if (TouchDelta.SizeSquared2D() < FMath::Square(1.f)) return false;", body)
         self.assertLess(body.index("GetClampedToMaxSize2D(1400.f)"),
                         body.index("CollisionSphere->AddImpulse(TouchDelta * BallMassKg)"))
