@@ -550,3 +550,7 @@ Rapid counterattack recovery is suppressed for attributed friendly control only 
 ### Touch ownership in rapid defensive transitions
 
 The accelerated defensive navigation horizon now requires either an opponent-attributed last touch, an absent last-touch player, or invalid last-touch ownership. A former friendly last touch with a separated ball no longer alone counts as an opponent-led counterattack. This is deliberately conservative and will need true possession-state tracking and Unreal gameplay validation.
+
+### Rising aerial ball transition guard
+
+A ball rising faster than 250 cm/s vertically no longer triggers the shortest emergency ground-counter positioning horizon, even if its horizontal trajectory points toward goal. Standard defensive shape remains available while the aerial sequence develops. The threshold is provisional pending native Unreal gameplay testing.
