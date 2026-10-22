@@ -226,6 +226,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // attacking line should be resetting behind the ball.
             !Ball->GetVelocity().ContainsNaN() &&
             Ball->GetVelocity().X * AttackSign >= -450.f &&
+            // Fast lateral switches need a settled receiving phase before
+            // both advanced runners attack the previous ball channel.
+            FMath::Abs(Ball->GetVelocity().Y) <= 1100.f &&
             Footballer->GetActorLocation().X * AttackSign <
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
         {
