@@ -4,6 +4,13 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_carrier_escape_scales_with_frontal_pressure(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("const float EscapeLaneOffsetCm =", source)
+        self.assertIn("FMath::Sqrt(ThreatDistanceSquared)", source)
+        self.assertIn("180.f, 320.f", source)
+        self.assertIn("Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;", source)
+
     def test_challenged_carrier_has_teammate_outlet(self):
         source = SOURCE.read_text(encoding="utf-8")
         block = source.split("if (bSelfControllingBall && bImmediateChallenge", 1)[1].split(
