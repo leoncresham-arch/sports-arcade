@@ -978,7 +978,19 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // tactical navigation horizon so teammates reassess cover sooner.
     const FVector TransitionBallVelocity = bBallInsidePitch
         ? Ball->GetVelocity() : FVector::ZeroVector;
+    // Only shorten recovery for a counter when the ball is genuinely
+    // travelling toward our goal; a fast backwards teammate pass or
+    // attributed friendly dribble should not trigger emergency shape.
+    const ASportsArcadeCharacter* TransitionToucher = bBallInsidePitch
+        ? Ball->GetLastTouchPlayer() : nullptr;
+    const bool bOpponentDrivingCounter = !IsValid(TransitionToucher) ||
+        TransitionToucher->GetWorld() != GetWorld() ||
+        TransitionToucher->TeamIndex != Footballer->TeamIndex ||
+        TransitionToucher->GetActorLocation().ContainsNaN() ||
+        FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
+            Ball->GetActorLocation()) > FMath::Square(220.f);
     const bool bRapidDefensiveTransition = bDefensiveHalf &&
+        bOpponentDrivingCounter &&
         !TransitionBallVelocity.ContainsNaN() &&
         TransitionBallVelocity.X * TeamAttackSign < -650.f;
     const float MaximumDecisionTargetDistanceCm =
