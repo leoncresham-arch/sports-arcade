@@ -578,3 +578,7 @@ The pressure-adaptive AI carrier escape now clamps its actual lateral displaceme
 ### Finite carrier lateral correction
 
 The bounded AI carrier sidestep now applies its lateral correction only when the ball-derived current lane and clamped destination are finite. This complements the final navigation target validation and prevents an invalid intermediate correction from reaching the movement planner. Source tests cover this guard; native physics behavior has not yet been executed.
+
+### Central pressure escape preference
+
+If the nearest frontal ground-level defender is within 60 cm of the ball's lateral coordinate, the AI carrier prefers the infield escape direction, rather than arbitrarily choosing based on an almost-zero opponent Y offset. Existing sideline clamps, pressure distance and outlet passing stay in force. Source tests are not a substitute for Unreal gameplay validation.
