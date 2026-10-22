@@ -520,3 +520,7 @@ Defensive marking ignores opposing actor coordinates more than 150 cm beyond the
 ### Custom pitch navigation bounds
 
 Final outfield AI navigation targets now derive nonnegative playable half-extents from the configured match pitch. This avoids reversed clamp bounds when a compact/custom pitch is smaller than the 150 cm safety inset. Full-size regulation fields retain their existing inset. Source contract checks were expanded; native navigation behavior still requires Unreal Editor validation.
+
+### Bounded off-ball navigation horizon
+
+The AI controller now caps the distance of each newly requested outfield navigation target to 1800 cm from the player's current horizontal position, before applying final pitch constraints again. This keeps long formation recovery and attacking support paths subject to periodic tactical reassessment, rather than committing the controller to a distant one-step target. It does not change player teleporting, velocity, animation or pathfinding implementation. Source regression protects the decision target; genuine UE navigation results remain untested.
