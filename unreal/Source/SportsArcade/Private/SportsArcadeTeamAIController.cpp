@@ -235,6 +235,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // ball carrier enters the attacking half, but never sprint beyond the
         // ball or abandon their base formation for a distant possession.
         if (RecentTouchTeam == Footballer->TeamIndex && Slot >= 5 && Slot <= 8 &&
+            // Avoid sending midfield passing support beyond a high clearance
+            // that cannot yet be received as a grounded possession.
+            FMath::Abs(Ball->GetActorLocation().Z -
+                Footballer->GetActorLocation().Z) <= 160.f &&
             Ball->GetActorLocation().X * AttackSign > 0.f &&
             FVector::DistSquared2D(Footballer->GetActorLocation(),
                 Ball->GetActorLocation()) < FMath::Square(2400.f))
