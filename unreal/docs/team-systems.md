@@ -588,3 +588,7 @@ If the nearest frontal ground-level defender is within 60 cm of the ball's later
 Nearest frontal opponent selection now requires a meaningful improvement in squared distance (greater than 100 cm² (the square of 10 cm)) before changing the selected dribble escape threat. This tiny tolerance reduces near-equal distance selection noise without changing the 500 cm detection radius or central infield preference. Source regression is included; Unreal native gameplay still needs validation.
 
 The nearest-frontal-defender selection tolerance was adjusted from 1 cm² to 100 cm² because the original value was too small to meaningfully filter movement sampling noise. This remains a per-decision spatial heuristic, not a time-based persistent target lock.
+
+### Carrier threat radius after hysteresis
+
+Defender selection now explicitly requires the opponent to be within the carrier's 500 cm frontal-pressure search radius, in addition to the squared-distance deadband. This prevents the hysteresis comparison from accidentally changing the intended search boundary. Source regression added; native Unreal gameplay remains deferred.
