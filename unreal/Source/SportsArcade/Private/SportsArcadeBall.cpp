@@ -148,6 +148,19 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     const float TouchDeltaCap = FMath::Lerp(180.f, 280.f,
         FMath::Clamp(IncomingSpeed / 1000.f, 0.f, 1.f)) *
         FMath::Lerp(1.f, 0.65f, ReceptionDifficulty);
+    // A grounded receiver travelling quickly in the opposite direction has
+    // less time to get a clean foot behind the ball. Do not punish a player
+    // simply running alongside the incoming pass.
+    const FVector PlayerTravel = Player->GetVelocity();
+    if (PlayerTravel.ContainsNaN()) return false;
+    const FVector HorizontalPlayerTravel(PlayerTravel.X, PlayerTravel.Y, 0.f);
+    const float ClosingSpeed = IncomingSpeed > 300.f &&
+        HorizontalPlayerTravel.Size2D() > 200.f
+        ? -FVector::DotProduct(HorizontalPlayerTravel.GetSafeNormal2D(),
+            FVector(Current.X, Current.Y, 0.f).GetSafeNormal2D()) *
+            HorizontalPlayerTravel.Size2D() : 0.f;
+    const float ReceptionMovementFactor = FMath::Lerp(1.f, 0.85f,
+        FMath::Clamp((ClosingSpeed - 150.f) / 700.f, 0.f, 1.f));
     // A hard reverse touch cannot be performed as easily as a cushioning
     // touch along the incoming ball trajectory. Apply a modest additional
     // control penalty only when intent is strongly opposite its travel.
@@ -158,7 +171,7 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
         ? FMath::Clamp((-ReverseAlignment - 0.35f) / 0.65f, 0.f, 1.f)
         : 0.f;
     const FVector TouchDelta = Correction.GetClampedToMaxSize(
-        TouchDeltaCap * FMath::Lerp(1.f, 0.75f, ReverseDifficulty));
+        TouchDeltaCap * ReceptionMovementFactor * FMath::Lerp(1.f, 0.75f, ReverseDifficulty));
     if (TouchDelta.ContainsNaN()) return false;
     // Do not award a new possession touch for a negligible/no-op impulse.
     // This protects last-touch ownership from stationary repeated input.
