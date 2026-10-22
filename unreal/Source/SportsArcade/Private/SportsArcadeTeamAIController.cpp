@@ -607,7 +607,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 CarrierEscapeSide * EscapeLaneOffsetCm;
             const float BoundedLaneY = FMath::Clamp(DesiredLaneY,
                 -CarrierSidelineLimit, CarrierSidelineLimit);
-            Target.Y += BoundedLaneY - CurrentLaneY;
+            // Never let the escape correction itself become invalid when
+            // the tracked ball position has been corrupted by physics.
+            if (FMath::IsFinite(BoundedLaneY) && FMath::IsFinite(CurrentLaneY))
+            {
+                Target.Y += BoundedLaneY - CurrentLaneY;
+            }
         }
         // Delay the controlled touch if a defender is directly in the running lane.
         // Navigation remains active while the footballer chooses an escape route.
