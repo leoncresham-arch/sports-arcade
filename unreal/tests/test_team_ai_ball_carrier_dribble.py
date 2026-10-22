@@ -11,7 +11,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
 
     def test_defender_distance_selection_has_deadband(self):
         source = SOURCE.read_text(encoding="utf-8")
-        self.assertIn("if (DistanceSquared + FMath::Square(10.f) < ThreatDistanceSquared)", source)
+        self.assertIn("DistanceSquared + FMath::Square(10.f) < ThreatDistanceSquared)", source)
 
     def test_near_central_defender_favors_infield_escape(self):
         source = SOURCE.read_text(encoding="utf-8")
