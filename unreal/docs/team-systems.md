@@ -600,3 +600,7 @@ Advanced attackers in lineup slots 9 and 10 now require the ball to be within 16
 ### Midfield ground-reception support
 
 Attacking midfield support shifts (slots 5–8) now require the ball to be within 160 cm vertically of the supporting footballer, matching the advanced-forward height gate. This prevents high clearances from triggering ground passing triangles before they settle. Existing distance, directional and pressure constraints remain; native gameplay validation is deferred.
+
+### Forward-run reset on retreating passes
+
+Advanced attackers in lineup slots 9–10 now delay their existing forward-run burst while a finite ball velocity indicates a backward pass travelling faster than 450 cm/s along their attacking axis. This aligns forward runs with the existing retreat-aware midfield support logic. Native Unreal match simulation and tuning remain pending.
