@@ -574,3 +574,7 @@ After scaling the AI carrier's lateral escape offset by opposing-player proximit
 ### Clamped dribble sidestep
 
 The pressure-adaptive AI carrier escape now clamps its actual lateral displacement to the available interior touchline margin, rather than only reversing direction before applying the full step. This prevents a large sidestep on narrow or edge-adjacent fields. Existing final pitch clamping remains a fallback; source regression updated to reflect the new displacement calculation.
+
+### Finite carrier lateral correction
+
+The bounded AI carrier sidestep now applies its lateral correction only when the ball-derived current lane and clamped destination are finite. This complements the final navigation target validation and prevents an invalid intermediate correction from reaching the movement planner. Source tests cover this guard; native physics behavior has not yet been executed.
