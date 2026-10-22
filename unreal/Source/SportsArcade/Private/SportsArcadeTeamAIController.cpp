@@ -576,7 +576,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 if (DistanceSquared < ThreatDistanceSquared)
                 {
                     ThreatDistanceSquared = DistanceSquared;
-                    CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f;
+                    // A directly central defender requires an intentional
+                    // sidestep rather than a default route toward one wing.
+                    // Prefer the side with more remaining touchline space.
+                    CarrierEscapeSide = FMath::Abs(ThreatOffset.Y) <= 60.f
+                        ? (Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f)
+                        : (ThreatOffset.Y >= 0.f ? -1.f : 1.f);
                 }
             }
             // Prefer the infield route if the selected escape risks the touchline.
