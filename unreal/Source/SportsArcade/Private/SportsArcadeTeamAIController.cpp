@@ -600,7 +600,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             {
                 CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f;
             }
-            Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;
+            // Do not shove the carrier beyond an inside touchline margin.
+            // Apply only the remaining lateral clearance in the chosen lane.
+            const float CurrentLaneY = Ball->GetActorLocation().Y;
+            const float DesiredLaneY = CurrentLaneY +
+                CarrierEscapeSide * EscapeLaneOffsetCm;
+            const float BoundedLaneY = FMath::Clamp(DesiredLaneY,
+                -CarrierSidelineLimit, CarrierSidelineLimit);
+            Target.Y += BoundedLaneY - CurrentLaneY;
         }
         // Delay the controlled touch if a defender is directly in the running lane.
         // Navigation remains active while the footballer chooses an escape route.
