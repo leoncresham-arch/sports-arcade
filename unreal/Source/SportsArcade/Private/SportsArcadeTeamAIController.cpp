@@ -973,6 +973,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         Target.Y = FMath::Clamp(CurrentPlayerPosition.Y + BoundedDelta.Y,
             -SafeHalfWidth, SafeHalfWidth);
     }
+    // Project navigation onto the grounded playing surface: an authored
+    // formation Z offset must not cause aerial/pathfinding movement requests.
+    Target.Z = CurrentPlayerPosition.Z;
     // Avoid submitting an identical path request when already inside the acceptance radius.
     if (FVector::DistSquared2D(Footballer->GetActorLocation(), Target) <= FMath::Square(125.f))
     {
