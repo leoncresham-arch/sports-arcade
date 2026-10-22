@@ -4,6 +4,12 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class BallCarrierDribbleTests(unittest.TestCase):
+    def test_pressure_escape_clamps_actual_lateral_displacement(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("const float BoundedLaneY = FMath::Clamp(DesiredLaneY,", source)
+        self.assertIn("-CarrierSidelineLimit, CarrierSidelineLimit", source)
+        self.assertIn("Target.Y += BoundedLaneY - CurrentLaneY;", source)
+
     def test_scaled_escape_rechecks_custom_touchline(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("const float CarrierSidelineLimit = FMath::Max(0.f, HalfWidth - 250.f)", source)
@@ -21,7 +27,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("const float EscapeLaneOffsetCm =", source)
         self.assertIn("FMath::Sqrt(ThreatDistanceSquared)", source)
         self.assertIn("180.f, 320.f", source)
-        self.assertIn("Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;", source)
+        self.assertIn("Target.Y += BoundedLaneY - CurrentLaneY;", source)
 
     def test_challenged_carrier_has_teammate_outlet(self):
         source = SOURCE.read_text(encoding="utf-8")
@@ -67,7 +73,7 @@ class BallCarrierDribbleTests(unittest.TestCase):
         self.assertIn("ThreatOffset.X * AttackSign < -100.f", code)
         self.assertIn("CarrierEscapeSide = ThreatOffset.Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("const FVector DribbleDirection(AttackSign, SafeLateralSign * 0.6f, 0.f)", part)
-        self.assertIn("Target.Y += CarrierEscapeSide * EscapeLaneOffsetCm;", code)
+        self.assertIn("Target.Y += BoundedLaneY - CurrentLaneY;", code)
         self.assertIn("HalfWidth - 250.f", code)
         self.assertIn("CarrierEscapeSide = Ball->GetActorLocation().Y >= 0.f ? -1.f : 1.f", code)
         self.assertIn("bDribbleLaneCrowded ? 280.f : 380.f", part)
