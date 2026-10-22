@@ -582,3 +582,7 @@ The bounded AI carrier sidestep now applies its lateral correction only when the
 ### Central pressure escape preference
 
 If the nearest frontal ground-level defender is within 60 cm of the ball's lateral coordinate, the AI carrier prefers the infield escape direction, rather than arbitrarily choosing based on an almost-zero opponent Y offset. Existing sideline clamps, pressure distance and outlet passing stay in force. Source tests are not a substitute for Unreal gameplay validation.
+
+### Stable pressure selection for ball carriers
+
+Nearest frontal opponent selection now requires a meaningful improvement in squared distance (greater than 1 cm²) before changing the selected dribble escape threat. This tiny tolerance reduces near-equal distance selection noise without changing the 500 cm detection radius or central infield preference. Source regression is included; Unreal native gameplay still needs validation.
