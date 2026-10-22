@@ -558,3 +558,7 @@ A ball rising faster than 250 cm/s vertically no longer triggers the shortest em
 ### Descending airborne counterattack guard
 
 Emergency ground-counter navigation also waits when the ball is more than 135 cm above or below the current defender's contact plane. This complements the existing rising-velocity exclusion and reduces classification of long descending clearances as controlled ground breaks. Gameplay tuning and animation-aware ball height remain for native UE validation.
+
+### Pressure-sensitive AI dribbling lane
+
+An AI carrier with a detected frontal opponent now expands its lateral escape target from 180 cm up to 320 cm as that threat closes from 500 cm toward contact. This influences movement navigation rather than adding an instantaneous lateral ball impulse. Existing sideline avoidance and challenged-carrier pass outlet logic remain. Source-regression coverage lives in `tests/test_team_ai_ball_carrier_dribble.py`; tuning and path feasibility require future native Unreal gameplay tests.
