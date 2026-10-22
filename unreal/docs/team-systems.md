@@ -596,3 +596,7 @@ Defender selection now explicitly requires the opponent to be within the carrier
 ### Grounded forward-run trigger
 
 Advanced attackers in lineup slots 9 and 10 now require the ball to be within 160 cm vertically of their footballer when initiating the existing attacking-half forward-run shift. This avoids treating high attributed clearances as immediately controllable ground attacks. It retains the existing attack-half gate, separated channels and authored run offsets. Source contract in `tests/test_team_ai_forward_runs.py`; native simulation remains deferred.
+
+### Midfield ground-reception support
+
+Attacking midfield support shifts (slots 5–8) now require the ball to be within 160 cm vertically of the supporting footballer, matching the advanced-forward height gate. This prevents high clearances from triggering ground passing triangles before they settle. Existing distance, directional and pressure constraints remain; native gameplay validation is deferred.
