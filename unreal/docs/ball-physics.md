@@ -37,3 +37,7 @@ Ground-controlled touch now reduces its maximum single-contact velocity correcti
 ## October 21 — reversing an incoming ball
 
 Controlled ground contact additionally reduces the one-touch correction by as much as 25% when the player's target direction is strongly opposite the incoming ball trajectory and its speed exceeds 300 cm/s. A stationary or compatible-direction touch retains the ordinary reception cap. This limits instantaneous spin-free reversals while retaining physics impulse ownership and finite input validation. It is not an animated backheel, a full friction model, or a native Unreal gameplay test.
+
+## October 21 — relative player/ball reception motion
+
+A receiving footballer moving against a grounded incoming ball now gets a modest additional correction-cap penalty (up to 15%) as closing speed increases. Running in the same direction does not receive that opposing-motion penalty. The existing high-speed reception, attempted reverse-direction, contact-height, finite-vector and ownership checks still apply. This is a provisional source gameplay heuristic without authored foot animations or Unreal-native simulation verification.
