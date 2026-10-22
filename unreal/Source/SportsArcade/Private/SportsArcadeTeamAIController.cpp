@@ -222,6 +222,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             FMath::Abs(Ball->GetActorLocation().Z -
                 Footballer->GetActorLocation().Z) <= 160.f &&
             Ball->GetActorLocation().X * AttackSign > 0.f &&
+            // Do not run beyond a high-speed backward pass while the
+            // attacking line should be resetting behind the ball.
+            !Ball->GetVelocity().ContainsNaN() &&
+            Ball->GetVelocity().X * AttackSign >= -450.f &&
             Footballer->GetActorLocation().X * AttackSign <
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
         {
