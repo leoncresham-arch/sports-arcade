@@ -592,3 +592,7 @@ The nearest-frontal-defender selection tolerance was adjusted from 1 cm² to 100
 ### Carrier threat radius after hysteresis
 
 Defender selection now explicitly requires the opponent to be within the carrier's 500 cm frontal-pressure search radius, in addition to the squared-distance deadband. This prevents the hysteresis comparison from accidentally changing the intended search boundary. Source regression added; native Unreal gameplay remains deferred.
+
+### Grounded forward-run trigger
+
+Advanced attackers in lineup slots 9 and 10 now require the ball to be within 160 cm vertically of their footballer when initiating the existing attacking-half forward-run shift. This avoids treating high attributed clearances as immediately controllable ground attacks. It retains the existing attack-half gate, separated channels and authored run offsets. Source contract in `tests/test_team_ai_forward_runs.py`; native simulation remains deferred.
