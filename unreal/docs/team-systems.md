@@ -570,3 +570,7 @@ The AI ball carrier excludes opposing actors more than 150 cm vertically from th
 ### Final touchline check for adaptive dribbling
 
 After scaling the AI carrier's lateral escape offset by opposing-player proximity, the controller now checks the actual proposed lane against the configured pitch's touchline clearance. If the proposed lane would exceed that margin, the carrier shifts toward the pitch interior. Small/custom pitches use a nonnegative clearance bound. Source-level regression only; Unreal pathing and dribble quality remain subject to native validation.
+
+### Clamped dribble sidestep
+
+The pressure-adaptive AI carrier escape now clamps its actual lateral displacement to the available interior touchline margin, rather than only reversing direction before applying the full step. This prevents a large sidestep on narrow or edge-adjacent fields. Existing final pitch clamping remains a fallback; source regression updated to reflect the new displacement calculation.
