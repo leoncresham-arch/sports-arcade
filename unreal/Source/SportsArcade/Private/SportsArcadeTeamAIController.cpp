@@ -965,7 +965,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // A recovering side needs faster compact support in its defensive half;
     // preserve the usual wider decision horizon while attacking.
     const float TeamAttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
-    const bool bDefensiveHalf = IsValid(Ball) &&
+    // Do not interpret a ball far outside the legal pitch as a valid
+    // attacking/defensive transition while a restart is being prepared.
+    const bool bBallInsidePitch = IsValid(Ball) &&
+        !Ball->GetActorLocation().ContainsNaN() &&
+        FMath::Abs(Ball->GetActorLocation().X) <= HalfLength &&
+        FMath::Abs(Ball->GetActorLocation().Y) <= HalfWidth;
+    const bool bDefensiveHalf = bBallInsidePitch &&
         Ball->GetActorLocation().X * TeamAttackSign < 0.f;
     const float MaximumDecisionTargetDistanceCm =
         bDefensiveHalf ? 1350.f : 1800.f;
