@@ -554,3 +554,7 @@ The accelerated defensive navigation horizon now requires either an opponent-att
 ### Rising aerial ball transition guard
 
 A ball rising faster than 250 cm/s vertically no longer triggers the shortest emergency ground-counter positioning horizon, even if its horizontal trajectory points toward goal. Standard defensive shape remains available while the aerial sequence develops. The threshold is provisional pending native Unreal gameplay testing.
+
+### Descending airborne counterattack guard
+
+Emergency ground-counter navigation also waits when the ball is more than 135 cm above or below the current defender's contact plane. This complements the existing rising-velocity exclusion and reduces classification of long descending clearances as controlled ground breaks. Gameplay tuning and animation-aware ball height remain for native UE validation.
