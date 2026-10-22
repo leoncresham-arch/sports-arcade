@@ -14,6 +14,14 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
         self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
+    def test_forward_runs_require_nearby_combination_play(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Forward players make a modest run", 1)[1].split(
+            "// Central midfielders supply", 1
+        )[0]
+        self.assertIn("FMath::Square(3200.f)", section)
+        self.assertIn("FVector::DistSquared2D(Footballer->GetActorLocation()", section)
+
     def test_forward_run_waits_during_fast_lateral_switch(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Forward players make a modest run", 1)[1].split(
