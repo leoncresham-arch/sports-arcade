@@ -36,6 +36,12 @@ class TeamMarkAssignmentTests(unittest.TestCase):
         self.assertIn("FMath::Abs(ThreatPosition.X) > HalfLength + 150.f", SOURCE)
         self.assertIn("FMath::Abs(ThreatPosition.Y) > HalfWidth + 150.f", SOURCE)
 
+    def test_small_pitch_uses_nonnegative_navigation_extents(self):
+        self.assertIn("const float SafeHalfLength = FMath::Max(0.f, HalfLength - 150.f)", SOURCE)
+        self.assertIn("const float SafeHalfWidth = FMath::Max(0.f, HalfWidth - 150.f)", SOURCE)
+        self.assertIn("FMath::Clamp(Target.X, -SafeHalfLength, SafeHalfLength)", SOURCE)
+        self.assertIn("FMath::Clamp(Target.Y, -SafeHalfWidth, SafeHalfWidth)", SOURCE)
+
     def test_goal_side_and_formation_cover_preserved(self):
         self.assertIn("const FVector GoalSideMarkingPoint", SOURCE)
         self.assertIn("FMath::Clamp(MarkingInfluence, 0.f, 0.5f)", SOURCE)
