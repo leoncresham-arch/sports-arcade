@@ -41,6 +41,9 @@ class FootballDatabaseContracts(unittest.TestCase):
         self.assertIn("has invalid performance rating", SOURCE)
         self.assertIn("SportsArcade.Gameplay.FootballerProfileData", NATIVE_TESTS)
         self.assertIn("Out-of-range player rating is rejected", NATIVE_TESTS)
+        self.assertIn("ClubShirtNumbers.FindOrAdd(Player.ClubId)", SOURCE)
+        self.assertIn("duplicate shirt number", SOURCE)
+        self.assertIn("Club duplicate shirt numbers rejected", NATIVE_TESTS)
 
     def test_individual_ratings_flow_from_database_to_match_footballers(self):
         attributes = ("Acceleration", "Agility", "SprintSpeed", "Stamina",
