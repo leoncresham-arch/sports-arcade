@@ -253,4 +253,47 @@ bool FSportsArcadePlayerRatingAutomation::RunTest(const FString& Parameters)
     return true;
 }
 
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadeFootballerProfileAutomation,
+    "SportsArcade.Gameplay.FootballerProfileData",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadeFootballerProfileAutomation::RunTest(const FString& Parameters)
+{
+    // Validate the full authored player-to-team catalog chain with real
+    // Unreal data objects, while preserving the generic 65-rating baseline.
+    USportsArcadeFootballDatabase* Catalog =
+        NewObject<USportsArcadeFootballDatabase>(GetTransientPackage());
+    if (!TestNotNull(TEXT("Catalog exists"), Catalog)) return false;
+    FSportsArcadeNationRecord Nation;
+    Nation.Id = FName(TEXT("n"));
+    Nation.DisplayName = TEXT("Original Nation");
+    Catalog->Nations.Add(Nation);
+    FSportsArcadeClubRecord Club;
+    Club.Id = FName(TEXT("c"));
+    Club.DisplayName = TEXT("Original Club");
+    Club.NationId = Nation.Id;
+    Catalog->Clubs.Add(Club);
+    FSportsArcadeFootballerRecord Player;
+    Player.Id = FName(TEXT("striker"));
+    Player.DisplayName = TEXT("Original Striker");
+    Player.NationId = Nation.Id;
+    Player.ClubId = Club.Id;
+    Player.ShirtNumber = 9;
+    Player.Finishing = 94;
+    Player.SprintSpeed = 87;
+    Catalog->Footballers.Add(Player);
+    TArray<FString> Errors;
+    TestTrue(TEXT("Authored player profile passes catalog validation"),
+        Catalog->ValidateDatabase(Errors));
+    TestEqual(TEXT("Custom finishing retained"), Catalog->Footballers[0].Finishing, 94);
+    TestEqual(TEXT("Custom sprint retained"), Catalog->Footballers[0].SprintSpeed, 87);
+    TestEqual(TEXT("Unmodified passing uses neutral baseline"),
+        Catalog->Footballers[0].ShortPassing, 65);
+    Catalog->Footballers[0].ClubId = FName(TEXT("missing_club"));
+    TestFalse(TEXT("Missing footballer club is rejected"),
+        Catalog->ValidateDatabase(Errors));
+    return true;
+}
+
 #endif
