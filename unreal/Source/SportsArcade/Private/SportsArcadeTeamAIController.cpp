@@ -516,63 +516,50 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             }
         }
 
-        // Only the closest eligible outfielder presses; others maintain support shape.
+        // Rank the two nearest AI outfielders together, so pressing and cover
+        // agree on one stable assignment even at equal ball distances.
         ASportsArcadeCharacter* Nearest = nullptr;
+        ASportsArcadeCharacter* Second = nullptr;
         float BestDistance = TNumericLimits<float>::Max();
+        float SecondDistance = TNumericLimits<float>::Max();
+        int32 BestSlot = MAX_int32;
+        int32 SecondSlot = MAX_int32;
         for (ASportsArcadeCharacter* Candidate : Roster->Players)
         {
-            // A human-controlled footballer is not an available autonomous
-            // presser; otherwise every nearby AI teammate could stay passive.
             if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld() ||
                 Candidate->TeamIndex != Footballer->TeamIndex ||
                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
                     Roster->Players.IndexOfByKey(Candidate) == 0) ||
                 !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
                 Candidate->GetActorLocation().ContainsNaN()) continue;
-            const float Distance = FVector::DistSquared2D(Candidate->GetActorLocation(), Ball->GetActorLocation());
-            if (Distance < BestDistance - 1.f ||
-                (FMath::Abs(Distance - BestDistance) <= 1.f && IsValid(Nearest) &&
-                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot :
-                    Roster->Players.IndexOfByKey(Candidate)) <
-                 (Roster->bUseExplicitLineupSlots ? Nearest->LineupSlot :
-                    Roster->Players.IndexOfByKey(Nearest))))
+            const int32 CandidateSlot = Roster->bUseExplicitLineupSlots
+                ? Candidate->LineupSlot : Roster->Players.IndexOfByKey(Candidate);
+            const float Distance = FVector::DistSquared2D(
+                Candidate->GetActorLocation(), Ball->GetActorLocation());
+            const bool bBeatsFirst = Distance < BestDistance - 1.f ||
+                (FMath::Abs(Distance - BestDistance) <= 1.f && CandidateSlot < BestSlot);
+            if (bBeatsFirst)
             {
-                BestDistance = Distance;
+                Second = Nearest;
+                SecondDistance = BestDistance;
+                SecondSlot = BestSlot;
                 Nearest = Candidate;
+                BestDistance = Distance;
+                BestSlot = CandidateSlot;
+            }
+            else if (Distance < SecondDistance - 1.f ||
+                (FMath::Abs(Distance - SecondDistance) <= 1.f && CandidateSlot < SecondSlot))
+            {
+                Second = Candidate;
+                SecondDistance = Distance;
+                SecondSlot = CandidateSlot;
             }
         }
-        // The second-closest autonomous outfielder supports defensive pressure
-        // at a conservative stand-off. Avoid both defenders chasing one point.
-        // Back-line defenders support a second press only when the ball is
-        // deep in their own half; midfielders and attackers may press higher.
-        const bool bDefensiveEmergency = Ball->GetActorLocation().X * AttackSign < -HalfLength * 0.45f;
+        const bool bDefensiveEmergency =
+            Ball->GetActorLocation().X * AttackSign < -HalfLength * 0.45f;
         if (Nearest != Footballer && RecentTouchTeam == 1 - Footballer->TeamIndex &&
             (Slot > 4 || bDefensiveEmergency))
         {
-            ASportsArcadeCharacter* Second = nullptr;
-            float SecondDistance = TNumericLimits<float>::Max();
-            for (ASportsArcadeCharacter* Candidate : Roster->Players)
-            {
-                if (!IsValid(Candidate) || Candidate == Nearest ||
-                    Candidate->GetWorld() != GetWorld() ||
-                    Candidate->TeamIndex != Footballer->TeamIndex ||
-                    (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
-                        Roster->Players.IndexOfByKey(Candidate) == 0) ||
-                    !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
-                    Candidate->GetActorLocation().ContainsNaN()) continue;
-                const float Distance = FVector::DistSquared2D(
-                    Candidate->GetActorLocation(), Ball->GetActorLocation());
-                if (Distance < SecondDistance - 1.f ||
-                (FMath::Abs(Distance - SecondDistance) <= 1.f && IsValid(Second) &&
-                 (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot :
-                    Roster->Players.IndexOfByKey(Candidate)) <
-                 (Roster->bUseExplicitLineupSlots ? Second->LineupSlot :
-                    Roster->Players.IndexOfByKey(Second))))
-                {
-                    SecondDistance = Distance;
-                    Second = Candidate;
-                }
-            }
             if (Second == Footballer &&
                 SecondDistance <= FMath::Square(FMath::Clamp(SecondaryPressureRadiusCm, 0.f, 3000.f)))
             {
