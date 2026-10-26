@@ -1115,6 +1115,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // a sustained counterattacking carrier solely on last touch.
         !TransitionToucher->GetActorLocation().ContainsNaN() &&
         !TransitionToucher->GetVelocity().ContainsNaN() &&
+        // Reject invalid extremes before computing heading from velocity.
+        TransitionToucher->GetVelocity().GetMax() < 100000.f &&
+        TransitionToucher->GetVelocity().GetMin() > -100000.f &&
         // Direction is only meaningful for a player actually moving:
         // stationary opponents should not be rejected by a zero-vector dot.
         (TransitionToucher->GetVelocity().SizeSquared2D() < FMath::Square(150.f) ||
