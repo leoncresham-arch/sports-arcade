@@ -20,9 +20,12 @@ class PossessionProximityTests(unittest.TestCase):
         cpp = SOURCE.read_text(encoding="utf-8")
         section = cpp.split("// A conservative defensive shadow", 1)[1].split(
             "ASportsArcadeCharacter* Opponent", 1)[0]
-        self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
-        self.assertIn("Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN()", section)
-        self.assertIn("FMath::Square(300.f)", section)
+        self.assertIn("!bTeammateControlsForMarking", section)
+        self.assertIn("FMath::Square(220.f)", cpp)
+        self.assertIn("MarkingCarrier->GetWorld() == GetWorld()", cpp)
+        self.assertIn("MarkingCarrier->TeamIndex == Footballer->TeamIndex", cpp)
+        self.assertIn("MarkingCarrier->GetActorLocation().Z -", cpp)
+        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", cpp)
 
 if __name__ == "__main__":
     unittest.main()
