@@ -620,3 +620,7 @@ Attacking runners in slots 9 and 10 now scale the configured forward-run distanc
 ### Midfield attack-tempo support (October 26)
 
 Midfielders in slots 5–8 now scale their already-bounded forward supporting advance from 85% at stationary/slow forward ball movement to 112% when the attacking ball moves forward at 850 cm/s. Retreating balls, fast switches and live carrier pressure still suppress this advance, and the support location remains behind the ball carrier as before. Regression contracts cover the speed mapping; native Unreal compilation and gameplay verification are deferred.
+
+### Wide-channel attacking runs (October 26)
+
+When the ball moves toward a touchline, advanced forward runners in slots 9–10 narrow their configured lateral run separation gradually to 55% at the field edge. This retains better inside passing angles during wide build-up while preserving the previous attacking tempo scale, formation, and navigation clamps. Source regression added; native UE5.5 simulation remains deferred.
