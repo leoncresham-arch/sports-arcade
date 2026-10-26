@@ -130,3 +130,7 @@ Defensive transition classification now obtains the opponent's current grounded 
 ## 2026-10-26 — Ball-control physics precondition hardening
 
 The native ball control authority now fails closed when the collision sphere is absent, not simulating physics, or reports non-finite linear velocity. This prevents tactical AI from trusting contact attribution while the ball is in an invalid physics state. Source-level regression tests cover the shared physics/position validation, the separation from historical last touch and touch-attribution ordering. Unreal native integration and ball reception behavior still require PC testing.
+
+## 2026-10-26 — Kick reach and moving-ball possession classification
+
+The physics-ball kick entry point now checks vertical contact reach in addition to total contact distance before recording a touch; the bound permits reachable elevated goalkeeper contacts while rejecting implausibly high foot kicks. Ball control classification also rejects cases where the ball is moving faster than the nearby last toucher by more than 1500 cm/s in the plane, avoiding false controlled-possession calls as driven passes or ricochets cross the last kicker. The relative velocity is measured against player motion so running carriers are not automatically rejected. Source regression contracts cover vertical reach, relative-speed validation, and touch attribution ordering. Unreal native playtests remain necessary to tune reception thresholds and distinguish volleys/headers with dedicated animation/contact sockets.
