@@ -41,3 +41,7 @@ The existing 1–99 `USportsArcadePlayerAttributes` component now has separately
 ## 2026-10-26 — Individual player performance profiles
 
 The authored footballer database now stores eight distinct 1–99 gameplay ratings per footballer (acceleration, agility, sprint, stamina, short passing, finishing, ball control and tackling). Existing team roster assignment copies the matched player's values into the live character's `USportsArcadePlayerAttributes` component, which already influences movement and core football actions. Ratings default to neutral 65 and are clamped at binding. This is original, editable football data—not a copy of proprietary FC ratings or a claim of verified current professional-player statistics. Source contracts cover the entire field-to-component mapping. Native Unreal testing and richer player traits/AI differentiation remain follow-on milestones.
+
+## 2026-10-26 — Broader tactical AI performance continuation
+
+Expanded the existing per-decision opposition snapshot to midfield passing-lane obstruction checks, avoiding another full world enumeration in the same tactical decision. Individual footballer attribute integration remains part of the long-term plan but does not supersede team tactics, movement, ball interactions, match completion or graphics priorities. Source regression added; native profiling remains pending.
