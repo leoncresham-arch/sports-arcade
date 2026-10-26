@@ -991,10 +991,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                     // assignment. Preserve coverage for this runner instead
                     // of conceding every attacker to the same teammate.
                     bool bTeammateHasCloserThreat = false;
-                    for (TActorIterator<ASportsArcadeCharacter> OtherThreat(GetWorld());
-                         OtherThreat; ++OtherThreat)
+                    for (ASportsArcadeCharacter* OtherThreat : TacticalOpponents)
                     {
-                        if (!IsValid(*OtherThreat) || *OtherThreat == *It ||
+                        if (!IsValid(OtherThreat) || OtherThreat == *It ||
                             OtherThreat->GetWorld() != GetWorld() ||
                             OtherThreat->TeamIndex == Footballer->TeamIndex ||
                             OtherThreat->GetActorLocation().ContainsNaN()) continue;
