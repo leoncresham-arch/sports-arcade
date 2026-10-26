@@ -59,6 +59,10 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="1000.0"))
     float PitchHalfWidthCm = 3400.f;
 
+    /** Resolves home-ground metadata without assuming a 3D stadium is loaded. */
+    UFUNCTION(BlueprintCallable, Category="Sports Arcade|Pitch")
+    bool ConfigurePitchFromHomeStadium();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sports Arcade|Pitch", meta=(ClampMin="100.0"))
     float GoalHalfWidthCm = 366.f;
 
