@@ -14,6 +14,14 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
         self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
+    def test_wide_possession_bends_advanced_runs_infield(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Forward players make a modest run", 1)[1].split(
+            "// Central midfielders supply", 1
+        )[0]
+        self.assertIn("const float InfieldRunBias = BallWideFactor *", section)
+        self.assertIn("Target.Y -= FMath::Sign(Ball->GetActorLocation().Y) * InfieldRunBias;", section)
+
     def test_wide_ball_narrows_advanced_run_channels(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Forward players make a modest run", 1)[1].split(
