@@ -1127,9 +1127,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Ball->GetActorLocation().Z) <= 135.f &&
         FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
             Ball->GetActorLocation()) <= FMath::Square(220.f);
+    // Distinguish a genuine counter from a receding ball: an opponent
+    // moving toward our goal with ball control requires compact reactions.
+    // Near the edge of our penalty area, shorten the next planning step.
+    const bool bCounterThreatNearGoal = bOpponentClearlyControllingCounter &&
+        Ball->GetActorLocation().X * TeamAttackSign < -3500.f &&
+        FMath::Abs(Ball->GetActorLocation().Y) < 2200.f;
     const float MaximumDecisionTargetDistanceCm =
-        bOpponentClearlyControllingCounter ? 1050.f :
-        (bDefensiveHalf ? 1350.f : 1800.f);
+        bCounterThreatNearGoal ? 800.f :
+        (bOpponentClearlyControllingCounter ? 1050.f :
+        (bDefensiveHalf ? 1350.f : 1800.f));
     if (PlanarTargetDelta.SizeSquared2D() >
         FMath::Square(MaximumDecisionTargetDistanceCm))
     {
