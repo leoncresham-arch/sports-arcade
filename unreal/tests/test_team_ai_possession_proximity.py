@@ -9,23 +9,16 @@ class PossessionProximityTests(unittest.TestCase):
         cpp = SOURCE.read_text(encoding="utf-8")
         section = cpp.split("// A last touch without nearby control", 1)[1].split(
             "const float AttackSign", 1)[0]
-        self.assertIn("GetLastTouchPlayer()", section)
-        self.assertIn("LastToucher->GetWorld() == GetWorld()", section)
-        self.assertIn("FMath::Square(220.f)", section)
-        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", section)
-        self.assertIn("bAttributedControl", section)
-        self.assertIn("LastToucher->TeamIndex : INDEX_NONE", section)
+        self.assertIn("Ball->GetControlledPlayer()", section)
+        self.assertIn("? LastToucher->TeamIndex : INDEX_NONE;", section)
 
     def test_marking_resumes_after_last_toucher_separates(self):
         cpp = SOURCE.read_text(encoding="utf-8")
         section = cpp.split("// A conservative defensive shadow", 1)[1].split(
             "ASportsArcadeCharacter* Opponent", 1)[0]
         self.assertIn("!bTeammateControlsForMarking", section)
-        self.assertIn("FMath::Square(220.f)", cpp)
-        self.assertIn("MarkingCarrier->GetWorld() == GetWorld()", cpp)
+        self.assertIn("Ball->GetControlledPlayer() : nullptr", cpp)
         self.assertIn("MarkingCarrier->TeamIndex == Footballer->TeamIndex", cpp)
-        self.assertIn("MarkingCarrier->GetActorLocation().Z -", cpp)
-        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", cpp)
 
 if __name__ == "__main__":
     unittest.main()
