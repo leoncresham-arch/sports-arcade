@@ -1104,8 +1104,19 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         !bBallBeyondGroundControlHeight &&
         !TransitionBallVelocity.ContainsNaN() &&
         TransitionBallVelocity.X * TeamAttackSign < -650.f;
+    // A controlled opponent counter calls for a compact recovery step,
+    // but a loose ball should remain contestable rather than being treated
+    // as a guaranteed opposition dribble.
+    const bool bOpponentClearlyControllingCounter = bRapidDefensiveTransition &&
+        IsValid(TransitionToucher) &&
+        TransitionToucher->GetWorld() == GetWorld() &&
+        TransitionToucher->TeamIndex != Footballer->TeamIndex &&
+        !TransitionToucher->GetActorLocation().ContainsNaN() &&
+        FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
+            Ball->GetActorLocation()) <= FMath::Square(220.f);
     const float MaximumDecisionTargetDistanceCm =
-        bRapidDefensiveTransition ? 1050.f : (bDefensiveHalf ? 1350.f : 1800.f);
+        bOpponentClearlyControllingCounter ? 1050.f :
+        (bDefensiveHalf ? 1350.f : 1800.f);
     if (PlanarTargetDelta.SizeSquared2D() >
         FMath::Square(MaximumDecisionTargetDistanceCm))
     {
