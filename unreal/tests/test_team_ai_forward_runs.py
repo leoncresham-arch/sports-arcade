@@ -14,6 +14,16 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
         self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
+    def test_forward_run_distance_tracks_attack_tempo(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Forward players make a modest run", 1)[1].split(
+            "// Central midfielders supply", 1
+        )[0]
+        self.assertIn("const float ForwardBallSpeed = Ball->GetVelocity().X * AttackSign;", section)
+        self.assertIn("FVector2D(-450.f, 850.f), FVector2D(0.65f, 1.15f)", section)
+        self.assertIn("ForwardRunTempo;", section)
+        self.assertIn("FMath::GetMappedRangeValueClamped(", section)
+
     def test_forward_runs_require_nearby_combination_play(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Forward players make a modest run", 1)[1].split(
