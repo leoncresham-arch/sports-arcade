@@ -61,3 +61,7 @@ Added a Blueprint-callable `GetHomeStadiumOrDefault` lookup for club records. A 
 ## 2026-10-26 — Real-club stadium data completeness
 
 The generic venue remains a resilient fallback for incomplete imports and custom teams, not the intended final presentation for real clubs. Club records may set `bRequireVerifiedHomeStadium` to enforce a nonempty home-stadium reference during catalog validation; referenced IDs must exist in the stadium catalog. This is an explicit authoring constraint, not a claim that existing catalog entries contain researched real-world venues. Real stadium names, geometry, location, club relocations and groundsharing must be verified and maintained with provenance; licensed venue artwork is separate. Native game scene selection still needs integration.
+
+## 2026-10-26 — Ball-control arbitration optimization
+
+The human-controlled dribble path now makes one footballer proximity pass to determine both teammate-priority and opposition-priority ownership instead of separately enumerating all characters twice for each prospective touch. Existing grounded contact-height, shielding margin, same-world and team checks are preserved, with short-circuit only once both claims are found. Source regressions updated to verify the combined logic and prevent accidental automatic steals. GitHub Python source tests passed on commit `4a08e141`. Native UE compilation, functional ball-control behavior and performance impact remain unverified.
