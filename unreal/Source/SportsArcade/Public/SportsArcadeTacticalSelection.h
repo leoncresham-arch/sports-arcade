@@ -9,6 +9,10 @@ struct FSportsArcadePressCandidate
     GENERATED_BODY()
     int32 Slot = INDEX_NONE;
     float DistanceSquared = TNumericLimits<float>::Max();
+
+    FSportsArcadePressCandidate() = default;
+    FSportsArcadePressCandidate(int32 InSlot, float InDistanceSquared)
+        : Slot(InSlot), DistanceSquared(InDistanceSquared) {}
 };
 
 USTRUCT()
