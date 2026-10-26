@@ -1112,6 +1112,8 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         TransitionToucher->GetWorld() == GetWorld() &&
         TransitionToucher->TeamIndex != Footballer->TeamIndex &&
         !TransitionToucher->GetActorLocation().ContainsNaN() &&
+        FMath::Abs(TransitionToucher->GetActorLocation().Z -
+            Ball->GetActorLocation().Z) <= 135.f &&
         FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
             Ball->GetActorLocation()) <= FMath::Square(220.f);
     const float MaximumDecisionTargetDistanceCm =
