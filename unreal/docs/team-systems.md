@@ -652,3 +652,7 @@ Opponent position validity is checked before calculating ball-relative heading f
 ### Counter-carrier velocity sanity bounds (October 26)
 
 The controlled-counter recognition guard now rejects opposing last-touch velocity with any component outside ±100000 cm/s before its direction comparison. This protects the heading-based tactical classification from implausible extreme inputs. A source regression tests the bounds; gameplay tuning and native compilation remain outstanding.
+
+### Compact recovery near own goal (October 26)
+
+A confirmed, ground-controllable opposition counter in the central defensive channel (within 2200 cm laterally and more than 3500 cm into the defending half) now uses an 800 cm per-decision navigation planning horizon instead of 1050 cm. Counters elsewhere and loose balls retain their established 1050/1350/1800 cm ranges. This is a tactical target bound, not a new tackle or goalkeeper animation. Source tests cover the branch; native Unreal match validation is deferred.
