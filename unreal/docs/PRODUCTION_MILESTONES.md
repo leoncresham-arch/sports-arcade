@@ -98,3 +98,7 @@ The existing AI controller now reuses its per-decision validated opponent snapsh
 ## 2026-10-26 — Coordinated pressing and cover selection
 
 Primary and secondary AI pressers are now selected together in a single roster pass with a deterministic distance/lineup-slot ordering. The second defender is the next closest eligible AI outfielder after the first; human-controlled players and the goalkeeper are not silently included. The existing restrictions on secondary defensive coverage, pressure radius, lateral stand-off and emergency recovery remain intact. Source-level regression checks protect the one-pass selection and tie-breaking; Unreal editor simulation must still verify pressing swaps, goalkeeper exclusions, controlled-player takeovers and transition timing. This is part of the integrated 11v11 tactics package, not a complete football match milestone.
+
+## 2026-10-26 — Defensive marking conflict integration
+
+Nested alternate-runner coverage checks reuse the existing validated tactical opposition snapshot instead of traversing every world character again for each closer teammate. This preserves nearest-runner priority, competing-assignment checks, and the 75 cm alternative-threat margin while reducing repeated actor enumeration. Added source regression coverage. This is not a new defensive AI mode or proof of CPU improvements: Unreal 5.5 native compile, 11v11 transition playtests, and frame profiling remain pending.
