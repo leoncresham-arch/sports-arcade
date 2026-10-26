@@ -36,6 +36,8 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
             ClubCategories.Add(Club.Id, Club.Category);
             ClubNations.Add(Club.Id, Club.NationId);
         }
+        if (Club.bRequireVerifiedHomeStadium && Club.HomeStadiumId.IsNone())
+            Errors.Add(FString::Printf(TEXT("Club %s requires a home stadium"), *Club.Id.ToString()));
         if (!Club.HomeStadiumId.IsNone() && !StadiumIds.Contains(Club.HomeStadiumId))
             Errors.Add(FString::Printf(TEXT("Club %s references missing stadium"), *Club.Id.ToString()));
         if (!Club.PreferredFormationId.IsNone() &&
