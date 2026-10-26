@@ -15,7 +15,7 @@ class NativeUnrealAutomationContracts(unittest.TestCase):
 
     def test_editor_automation_tests_exist(self):
         self.assertIn("#if WITH_DEV_AUTOMATION_TESTS", SOURCE)
-        self.assertEqual(SOURCE.count("IMPLEMENT_SIMPLE_AUTOMATION_TEST("), 7)
+        self.assertEqual(SOURCE.count("IMPLEMENT_SIMPLE_AUTOMATION_TEST("), 8)
         self.assertIn("FSportsArcadeLeagueScheduleAutomation", SOURCE)
         self.assertIn("FSportsArcadeCupBracketAutomation", SOURCE)
         self.assertIn("FSportsArcadeTableAutomation", SOURCE)
@@ -23,6 +23,7 @@ class NativeUnrealAutomationContracts(unittest.TestCase):
         self.assertIn("FSportsArcadeCupSaveIntegrityAutomation", SOURCE)
         self.assertIn("FSportsArcadeHomeStadiumAutomation", SOURCE)
         self.assertIn("FSportsArcadePlayerRatingAutomation", SOURCE)
+        self.assertIn("FSportsArcadeFootballerProfileAutomation", SOURCE)
         self.assertIn("Rating factor must be monotonic", SOURCE)
         self.assertIn("Incorrect round index rejected", SOURCE)
     def test_native_tests_invoke_domain_logic(self):
