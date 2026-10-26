@@ -51,6 +51,36 @@ struct FSportsArcadeClubRecord
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     ESportsArcadeSquadCategory Category = ESportsArcadeSquadCategory::Men;
+
+    // Optional real-world-inspired identity and tactical customisation.
+    // Empty values retain the generic game baseline.
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName HomeStadiumId;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName PreferredFormationId;
+};
+
+USTRUCT(BlueprintType)
+struct FSportsArcadeStadiumRecord
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName Id;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FString DisplayName;
+
+    // Presentation dimensions are authored; match-pitch defaults remain safe.
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1000"))
+    int32 Capacity = 30000;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="90.0", ClampMax="120.0"))
+    float PitchLengthMetres = 105.f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="45.0", ClampMax="90.0"))
+    float PitchWidthMetres = 68.f;
 };
 
 USTRUCT(BlueprintType)
@@ -129,6 +159,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Football Database")
     TArray<FSportsArcadeClubRecord> Clubs;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Football Database")
+    TArray<FSportsArcadeStadiumRecord> Stadiums;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Football Database")
     TArray<FSportsArcadeFootballerRecord> Footballers;
