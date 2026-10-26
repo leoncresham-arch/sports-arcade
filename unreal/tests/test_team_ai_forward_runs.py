@@ -47,6 +47,16 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("Ball->GetVelocity().X * AttackSign >= -450.f", section)
         self.assertIn("!Ball->GetVelocity().ContainsNaN()", section)
 
+    def test_midfield_support_adjusts_to_attacking_tempo(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Central midfielders supply", 1)[1].split(
+            "// Hold the authored back line", 1
+        )[0]
+        self.assertIn("const float MidfieldTempoScale =", section)
+        self.assertIn("FVector2D(0.f, 850.f), FVector2D(0.85f, 1.12f)", section)
+        self.assertIn("SupportAdvance * ForwardSupportScale *", section)
+        self.assertIn("MidfieldTempoScale;", section)
+
     def test_midfield_support_requires_receivable_ball_height(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Central midfielders supply", 1)[1].split(
