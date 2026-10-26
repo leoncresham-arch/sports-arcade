@@ -19,12 +19,24 @@ FSportsArcadePressPair FSportsArcadeTacticalSelection::SelectPressPair(
         if (Candidate.Slot < 1 || Candidate.Slot > 10 ||
             !FMath::IsFinite(Candidate.DistanceSquared) ||
             Candidate.DistanceSquared < 0.f) continue;
+        // Keep slot identity unique even if a malformed caller supplies
+        // repeated lineup records. The better reading wins deterministically.
+        if (Candidate.Slot == First.Slot)
+        {
+            if (Before(Candidate, First)) First = Candidate;
+            continue;
+        }
+        if (Candidate.Slot == Second.Slot)
+        {
+            if (Before(Candidate, Second)) Second = Candidate;
+            continue;
+        }
         if (Before(Candidate, First))
         {
             Second = First;
             First = Candidate;
         }
-        else if (Candidate.Slot != First.Slot && Before(Candidate, Second))
+        else if (Before(Candidate, Second))
         {
             Second = Candidate;
         }
