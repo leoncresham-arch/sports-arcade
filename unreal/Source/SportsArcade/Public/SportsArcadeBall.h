@@ -55,6 +55,11 @@ public:
     UFUNCTION(BlueprintPure, Category="Sports Arcade|Ball")
     int32 GetLastTouchTeamIndex() const;
 
+    /** Nearby last toucher with physically plausible grounded control; nullptr for loose balls. */
+    UFUNCTION(BlueprintPure, Category="Sports Arcade|Ball")
+    ASportsArcadeCharacter* GetControlledPlayer(float MaximumPlanarRangeCm = 220.f,
+        float MaximumHeightDifferenceCm = 135.f) const;
+
     UFUNCTION(BlueprintCallable, Category="Sports Arcade|Ball")
     void ResetToCentre();
 
