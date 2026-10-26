@@ -19,6 +19,13 @@ class LiveBallControlTests(unittest.TestCase):
         self.assertIn("MaximumPlanarRangeCm <= 0.f", part)
         self.assertIn("MaximumHeightDifferenceCm <= 0.f", part)
         self.assertIn("FVector::DistSquared2D(Player->GetActorLocation()", part)
+    def test_fast_loose_pass_not_misattributed_to_last_kicker(self):
+        part = CPP.split("ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(", 1)[1]
+        self.assertIn("const FVector PlayerVelocity = Player->GetVelocity()", part)
+        self.assertIn("PlayerVelocity.ContainsNaN()", part)
+        self.assertIn("CollisionSphere->GetPhysicsLinearVelocity() - PlayerVelocity", part)
+        self.assertIn("RelativeBallVelocity.SizeSquared2D() > FMath::Square(1500.f)", part)
+
     def test_kick_respects_vertical_foot_contact(self):
         part = CPP.split("bool ASportsArcadeBall::KickByPlayer(", 1)[1].split(
             "void ASportsArcadeBall::StopMotion()", 1)[0]
