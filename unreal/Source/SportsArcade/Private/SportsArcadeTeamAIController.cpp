@@ -237,7 +237,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Footballer->GetActorLocation().X * AttackSign <
                 Ball->GetActorLocation().X * AttackSign + 1200.f)
         {
-            Target.X += AttackSign * FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f);
+            // Match the run to the pace of the developing attack: a slowly
+            // circulating ball calls for a shorter supporting run, while a
+            // forward-moving ball invites a more aggressive run into space.
+            const float ForwardBallSpeed = Ball->GetVelocity().X * AttackSign;
+            const float ForwardRunTempo = FMath::GetMappedRangeValueClamped(
+                FVector2D(-450.f, 850.f), FVector2D(0.65f, 1.15f),
+                ForwardBallSpeed);
+            Target.X += AttackSign * FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f) *
+                ForwardRunTempo;
             // Two advanced runners approach from different channels.
             Target.Y += (Slot == 9 ? -1.f : 1.f) *
                 FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f);
