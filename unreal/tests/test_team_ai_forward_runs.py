@@ -14,6 +14,14 @@ class ForwardRunTests(unittest.TestCase):
         self.assertIn("ForwardRunOffsetCm = 650.f", HEADER.read_text(encoding="utf-8"))
         self.assertIn("ForwardRunLaneSeparationCm = 250.f", HEADER.read_text(encoding="utf-8"))
 
+    def test_wide_forward_run_targets_keep_touchline_margin(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        section = code.split("// Forward players make a modest run", 1)[1].split(
+            "// Central midfielders supply", 1
+        )[0]
+        self.assertIn("const float ForwardLaneMargin = FMath::Max(0.f, HalfWidth - 300.f)", section)
+        self.assertIn("Target.Y = FMath::Clamp(Target.Y, -ForwardLaneMargin, ForwardLaneMargin)", section)
+
     def test_wide_possession_bends_advanced_runs_infield(self):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("// Forward players make a modest run", 1)[1].split(
