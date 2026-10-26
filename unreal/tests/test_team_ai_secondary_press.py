@@ -27,20 +27,22 @@ class SecondaryPressTests(unittest.TestCase):
 
     def test_second_defender_is_distinct_and_excludes_keeper(self):
         code = SOURCE.read_text(encoding="utf-8")
-        part = code.split("// The second-closest autonomous outfielder", 1)[1].split(
-            "if (Nearest == Footballer", 1
+        part = code.split("// Rank the two nearest AI outfielders together", 1)[1].split(
+            "if (Second == Footballer &&", 1
         )[0]
         self.assertIn("Nearest != Footballer", part)
-        self.assertIn("Second == Footballer", part)
+        self.assertIn("Second = Nearest;", part)
+        self.assertIn("Second = Candidate;", part)
         self.assertIn("Slot > 4 || bDefensiveEmergency", part)
-        self.assertIn("Candidate == Nearest", part)
+        self.assertIn("SecondDistance = BestDistance;", part)
         self.assertIn("Candidate->LineupSlot == 0", part)
         self.assertIn("Roster->Players.IndexOfByKey(Candidate) == 0", part)
         self.assertIn("RecentTouchTeam == 1 - Footballer->TeamIndex", part)
-        self.assertIn("FMath::Clamp(SecondaryPressureRadiusCm, 0.f, 3000.f)", part)
-        self.assertIn("FMath::Clamp(SecondaryPressureStandOffCm, 0.f, 1000.f)", part)
+        self.assertIn("FMath::Clamp(SecondaryPressureRadiusCm, 0.f, 3000.f)", code)
+        self.assertIn("FMath::Clamp(SecondaryPressureStandOffCm, 0.f, 1000.f)", code)
         self.assertIn("Candidate->GetActorLocation().ContainsNaN()", part)
-        self.assertIn("Target.Y +=", part)
+        self.assertIn("Target.Y +=", code)
+        self.assertEqual(part.count("for (ASportsArcadeCharacter* Candidate : Roster->Players)"), 1)
 
 if __name__ == "__main__":
     unittest.main()
