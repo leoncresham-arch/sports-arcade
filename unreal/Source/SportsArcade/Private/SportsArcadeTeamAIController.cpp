@@ -1075,21 +1075,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // travelling toward our goal; a fast backwards teammate pass or
     // attributed friendly dribble should not trigger emergency shape.
     const ASportsArcadeCharacter* TransitionToucher = bBallInsidePitch
-        ? Ball->GetLastTouchPlayer() : nullptr;
+        ? Ball->GetControlledPlayer() : nullptr;
     const bool bAttributedFriendlyControl = IsValid(TransitionToucher) &&
-        TransitionToucher->GetWorld() == GetWorld() &&
-        TransitionToucher->TeamIndex == Footballer->TeamIndex &&
-        !TransitionToucher->GetActorLocation().ContainsNaN() &&
-        FMath::Abs(TransitionToucher->GetActorLocation().Z -
-            Ball->GetActorLocation().Z) <= 135.f &&
-        FVector::DistSquared2D(TransitionToucher->GetActorLocation(),
-            Ball->GetActorLocation()) <= FMath::Square(220.f);
-    // A nearby opponent with the last touch is stronger evidence of a
-    // live counterattack than an old unattributed loose-ball trajectory.
-    const bool bOpponentDrivingCounter = !bAttributedFriendlyControl &&
-        (!IsValid(TransitionToucher) ||
-         TransitionToucher->GetWorld() != GetWorld() ||
-         TransitionToucher->TeamIndex != Footballer->TeamIndex);
+        TransitionToucher->TeamIndex == Footballer->TeamIndex;
+    // Only a live opponent carrier identifies an active opposition counter.
+    // Unattributed flight and a detached last touch remain loose-ball phases.
+    const bool bOpponentDrivingCounter = IsValid(TransitionToucher) &&
+        TransitionToucher->TeamIndex != Footballer->TeamIndex;
     // A strongly rising ball is not a grounded dribble or driven counter.
     // Preserve ordinary shape until aerial flight resolves.
     const bool bBallMovingUpward = !TransitionBallVelocity.ContainsNaN() &&
