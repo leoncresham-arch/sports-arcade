@@ -12,7 +12,7 @@ class MovementDribbleBatchTests(unittest.TestCase):
     def test_shielding_contests_marginal_opponent_control_without_seizing_clear_winner(self):
         self.assertIn("bShieldHeld ? 25.f : 0.f", CHARACTER)
         self.assertIn("bOpponentClearlyCloser", CHARACTER)
-        self.assertIn("OppToBall.SizeSquared2D() < FMath::Square(95.f)", CHARACTER)
+        self.assertIn("NearbyDistanceSquared < FMath::Square(95.f)", CHARACTER)
 
     def test_manual_shielding_is_input_driven_and_caps_pace(self):
         self.assertIn("bool IsShieldingBall() const", HEADER)
