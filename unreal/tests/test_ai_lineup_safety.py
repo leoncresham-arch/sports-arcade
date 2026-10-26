@@ -6,8 +6,8 @@ AI = Path(__file__).resolve().parents[1] / 'Source/SportsArcade/Private/SportsAr
 class LineupSafetyTests(unittest.TestCase):
     def test_outfielder_selection_ignores_goalkeeper_slot(self):
         code = AI.read_text()
-        self.assertIn('for (ASportsArcadeCharacter* Candidate : Roster->Players)', code)
-        self.assertIn('Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0', code)
+        self.assertIn('for (int32 CandidateIndex = 0;', code)
+        self.assertIn('CandidateSlot < 1 || CandidateSlot > 10', code)
         self.assertNotIn('for (int32 Index = 1; Index < Roster->Players.Num(); ++Index)', code)
     def test_human_controlled_player_does_not_suppress_ai_pressing(self):
         code = AI.read_text()
