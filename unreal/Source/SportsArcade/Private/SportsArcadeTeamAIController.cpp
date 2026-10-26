@@ -153,8 +153,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         StopMovement();
         return;
     }
-    // Snapshot opponents once per decision rather than repeating world actor
-    // enumeration in support pressure and passing-lane obstacle checks.
+    // Snapshot opposing footballers once for this tactical decision. Reuse the
+    // same validated roster of threats for support, dribbling, challenges and
+    // pass interception; each decision still evaluates current positions.
     TArray<ASportsArcadeCharacter*> TacticalOpponents;
     for (TActorIterator<ASportsArcadeCharacter> OpponentIt(GetWorld()); OpponentIt; ++OpponentIt)
     {
@@ -496,16 +497,16 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         {
             float ClosestOpponentSq = FMath::Square(FMath::Clamp(PassingSupportOpponentSearchCm, 0.f, 2000.f));
             const ASportsArcadeCharacter* NearestOpponent = nullptr;
-            for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+            for (ASportsArcadeCharacter* Opp : TacticalOpponents)
             {
-                if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                if (!IsValid(Opp) || Opp->GetWorld() != GetWorld() ||
                     Opp->TeamIndex == Footballer->TeamIndex ||
                     Opp->GetActorLocation().ContainsNaN()) continue;
                 const float DistanceSq = FVector::DistSquared2D(Opp->GetActorLocation(), Target);
                 if (DistanceSq < ClosestOpponentSq)
                 {
                     ClosestOpponentSq = DistanceSq;
-                    NearestOpponent = *Opp;
+                    NearestOpponent = Opp;
                 }
             }
             if (NearestOpponent)
@@ -646,9 +647,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         if (bSelfControllingBall)
         {
             float ThreatDistanceSquared = FMath::Square(500.f);
-            for (TActorIterator<ASportsArcadeCharacter> Threat(GetWorld()); Threat; ++Threat)
+            for (ASportsArcadeCharacter* Threat : TacticalOpponents)
             {
-                if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
+                if (!IsValid(Threat) || Threat->GetWorld() != GetWorld() ||
                     Threat->TeamIndex == Footballer->TeamIndex ||
                     Threat->GetActorLocation().ContainsNaN()) continue;
                 const FVector ThreatOffset = Threat->GetActorLocation() - Ball->GetActorLocation();
@@ -717,9 +718,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         bool bImmediateChallenge = false;
         if (bSelfControllingBall)
         {
-            for (TActorIterator<ASportsArcadeCharacter> Defender(GetWorld()); Defender; ++Defender)
+            for (ASportsArcadeCharacter* Defender : TacticalOpponents)
             {
-                if (!IsValid(*Defender) || Defender->GetWorld() != GetWorld() ||
+                if (!IsValid(Defender) || Defender->GetWorld() != GetWorld() ||
                     Defender->TeamIndex == Footballer->TeamIndex ||
                     Defender->GetActorLocation().ContainsNaN()) continue;
                 const FVector Approach = Defender->GetActorLocation() - Ball->GetActorLocation();
@@ -755,9 +756,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 if (DistanceSq < FMath::Square(350.f) || DistanceSq > FMath::Square(2200.f)) continue;
                 // Reject outlets already marked at very close range.
                 bool bReceiverMarked = false;
-                for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+                for (ASportsArcadeCharacter* Opp : TacticalOpponents)
                 {
-                    if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                    if (!IsValid(Opp) || Opp->GetWorld() != GetWorld() ||
                         Opp->TeamIndex == Footballer->TeamIndex ||
                         Opp->GetActorLocation().ContainsNaN()) continue;
                     const FVector2D Start(Ball->GetActorLocation());
@@ -872,9 +873,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                         Delta.X * AttackSign < -650.f) continue;
                     bool bBlocked = false;
                     float ReceiverPressurePenalty = 0.f;
-                    for (TActorIterator<ASportsArcadeCharacter> Opp(GetWorld()); Opp; ++Opp)
+                    for (ASportsArcadeCharacter* Opp : TacticalOpponents)
                     {
-                        if (!IsValid(*Opp) || Opp->GetWorld() != GetWorld() ||
+                        if (!IsValid(Opp) || Opp->GetWorld() != GetWorld() ||
                             Opp->TeamIndex == Footballer->TeamIndex ||
                             Opp->GetActorLocation().ContainsNaN()) continue;
                         // An unblocked pass can still be intercepted at the receiver.
