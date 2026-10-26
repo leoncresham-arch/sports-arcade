@@ -32,12 +32,12 @@ class TeamAIShapeShiftTests(unittest.TestCase):
         code = CPP.read_text(encoding="utf-8")
         section = code.split("else if (IsValid(Ball))", 1)[1].split(
             "if (Nearest == Footballer", 1)[0]
-        self.assertIn("GetLastTouchTeamIndex()", section)
+        self.assertIn("LastToucher->TeamIndex : INDEX_NONE", section)
         self.assertIn("RecentTouchTeam == Footballer->TeamIndex", section)
         self.assertIn("RecentTouchTeam == 1 - Footballer->TeamIndex", section)
         self.assertIn("FMath::Clamp(AttackingSupportShiftCm, 0.f, 500.f)", section)
         self.assertIn("FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f)", section)
-        self.assertLess(section.index("GetLastTouchTeamIndex()"),
+        self.assertLess(section.index("LastToucher->TeamIndex : INDEX_NONE"),
                         section.index("for (ASportsArcadeCharacter* Candidate"))
 
 
