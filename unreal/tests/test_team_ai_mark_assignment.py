@@ -26,7 +26,7 @@ class TeamMarkAssignmentTests(unittest.TestCase):
 
     def test_other_runner_coverage_not_suppressed_by_busy_teammate(self):
         self.assertIn("bTeammateHasCloserThreat", SOURCE)
-        self.assertIn("TActorIterator<ASportsArcadeCharacter> OtherThreat(GetWorld())", SOURCE)
+        self.assertIn("for (ASportsArcadeCharacter* OtherThreat : TacticalOpponents)", SOURCE)
         self.assertIn("OtherThreat->TeamIndex == Footballer->TeamIndex", SOURCE)
         self.assertIn("AlternativeDistance + FMath::Square(75.f) < TheirDistance", SOURCE)
         self.assertIn("if (!bTeammateHasCloserThreat)", SOURCE)
