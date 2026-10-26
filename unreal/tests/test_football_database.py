@@ -6,6 +6,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 HEADER = (ROOT / "Source/SportsArcade/Public/SportsArcadeFootballDatabase.h").read_text()
 SOURCE = (ROOT / "Source/SportsArcade/Private/SportsArcadeFootballDatabase.cpp").read_text()
 ROSTER = (ROOT / "Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp").read_text()
+GAME_MODE = (ROOT / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
+GAME_HEADER = (ROOT / "Source/SportsArcade/Public/SportsArcadeGameMode.h").read_text()
 
 
 class FootballDatabaseContracts(unittest.TestCase):
@@ -37,6 +39,12 @@ class FootballDatabaseContracts(unittest.TestCase):
         for name in attributes:
             self.assertIn("int32 " + name + " = 65;", HEADER)
             self.assertIn("Ratings->" + name + " = FMath::Clamp(Record." + name + ", 1, 99);", ROSTER)
+
+    def test_game_mode_can_explicitly_use_stadium_pitch_dimensions(self):
+        self.assertIn("bool ConfigurePitchFromHomeStadium();", GAME_HEADER)
+        self.assertIn("FootballCatalog->GetHomeStadiumOrDefault(SelectedHomeClubId)", GAME_MODE)
+        self.assertIn("PitchHalfLengthCm = Stadium.PitchLengthMetres * 50.f;", GAME_MODE)
+        self.assertIn("PitchHalfWidthCm = Stadium.PitchWidthMetres * 50.f;", GAME_MODE)
 
     def test_club_home_stadium_has_playable_generic_fallback(self):
         self.assertIn("GetHomeStadiumOrDefault(FName ClubId) const", HEADER)
