@@ -40,8 +40,10 @@ class LineupSafetyTests(unittest.TestCase):
         self.assertIn('StopMovement();\n        return;', code)
     def test_invalid_opponents_not_marked(self):
         code = AI.read_text()
-        self.assertIn('if (!IsValid(*Opp)', code)
-        self.assertIn('Opp->TeamIndex == Footballer->TeamIndex', code)
+        self.assertIn('Candidate->TeamIndex != Footballer->TeamIndex', code)
+        self.assertIn('Candidate->GetWorld() == GetWorld()', code)
+        self.assertIn('!Candidate->GetActorLocation().ContainsNaN()', code)
+        self.assertIn('for (ASportsArcadeCharacter* Opp : TacticalOpponents)', code)
 
     def test_roster_absence_and_invalid_team_stop_navigation(self):
         code = AI.read_text()
