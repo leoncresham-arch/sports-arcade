@@ -90,3 +90,7 @@ Next development must prioritize cohesive outcomes over per-condition tuning:
 - **Verification:** expand actual Unreal editor C++ automation, then native Windows builds and game-play testing; source-string tests are insufficient.
 
 Current integration batch: strengthened catalog validation for eight 1–99 footballer attributes, created a native editor automation scenario with valid/invalid profile records, and updated source regression coverage. No native UE execution occurred.
+
+## 2026-10-26 — Integrated 11v11 opponent-observation reuse
+
+The existing AI controller now reuses its per-decision validated opponent snapshot in five additional tactical paths: support-outlet displacement, carrier escape pressure, immediate ball challenge detection, pressured outlet screening and general pass-receiver/interception checks. This removes five redundant full-world footballer traversals from a decision without altering the existing attacking/defensive scoring criteria. Dead-ball suppression and per-use physics/height checks remain active. A dedicated source regression checks snapshot reuse and guard ordering. Runtime movement, interception quality, and performance gains **remain unverified** until Unreal Engine 5.5 compilation and profiling. This is a connected tactical performance step, **not completion of the 11v11 milestone**. Next integrate coherent state classification and acceptance scenarios across possession changes, pressing and recovering formation, without multiplying one-off scalar thresholds.
