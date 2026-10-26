@@ -312,7 +312,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const float SupportAdvance = FMath::Clamp(SupportGap * 0.25f, 0.f, 450.f);
             const float ForwardSupportScale = (bRetreatingPass || bFastLateralSwitch || bCarrierUnderPressure)
                 ? 0.f : FMath::Clamp(SupportGap / 1200.f, 0.f, 1.f);
-            Target.X += AttackSign * SupportAdvance * ForwardSupportScale;
+            // Match midfield support to attack tempo without allowing a fast
+            // ball to override pressure, retreat or touchline-switch gates.
+            const float MidfieldTempoScale = SupportBallVelocity.ContainsNaN()
+                ? 1.f : FMath::GetMappedRangeValueClamped(
+                    FVector2D(0.f, 850.f), FVector2D(0.85f, 1.12f),
+                    SupportBallVelocity.X * AttackSign);
+            Target.X += AttackSign * SupportAdvance * ForwardSupportScale *
+                MidfieldTempoScale;
             // The supporting midfielder should not overrun the available
             // passing lane and stand farther forward than the ball carrier.
             const float MaximumSupportX = Ball->GetActorLocation().X -
