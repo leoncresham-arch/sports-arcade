@@ -26,6 +26,11 @@ class LiveBallControlTests(unittest.TestCase):
         self.assertIn("CollisionSphere->GetPhysicsLinearVelocity() - PlayerVelocity", part)
         self.assertIn("RelativeBallVelocity.SizeSquared2D() > FMath::Square(1500.f)", part)
 
+    def test_airborne_vertical_velocity_cannot_claim_ground_control(self):
+        part = CPP.split("ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(", 1)[1]
+        self.assertIn("FMath::Abs(BallVelocity.Z) > 650.f", part)
+        self.assertIn("BallVelocity - PlayerVelocity", part)
+
     def test_kick_respects_vertical_foot_contact(self):
         part = CPP.split("bool ASportsArcadeBall::KickByPlayer(", 1)[1].split(
             "void ASportsArcadeBall::StopMotion()", 1)[0]
