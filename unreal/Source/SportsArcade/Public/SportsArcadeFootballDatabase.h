@@ -57,6 +57,10 @@ struct FSportsArcadeClubRecord
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     FName HomeStadiumId;
 
+    /** Real clubs should provide a verified venue; custom clubs may use baseline. */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    bool bRequireVerifiedHomeStadium = false;
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     FName PreferredFormationId;
 };
