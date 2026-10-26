@@ -35,18 +35,15 @@ class SharedOpponentDecisionTests(unittest.TestCase):
         self.assertIn("Candidate->TeamIndex != Footballer->TeamIndex", snapshot)
         self.assertIn("!Candidate->GetActorLocation().ContainsNaN()", snapshot)
 
-    def test_press_and_cover_are_ranked_in_one_pass(self):
+    def test_press_and_cover_use_independently_testable_algorithm(self):
         code = self.code
-        start = code.index("// Rank the two nearest AI outfielders together")
-        end = code.index("if (Second == Footballer &&", start)
-        section = code[start:end]
-        self.assertEqual(section.count("for (ASportsArcadeCharacter* Candidate : Roster->Players)"), 1)
-        self.assertIn("Second = Nearest;", section)
-        self.assertIn("SecondDistance = BestDistance;", section)
-        self.assertIn("CandidateSlot < BestSlot", section)
-        self.assertIn("CandidateSlot < SecondSlot", section)
-        self.assertIn("Nearest = Candidate;", section)
-        self.assertIn("Second = Candidate;", section)
+        selection = (SOURCE.parent / "SportsArcadeTacticalSelection.cpp").read_text()
+        self.assertIn("FSportsArcadeTacticalSelection::SelectPressPair(PressCandidates)", code)
+        self.assertIn("CandidateSlot == PressPair.PrimarySlot", code)
+        self.assertIn("CandidateSlot == PressPair.CoverSlot", code)
+        self.assertIn("Second = First;", selection)
+        self.assertIn("Candidate.Slot < Current.Slot", selection)
+        self.assertIn("Candidate.Slot < 1 || Candidate.Slot > 10", selection)
 
     def test_marking_conflicts_reuse_opponent_snapshot(self):
         code = self.code
