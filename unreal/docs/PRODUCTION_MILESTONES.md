@@ -49,3 +49,7 @@ Expanded the existing per-decision opposition snapshot to midfield passing-lane 
 ## 2026-10-26 — Universal baseline and real-world customization
 
 Core design policy: every footballer, team, formation, stadium, match rule, animation state and gameplay system must have sensible generic defaults and work without external real-world data. Optional verified/authored real-world information enriches that baseline rather than becoming a prerequisite. The database now has generic stadium records (30,000-capacity, 105x68 m pitch defaults) and optional club home-stadium and 4-3-3/4-4-2 formation references. Validation rejects duplicate stadiums, missing references, invalid dimensions and unsupported tactical formations. The existing roster now applies an optional authored club formation when binding footballers; otherwise it preserves the team's baseline formation. Stadium records are *data foundations*, not yet spawned 3D stadium meshes or runtime stadium selection. Do not copy proprietary club artwork, stadium assets, player faces or game data without permission. Native UE verification pending.
+
+## 2026-10-26 — Baseline stadium resolver
+
+Added a Blueprint-callable `GetHomeStadiumOrDefault` lookup for club records. A valid authored home stadium takes precedence; an absent, unknown or invalid stadium reference resolves to a generic 30,000-capacity, 105x68 m ground. This is a data resolver and not yet stadium mesh spawning, lighting, crowd presentation or match-game-mode pitch selection. Source regression added; native UE5.5 compilation deferred.
