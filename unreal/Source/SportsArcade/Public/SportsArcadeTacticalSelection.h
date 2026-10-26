@@ -1,18 +1,20 @@
 #pragma once
-
 #include "CoreMinimal.h"
+#include "SportsArcadeTacticalSelection.generated.h"
 
-/** Lightweight, actor-independent defensive assignments. Inputs are already
- * filtered for valid autonomous outfield players by the caller. The helper
- * can be exercised in Unreal automation without spawning a world or pawn. */
+/** Candidate independent of a live Unreal world; invalid roles excluded. */
+USTRUCT()
 struct FSportsArcadePressCandidate
 {
+    GENERATED_BODY()
     int32 Slot = INDEX_NONE;
     float DistanceSquared = TNumericLimits<float>::Max();
 };
 
+USTRUCT()
 struct FSportsArcadePressPair
 {
+    GENERATED_BODY()
     int32 PrimarySlot = INDEX_NONE;
     int32 CoverSlot = INDEX_NONE;
 };
@@ -20,35 +22,7 @@ struct FSportsArcadePressPair
 struct FSportsArcadeTacticalSelection
 {
     static bool Before(const FSportsArcadePressCandidate& Candidate,
-        const FSportsArcadePressCandidate& Current)
-    {
-        return Candidate.DistanceSquared < Current.DistanceSquared - 1.f ||
-            (FMath::Abs(Candidate.DistanceSquared - Current.DistanceSquared) <= 1.f &&
-                Candidate.Slot < Current.Slot);
-    }
-
+        const FSportsArcadePressCandidate& Current);
     static FSportsArcadePressPair SelectPressPair(
-        const TArray<FSportsArcadePressCandidate>& Eligible)
-    {
-        FSportsArcadePressCandidate First, Second;
-        FSportsArcadePressPair Result;
-        for (const FSportsArcadePressCandidate& Candidate : Eligible)
-        {
-            if (Candidate.Slot < 1 || Candidate.Slot > 10 ||
-                !FMath::IsFinite(Candidate.DistanceSquared) ||
-                Candidate.DistanceSquared < 0.f) continue;
-            if (Before(Candidate, First))
-            {
-                Second = First;
-                First = Candidate;
-            }
-            else if (Candidate.Slot != First.Slot && Before(Candidate, Second))
-            {
-                Second = Candidate;
-            }
-        }
-        Result.PrimarySlot = First.Slot;
-        Result.CoverSlot = Second.Slot;
-        return Result;
-    }
+        const TArray<FSportsArcadePressCandidate>& Eligible);
 };
