@@ -111,25 +111,16 @@ class PossessionPressureTests(unittest.TestCase):
 
     def test_controlled_carrier_does_not_self_press(self):
         cpp = SOURCE.read_text(encoding="utf-8")
-        segment = cpp.split("const bool bSelfControllingBall", 1)[1].split(
-            "if (!bTeammateNearbyBall && !bSelfControllingBall", 1)[0]
-        self.assertIn("Ball->GetLastTouchPlayer() == Footballer", segment)
-        self.assertIn("FMath::Square(220.f)", segment)
+        self.assertIn("Ball->GetControlledPlayer(220.f, 115.f)", cpp)
+        self.assertIn("const bool bSelfControllingBall = CloseCarrier == Footballer;", cpp)
         self.assertIn("!bSelfControllingBall", cpp)
 
     def test_primary_ai_does_not_press_nearby_recent_teammate_ball(self):
-        code = SOURCE.read_text(encoding="utf-8")
-        section = code.split("const bool bTeammateNearbyBall", 1)[1].split(
-            "bIsPrimaryPresser = true", 1)[0]
-        self.assertIn("RecentTouchTeam == Footballer->TeamIndex", section)
-        self.assertIn("IsValid(Ball->GetLastTouchPlayer())", section)
-        self.assertIn("Ball->GetLastTouchPlayer() != Footballer", section)
-        self.assertIn("!Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN()", section)
-        self.assertIn("FMath::Square(220.f)", section)
-        self.assertIn("Ball->GetLastTouchPlayer()->GetWorld() == GetWorld()", section)
-        self.assertIn("FMath::Abs(Ball->GetLastTouchPlayer()->GetActorLocation().Z -", section)
-        self.assertIn("Ball->GetActorLocation().Z) <= 115.f", section)
-        self.assertIn("if (!bTeammateNearbyBall && !bSelfControllingBall", code)
+        cpp = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("CloseCarrier != Footballer", cpp)
+        self.assertIn("CloseCarrier->TeamIndex == Footballer->TeamIndex", cpp)
+        self.assertIn("Ball->GetControlledPlayer(220.f, 115.f)", cpp)
+        self.assertIn("if (!bTeammateNearbyBall && !bSelfControllingBall", cpp)
 
 if __name__ == "__main__":
     unittest.main()
