@@ -56,7 +56,7 @@ class StandingTackleRecoveryTests(unittest.TestCase):
                         self.tackle.index("bool bTeammateControllingBall"))
 
     def test_challenge_deflects_from_nearby_opponent_without_backwards_kick(self):
-        for token in ("PreviousCarrier = CandidateBall->GetLastTouchPlayer()",
+        for token in ("PreviousCarrier = CandidateBall->GetControlledPlayer(220.f, 135.f)",
                       "PreviousCarrier->GetWorld() == GetWorld()",
                       "PreviousCarrier->TeamIndex != TeamIndex",
                       "FMath::Square(220.f)",
