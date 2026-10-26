@@ -6,6 +6,7 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
     TSet<FName> NationIds;
     TMap<FName, ESportsArcadeSquadCategory> ClubCategories;
     TMap<FName, FName> ClubNations;
+    TSet<FName> StadiumIds;
     TSet<FName> FootballerIds;
     TSet<FName> CompetitionIds;
 
@@ -14,6 +15,17 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
         if (Nation.Id.IsNone() || Nation.DisplayName.TrimStartAndEnd().IsEmpty() || NationIds.Contains(Nation.Id))
             Errors.Add(FString::Printf(TEXT("Invalid or duplicate nation: %s"), *Nation.Id.ToString()));
         else NationIds.Add(Nation.Id);
+    }
+    for (const FSportsArcadeStadiumRecord& Stadium : Stadiums)
+    {
+        if (Stadium.Id.IsNone() || Stadium.DisplayName.TrimStartAndEnd().IsEmpty() ||
+            StadiumIds.Contains(Stadium.Id) || Stadium.Capacity < 1000 ||
+            !FMath::IsFinite(Stadium.PitchLengthMetres) ||
+            !FMath::IsFinite(Stadium.PitchWidthMetres) ||
+            Stadium.PitchLengthMetres < 90.f || Stadium.PitchLengthMetres > 120.f ||
+            Stadium.PitchWidthMetres < 45.f || Stadium.PitchWidthMetres > 90.f)
+            Errors.Add(FString::Printf(TEXT("Invalid or duplicate stadium: %s"), *Stadium.Id.ToString()));
+        else StadiumIds.Add(Stadium.Id);
     }
     for (const FSportsArcadeClubRecord& Club : Clubs)
     {
@@ -24,6 +36,12 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
             ClubCategories.Add(Club.Id, Club.Category);
             ClubNations.Add(Club.Id, Club.NationId);
         }
+        if (!Club.HomeStadiumId.IsNone() && !StadiumIds.Contains(Club.HomeStadiumId))
+            Errors.Add(FString::Printf(TEXT("Club %s references missing stadium"), *Club.Id.ToString()));
+        if (!Club.PreferredFormationId.IsNone() &&
+            Club.PreferredFormationId != FName(TEXT("433")) &&
+            Club.PreferredFormationId != FName(TEXT("442")))
+            Errors.Add(FString::Printf(TEXT("Club %s has unsupported formation"), *Club.Id.ToString()));
         if (!NationIds.Contains(Club.NationId))
             Errors.Add(FString::Printf(TEXT("Club %s references missing nation"), *Club.Id.ToString()));
     }
