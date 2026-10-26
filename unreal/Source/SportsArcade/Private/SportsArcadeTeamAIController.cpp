@@ -442,9 +442,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             const FVector CarrierBall = Ball->GetActorLocation();
             if (FVector::DistSquared2D(CarrierBall, Target) > FMath::Square(250.f))
             {
-                for (TActorIterator<ASportsArcadeCharacter> LaneIt(GetWorld()); LaneIt; ++LaneIt)
+                for (ASportsArcadeCharacter* LaneIt : TacticalOpponents)
                 {
-                    if (!IsValid(*LaneIt) || LaneIt->GetWorld() != GetWorld() ||
+                    if (!IsValid(LaneIt) || LaneIt->GetWorld() != GetWorld() ||
                         LaneIt->TeamIndex == Footballer->TeamIndex ||
                         LaneIt->GetActorLocation().ContainsNaN()) continue;
                     const FVector Defender = LaneIt->GetActorLocation();
