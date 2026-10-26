@@ -38,6 +38,14 @@ class LiveBallControlTests(unittest.TestCase):
         self.assertLess(part.index("FMath::Min(MaxContactDistanceCm, 225.f)"),
                         part.index("LastTouchPlayer = Player;"))
 
+    def test_kick_and_dribble_reject_invalid_team_identity(self):
+        for name, terminator in (
+            ("KickByPlayer(", "void ASportsArcadeBall::StopMotion()"),
+            ("ApplyControlledTouch(", "int32 ASportsArcadeBall::GetLastTouchTeamIndex()")
+        ):
+            section = CPP.split("bool ASportsArcadeBall::" + name, 1)[1].split(terminator, 1)[0]
+            self.assertIn("Player->TeamIndex != 0 && Player->TeamIndex != 1", section)
+
     def test_grounded_first_touch_rejects_fast_vertical_delivery(self):
         section = CPP.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
             "int32 ASportsArcadeBall::GetLastTouchTeamIndex()", 1)[0]
