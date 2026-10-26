@@ -28,7 +28,18 @@ FSportsArcadePressPair FSportsArcadeTacticalSelection::SelectPressPair(
         }
         if (Candidate.Slot == Second.Slot)
         {
-            if (Before(Candidate, Second)) Second = Candidate;
+            if (Before(Candidate, Second))
+            {
+                if (Before(Candidate, First))
+                {
+                    Second = First;
+                    First = Candidate;
+                }
+                else
+                {
+                    Second = Candidate;
+                }
+            }
             continue;
         }
         if (Before(Candidate, First))
