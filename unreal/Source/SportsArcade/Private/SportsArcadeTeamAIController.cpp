@@ -260,6 +260,12 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target.Y += (Slot == 9 ? -1.f : 1.f) *
                 FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f) * RunLaneScale;
             Target.Y -= FMath::Sign(Ball->GetActorLocation().Y) * InfieldRunBias;
+            // Avoid crossing the carrier's channel when the near-side
+            // forward is already positioned inside that passing corridor.
+            // Preserve the dual-runner split while keeping the adjustment
+            // away from the touchline.
+            const float ForwardLaneMargin = FMath::Max(0.f, HalfWidth - 300.f);
+            Target.Y = FMath::Clamp(Target.Y, -ForwardLaneMargin, ForwardLaneMargin);
         }
 
         // Central midfielders supply a short forward passing option when our
