@@ -624,3 +624,7 @@ Midfielders in slots 5–8 now scale their already-bounded forward supporting ad
 ### Wide-channel attacking runs (October 26)
 
 When the ball moves toward a touchline, advanced forward runners in slots 9–10 narrow their configured lateral run separation gradually to 55% at the field edge. This retains better inside passing angles during wide build-up while preserving the previous attacking tempo scale, formation, and navigation clamps. Source regression added; native UE5.5 simulation remains deferred.
+
+### Infield attacking run bias (October 26)
+
+During wide possession, advanced forwards now apply an additional bounded infield component to their navigation targets alongside the previous narrowed lane separation. The bias increases with proximity to the touchline and is capped at 35% of the authored lateral separation. Final pitch boundaries and movement horizon still apply. Source regression added; native Unreal gameplay testing remains deferred.
