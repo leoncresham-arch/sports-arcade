@@ -48,6 +48,13 @@ class SharedOpponentDecisionTests(unittest.TestCase):
         self.assertIn("Nearest = Candidate;", section)
         self.assertIn("Second = Candidate;", section)
 
+    def test_marking_conflicts_reuse_opponent_snapshot(self):
+        code = self.code
+        self.assertIn("for (ASportsArcadeCharacter* OtherThreat : TacticalOpponents)", code)
+        self.assertNotIn("TActorIterator<ASportsArcadeCharacter> OtherThreat", code)
+        self.assertIn("AlternativeDistance + FMath::Square(75.f) < TheirDistance", code)
+        self.assertIn("bAnotherTeammateOwnsMark = true;", code)
+
     def test_dead_ball_guard_precedes_snapshot(self):
         code = self.code
         self.assertLess(code.index("Match->bHalfTime || Match->bMatchFinished"),
