@@ -644,3 +644,7 @@ Compact defensive replanning during a fast counter now requires the most recent 
 ### Counter-carrier movement direction (October 26)
 
 The compact defensive-recovery horizon now also requires a finite opposing last-touch velocity that is not directed sharply away from the ball. This reduces false classifications of a former toucher as the current counterattack carrier. A nearby opponent, vertical reach and pitch constraints are still required. Source-level tests cover the gating; native gameplay verification remains pending.
+
+### Stable counter-carrier motion classification (October 26)
+
+Opponent position validity is checked before calculating ball-relative heading for rapid-counter attribution. Opponents moving under 150 cm/s are treated as effectively stationary, so their undefined heading cannot reject nearby controlled possession. Faster players moving decisively away from the ball still fail the counter-carrier test. The existing distance, height and last-touch requirements remain. Source-level regression is included; no native Unreal compile/playtest has been performed.
