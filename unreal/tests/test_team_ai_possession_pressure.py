@@ -5,6 +5,13 @@ import unittest
 SOURCE = Path(__file__).resolve().parents[1] / "Source/SportsArcade/Private/SportsArcadeTeamAIController.cpp"
 
 class PossessionPressureTests(unittest.TestCase):
+    def test_midfield_uses_single_opponent_snapshot_for_pressure_and_outlets(self):
+        code = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("TArray<ASportsArcadeCharacter*> TacticalOpponents;", code)
+        self.assertIn("TacticalOpponents.Add(Candidate);", code)
+        self.assertIn("for (ASportsArcadeCharacter* Threat : TacticalOpponents)", code)
+        self.assertIn("for (ASportsArcadeCharacter* Blocker : TacticalOpponents)", code)
+
     def test_midfield_support_runs_remain_bounded_and_possession_based(self):
         code = SOURCE.read_text(encoding="utf-8")
         part = code.split("// Central midfielders supply a short forward", 1)[1].split(
