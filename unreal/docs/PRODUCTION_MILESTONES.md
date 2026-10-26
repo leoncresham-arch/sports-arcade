@@ -138,3 +138,7 @@ The physics-ball kick entry point now checks vertical contact reach in addition 
 ## 2026-10-26 — Airborne-contact separation
 
 The ball actor's shared grounded-possession query now rejects vertical ball velocities above 650 cm/s. This prevents fast rising/falling passes and ricochets from being interpreted as settled dribbles simply because the previous kicker remains nearby. The relative horizontal velocity check is retained for moving ball carriers, while historical last-touch tracking is unchanged for match event attribution. Source checks were aligned with the single captured physics velocity and passed at `1a92a131`. This remains part of native gameplay integration rather than a separately completed football mechanic; physical reception and aerial control require Unreal editor testing and animation-specific contact work.
+
+## 2026-10-26 — Ground-contact rejection for fast aerial delivery
+
+Direct kicks and grounded controlled touches now reject invalid team identities before applying physics impulses or awarding last-touch attribution. Controlled ground touches additionally decline fast vertical ball travel (>650 cm/s), matching the existing live-control flight distinction; true trapping, volleys and headers remain separate animation/contact requirements. Structural tests cover both actions and guard ordering. Unreal native build and tactile first-touch outcomes remain pending.
