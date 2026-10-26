@@ -122,3 +122,7 @@ The ball actor now exposes `GetControlledPlayer(MaximumPlanarRangeCm, MaximumHei
 ## 2026-10-26 — Close-control and AI dribble consistency
 
 The AI ball carrier and teammate press-suppression paths now consume the same `ASportsArcadeBall::GetControlledPlayer(220.f, 115.f)` contract rather than duplicating a historical-last-touch proximity check. That contract validates the current world, last-touch footballer, live team identity, finite positions and grounded contact range. This connects attacking carrier motion and teammate defensive pressing to a single ball-contact authority. The related Python source contracts were updated and source CI passed on `581e9da6`. This is source-level evidence only; Unreal 5.5 C++ compilation, actor/world interaction, contact realism, and PC match behavior remain unverified. No artificial overall percentage change.
+
+## 2026-10-26 — Opponent-counter classification aligned with live ball control
+
+Defensive transition classification now obtains the opponent's current grounded carrier using the ball actor's validated control query. A detached historical last touch or unattributed ball flight no longer automatically qualifies as a driven opposition counter. This preserves ordinary loose-ball recovery while reserving emergency response for actual controlled opposition play. Existing source regression expectations were aligned. Native match testing and Unreal compilation remain separate acceptance stages.
