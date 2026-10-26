@@ -239,8 +239,11 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Ball->GetActorLocation().Z) <= 135.f &&
             FVector::DistSquared2D(LastToucher->GetActorLocation(),
                 Ball->GetActorLocation()) <= FMath::Square(220.f);
-        const int32 RecentTouchTeam = bAttributedControl
-            ? Ball->GetLastTouchTeamIndex() : INDEX_NONE;
+        // Resolve controlled possession from the nearby live carrier, rather
+        // than relying on possibly stale attribution after a transition.
+        const int32 RecentTouchTeam = bAttributedControl &&
+            (LastToucher->TeamIndex == 0 || LastToucher->TeamIndex == 1)
+            ? LastToucher->TeamIndex : INDEX_NONE;
         const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         if (RecentTouchTeam == Footballer->TeamIndex)
             Target.X += AttackSign * FMath::Clamp(AttackingSupportShiftCm, 0.f, 500.f);
