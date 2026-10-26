@@ -23,7 +23,7 @@ class LiveBallControlTests(unittest.TestCase):
         part = CPP.split("ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(", 1)[1]
         self.assertIn("const FVector PlayerVelocity = Player->GetVelocity()", part)
         self.assertIn("PlayerVelocity.ContainsNaN()", part)
-        self.assertIn("CollisionSphere->GetPhysicsLinearVelocity() - PlayerVelocity", part)
+        self.assertIn("BallVelocity - PlayerVelocity", part)
         self.assertIn("RelativeBallVelocity.SizeSquared2D() > FMath::Square(1500.f)", part)
 
     def test_airborne_vertical_velocity_cannot_claim_ground_control(self):
