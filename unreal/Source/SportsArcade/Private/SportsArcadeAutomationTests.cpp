@@ -340,6 +340,16 @@ bool FSportsArcadePressPairAutomation::RunTest(const FString& Parameters)
         FSportsArcadeTacticalSelection::SelectPressPair(Invalid);
     TestEqual(TEXT("Keeper, invalid slot and distance are ignored"), Safe.PrimarySlot, 4);
     TestEqual(TEXT("Single eligible outfielder has no cover"), Safe.CoverSlot, INDEX_NONE);
+    const TArray<FSportsArcadePressCandidate> RepeatedSlots = {
+        {5, 800.f}, {5, 300.f}, {2, 500.f}, {8, 900.f}};
+    const FSportsArcadePressPair DeDuplicated =
+        FSportsArcadeTacticalSelection::SelectPressPair(RepeatedSlots);
+    TestEqual(TEXT("Duplicate player slot only ranks once"), DeDuplicated.PrimarySlot, 5);
+    TestEqual(TEXT("Cover is a different player"), DeDuplicated.CoverSlot, 2);
+    const TArray<FSportsArcadePressCandidate> NonFinite = {
+        {3, TNumericLimits<float>::Infinity()}, {4, 25.f}};
+    TestEqual(TEXT("Infinite distance rejected"),
+        FSportsArcadeTacticalSelection::SelectPressPair(NonFinite).PrimarySlot, 4);
     const TArray<FSportsArcadePressCandidate> Empty;
     const FSportsArcadePressPair Missing =
         FSportsArcadeTacticalSelection::SelectPressPair(Empty);
