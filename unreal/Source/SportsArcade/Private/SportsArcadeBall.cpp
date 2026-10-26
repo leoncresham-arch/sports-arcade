@@ -197,7 +197,9 @@ ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(
         (Player->TeamIndex != 0 && Player->TeamIndex != 1) ||
         !FMath::IsFinite(MaximumPlanarRangeCm) || MaximumPlanarRangeCm <= 0.f ||
         !FMath::IsFinite(MaximumHeightDifferenceCm) || MaximumHeightDifferenceCm <= 0.f ||
-        Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN())
+        Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
+        !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
+        CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN())
     {
         return nullptr;
     }
