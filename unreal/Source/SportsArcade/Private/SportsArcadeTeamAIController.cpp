@@ -1,5 +1,6 @@
 #include "SportsArcadeTeamAIController.h"
 #include "SportsArcadeTeamRoster.h"
+#include "SportsArcadeTacticalSelection.h"
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeBall.h"
 #include "SportsArcadeGameMode.h"
@@ -519,14 +520,10 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             }
         }
 
-        // Rank the two nearest AI outfielders together, so pressing and cover
-        // agree on one stable assignment even at equal ball distances.
-        ASportsArcadeCharacter* Nearest = nullptr;
-        ASportsArcadeCharacter* Second = nullptr;
-        float BestDistance = TNumericLimits<float>::Max();
-        float SecondDistance = TNumericLimits<float>::Max();
-        int32 BestSlot = MAX_int32;
-        int32 SecondSlot = MAX_int32;
+        // The same deterministic algorithm is used in native automation tests,
+        // with eligibility supplied by the live roster (human-controlled
+        // players and goalkeepers are excluded before ranking).
+        TArray<FSportsArcadePressCandidate> PressCandidates;
         for (ASportsArcadeCharacter* Candidate : Roster->Players)
         {
             if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld() ||
@@ -537,25 +534,28 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 Candidate->GetActorLocation().ContainsNaN()) continue;
             const int32 CandidateSlot = Roster->bUseExplicitLineupSlots
                 ? Candidate->LineupSlot : Roster->Players.IndexOfByKey(Candidate);
-            const float Distance = FVector::DistSquared2D(
+            FSportsArcadePressCandidate Entry;
+            Entry.Slot = CandidateSlot;
+            Entry.DistanceSquared = FVector::DistSquared2D(
                 Candidate->GetActorLocation(), Ball->GetActorLocation());
-            const bool bBeatsFirst = Distance < BestDistance - 1.f ||
-                (FMath::Abs(Distance - BestDistance) <= 1.f && CandidateSlot < BestSlot);
-            if (bBeatsFirst)
-            {
-                Second = Nearest;
-                SecondDistance = BestDistance;
-                SecondSlot = BestSlot;
-                Nearest = Candidate;
-                BestDistance = Distance;
-                BestSlot = CandidateSlot;
-            }
-            else if (Distance < SecondDistance - 1.f ||
-                (FMath::Abs(Distance - SecondDistance) <= 1.f && CandidateSlot < SecondSlot))
+            PressCandidates.Add(Entry);
+        }
+        const FSportsArcadePressPair PressPair =
+            FSportsArcadeTacticalSelection::SelectPressPair(PressCandidates);
+        ASportsArcadeCharacter* Nearest = nullptr;
+        ASportsArcadeCharacter* Second = nullptr;
+        float SecondDistance = TNumericLimits<float>::Max();
+        for (ASportsArcadeCharacter* Candidate : Roster->Players)
+        {
+            if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld()) continue;
+            const int32 CandidateSlot = Roster->bUseExplicitLineupSlots
+                ? Candidate->LineupSlot : Roster->Players.IndexOfByKey(Candidate);
+            if (CandidateSlot == PressPair.PrimarySlot) Nearest = Candidate;
+            if (CandidateSlot == PressPair.CoverSlot)
             {
                 Second = Candidate;
-                SecondDistance = Distance;
-                SecondSlot = CandidateSlot;
+                SecondDistance = FVector::DistSquared2D(
+                    Candidate->GetActorLocation(), Ball->GetActorLocation());
             }
         }
         const bool bDefensiveEmergency =
