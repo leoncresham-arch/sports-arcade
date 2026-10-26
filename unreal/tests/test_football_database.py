@@ -8,6 +8,7 @@ SOURCE = (ROOT / "Source/SportsArcade/Private/SportsArcadeFootballDatabase.cpp")
 ROSTER = (ROOT / "Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp").read_text()
 GAME_MODE = (ROOT / "Source/SportsArcade/Private/SportsArcadeGameMode.cpp").read_text()
 GAME_HEADER = (ROOT / "Source/SportsArcade/Public/SportsArcadeGameMode.h").read_text()
+NATIVE_TESTS = (ROOT / "Source/SportsArcade/Private/SportsArcadeAutomationTests.cpp").read_text()
 
 
 class FootballDatabaseContracts(unittest.TestCase):
@@ -39,6 +40,12 @@ class FootballDatabaseContracts(unittest.TestCase):
         for name in attributes:
             self.assertIn("int32 " + name + " = 65;", HEADER)
             self.assertIn("Ratings->" + name + " = FMath::Clamp(Record." + name + ", 1, 99);", ROSTER)
+
+    def test_native_engine_automation_covers_stadium_fallback_and_validation(self):
+        self.assertIn("SportsArcade.Database.HomeStadiumFallback", NATIVE_TESTS)
+        self.assertIn("Missing required ground invalidates database", NATIVE_TESTS)
+        self.assertIn("Complete club and ground records validate", NATIVE_TESTS)
+        self.assertIn("Invalid stadium falls back safely", NATIVE_TESTS)
 
     def test_game_mode_can_explicitly_use_stadium_pitch_dimensions(self):
         self.assertIn("bool ConfigurePitchFromHomeStadium();", GAME_HEADER)
