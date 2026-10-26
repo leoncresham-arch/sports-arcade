@@ -105,6 +105,8 @@ public:
     float DribbleChallengeRadiusCm = 150.f;
 
 private:
+    // Distribute expensive full-squad scans over the decision interval.
+    bool bDecisionPhaseInitialized = false;
     float DecisionCountdown = 0.f;
     float ActionCooldownRemaining = 0.f;
 };
