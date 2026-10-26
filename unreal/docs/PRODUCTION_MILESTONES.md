@@ -142,3 +142,7 @@ The ball actor's shared grounded-possession query now rejects vertical ball velo
 ## 2026-10-26 — Ground-contact rejection for fast aerial delivery
 
 Direct kicks and grounded controlled touches now reject invalid team identities before applying physics impulses or awarding last-touch attribution. Controlled ground touches additionally decline fast vertical ball travel (>650 cm/s), matching the existing live-control flight distinction; true trapping, volleys and headers remain separate animation/contact requirements. Structural tests cover both actions and guard ordering. Unreal native build and tactile first-touch outcomes remain pending.
+
+## 2026-10-26 — Tackle contact integrated with ball control
+
+The native standing-tackle candidate selector now uses `GetControlledPlayer(135.f, 115.f)` for the historically attributed friendly player rather than a separate distance-only calculation. This respects the same physics/flight/relative-speed checks used by attacking carriers and pressing AI. The pre-existing independent nearby-teammate protection remains in place. Ground tackles additionally reject rapidly rising/falling balls above 650 cm/s vertical speed before a kick is attempted, matching the ground-dribble contact gate. Structural regressions and related source contracts were updated; source CI is the current verification, not native match simulation. Follow-up physical-ball interception, fouls and aerial tackle behavior remain to be integrated in Unreal 5.5.
