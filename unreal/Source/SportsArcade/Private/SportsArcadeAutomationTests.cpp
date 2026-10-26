@@ -296,6 +296,14 @@ bool FSportsArcadeFootballerProfileAutomation::RunTest(const FString& Parameters
     Catalog->Footballers[0].Finishing = 94;
     TestTrue(TEXT("Corrected player rating validates"),
         Catalog->ValidateDatabase(Errors));
+    FSportsArcadeFootballerRecord DuplicateShirt = Player;
+    DuplicateShirt.Id = FName(TEXT("second_striker"));
+    Catalog->Footballers.Add(DuplicateShirt);
+    TestFalse(TEXT("Club duplicate shirt numbers rejected"),
+        Catalog->ValidateDatabase(Errors));
+    Catalog->Footballers.Pop();
+    TestTrue(TEXT("Unique club shirt numbers validate"),
+        Catalog->ValidateDatabase(Errors));
     Catalog->Footballers[0].ClubId = FName(TEXT("missing_club"));
     TestFalse(TEXT("Missing footballer club is rejected"),
         Catalog->ValidateDatabase(Errors));
