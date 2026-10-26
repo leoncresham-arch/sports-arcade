@@ -5,6 +5,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 HEADER = (ROOT / "Source/SportsArcade/Public/SportsArcadeFootballDatabase.h").read_text()
 SOURCE = (ROOT / "Source/SportsArcade/Private/SportsArcadeFootballDatabase.cpp").read_text()
+ROSTER = (ROOT / "Source/SportsArcade/Private/SportsArcadeTeamRoster.cpp").read_text()
 
 
 class FootballDatabaseContracts(unittest.TestCase):
@@ -28,6 +29,14 @@ class FootballDatabaseContracts(unittest.TestCase):
                      "ClubCategories.Add", "FootballerIds.Add", "CompetitionIds.Add"):
             self.assertIn(term, SOURCE)
         self.assertIn("return Errors.IsEmpty();", SOURCE)
+
+    def test_individual_ratings_flow_from_database_to_match_footballers(self):
+        attributes = ("Acceleration", "Agility", "SprintSpeed", "Stamina",
+                      "ShortPassing", "Finishing", "BallControl", "Tackling")
+        self.assertIn("FindComponentByClass<USportsArcadePlayerAttributes>()", ROSTER)
+        for name in attributes:
+            self.assertIn("int32 " + name + " = 65;", HEADER)
+            self.assertIn("Ratings->" + name + " = FMath::Clamp(Record." + name + ", 1, 99);", ROSTER)
 
     def test_supports_multiple_competition_formats(self):
         for fmt in ("League", "Knockout", "GroupsAndKnockout"):
