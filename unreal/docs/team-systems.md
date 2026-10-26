@@ -612,3 +612,7 @@ Advanced forward-run bursts in slots 9–10 now pause when the ball travels late
 ### Local combination-play forward runs
 
 Advanced attacking runs in slots 9–10 now require the footballer to be within 3200 cm of the ball. This keeps far-away forwards anchored in formation during attributed possession on the other side of the pitch, while preserving ball-height, retreating-pass and fast-switch gates. Source regression added; UE native playtesting remains deferred.
+
+### Tempo-adaptive advanced forward runs (October 26)
+
+Attacking runners in slots 9 and 10 now scale the configured forward-run distance by the ball's forward movement speed, from 65% for backward-travelling-but-eligible play to 115% on a quick developing forward pass (input mapped from -450 to 850 cm/s). Existing possession, local-distance, ball-height, backward-pass and cross-field-switch gates still apply. The distance multiplier is bounded, and final navigation targets retain the existing pitch and planning-horizon clamps. Tests remain source-level; Unreal 5.5 native compilation and tuning are deferred.
