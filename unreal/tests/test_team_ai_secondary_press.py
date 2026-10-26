@@ -27,8 +27,8 @@ class SecondaryPressTests(unittest.TestCase):
 
     def test_second_defender_is_distinct_and_excludes_keeper(self):
         code = SOURCE.read_text(encoding="utf-8")
-        self.assertIn("Candidate->LineupSlot == 0", code)
-        self.assertIn("Roster->Players.IndexOfByKey(Candidate) == 0", code)
+        self.assertIn("CandidateSlot < 1 || CandidateSlot > 10", code)
+        self.assertIn("PressActors.Contains(CandidateSlot)", code)
         self.assertIn("Cast<ASportsArcadeTeamAIController>(Candidate->GetController())", code)
         self.assertIn("PressPair.CoverSlot", code)
         self.assertIn("Nearest != Footballer", code)
