@@ -126,3 +126,7 @@ The AI ball carrier and teammate press-suppression paths now consume the same `A
 ## 2026-10-26 — Opponent-counter classification aligned with live ball control
 
 Defensive transition classification now obtains the opponent's current grounded carrier using the ball actor's validated control query. A detached historical last touch or unattributed ball flight no longer automatically qualifies as a driven opposition counter. This preserves ordinary loose-ball recovery while reserving emergency response for actual controlled opposition play. Existing source regression expectations were aligned. Native match testing and Unreal compilation remain separate acceptance stages.
+
+## 2026-10-26 — Ball-control physics precondition hardening
+
+The native ball control authority now fails closed when the collision sphere is absent, not simulating physics, or reports non-finite linear velocity. This prevents tactical AI from trusting contact attribution while the ball is in an invalid physics state. Source-level regression tests cover the shared physics/position validation, the separation from historical last touch and touch-attribution ordering. Unreal native integration and ball reception behavior still require PC testing.
