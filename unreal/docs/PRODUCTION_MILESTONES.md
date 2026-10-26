@@ -65,3 +65,7 @@ The generic venue remains a resilient fallback for incomplete imports and custom
 ## 2026-10-26 — Ball-control arbitration optimization
 
 The human-controlled dribble path now makes one footballer proximity pass to determine both teammate-priority and opposition-priority ownership instead of separately enumerating all characters twice for each prospective touch. Existing grounded contact-height, shielding margin, same-world and team checks are preserved, with short-circuit only once both claims are found. Source regressions updated to verify the combined logic and prevent accidental automatic steals. GitHub Python source tests passed on commit `4a08e141`. Native UE compilation, functional ball-control behavior and performance impact remain unverified.
+
+## 2026-10-26 — Early manual-touch reachability gate
+
+The manual ball-control path now rejects out-of-range and rearward/nonaligned balls before enumerating footballers for ownership arbitration. This retains the prior eligibility requirements while reducing full-roster work for impossible touch candidates. Regression checks cover gate ordering. Source CI is not a native Unreal behavioral or performance test.
