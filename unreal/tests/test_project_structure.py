@@ -155,7 +155,7 @@ class UnrealProjectStructureTests(unittest.TestCase):
         self.assertIn("StrikeCooldownRemaining", footballer)
         self.assertIn("if (NearestBall->KickByPlayer(this", footballer)
         self.assertIn("StrikeCooldownRemaining = FMath::Max(StrikeCooldownSeconds", footballer)
-        self.assertIn("LastTouch->TeamIndex == TeamIndex", footballer)
+        self.assertIn("ControlledCarrier->TeamIndex == TeamIndex", footballer)
         self.assertIn("CandidateBall->KickByPlayer(this, ChallengeDirection", footballer)
         self.assertIn("FMath::Abs(ToBall.Z) <= 120.f", footballer)
         self.assertIn("KickByPlayer(this", footballer)
