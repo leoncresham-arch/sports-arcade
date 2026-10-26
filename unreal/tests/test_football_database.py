@@ -54,6 +54,11 @@ class FootballDatabaseContracts(unittest.TestCase):
         self.assertIn("return Stadium;", SOURCE)
         self.assertIn("return Baseline;", SOURCE)
 
+    def test_real_club_can_require_explicit_home_stadium(self):
+        self.assertIn("bool bRequireVerifiedHomeStadium = false;", HEADER)
+        self.assertIn("Club.bRequireVerifiedHomeStadium && Club.HomeStadiumId.IsNone()", SOURCE)
+        self.assertIn("requires a home stadium", SOURCE)
+
     def test_stadium_defaults_and_club_customisation(self):
         self.assertIn("struct FSportsArcadeStadiumRecord", HEADER)
         self.assertIn("int32 Capacity = 30000;", HEADER)
