@@ -153,6 +153,19 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         StopMovement();
         return;
     }
+    // Snapshot opponents once per decision rather than repeating world actor
+    // enumeration in support pressure and passing-lane obstacle checks.
+    TArray<ASportsArcadeCharacter*> TacticalOpponents;
+    for (TActorIterator<ASportsArcadeCharacter> OpponentIt(GetWorld()); OpponentIt; ++OpponentIt)
+    {
+        ASportsArcadeCharacter* Candidate = *OpponentIt;
+        if (IsValid(Candidate) && Candidate->GetWorld() == GetWorld() &&
+            Candidate->TeamIndex != Footballer->TeamIndex &&
+            !Candidate->GetActorLocation().ContainsNaN())
+        {
+            TacticalOpponents.Add(Candidate);
+        }
+    }
     FVector Target = Roster->GetFormationPosition(Slot);
     const float HalfLength = IsValid(Match) ? Match->PitchHalfLengthCm : 5250.f;
     const float HalfWidth = IsValid(Match) ? Match->PitchHalfWidthCm : 3400.f;
@@ -311,9 +324,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             // Avoid shifting midfield forward when the current carrier is
             // facing a live close-range challenge.
             bool bCarrierUnderPressure = false;
-            for (TActorIterator<ASportsArcadeCharacter> Threat(GetWorld()); Threat; ++Threat)
+            for (ASportsArcadeCharacter* Threat : TacticalOpponents)
             {
-                if (!IsValid(*Threat) || Threat->GetWorld() != GetWorld() ||
+                if (!IsValid(Threat) || Threat->GetWorld() != GetWorld() ||
                     Threat->TeamIndex == Footballer->TeamIndex ||
                     Threat->GetActorLocation().ContainsNaN()) continue;
                 const FVector ThreatDelta = Threat->GetActorLocation() - Ball->GetActorLocation();
@@ -392,9 +405,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target.Y = FMath::Clamp(Target.Y, MidfieldBaseY - 1100.f, MidfieldBaseY + 1100.f);
             // Avoid choosing the exact position of an opponent screening
             // the passing outlet. Deflect within the midfielder's corridor.
-            for (TActorIterator<ASportsArcadeCharacter> Blocker(GetWorld()); Blocker; ++Blocker)
+            for (ASportsArcadeCharacter* Blocker : TacticalOpponents)
             {
-                if (!IsValid(*Blocker) || Blocker->GetWorld() != GetWorld() ||
+                if (!IsValid(Blocker) || Blocker->GetWorld() != GetWorld() ||
                     Blocker->TeamIndex == Footballer->TeamIndex ||
                     Blocker->GetActorLocation().ContainsNaN()) continue;
                 const FVector OutletDelta = Target - Blocker->GetActorLocation();
