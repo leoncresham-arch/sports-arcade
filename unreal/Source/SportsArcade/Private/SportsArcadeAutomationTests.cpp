@@ -2,6 +2,7 @@
 #include "SportsArcadeCupFixtures.h"
 #include "SportsArcadeCupSave.h"
 #include "SportsArcadeLeagueTable.h"
+#include "SportsArcadeFootballDatabase.h"
 #include "SportsArcadePenaltyShootout.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
@@ -159,6 +160,67 @@ bool FSportsArcadeCupSaveIntegrityAutomation::RunTest(const FString& Parameters)
     TestTrue(TEXT("Champion crowned"), Cup->RecordWinner(Clubs[0]));
     TestTrue(TEXT("Completed tournament validates"), Cup->ValidateProgress());
     TestEqual(TEXT("Champion identity"), Cup->ChampionId, Clubs[0]);
+    return true;
+}
+
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadeHomeStadiumAutomation,
+    "SportsArcade.Database.HomeStadiumFallback",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadeHomeStadiumAutomation::RunTest(const FString& Parameters)
+{
+    USportsArcadeFootballDatabase* Catalog =
+        NewObject<USportsArcadeFootballDatabase>(GetTransientPackage());
+    TestNotNull(TEXT("Football database exists"), Catalog);
+    if (!Catalog) return false;
+
+    const FSportsArcadeStadiumRecord Default =
+        Catalog->GetHomeStadiumOrDefault(FName(TEXT("unknown")));
+    TestEqual(TEXT("Missing club uses generic stadium"),
+        Default.Id, FName(TEXT("GenericStadium")));
+    TestEqual(TEXT("Generic pitch length"), Default.PitchLengthMetres, 105.f);
+    TestEqual(TEXT("Generic pitch width"), Default.PitchWidthMetres, 68.f);
+
+    FSportsArcadeNationRecord Nation;
+    Nation.Id = FName(TEXT("test_nation"));
+    Nation.DisplayName = TEXT("Test Nation");
+    Catalog->Nations.Add(Nation);
+
+    FSportsArcadeClubRecord Club;
+    Club.Id = FName(TEXT("home_club"));
+    Club.DisplayName = TEXT("Home Club");
+    Club.NationId = Nation.Id;
+    Club.HomeStadiumId = FName(TEXT("arena_a"));
+    Club.bRequireVerifiedHomeStadium = true;
+    Catalog->Clubs.Add(Club);
+
+    TArray<FString> Errors;
+    TestFalse(TEXT("Missing required ground invalidates database"),
+        Catalog->ValidateDatabase(Errors));
+
+    FSportsArcadeStadiumRecord Stadium;
+    Stadium.Id = Club.HomeStadiumId;
+    Stadium.DisplayName = TEXT("Original Arena");
+    Stadium.Capacity = 42000;
+    Stadium.PitchLengthMetres = 104.f;
+    Stadium.PitchWidthMetres = 67.f;
+    Catalog->Stadiums.Add(Stadium);
+    TestTrue(TEXT("Complete club and ground records validate"),
+        Catalog->ValidateDatabase(Errors));
+
+    const FSportsArcadeStadiumRecord Resolved =
+        Catalog->GetHomeStadiumOrDefault(Club.Id);
+    TestEqual(TEXT("Home club gets correct stadium"), Resolved.Id, Stadium.Id);
+    TestEqual(TEXT("Authored pitch length"), Resolved.PitchLengthMetres, 104.f);
+    TestEqual(TEXT("Authored pitch width"), Resolved.PitchWidthMetres, 67.f);
+
+    Catalog->Stadiums[0].PitchLengthMetres = 200.f;
+    TestFalse(TEXT("Out-of-bounds stadium invalidates catalog"),
+        Catalog->ValidateDatabase(Errors));
+    TestEqual(TEXT("Invalid stadium falls back safely"),
+        Catalog->GetHomeStadiumOrDefault(Club.Id).Id,
+        FName(TEXT("GenericStadium")));
     return true;
 }
 
