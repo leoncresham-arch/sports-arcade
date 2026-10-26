@@ -230,20 +230,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // Last-touch attribution is a weak possession signal, not a guarantee:
         // use only small shape adjustments, never override primary pressing.
         // A last touch without nearby control is a loose ball, not possession.
-        const ASportsArcadeCharacter* LastToucher = Ball->GetLastTouchPlayer();
-        const bool bAttributedControl = IsValid(LastToucher) &&
-            LastToucher->GetWorld() == GetWorld() &&
-            !LastToucher->GetActorLocation().ContainsNaN() &&
-            // Aerial and separated loose balls must not masquerade as
-            // retained team possession based solely on touch history.
-            FMath::Abs(LastToucher->GetActorLocation().Z -
-                Ball->GetActorLocation().Z) <= 135.f &&
-            FVector::DistSquared2D(LastToucher->GetActorLocation(),
-                Ball->GetActorLocation()) <= FMath::Square(220.f);
-        // Resolve controlled possession from the nearby live carrier, rather
-        // than relying on possibly stale attribution after a transition.
-        const int32 RecentTouchTeam = bAttributedControl &&
-            (LastToucher->TeamIndex == 0 || LastToucher->TeamIndex == 1)
+        const ASportsArcadeCharacter* LastToucher =
+            Ball->GetControlledPlayer();
+        const int32 RecentTouchTeam = IsValid(LastToucher)
             ? LastToucher->TeamIndex : INDEX_NONE;
         const float AttackSign = Footballer->TeamIndex == 0 ? 1.f : -1.f;
         if (RecentTouchTeam == Footballer->TeamIndex)
@@ -917,15 +906,9 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
     // A historical last touch cannot suppress defensive cover after an
     // interception, an aerial clearance or a separated loose ball.
     const ASportsArcadeCharacter* MarkingCarrier =
-        IsValid(Ball) ? Ball->GetLastTouchPlayer() : nullptr;
-    const bool bTeammateControlsForMarking = IsValid(Ball) &&
-        IsValid(MarkingCarrier) && MarkingCarrier->GetWorld() == GetWorld() &&
-        MarkingCarrier->TeamIndex == Footballer->TeamIndex &&
-        !MarkingCarrier->GetActorLocation().ContainsNaN() &&
-        FMath::Abs(MarkingCarrier->GetActorLocation().Z -
-            Ball->GetActorLocation().Z) <= 135.f &&
-        FVector::DistSquared2D(MarkingCarrier->GetActorLocation(),
-            Ball->GetActorLocation()) <= FMath::Square(220.f);
+        IsValid(Ball) ? Ball->GetControlledPlayer() : nullptr;
+    const bool bTeammateControlsForMarking =
+        IsValid(MarkingCarrier) && MarkingCarrier->TeamIndex == Footballer->TeamIndex;
     // A conservative defensive shadow towards the closest nearby opponent.
     // Pressing footballer already has the ball as target and must not be pulled away.
     if (Slot != 0 && !bIsPrimaryPresser && !bIsSecondaryPresser && IsValid(Ball) &&
