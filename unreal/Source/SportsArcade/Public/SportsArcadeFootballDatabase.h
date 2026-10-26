@@ -72,6 +72,25 @@ struct FSportsArcadeFootballerRecord
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
     int32 ShirtNumber = 1;
+
+    // Individual match-performance traits. The neutral 65 values deliberately
+    // avoid misrepresenting real-world player statistics until authored.
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 Acceleration = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 Agility = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 SprintSpeed = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 Stamina = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 ShortPassing = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 Finishing = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 BallControl = 65;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="1", ClampMax="99"))
+    int32 Tackling = 65;
 };
 
 USTRUCT(BlueprintType)
