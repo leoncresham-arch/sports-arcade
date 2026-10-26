@@ -58,6 +58,18 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
             Errors.Add(FString::Printf(TEXT("Footballer %s references missing club"), *Player.Id.ToString()));
         if (Player.ShirtNumber < 1 || Player.ShirtNumber > 99)
             Errors.Add(FString::Printf(TEXT("Footballer %s has invalid shirt number"), *Player.Id.ToString()));
+        const int32 Ratings[] = {Player.Acceleration, Player.Agility, Player.SprintSpeed,
+            Player.Stamina, Player.ShortPassing, Player.Finishing, Player.BallControl,
+            Player.Tackling};
+        for (const int32 Rating : Ratings)
+        {
+            if (Rating < 1 || Rating > 99)
+            {
+                Errors.Add(FString::Printf(TEXT("Footballer %s has invalid performance rating"),
+                    *Player.Id.ToString()));
+                break;
+            }
+        }
     }
     for (const FSportsArcadeCompetitionRecord& Competition : Competitions)
     {
