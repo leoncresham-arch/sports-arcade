@@ -1,3 +1,5 @@
+> **CURRENT ACTIVE HANDOFF (2026-10-26):** Read [HANDOFF_2026-10-26.md](HANDOFF_2026-10-26.md) before resuming. It contains the latest project state, user instructions, verified CI, working 30% provisional estimate, large-batch requirement, baseline-first customization and development priorities. This permanent history file is retained; older checkpoints below may be stale.
+
 # SPORTS ARCADE — HANDOFF / CONTINUITY NOTES
 
 Last updated: 2026-10-14/15 (UTC). Read the current GitHub tree and Actions status before making assumptions.
