@@ -73,3 +73,7 @@ The manual ball-control path now rejects out-of-range and rearward/nonaligned ba
 ## 2026-10-26 — Loose-ball speed rejection ordering
 
 Moved the existing relative high-speed loose-ball test before expensive teammate/opponent proximity arbitration in player-controlled dribbling. Impossible-to-control balls no longer trigger a squad ownership scan. Preserves the original 1150 cm/s threshold and 0.3 directional test; only the order of checks changes. Added regression check for the early gate. Performance and native behavioral validation remain pending.
+
+## 2026-10-26 — Native executable regression expansion
+
+Added `SportsArcade.Database.HomeStadiumFallback` to the existing Unreal Engine native editor automation suite. Unlike Python source-string contracts, this C++ automation exercises actual stadium lookup and database validation against live `UDataAsset` objects when run in Unreal: absent club uses the 105x68 m baseline; missing required home ground fails validation; an authored valid ground resolves correctly; corrupt pitch dimensions are rejected and fall back safely. Updated both suite-count and integration contracts. **Not yet executed under Unreal Engine 5.5:** GitHub source CI cannot establish native compile or behavioral pass; run `unreal/Tools/Windows/Run-SportsArcadeTests.ps1` when Windows UE is available.
