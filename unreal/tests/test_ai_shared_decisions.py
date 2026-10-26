@@ -35,6 +35,19 @@ class SharedOpponentDecisionTests(unittest.TestCase):
         self.assertIn("Candidate->TeamIndex != Footballer->TeamIndex", snapshot)
         self.assertIn("!Candidate->GetActorLocation().ContainsNaN()", snapshot)
 
+    def test_press_and_cover_are_ranked_in_one_pass(self):
+        code = self.code
+        start = code.index("// Rank the two nearest AI outfielders together")
+        end = code.index("if (Second == Footballer &&", start)
+        section = code[start:end]
+        self.assertEqual(section.count("for (ASportsArcadeCharacter* Candidate : Roster->Players)"), 1)
+        self.assertIn("Second = Nearest;", section)
+        self.assertIn("SecondDistance = BestDistance;", section)
+        self.assertIn("CandidateSlot < BestSlot", section)
+        self.assertIn("CandidateSlot < SecondSlot", section)
+        self.assertIn("Nearest = Candidate;", section)
+        self.assertIn("Second = Candidate;", section)
+
     def test_dead_ball_guard_precedes_snapshot(self):
         code = self.code
         self.assertLess(code.index("Match->bHalfTime || Match->bMatchFinished"),
