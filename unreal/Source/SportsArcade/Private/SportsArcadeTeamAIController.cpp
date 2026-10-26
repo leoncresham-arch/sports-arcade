@@ -591,22 +591,15 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         }
         // Do not press a teammate's clearly controlled ball. Last touch is
         // only a proxy, so retain pressure once the ball has separated.
-        const bool bTeammateNearbyBall = RecentTouchTeam == Footballer->TeamIndex &&
-            IsValid(Ball->GetLastTouchPlayer()) &&
-            Ball->GetLastTouchPlayer() != Footballer &&
-            Ball->GetLastTouchPlayer()->GetWorld() == GetWorld() &&
-            !Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() &&
-            FMath::Abs(Ball->GetLastTouchPlayer()->GetActorLocation().Z -
-                Ball->GetActorLocation().Z) <= 115.f &&
-            FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
-                Ball->GetActorLocation()) < FMath::Square(220.f);
-        // A controlled opponent ball deserves pressure; when the ball is loose,
-        // the nearest defender still recovers it. The carrier never presses
-        // its own controlled touch simply because it is nearest to the ball.
-        const bool bSelfControllingBall = RecentTouchTeam == Footballer->TeamIndex &&
-            Ball->GetLastTouchPlayer() == Footballer &&
-            FVector::DistSquared2D(Footballer->GetActorLocation(),
-                Ball->GetActorLocation()) <= FMath::Square(220.f);
+        // Reuse the stricter close-control contract for both carrier and teammate.
+        // Neither stale touches nor elevated balls can claim a playable dribble.
+        const ASportsArcadeCharacter* CloseCarrier =
+            Ball->GetControlledPlayer(220.f, 115.f);
+        const bool bTeammateNearbyBall =
+            CloseCarrier && CloseCarrier != Footballer &&
+            CloseCarrier->TeamIndex == Footballer->TeamIndex;
+        // The selected carrier must remain the physically reachable footballer.
+        const bool bSelfControllingBall = CloseCarrier == Footballer;
         // Carry a nearby controlled ball toward goal with a measured touch.
         // Avoid repeated impulses until the existing action cooldown clears.
         if (bSelfControllingBall)
