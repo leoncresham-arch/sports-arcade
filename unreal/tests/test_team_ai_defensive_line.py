@@ -14,6 +14,15 @@ class DefensiveLineTests(unittest.TestCase):
         self.assertIn("DefensiveLineRecoveryDepthCm = 650.f", header)
         self.assertIn("DefensiveLineLateralDisplacementCm = 650.f", header)
 
+    def test_controlled_counter_has_tighter_recovery_than_loose_ball(self):
+        code = SOURCE.read_text()
+        self.assertIn("const bool bOpponentClearlyControllingCounter =", code)
+        self.assertIn("bRapidDefensiveTransition &&", code)
+        self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", code)
+        self.assertIn("FMath::Square(220.f)", code)
+        self.assertIn("bOpponentClearlyControllingCounter ? 1050.f :", code)
+        self.assertIn("(bDefensiveHalf ? 1350.f : 1800.f)", code)
+
     def test_back_line_restrained_only_when_opposition_last_touched(self):
         code = SOURCE.read_text()
         section = code.split("// Hold the authored back line", 1)[1].split(
