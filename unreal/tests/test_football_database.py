@@ -38,6 +38,19 @@ class FootballDatabaseContracts(unittest.TestCase):
             self.assertIn("int32 " + name + " = 65;", HEADER)
             self.assertIn("Ratings->" + name + " = FMath::Clamp(Record." + name + ", 1, 99);", ROSTER)
 
+    def test_stadium_defaults_and_club_customisation(self):
+        self.assertIn("struct FSportsArcadeStadiumRecord", HEADER)
+        self.assertIn("int32 Capacity = 30000;", HEADER)
+        self.assertIn("float PitchLengthMetres = 105.f;", HEADER)
+        self.assertIn("float PitchWidthMetres = 68.f;", HEADER)
+        self.assertIn("FName HomeStadiumId;", HEADER)
+        self.assertIn("FName PreferredFormationId;", HEADER)
+        self.assertIn("StadiumIds.Contains(Stadium.Id)", SOURCE)
+        self.assertIn("Club.HomeStadiumId.IsNone()", SOURCE)
+        self.assertIn("Club.PreferredFormationId.IsNone()", SOURCE)
+        self.assertIn('FName(TEXT("433"))', ROSTER)
+        self.assertIn('FName(TEXT("442"))', ROSTER)
+
     def test_supports_multiple_competition_formats(self):
         for fmt in ("League", "Knockout", "GroupsAndKnockout"):
             self.assertIn(fmt, HEADER)
