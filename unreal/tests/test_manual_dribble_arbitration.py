@@ -40,6 +40,12 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("ClosestDribbleBall = *It", self.tick)
         self.assertIn("if (IsValid(ClosestDribbleBall) && !ShieldTouchDir.IsNearlyZero() &&", self.tick)
 
+    def test_unreachable_ball_rejected_before_squad_scan(self):
+        block = self.tick
+        scan = block.index("TActorIterator<ASportsArcadeCharacter> ContactIt(GetWorld())")
+        self.assertLess(block.index("ContactDistanceSq >= ClosestDribbleDistanceSq"), scan)
+        self.assertLess(block.index("TravelDirection, ToBall.GetSafeNormal2D()) <= 0.2f"), scan)
+
     def test_single_contact_scan_respects_friendly_and_opposing_claims(self):
         block = self.tick
         self.assertEqual(block.count("TActorIterator<ASportsArcadeCharacter> ContactIt(GetWorld())"), 1)
