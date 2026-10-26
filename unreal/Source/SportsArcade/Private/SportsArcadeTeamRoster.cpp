@@ -141,6 +141,16 @@ bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootbal
     {
         if (Record.ClubId == ClubId) SquadByShirt.Add(Record.ShirtNumber, Record.Id);
     }
+    // Optional club tactics override the generic 4-3-3 baseline.
+    for (const FSportsArcadeClubRecord& Club : Catalog->Clubs)
+    {
+        if (Club.Id != ClubId) continue;
+        if (Club.PreferredFormationId == FName(TEXT("442")))
+            Formation = ESportsArcadeFormation::Formation442;
+        else if (Club.PreferredFormationId == FName(TEXT("433")))
+            Formation = ESportsArcadeFormation::Formation433;
+        break;
+    }
     for (ASportsArcadeCharacter* Player : Players)
     {
         Player->FootballerRecordId = SquadByShirt[Player->ShirtNumber];
