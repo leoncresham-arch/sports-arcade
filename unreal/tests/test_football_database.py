@@ -33,6 +33,15 @@ class FootballDatabaseContracts(unittest.TestCase):
             self.assertIn(term, SOURCE)
         self.assertIn("return Errors.IsEmpty();", SOURCE)
 
+    def test_catalog_validates_each_rating_before_roster_binding(self):
+        self.assertIn("const int32 Ratings[]", SOURCE)
+        self.assertIn("Player.Acceleration", SOURCE)
+        self.assertIn("Player.Tackling", SOURCE)
+        self.assertIn("if (Rating < 1 || Rating > 99)", SOURCE)
+        self.assertIn("has invalid performance rating", SOURCE)
+        self.assertIn("SportsArcade.Gameplay.FootballerProfileData", NATIVE_TESTS)
+        self.assertIn("Out-of-range player rating is rejected", NATIVE_TESTS)
+
     def test_individual_ratings_flow_from_database_to_match_footballers(self):
         attributes = ("Acceleration", "Agility", "SprintSpeed", "Stamina",
                       "ShortPassing", "Finishing", "BallControl", "Tackling")
