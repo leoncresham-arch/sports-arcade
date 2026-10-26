@@ -290,6 +290,12 @@ bool FSportsArcadeFootballerProfileAutomation::RunTest(const FString& Parameters
     TestEqual(TEXT("Custom sprint retained"), Catalog->Footballers[0].SprintSpeed, 87);
     TestEqual(TEXT("Unmodified passing uses neutral baseline"),
         Catalog->Footballers[0].ShortPassing, 65);
+    Catalog->Footballers[0].Finishing = 120;
+    TestFalse(TEXT("Out-of-range player rating is rejected"),
+        Catalog->ValidateDatabase(Errors));
+    Catalog->Footballers[0].Finishing = 94;
+    TestTrue(TEXT("Corrected player rating validates"),
+        Catalog->ValidateDatabase(Errors));
     Catalog->Footballers[0].ClubId = FName(TEXT("missing_club"));
     TestFalse(TEXT("Missing footballer club is rejected"),
         Catalog->ValidateDatabase(Errors));
