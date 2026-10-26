@@ -81,6 +81,10 @@ bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVect
     {
         return false;
     }
+    // A grounded outfielder cannot kick a ball several metres above the foot.
+    // Keep goalkeeper parries and realistic low volleys available inside reach.
+    if (FMath::Abs(Player->GetActorLocation().Z - GetActorLocation().Z) >
+        FMath::Min(MaxContactDistanceCm, 225.f)) return false;
     // Attribute the touch only after a finite, nonzero physics impulse.
     if (CollisionSphere->GetPhysicsLinearVelocity().ContainsNaN()) return false;
     Kick(Direction, StrengthKgCmPerSec);
