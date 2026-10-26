@@ -90,3 +90,27 @@ bool USportsArcadeFootballDatabase::FindClubById(FName ClubId, FSportsArcadeClub
     }
     return false;
 }
+
+
+FSportsArcadeStadiumRecord USportsArcadeFootballDatabase::GetHomeStadiumOrDefault(FName ClubId) const
+{
+    FSportsArcadeStadiumRecord Baseline;
+    Baseline.Id = FName(TEXT("GenericStadium"));
+    Baseline.DisplayName = TEXT("Generic Stadium");
+    for (const FSportsArcadeClubRecord& Club : Clubs)
+    {
+        if (Club.Id != ClubId || Club.HomeStadiumId.IsNone()) continue;
+        for (const FSportsArcadeStadiumRecord& Stadium : Stadiums)
+        {
+            if (Stadium.Id == Club.HomeStadiumId &&
+                Stadium.Capacity >= 1000 &&
+                FMath::IsFinite(Stadium.PitchLengthMetres) &&
+                FMath::IsFinite(Stadium.PitchWidthMetres) &&
+                Stadium.PitchLengthMetres >= 90.f && Stadium.PitchLengthMetres <= 120.f &&
+                Stadium.PitchWidthMetres >= 45.f && Stadium.PitchWidthMetres <= 90.f)
+                return Stadium;
+        }
+        break;
+    }
+    return Baseline;
+}
