@@ -14,7 +14,7 @@ class PossessionProximityTests(unittest.TestCase):
         self.assertIn("FMath::Square(220.f)", section)
         self.assertIn("Ball->GetActorLocation().Z) <= 135.f", section)
         self.assertIn("bAttributedControl", section)
-        self.assertIn("Ball->GetLastTouchTeamIndex() : INDEX_NONE", section)
+        self.assertIn("LastToucher->TeamIndex : INDEX_NONE", section)
 
     def test_marking_resumes_after_last_toucher_separates(self):
         cpp = SOURCE.read_text(encoding="utf-8")
