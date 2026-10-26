@@ -919,14 +919,23 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             }
         }
     }
+    // Marking must use the same live-carrier principle as attacking support.
+    // A historical last touch cannot suppress defensive cover after an
+    // interception, an aerial clearance or a separated loose ball.
+    const ASportsArcadeCharacter* MarkingCarrier =
+        IsValid(Ball) ? Ball->GetLastTouchPlayer() : nullptr;
+    const bool bTeammateControlsForMarking = IsValid(Ball) &&
+        IsValid(MarkingCarrier) && MarkingCarrier->GetWorld() == GetWorld() &&
+        MarkingCarrier->TeamIndex == Footballer->TeamIndex &&
+        !MarkingCarrier->GetActorLocation().ContainsNaN() &&
+        FMath::Abs(MarkingCarrier->GetActorLocation().Z -
+            Ball->GetActorLocation().Z) <= 135.f &&
+        FVector::DistSquared2D(MarkingCarrier->GetActorLocation(),
+            Ball->GetActorLocation()) <= FMath::Square(220.f);
     // A conservative defensive shadow towards the closest nearby opponent.
     // Pressing footballer already has the ball as target and must not be pulled away.
     if (Slot != 0 && !bIsPrimaryPresser && !bIsSecondaryPresser && IsValid(Ball) &&
-        (Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex ||
-            !IsValid(Ball->GetLastTouchPlayer()) ||
-            Ball->GetLastTouchPlayer()->GetActorLocation().ContainsNaN() ||
-            FVector::DistSquared2D(Ball->GetLastTouchPlayer()->GetActorLocation(),
-                Ball->GetActorLocation()) > FMath::Square(300.f)) &&
+        !bTeammateControlsForMarking &&
         FVector::DistSquared2D(Target, Ball->GetActorLocation()) > FMath::Square(200.f))
     {
         ASportsArcadeCharacter* Opponent = nullptr;
