@@ -188,3 +188,25 @@ int32 ASportsArcadeBall::GetLastTouchTeamIndex() const
         (Player->TeamIndex == 0 || Player->TeamIndex == 1)
         ? Player->TeamIndex : INDEX_NONE;
 }
+
+ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(
+    float MaximumPlanarRangeCm, float MaximumHeightDifferenceCm) const
+{
+    ASportsArcadeCharacter* Player = LastTouchPlayer.Get();
+    if (!IsValid(Player) || Player->GetWorld() != GetWorld() ||
+        (Player->TeamIndex != 0 && Player->TeamIndex != 1) ||
+        !FMath::IsFinite(MaximumPlanarRangeCm) || MaximumPlanarRangeCm <= 0.f ||
+        !FMath::IsFinite(MaximumHeightDifferenceCm) || MaximumHeightDifferenceCm <= 0.f ||
+        Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN())
+    {
+        return nullptr;
+    }
+    if (FMath::Abs(Player->GetActorLocation().Z - GetActorLocation().Z) >
+            MaximumHeightDifferenceCm ||
+        FVector::DistSquared2D(Player->GetActorLocation(), GetActorLocation()) >
+            FMath::Square(MaximumPlanarRangeCm))
+    {
+        return nullptr;
+    }
+    return Player;
+}
