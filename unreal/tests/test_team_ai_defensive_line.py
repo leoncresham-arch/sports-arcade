@@ -14,6 +14,13 @@ class DefensiveLineTests(unittest.TestCase):
         self.assertIn("DefensiveLineRecoveryDepthCm = 650.f", header)
         self.assertIn("DefensiveLineLateralDisplacementCm = 650.f", header)
 
+    def test_near_goal_controlled_counter_tightens_recovery(self):
+        code = SOURCE.read_text()
+        self.assertIn("const bool bCounterThreatNearGoal =", code)
+        self.assertIn("Ball->GetActorLocation().X * TeamAttackSign < -3500.f", code)
+        self.assertIn("FMath::Abs(Ball->GetActorLocation().Y) < 2200.f", code)
+        self.assertIn("bCounterThreatNearGoal ? 800.f :", code)
+
     def test_controlled_counter_has_tighter_recovery_than_loose_ball(self):
         code = SOURCE.read_text()
         self.assertIn("const bool bOpponentClearlyControllingCounter =", code)
