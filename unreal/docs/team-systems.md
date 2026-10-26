@@ -632,3 +632,7 @@ During wide possession, advanced forwards now apply an additional bounded infiel
 ### Forward lane touchline margin (October 26)
 
 Advanced forward-run targets now retain at least 300 cm of nominal lateral margin from the authored pitch edge after their channel split and infield shift. This is a local support target constraint; the controller's existing final navigation clipping still applies. The source contract is checked in `test_team_ai_forward_runs.py`. Native Unreal compilation and full gameplay tuning remain deferred.
+
+### Controlled-counter defensive horizon (October 26)
+
+The shortest defensive replanning horizon (1050 cm) now applies only when an opposing last-touch player is confirmed within 220 cm of the ball during a rapid defensive-half counter. A loose ball, or one without a nearby verified opposing toucher, uses the normal defensive-half 1350 cm horizon so recovery players remain able to compete for possession. Both behaviors retain the existing finite-position and vertical-ball guards. Source contracts are in `test_team_ai_defensive_line.py`; native match simulation is still pending.
