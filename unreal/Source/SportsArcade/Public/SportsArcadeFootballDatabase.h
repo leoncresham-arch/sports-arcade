@@ -175,4 +175,8 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Football Database")
     bool FindClubById(FName ClubId, FSportsArcadeClubRecord& OutClub) const;
+
+    /** Use a club's authored home ground, or the generic playable baseline. */
+    UFUNCTION(BlueprintCallable, Category="Football Database")
+    FSportsArcadeStadiumRecord GetHomeStadiumOrDefault(FName ClubId) const;
 };
