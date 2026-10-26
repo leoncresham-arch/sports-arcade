@@ -88,7 +88,8 @@ class PossessionPressureTests(unittest.TestCase):
         section = code.split("// A conservative defensive shadow", 1)[1].split(
             "ASportsArcadeCharacter* Opponent = nullptr", 1
         )[0]
-        self.assertIn("Ball->GetLastTouchTeamIndex() != Footballer->TeamIndex", section)
+        self.assertIn("!bTeammateControlsForMarking", section)
+        self.assertIn("MarkingCarrier->TeamIndex == Footballer->TeamIndex", code)
 
     def test_secondary_presser_shadows_within_pitch_bounds(self):
         cpp = SOURCE.read_text(encoding="utf-8")
