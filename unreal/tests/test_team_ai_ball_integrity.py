@@ -39,11 +39,11 @@ class TeamAIBallIntegrityTests(unittest.TestCase):
 
     def test_pressing_excludes_goalkeeper_using_correct_roster_slot_mode(self):
         code = SRC.read_text(encoding="utf-8")
-        section = code.split("for (ASportsArcadeCharacter* Candidate : Roster->Players)", 1)[1].split(
-            "if (Nearest == Footballer", 1
+        section = code.split("for (int32 CandidateIndex = 0;", 1)[1].split(
+            "const FSportsArcadePressPair PressPair", 1
         )[0]
-        self.assertIn("Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0", section)
-        self.assertIn("Roster->Players.IndexOfByKey(Candidate) == 0", section)
+        self.assertIn("CandidateSlot < 1 || CandidateSlot > 10", section)
+        self.assertIn("PressActors.Contains(CandidateSlot)", section)
         self.assertIn("Candidate->GetController()", section)
         self.assertIn("Candidate->GetActorLocation().ContainsNaN()", section)
 
