@@ -19,6 +19,7 @@ class DefensiveLineTests(unittest.TestCase):
         self.assertIn("const bool bOpponentClearlyControllingCounter =", code)
         self.assertIn("bRapidDefensiveTransition &&", code)
         self.assertIn("TransitionToucher->TeamIndex != Footballer->TeamIndex", code)
+        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", code)
         self.assertIn("FMath::Square(220.f)", code)
         self.assertIn("bOpponentClearlyControllingCounter ? 1050.f :", code)
         self.assertIn("(bDefensiveHalf ? 1350.f : 1800.f)", code)
