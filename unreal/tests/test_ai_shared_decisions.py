@@ -39,8 +39,8 @@ class SharedOpponentDecisionTests(unittest.TestCase):
         code = self.code
         selection = (SOURCE.parent / "SportsArcadeTacticalSelection.cpp").read_text()
         self.assertIn("FSportsArcadeTacticalSelection::SelectPressPair(PressCandidates)", code)
-        self.assertIn("CandidateSlot == PressPair.PrimarySlot", code)
-        self.assertIn("CandidateSlot == PressPair.CoverSlot", code)
+        self.assertIn("PressActors.FindRef(PressPair.PrimarySlot)", code)
+        self.assertIn("PressActors.FindRef(PressPair.CoverSlot)", code)
         self.assertIn("Second = First;", selection)
         self.assertIn("Candidate.Slot < Current.Slot", selection)
         self.assertIn("Candidate.Slot < 1 || Candidate.Slot > 10", selection)
