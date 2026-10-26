@@ -69,3 +69,7 @@ The human-controlled dribble path now makes one footballer proximity pass to det
 ## 2026-10-26 — Early manual-touch reachability gate
 
 The manual ball-control path now rejects out-of-range and rearward/nonaligned balls before enumerating footballers for ownership arbitration. This retains the prior eligibility requirements while reducing full-roster work for impossible touch candidates. Regression checks cover gate ordering. Source CI is not a native Unreal behavioral or performance test.
+
+## 2026-10-26 — Loose-ball speed rejection ordering
+
+Moved the existing relative high-speed loose-ball test before expensive teammate/opponent proximity arbitration in player-controlled dribbling. Impossible-to-control balls no longer trigger a squad ownership scan. Preserves the original 1150 cm/s threshold and 0.3 directional test; only the order of checks changes. Added regression check for the early gate. Performance and native behavioral validation remain pending.
