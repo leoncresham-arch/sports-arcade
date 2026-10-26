@@ -45,6 +45,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         scan = block.index("TActorIterator<ASportsArcadeCharacter> ContactIt(GetWorld())")
         self.assertLess(block.index("ContactDistanceSq >= ClosestDribbleDistanceSq"), scan)
         self.assertLess(block.index("TravelDirection, ToBall.GetSafeNormal2D()) <= 0.2f"), scan)
+        self.assertLess(block.index("RelativeBallTravel.SizeSquared2D() > FMath::Square(1150.f)"), scan)
 
     def test_single_contact_scan_respects_friendly_and_opposing_claims(self):
         block = self.tick
