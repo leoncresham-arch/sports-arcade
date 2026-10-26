@@ -53,3 +53,7 @@ Core design policy: every footballer, team, formation, stadium, match rule, anim
 ## 2026-10-26 — Baseline stadium resolver
 
 Added a Blueprint-callable `GetHomeStadiumOrDefault` lookup for club records. A valid authored home stadium takes precedence; an absent, unknown or invalid stadium reference resolves to a generic 30,000-capacity, 105x68 m ground. This is a data resolver and not yet stadium mesh spawning, lighting, crowd presentation or match-game-mode pitch selection. Source regression added; native UE5.5 compilation deferred.
+
+## 2026-10-26 — Stadium data to match pitch integration
+
+`ASportsArcadeGameMode::ConfigurePitchFromHomeStadium()` now explicitly resolves the selected home club's authored stadium or generic baseline and can set game-mode pitch half-length/width in centimetres. It is deliberately **opt-in**, not an automatic level-resize: changing a numeric pitch bound does not resize the level's visual pitch mesh, goal actors, collision volumes, restart markers or stadium models. A level author must align those assets before enabling varying pitch dimensions in a playable level. Source tests verify the resolver connection and units. Native UE5.5 compilation and field-geometry integration are unverified.
