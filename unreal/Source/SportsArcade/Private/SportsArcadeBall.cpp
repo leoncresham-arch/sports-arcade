@@ -135,6 +135,11 @@ bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, con
     {
         return false;
     }
+    // A first touch should not claim an uncontrollable fast aerial delivery.
+    // Fast descending balls require a deliberate trapping/head-control action,
+    // which is separate from the ground-dribble impulse path.
+    const FVector IncomingBallVelocity = CollisionSphere->GetPhysicsLinearVelocity();
+    if (FMath::Abs(IncomingBallVelocity.Z) > 650.f) return false;
     // Limit contact intent to a plausible ground-control speed. This bounds
     // accidental overspeed commands independently from the physics delta cap.
     const FVector HorizontalTarget = FVector(DesiredVelocity.X, DesiredVelocity.Y, 0.f)
