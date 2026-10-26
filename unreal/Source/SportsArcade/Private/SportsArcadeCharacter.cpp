@@ -751,6 +751,7 @@ void ASportsArcadeCharacter::TackleBall()
         // beyond the defender's practical foot-contact velocity.
         const FVector BallVelocity = It->GetVelocity();
         if (BallVelocity.ContainsNaN() ||
+            FMath::Abs(BallVelocity.Z) > 650.f ||
             (BallVelocity.SizeSquared2D() > FMath::Square(1200.f) &&
              FVector2D::DotProduct(FVector2D(Direction), FVector2D(BallVelocity)) > 0.f))
             continue;
