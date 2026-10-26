@@ -636,3 +636,7 @@ Advanced forward-run targets now retain at least 300 cm of nominal lateral margi
 ### Controlled-counter defensive horizon (October 26)
 
 The shortest defensive replanning horizon (1050 cm) now applies only when an opposing last-touch player is confirmed within 220 cm of the ball during a rapid defensive-half counter. A loose ball, or one without a nearby verified opposing toucher, uses the normal defensive-half 1350 cm horizon so recovery players remain able to compete for possession. Both behaviors retain the existing finite-position and vertical-ball guards. Source contracts are in `test_team_ai_defensive_line.py`; native match simulation is still pending.
+
+### Defensive transition contact-height check (October 26)
+
+Compact defensive replanning during a fast counter now requires the most recent opposing ball toucher to be within 135 cm of the ball vertically as well as within 220 cm horizontally. This avoids interpreting nearby airborne players as having grounded ball control. Source-level regression added; native Unreal gameplay behavior remains to be verified.
