@@ -524,40 +524,34 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         // with eligibility supplied by the live roster (human-controlled
         // players and goalkeepers are excluded before ranking).
         TArray<FSportsArcadePressCandidate> PressCandidates;
-        for (ASportsArcadeCharacter* Candidate : Roster->Players)
+        TMap<int32, ASportsArcadeCharacter*> PressActors;
+        for (int32 CandidateIndex = 0; CandidateIndex < Roster->Players.Num(); ++CandidateIndex)
         {
+            ASportsArcadeCharacter* Candidate = Roster->Players[CandidateIndex];
             if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld() ||
                 Candidate->TeamIndex != Footballer->TeamIndex ||
-                (Roster->bUseExplicitLineupSlots ? Candidate->LineupSlot == 0 :
-                    Roster->Players.IndexOfByKey(Candidate) == 0) ||
                 !Cast<ASportsArcadeTeamAIController>(Candidate->GetController()) ||
                 Candidate->GetActorLocation().ContainsNaN()) continue;
             const int32 CandidateSlot = Roster->bUseExplicitLineupSlots
-                ? Candidate->LineupSlot : Roster->Players.IndexOfByKey(Candidate);
+                ? Candidate->LineupSlot : CandidateIndex;
+            if (CandidateSlot < 1 || CandidateSlot > 10 ||
+                PressActors.Contains(CandidateSlot)) continue;
             FSportsArcadePressCandidate Entry;
             Entry.Slot = CandidateSlot;
             Entry.DistanceSquared = FVector::DistSquared2D(
                 Candidate->GetActorLocation(), Ball->GetActorLocation());
             PressCandidates.Add(Entry);
+            PressActors.Add(CandidateSlot, Candidate);
         }
         const FSportsArcadePressPair PressPair =
             FSportsArcadeTacticalSelection::SelectPressPair(PressCandidates);
-        ASportsArcadeCharacter* Nearest = nullptr;
-        ASportsArcadeCharacter* Second = nullptr;
-        float SecondDistance = TNumericLimits<float>::Max();
-        for (ASportsArcadeCharacter* Candidate : Roster->Players)
-        {
-            if (!IsValid(Candidate) || Candidate->GetWorld() != GetWorld()) continue;
-            const int32 CandidateSlot = Roster->bUseExplicitLineupSlots
-                ? Candidate->LineupSlot : Roster->Players.IndexOfByKey(Candidate);
-            if (CandidateSlot == PressPair.PrimarySlot) Nearest = Candidate;
-            if (CandidateSlot == PressPair.CoverSlot)
-            {
-                Second = Candidate;
-                SecondDistance = FVector::DistSquared2D(
-                    Candidate->GetActorLocation(), Ball->GetActorLocation());
-            }
-        }
+        ASportsArcadeCharacter* Nearest =
+            PressActors.FindRef(PressPair.PrimarySlot);
+        ASportsArcadeCharacter* Second =
+            PressActors.FindRef(PressPair.CoverSlot);
+        const float SecondDistance = IsValid(Second)
+            ? FVector::DistSquared2D(Second->GetActorLocation(), Ball->GetActorLocation())
+            : TNumericLimits<float>::Max();
         const bool bDefensiveEmergency =
             Ball->GetActorLocation().X * AttackSign < -HalfLength * 0.45f;
         if (Nearest != Footballer && RecentTouchTeam == 1 - Footballer->TeamIndex &&
