@@ -1,6 +1,7 @@
 #include "SportsArcadeTeamRoster.h"
 #include "SportsArcadeCharacter.h"
 #include "SportsArcadeFootballDatabase.h"
+#include "SportsArcadePlayerAttributes.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
 
@@ -143,6 +144,23 @@ bool ASportsArcadeTeamRoster::AssignFootballerRecords(const USportsArcadeFootbal
     for (ASportsArcadeCharacter* Player : Players)
     {
         Player->FootballerRecordId = SquadByShirt[Player->ShirtNumber];
+        if (USportsArcadePlayerAttributes* Ratings =
+            Player->FindComponentByClass<USportsArcadePlayerAttributes>())
+        {
+            for (const FSportsArcadeFootballerRecord& Record : Catalog->Footballers)
+            {
+                if (Record.Id != Player->FootballerRecordId) continue;
+                Ratings->Acceleration = FMath::Clamp(Record.Acceleration, 1, 99);
+                Ratings->Agility = FMath::Clamp(Record.Agility, 1, 99);
+                Ratings->SprintSpeed = FMath::Clamp(Record.SprintSpeed, 1, 99);
+                Ratings->Stamina = FMath::Clamp(Record.Stamina, 1, 99);
+                Ratings->ShortPassing = FMath::Clamp(Record.ShortPassing, 1, 99);
+                Ratings->Finishing = FMath::Clamp(Record.Finishing, 1, 99);
+                Ratings->BallControl = FMath::Clamp(Record.BallControl, 1, 99);
+                Ratings->Tackling = FMath::Clamp(Record.Tackling, 1, 99);
+                break;
+            }
+        }
     }
     return true;
 }
