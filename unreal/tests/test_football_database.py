@@ -38,6 +38,14 @@ class FootballDatabaseContracts(unittest.TestCase):
             self.assertIn("int32 " + name + " = 65;", HEADER)
             self.assertIn("Ratings->" + name + " = FMath::Clamp(Record." + name + ", 1, 99);", ROSTER)
 
+    def test_club_home_stadium_has_playable_generic_fallback(self):
+        self.assertIn("GetHomeStadiumOrDefault(FName ClubId) const", HEADER)
+        self.assertIn('Baseline.Id = FName(TEXT("GenericStadium"))', SOURCE)
+        self.assertIn('Baseline.DisplayName = TEXT("Generic Stadium")', SOURCE)
+        self.assertIn("Club.HomeStadiumId.IsNone()", SOURCE)
+        self.assertIn("return Stadium;", SOURCE)
+        self.assertIn("return Baseline;", SOURCE)
+
     def test_stadium_defaults_and_club_customisation(self):
         self.assertIn("struct FSportsArcadeStadiumRecord", HEADER)
         self.assertIn("int32 Capacity = 30000;", HEADER)
