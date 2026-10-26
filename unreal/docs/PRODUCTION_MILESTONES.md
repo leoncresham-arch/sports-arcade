@@ -57,3 +57,7 @@ Added a Blueprint-callable `GetHomeStadiumOrDefault` lookup for club records. A 
 ## 2026-10-26 — Stadium data to match pitch integration
 
 `ASportsArcadeGameMode::ConfigurePitchFromHomeStadium()` now explicitly resolves the selected home club's authored stadium or generic baseline and can set game-mode pitch half-length/width in centimetres. It is deliberately **opt-in**, not an automatic level-resize: changing a numeric pitch bound does not resize the level's visual pitch mesh, goal actors, collision volumes, restart markers or stadium models. A level author must align those assets before enabling varying pitch dimensions in a playable level. Source tests verify the resolver connection and units. Native UE5.5 compilation and field-geometry integration are unverified.
+
+## 2026-10-26 — Real-club stadium data completeness
+
+The generic venue remains a resilient fallback for incomplete imports and custom teams, not the intended final presentation for real clubs. Club records may set `bRequireVerifiedHomeStadium` to enforce a nonempty home-stadium reference during catalog validation; referenced IDs must exist in the stadium catalog. This is an explicit authoring constraint, not a claim that existing catalog entries contain researched real-world venues. Real stadium names, geometry, location, club relocations and groundsharing must be verified and maintained with provenance; licensed venue artwork is separate. Native game scene selection still needs integration.
