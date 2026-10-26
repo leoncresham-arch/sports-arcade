@@ -31,7 +31,7 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
 
     def test_automatic_touch_needs_forward_travel_alignment(self):
         self.assertIn("const FVector TravelDirection = MyVelocity.GetSafeNormal2D()", self.tick)
-        self.assertIn("FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f", self.tick)
+        self.assertIn("FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) <= 0.2f) continue;", self.tick)
         self.assertIn("ClosestDribbleBall->ApplyControlledTouch(this, ShieldTouchDir *", self.tick)
 
     def test_nearest_eligible_ball_selected_before_touch(self):
