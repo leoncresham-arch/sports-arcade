@@ -640,3 +640,7 @@ The shortest defensive replanning horizon (1050 cm) now applies only when an opp
 ### Defensive transition contact-height check (October 26)
 
 Compact defensive replanning during a fast counter now requires the most recent opposing ball toucher to be within 135 cm of the ball vertically as well as within 220 cm horizontally. This avoids interpreting nearby airborne players as having grounded ball control. Source-level regression added; native Unreal gameplay behavior remains to be verified.
+
+### Counter-carrier movement direction (October 26)
+
+The compact defensive-recovery horizon now also requires a finite opposing last-touch velocity that is not directed sharply away from the ball. This reduces false classifications of a former toucher as the current counterattack carrier. A nearby opponent, vertical reach and pitch constraints are still required. Source-level tests cover the gating; native gameplay verification remains pending.
