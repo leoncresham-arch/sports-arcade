@@ -247,8 +247,14 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
             Target.X += AttackSign * FMath::Clamp(ForwardRunOffsetCm, 0.f, 1500.f) *
                 ForwardRunTempo;
             // Two advanced runners approach from different channels.
+            // Narrow the run channels when play is already near a sideline,
+            // maintaining a viable inside passing angle for both forwards.
+            const float BallWideFactor = FMath::Clamp(
+                FMath::Abs(Ball->GetActorLocation().Y) /
+                FMath::Max(HalfWidth, 1.f), 0.f, 1.f);
+            const float RunLaneScale = FMath::Lerp(1.f, 0.55f, BallWideFactor);
             Target.Y += (Slot == 9 ? -1.f : 1.f) *
-                FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f);
+                FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f) * RunLaneScale;
         }
 
         // Central midfielders supply a short forward passing option when our
