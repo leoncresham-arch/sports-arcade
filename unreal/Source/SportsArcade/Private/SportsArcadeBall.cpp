@@ -214,5 +214,14 @@ ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(
     {
         return nullptr;
     }
+    // Physical proximity alone is not settled possession: a driven pass or
+    // ricochet can pass through the last kicker's contact zone at high speed.
+    // Compare to player travel so a moving carrier retains control.
+    const FVector PlayerVelocity = Player->GetVelocity();
+    if (PlayerVelocity.ContainsNaN()) return nullptr;
+    const FVector RelativeBallVelocity =
+        CollisionSphere->GetPhysicsLinearVelocity() - PlayerVelocity;
+    if (RelativeBallVelocity.SizeSquared2D() > FMath::Square(1500.f))
+        return nullptr;
     return Player;
 }
