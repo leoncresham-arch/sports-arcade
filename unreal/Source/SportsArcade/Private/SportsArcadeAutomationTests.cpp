@@ -5,6 +5,7 @@
 #include "SportsArcadeFootballDatabase.h"
 #include "SportsArcadePlayerAttributes.h"
 #include "SportsArcadePenaltyShootout.h"
+#include "SportsArcadeTacticalSelection.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -307,6 +308,43 @@ bool FSportsArcadeFootballerProfileAutomation::RunTest(const FString& Parameters
     Catalog->Footballers[0].ClubId = FName(TEXT("missing_club"));
     TestFalse(TEXT("Missing footballer club is rejected"),
         Catalog->ValidateDatabase(Errors));
+    return true;
+}
+
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadePressPairAutomation,
+    "SportsArcade.Tactics.PressPair",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadePressPairAutomation::RunTest(const FString& Parameters)
+{
+    const TArray<FSportsArcadePressCandidate> Candidates = {
+        {8, 900.f}, {5, 400.f}, {2, 400.f}, {9, 1600.f}};
+    const FSportsArcadePressPair Pair =
+        FSportsArcadeTacticalSelection::SelectPressPair(Candidates);
+    TestEqual(TEXT("Closest tied outfielder has lowest slot"), Pair.PrimarySlot, 2);
+    TestEqual(TEXT("Next eligible outfielder provides cover"), Pair.CoverSlot, 5);
+
+    const TArray<FSportsArcadePressCandidate> Inverted = {
+        {9, 1600.f}, {2, 400.f}, {8, 900.f}, {5, 400.f}};
+    const FSportsArcadePressPair Reverse =
+        FSportsArcadeTacticalSelection::SelectPressPair(Inverted);
+    TestEqual(TEXT("Primary assignment is insertion-order-independent"),
+        Reverse.PrimarySlot, Pair.PrimarySlot);
+    TestEqual(TEXT("Cover assignment is insertion-order-independent"),
+        Reverse.CoverSlot, Pair.CoverSlot);
+
+    const TArray<FSportsArcadePressCandidate> Invalid = {
+        {0, 1.f}, {11, 2.f}, {7, -1.f}, {4, 90.f}};
+    const FSportsArcadePressPair Safe =
+        FSportsArcadeTacticalSelection::SelectPressPair(Invalid);
+    TestEqual(TEXT("Keeper, invalid slot and distance are ignored"), Safe.PrimarySlot, 4);
+    TestEqual(TEXT("Single eligible outfielder has no cover"), Safe.CoverSlot, INDEX_NONE);
+    const TArray<FSportsArcadePressCandidate> Empty;
+    const FSportsArcadePressPair Missing =
+        FSportsArcadeTacticalSelection::SelectPressPair(Empty);
+    TestEqual(TEXT("Empty roster has no primary"), Missing.PrimarySlot, INDEX_NONE);
+    TestEqual(TEXT("Empty roster has no cover"), Missing.CoverSlot, INDEX_NONE);
     return true;
 }
 
