@@ -55,6 +55,13 @@ class SharedOpponentDecisionTests(unittest.TestCase):
         self.assertIn("AlternativeDistance + FMath::Square(75.f) < TheirDistance", code)
         self.assertIn("bAnotherTeammateOwnsMark = true;", code)
 
+    def test_controlled_possession_uses_valid_nearby_carrier_team(self):
+        code = self.code
+        self.assertIn("const int32 RecentTouchTeam = bAttributedControl &&", code)
+        self.assertIn("LastToucher->TeamIndex == 0 || LastToucher->TeamIndex == 1", code)
+        self.assertIn("? LastToucher->TeamIndex : INDEX_NONE;", code)
+        self.assertIn("FVector::DistSquared2D(LastToucher->GetActorLocation(),", code)
+
     def test_dead_ball_guard_precedes_snapshot(self):
         code = self.code
         self.assertLess(code.index("Match->bHalfTime || Match->bMatchFinished"),
