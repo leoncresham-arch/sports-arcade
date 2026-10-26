@@ -38,6 +38,13 @@ class LiveBallControlTests(unittest.TestCase):
         self.assertLess(part.index("FMath::Min(MaxContactDistanceCm, 225.f)"),
                         part.index("LastTouchPlayer = Player;"))
 
+    def test_grounded_first_touch_rejects_fast_vertical_delivery(self):
+        section = CPP.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
+            "int32 ASportsArcadeBall::GetLastTouchTeamIndex()", 1)[0]
+        self.assertIn("FMath::Abs(IncomingBallVelocity.Z) > 650.f", section)
+        self.assertLess(section.index("FMath::Abs(IncomingBallVelocity.Z) > 650.f"),
+                        section.index("CollisionSphere->AddImpulse(TouchDelta * BallMassKg)"))
+
     def test_touch_changes_attribution_only_after_valid_impulse(self):
         part = CPP.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
             "int32 ASportsArcadeBall::GetLastTouchTeamIndex()", 1)[0]
