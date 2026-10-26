@@ -217,10 +217,14 @@ ASportsArcadeCharacter* ASportsArcadeBall::GetControlledPlayer(
     // Physical proximity alone is not settled possession: a driven pass or
     // ricochet can pass through the last kicker's contact zone at high speed.
     // Compare to player travel so a moving carrier retains control.
+    // A rapidly rising or falling football cannot be treated as settled
+    // foot control solely because its projected position is nearby.
+    const FVector BallVelocity = CollisionSphere->GetPhysicsLinearVelocity();
+    if (FMath::Abs(BallVelocity.Z) > 650.f) return nullptr;
     const FVector PlayerVelocity = Player->GetVelocity();
     if (PlayerVelocity.ContainsNaN()) return nullptr;
     const FVector RelativeBallVelocity =
-        CollisionSphere->GetPhysicsLinearVelocity() - PlayerVelocity;
+        BallVelocity - PlayerVelocity;
     if (RelativeBallVelocity.SizeSquared2D() > FMath::Square(1500.f))
         return nullptr;
     return Player;
