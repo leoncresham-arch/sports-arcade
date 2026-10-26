@@ -29,3 +29,7 @@ Source-only GitHub Actions 'Verify Unreal source scaffold' passed on `2adca569` 
 ## 2026-10-26 — 11v11 AI performance milestone (source implemented)
 
 Added deterministic initial decision phase offsets per valid lineup slot/team (22 unique phases across each 0.3 s decision window) so all controllers do not conduct costly team/opponent scans on their first tick. The phase initializes when a valid lineup pawn exists; regular AI decisions and cooldown timing otherwise remain unchanged. Python property-style scheduling tests validate uniqueness and bounds, and source checks verify the C++ wiring. Native profiling remains pending; this is a performance-preparation milestone, not measured frame-time improvement. Next prioritize shared tactical decision calculation and reduction of repeated squad-wide searches.
+
+## 2026-10-26 — Shared tactical opponent snapshot
+
+Within each valid off-field decision, the controller now enumerates the opposition once into a transient list rather than separately enumerating world actors for midfield carrier-pressure detection and blocked support-outlet checks. Per-use distance, height, velocity and world-validity checks remain intact. This is an initial reduction in redundant searches, not yet a full team-level shared tactical cache; other independent scans remain and Unreal profiling is still needed. Python source contracts were added alongside the C++ implementation.
