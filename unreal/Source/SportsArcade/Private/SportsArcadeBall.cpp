@@ -70,7 +70,9 @@ void ASportsArcadeBall::Kick(const FVector& Direction, float StrengthKgCmPerSec)
 
 bool ASportsArcadeBall::KickByPlayer(ASportsArcadeCharacter* Player, const FVector& Direction, float StrengthKgCmPerSec, float MaxContactDistanceCm)
 {
-    if (!IsValid(Player) || Player->GetWorld() != GetWorld() || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
+    if (!IsValid(Player) || Player->GetWorld() != GetWorld() ||
+        (Player->TeamIndex != 0 && Player->TeamIndex != 1) ||
+        !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
         !FMath::IsFinite(StrengthKgCmPerSec) || StrengthKgCmPerSec <= 0.f ||
         Direction.ContainsNaN() || Direction.IsNearlyZero() ||
         Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
@@ -120,7 +122,9 @@ void ASportsArcadeBall::ResetToCentre()
 
 bool ASportsArcadeBall::ApplyControlledTouch(ASportsArcadeCharacter* Player, const FVector& DesiredVelocity, float MaxDistanceCm)
 {
-    if (!IsValid(Player) || Player->GetWorld() != GetWorld() || !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
+    if (!IsValid(Player) || Player->GetWorld() != GetWorld() ||
+        (Player->TeamIndex != 0 && Player->TeamIndex != 1) ||
+        !CollisionSphere || !CollisionSphere->IsSimulatingPhysics() ||
         !FMath::IsFinite(MaxDistanceCm) || MaxDistanceCm <= 0.f ||
         DesiredVelocity.ContainsNaN() ||
         Player->GetActorLocation().ContainsNaN() || GetActorLocation().ContainsNaN() ||
