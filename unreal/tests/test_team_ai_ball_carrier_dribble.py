@@ -103,8 +103,8 @@ class BallCarrierDribbleTests(unittest.TestCase):
         code = SOURCE.read_text(encoding="utf-8")
         section = code.split("const bool bSelfControllingBall",1)[1].split(
             "if (!bTeammateNearbyBall",1)[0]
-        self.assertIn("Ball->GetLastTouchPlayer() == Footballer", section)
-        self.assertIn("FMath::Square(220.f)", section)
+        self.assertIn("CloseCarrier == Footballer", section)
+        self.assertIn("Ball->GetControlledPlayer(220.f, 115.f)", code)
         self.assertIn("bSelfControllingBall && !bImmediateChallenge && ActionCooldownRemaining <= 0.f", section)
         self.assertIn("Ball->ApplyControlledTouch(Footballer", section)
         self.assertIn("Target = Ball->GetActorLocation() + FVector(AttackSign * 280.f", section)
