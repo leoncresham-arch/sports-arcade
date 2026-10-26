@@ -8,6 +8,7 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
     TMap<FName, FName> ClubNations;
     TSet<FName> StadiumIds;
     TSet<FName> FootballerIds;
+    TMap<FName, TSet<int32>> ClubShirtNumbers;
     TSet<FName> CompetitionIds;
 
     for (const FSportsArcadeNationRecord& Nation : Nations)
@@ -58,6 +59,14 @@ bool USportsArcadeFootballDatabase::ValidateDatabase(TArray<FString>& Errors) co
             Errors.Add(FString::Printf(TEXT("Footballer %s references missing club"), *Player.Id.ToString()));
         if (Player.ShirtNumber < 1 || Player.ShirtNumber > 99)
             Errors.Add(FString::Printf(TEXT("Footballer %s has invalid shirt number"), *Player.Id.ToString()));
+        if (Player.ShirtNumber >= 1 && Player.ShirtNumber <= 99)
+        {
+            TSet<int32>& AssignedShirts = ClubShirtNumbers.FindOrAdd(Player.ClubId);
+            if (AssignedShirts.Contains(Player.ShirtNumber))
+                Errors.Add(FString::Printf(TEXT("Club %s has duplicate shirt number %d"),
+                    *Player.ClubId.ToString(), Player.ShirtNumber));
+            else AssignedShirts.Add(Player.ShirtNumber);
+        }
         const int32 Ratings[] = {Player.Acceleration, Player.Agility, Player.SprintSpeed,
             Player.Stamina, Player.ShortPassing, Player.Finishing, Player.BallControl,
             Player.Tackling};
