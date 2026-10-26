@@ -77,3 +77,16 @@ Moved the existing relative high-speed loose-ball test before expensive teammate
 ## 2026-10-26 — Native executable regression expansion
 
 Added `SportsArcade.Database.HomeStadiumFallback` to the existing Unreal Engine native editor automation suite. Unlike Python source-string contracts, this C++ automation exercises actual stadium lookup and database validation against live `UDataAsset` objects when run in Unreal: absent club uses the 105x68 m baseline; missing required home ground fails validation; an authored valid ground resolves correctly; corrupt pitch dimensions are rejected and fall back safely. Updated both suite-count and integration contracts. **Not yet executed under Unreal Engine 5.5:** GitHub source CI cannot establish native compile or behavioral pass; run `unreal/Tools/Windows/Run-SportsArcadeTests.ps1` when Windows UE is available.
+
+## 2026-10-26 — Completion estimate accountability and integrated gameplay work
+
+The previously communicated 30% completion figure is an **unverified planning estimate**, not a tested milestone result. Later replies incorrectly switched to ~20% without an evidence-based audit. Do not claim either as measured. Retain 30% solely as the user-visible working baseline until a documented feature/acceptance audit establishes an updated figure. Native UE5.5, gameplay, visual quality, and performance must receive substantial weight; source-file or commit counts must not drive completion percentage.
+
+Next development must prioritize cohesive outcomes over per-condition tuning:
+- **11v11 integrated gameplay:** possession, pressing, defending, support runs and passing decisions evaluated together with acceptance scenarios.
+- **Physical player–ball interactions:** controlled first touch, tackle, interception, shielding and ball-out arbitration validated as connected behavior.
+- **Match lifecycle:** formation/club data, kickoffs, set pieces, substitutions, full time and saved progress verified end to end.
+- **Presentation integration:** original stadium meshes, real rigged athletes, animation state graph, camera and lighting, with legal asset records.
+- **Verification:** expand actual Unreal editor C++ automation, then native Windows builds and game-play testing; source-string tests are insufficient.
+
+Current integration batch: strengthened catalog validation for eight 1–99 footballer attributes, created a native editor automation scenario with valid/invalid profile records, and updated source regression coverage. No native UE execution occurred.
