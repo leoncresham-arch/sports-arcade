@@ -253,8 +253,13 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
                 FMath::Abs(Ball->GetActorLocation().Y) /
                 FMath::Max(HalfWidth, 1.f), 0.f, 1.f);
             const float RunLaneScale = FMath::Lerp(1.f, 0.55f, BallWideFactor);
+            // Preserve an interior passing lane: wide possession should
+            // bend the run toward the centre rather than out beyond the wing.
+            const float InfieldRunBias = BallWideFactor *
+                FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f) * 0.35f;
             Target.Y += (Slot == 9 ? -1.f : 1.f) *
                 FMath::Clamp(ForwardRunLaneSeparationCm, 0.f, 800.f) * RunLaneScale;
+            Target.Y -= FMath::Sign(Ball->GetActorLocation().Y) * InfieldRunBias;
         }
 
         // Central midfielders supply a short forward passing option when our
