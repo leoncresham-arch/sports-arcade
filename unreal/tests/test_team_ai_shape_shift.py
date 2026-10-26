@@ -38,7 +38,7 @@ class TeamAIShapeShiftTests(unittest.TestCase):
         self.assertIn("FMath::Clamp(AttackingSupportShiftCm, 0.f, 500.f)", section)
         self.assertIn("FMath::Clamp(DefensiveRecoveryShiftCm, 0.f, 500.f)", section)
         self.assertLess(section.index("LastToucher->TeamIndex : INDEX_NONE"),
-                        section.index("for (ASportsArcadeCharacter* Candidate"))
+                        section.index("for (int32 CandidateIndex = 0;"))
 
 
 if __name__ == "__main__":
