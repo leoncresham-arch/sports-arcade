@@ -16,9 +16,28 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (!FMath::IsFinite(DeltaSeconds) || DeltaSeconds <= 0.f) return;
-    DecisionCountdown -= DeltaSeconds;
     ActionCooldownRemaining = FMath::Max(0.f, ActionCooldownRemaining - DeltaSeconds);
     if (!GetWorld()) return;
+    // Stagger recurring formation and opponent searches across the 22
+    // controllers, avoiding an identical initial decision on one frame.
+    // Keep phase deterministic for each lineup slot and team.
+    if (!bDecisionPhaseInitialized)
+    {
+        const ASportsArcadeCharacter* AssignedFootballer =
+            Cast<ASportsArcadeCharacter>(GetPawn());
+        if (IsValid(AssignedFootballer) &&
+            AssignedFootballer->LineupSlot >= 0 &&
+            AssignedFootballer->LineupSlot <= 10 &&
+            (AssignedFootballer->TeamIndex == 0 || AssignedFootballer->TeamIndex == 1))
+        {
+            const int32 PhaseIndex = AssignedFootballer->LineupSlot * 2 +
+                AssignedFootballer->TeamIndex;
+            DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f) *
+                static_cast<float>(PhaseIndex) / 22.f;
+            bDecisionPhaseInitialized = true;
+        }
+    }
+    DecisionCountdown -= DeltaSeconds;
     if (DecisionCountdown > 0.f) return;
     DecisionCountdown = FMath::Max(DecisionIntervalSeconds, 0.05f);
 
