@@ -146,3 +146,7 @@ Direct kicks and grounded controlled touches now reject invalid team identities 
 ## 2026-10-26 — Tackle contact integrated with ball control
 
 The native standing-tackle candidate selector now uses `GetControlledPlayer(135.f, 115.f)` for the historically attributed friendly player rather than a separate distance-only calculation. This respects the same physics/flight/relative-speed checks used by attacking carriers and pressing AI. The pre-existing independent nearby-teammate protection remains in place. Ground tackles additionally reject rapidly rising/falling balls above 650 cm/s vertical speed before a kick is attempted, matching the ground-dribble contact gate. Structural regressions and related source contracts were updated; source CI is the current verification, not native match simulation. Follow-up physical-ball interception, fouls and aerial tackle behavior remain to be integrated in Unreal 5.5.
+
+## 2026-10-26 — Active-carrier tackle direction
+
+Standing-tackle deflection direction now uses the ball's validated `GetControlledPlayer(220.f,135.f)` instead of historical last touch to determine whether an opposing carrier should influence the challenge lane. Detached older contacts cannot continue steering a defensive tackle. This joins the existing grounded tackle flight restriction and friendly-carrier protections in the same live contact model. Structural regression test expectations were updated, and native Unreal execution and tackling animations remain outstanding.
