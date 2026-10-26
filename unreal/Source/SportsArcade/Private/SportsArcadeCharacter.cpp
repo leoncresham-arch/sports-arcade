@@ -186,48 +186,37 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             if (BallLocation.ContainsNaN() || MyLocation.ContainsNaN() ||
                 MyVelocity.ContainsNaN() || MyFacing.ContainsNaN() ||
                 MyFacing.GetSafeNormal2D().IsNearlyZero()) continue;
+            // A single footballer scan arbitrates both friendly foot control
+            // and immediate opponent possession before any automatic touch.
             bool bFriendlyHasCloserControl = false;
-            const float MyBallDistanceSq = FVector::DistSquared2D(MyLocation, BallLocation);
-            for (TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld()); MateIt; ++MateIt)
-            {
-                const ASportsArcadeCharacter* Mate = *MateIt;
-                if (!IsValid(Mate) || Mate == this || Mate->GetWorld() != GetWorld() ||
-                    Mate->TeamIndex != TeamIndex ||
-                    Mate->GetActorLocation().ContainsNaN()) continue;
-                const FVector MateToBall = BallLocation - Mate->GetActorLocation();
-                if (FMath::Abs(MateToBall.Z) <= 115.f &&
-                    MateToBall.SizeSquared2D() < FMath::Square(115.f) &&
-                    MateToBall.SizeSquared2D() < MyBallDistanceSq)
-                {
-                    bFriendlyHasCloserControl = true;
-                    break;
-                }
-            }
-            if (bFriendlyHasCloserControl) continue;
-            // Recent enemy contact alone is not proof of ownership. A nearby
-            // opponent physically nearer the grounded ball gets first control
-            // priority until the local player moves into a better position.
             bool bOpponentHasCloserControl = false;
-            for (TActorIterator<ASportsArcadeCharacter> OppIt(GetWorld()); OppIt; ++OppIt)
+            const float MyBallDistanceSq = FVector::DistSquared2D(MyLocation, BallLocation);
+            const float MyBallDistance = FMath::Sqrt(MyBallDistanceSq);
+            for (TActorIterator<ASportsArcadeCharacter> ContactIt(GetWorld()); ContactIt; ++ContactIt)
             {
-                const ASportsArcadeCharacter* Opponent = *OppIt;
-                if (!IsValid(Opponent) || Opponent == this ||
-                    Opponent->TeamIndex == TeamIndex || Opponent->GetWorld() != GetWorld() ||
-                    Opponent->GetActorLocation().ContainsNaN()) continue;
-                const FVector OppToBall = BallLocation - Opponent->GetActorLocation();
-                // A planted shielding carrier can contest a marginally closer
-                // opponent, but never override a clearly superior foot contact.
-                const bool bOpponentClearlyCloser = OppToBall.Size2D() + (bShieldHeld ? 25.f : 0.f) <
-                    FMath::Sqrt(MyBallDistanceSq);
-                if (FMath::Abs(OppToBall.Z) <= 115.f &&
-                    OppToBall.SizeSquared2D() < FMath::Square(95.f) &&
-                    bOpponentClearlyCloser)
+                const ASportsArcadeCharacter* Nearby = *ContactIt;
+                if (!IsValid(Nearby) || Nearby == this || Nearby->GetWorld() != GetWorld() ||
+                    Nearby->GetActorLocation().ContainsNaN()) continue;
+                const FVector ToNearbyBall = BallLocation - Nearby->GetActorLocation();
+                if (FMath::Abs(ToNearbyBall.Z) > 115.f) continue;
+                const float NearbyDistanceSquared = ToNearbyBall.SizeSquared2D();
+                if (Nearby->TeamIndex == TeamIndex)
                 {
-                    bOpponentHasCloserControl = true;
-                    break;
+                    if (NearbyDistanceSquared < FMath::Square(115.f) &&
+                        NearbyDistanceSquared < MyBallDistanceSq)
+                        bFriendlyHasCloserControl = true;
                 }
+                else if (Nearby->TeamIndex == 1 - TeamIndex)
+                {
+                    const bool bOpponentClearlyCloser =
+                        FMath::Sqrt(NearbyDistanceSquared) + (bShieldHeld ? 25.f : 0.f) <
+                        MyBallDistance;
+                    if (NearbyDistanceSquared < FMath::Square(95.f) && bOpponentClearlyCloser)
+                        bOpponentHasCloserControl = true;
+                }
+                if (bFriendlyHasCloserControl && bOpponentHasCloserControl) break;
             }
-            if (bOpponentHasCloserControl) continue;
+            if (bFriendlyHasCloserControl || bOpponentHasCloserControl) continue;
             const FVector ToBall = BallLocation - MyLocation;
             const float ContactDistanceSq = ToBall.SizeSquared();
             if (ContactDistanceSq >= ClosestDribbleDistanceSq) continue;
