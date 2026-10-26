@@ -40,31 +40,24 @@ class ManualDribbleArbitrationTests(unittest.TestCase):
         self.assertIn("ClosestDribbleBall = *It", self.tick)
         self.assertIn("if (IsValid(ClosestDribbleBall) && !ShieldTouchDir.IsNearlyZero() &&", self.tick)
 
-    def test_opponent_closer_to_ball_blocks_automatic_steal(self):
-        for token in ("bOpponentHasCloserControl",
-                      "Opponent->TeamIndex == TeamIndex",
-                      "!IsValid(Opponent)",
-                      "Opponent->GetWorld() != GetWorld()",
-                      "OppToBall.SizeSquared2D() < FMath::Square(95.f)",
-                      "bOpponentClearlyCloser",
-                      "if (bOpponentHasCloserControl) continue"):
-            self.assertIn(token, self.tick)
-        self.assertLess(self.tick.index("if (bOpponentHasCloserControl) continue"),
-                        self.tick.index("ClosestDribbleBall->ApplyControlledTouch(this"))
-
-    def test_friendly_proximity_arbitrates_controlled_touches(self):
+    def test_single_contact_scan_respects_friendly_and_opposing_claims(self):
         block = self.tick
-        for check in ("TActorIterator<ASportsArcadeCharacter> MateIt(GetWorld())",
-                      "Mate->TeamIndex != TeamIndex",
-                      "!IsValid(Mate)",
-                      "Mate->GetWorld() != GetWorld()",
-                      "MateToBall.SizeSquared2D() < MyBallDistanceSq",
-                      "FMath::Abs(MateToBall.Z) <= 115.f",
-                      "if (bFriendlyHasCloserControl) continue",
-                      "BallLocation.ContainsNaN()"):
-            self.assertIn(check, block)
-        self.assertLess(block.index("if (bFriendlyHasCloserControl) continue"),
-                        block.index("ClosestDribbleBall->ApplyControlledTouch(this"))
+        self.assertEqual(block.count("TActorIterator<ASportsArcadeCharacter> ContactIt(GetWorld())"), 1)
+        for token in (
+            "Nearby->GetWorld() != GetWorld()",
+            "Nearby->TeamIndex == TeamIndex",
+            "Nearby->TeamIndex == 1 - TeamIndex",
+            "NearbyDistanceSquared < MyBallDistanceSq",
+            "NearbyDistanceSquared < FMath::Square(115.f)",
+            "NearbyDistanceSquared < FMath::Square(95.f)",
+            "bOpponentClearlyCloser",
+            "if (bFriendlyHasCloserControl || bOpponentHasCloserControl) continue",
+        ):
+            self.assertIn(token, block)
+        self.assertLess(
+            block.index("if (bFriendlyHasCloserControl || bOpponentHasCloserControl) continue"),
+            block.index("ClosestDribbleBall->ApplyControlledTouch(this"),
+        )
 
 if __name__ == "__main__":
     unittest.main()
