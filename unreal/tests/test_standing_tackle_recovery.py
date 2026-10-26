@@ -23,6 +23,11 @@ class StandingTackleRecoveryTests(unittest.TestCase):
         self.assertLess(tackle.index("CurrentStamina = FMath::Max(0.f, CurrentStamina -"),
                         tackle.index("for (TActorIterator<ASportsArcadeBall>"))
 
+    def test_ground_tackle_rejects_rapid_airborne_contact(self):
+        self.assertIn("FMath::Abs(BallVelocity.Z) > 650.f", self.tackle)
+        self.assertLess(self.tackle.index("FMath::Abs(BallVelocity.Z) > 650.f"),
+                        self.tackle.index("CandidateBall = *It;"))
+
     def test_safely_selects_nearest_reachable_forward_ball(self):
         for token in ("ClosestDistanceSq = FMath::Square(150.f)",
                       "DistanceSq >= ClosestDistanceSq",
