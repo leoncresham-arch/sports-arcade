@@ -795,7 +795,7 @@ void ASportsArcadeCharacter::TackleBall()
         // straight ahead. Deflect across the defender's forward line away from
         // the last opponent's position when the opponent is still close.
         FVector ChallengeDirection = Forward;
-        const ASportsArcadeCharacter* PreviousCarrier = CandidateBall->GetLastTouchPlayer();
+        const ASportsArcadeCharacter* PreviousCarrier = CandidateBall->GetControlledPlayer(220.f, 135.f);
         if (IsValid(PreviousCarrier) && PreviousCarrier->GetWorld() == GetWorld() &&
             PreviousCarrier->TeamIndex != TeamIndex &&
             !PreviousCarrier->GetActorLocation().ContainsNaN() &&
