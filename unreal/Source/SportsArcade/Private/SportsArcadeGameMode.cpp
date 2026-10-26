@@ -19,6 +19,24 @@ ASportsArcadeGameMode::ASportsArcadeGameMode()
     PrimaryActorTick.bCanEverTick = true;
 }
 
+bool ASportsArcadeGameMode::ConfigurePitchFromHomeStadium()
+{
+    // Retain the authored pitch dimensions unless real-world stadium
+    // metadata is explicitly available for the selected home club.
+    if (!IsValid(FootballCatalog) || SelectedHomeClubId.IsNone())
+        return false;
+    const FSportsArcadeStadiumRecord Stadium =
+        FootballCatalog->GetHomeStadiumOrDefault(SelectedHomeClubId);
+    if (!FMath::IsFinite(Stadium.PitchLengthMetres) ||
+        !FMath::IsFinite(Stadium.PitchWidthMetres) ||
+        Stadium.PitchLengthMetres < 90.f || Stadium.PitchLengthMetres > 120.f ||
+        Stadium.PitchWidthMetres < 45.f || Stadium.PitchWidthMetres > 90.f)
+        return false;
+    PitchHalfLengthCm = Stadium.PitchLengthMetres * 50.f;
+    PitchHalfWidthCm = Stadium.PitchWidthMetres * 50.f;
+    return true;
+}
+
 void ASportsArcadeGameMode::BeginPlay()
 {
     Super::BeginPlay();
