@@ -186,6 +186,14 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
             if (BallLocation.ContainsNaN() || MyLocation.ContainsNaN() ||
                 MyVelocity.ContainsNaN() || MyFacing.ContainsNaN() ||
                 MyFacing.GetSafeNormal2D().IsNearlyZero()) continue;
+            // Do not scan the complete 22-player roster for a ball that
+            // cannot possibly be reached or controlled by this footballer.
+            const FVector ToBall = BallLocation - MyLocation;
+            const float ContactDistanceSq = ToBall.SizeSquared();
+            if (ContactDistanceSq >= ClosestDribbleDistanceSq) continue;
+            const FVector TravelDirection = MyVelocity.GetSafeNormal2D();
+            if (FVector::DotProduct(MyFacing.GetSafeNormal2D(), ToBall.GetSafeNormal2D()) <= 0.35f ||
+                FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) <= 0.2f) continue;
             // A single footballer scan arbitrates both friendly foot control
             // and immediate opponent possession before any automatic touch.
             bool bFriendlyHasCloserControl = false;
@@ -217,9 +225,6 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                 if (bFriendlyHasCloserControl && bOpponentHasCloserControl) break;
             }
             if (bFriendlyHasCloserControl || bOpponentHasCloserControl) continue;
-            const FVector ToBall = BallLocation - MyLocation;
-            const float ContactDistanceSq = ToBall.SizeSquared();
-            if (ContactDistanceSq >= ClosestDribbleDistanceSq) continue;
             // A loose ball racing past the player should not be pulled back
             // by automatic foot control. Deliberate interceptions and tackles
             // remain available through their separate challenge actions.
@@ -231,13 +236,8 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
                     ToBall.GetSafeNormal2D()) > 0.3f) continue;
             // Controlled touches require the ball to be in front of the
             // player's actual travel direction, not just their mesh facing.
-            const FVector TravelDirection = MyVelocity.GetSafeNormal2D();
-            if (FVector::DotProduct(MyFacing.GetSafeNormal2D(), ToBall.GetSafeNormal2D()) > 0.35f &&
-                FVector::DotProduct(TravelDirection, ToBall.GetSafeNormal2D()) > 0.2f)
-            {
-                ClosestDribbleDistanceSq = ContactDistanceSq;
-                ClosestDribbleBall = *It;
-            }
+            ClosestDribbleDistanceSq = ContactDistanceSq;
+            ClosestDribbleBall = *It;
         }
         const float TravelSpeed = GetVelocity().Size2D();
         const float TouchSpeedFactor = FMath::Lerp(0.65f, 1.15f,
