@@ -25,3 +25,7 @@ A milestone is done only when its behavior and interfaces are integrated, regres
 
 ## Current verification state (2026-10-26)
 Source-only GitHub Actions 'Verify Unreal source scaffold' passed on `2adca569` prior to this policy. Native Windows UE compilation, in-engine gameplay, high-fidelity graphics and performance remain unverified.
+
+## 2026-10-26 — 11v11 AI performance milestone (source implemented)
+
+Added deterministic initial decision phase offsets per valid lineup slot/team (22 unique phases across each 0.3 s decision window) so all controllers do not conduct costly team/opponent scans on their first tick. The phase initializes when a valid lineup pawn exists; regular AI decisions and cooldown timing otherwise remain unchanged. Python property-style scheduling tests validate uniqueness and bounds, and source checks verify the C++ wiring. Native profiling remains pending; this is a performance-preparation milestone, not measured frame-time improvement. Next prioritize shared tactical decision calculation and reduction of repeated squad-wide searches.
