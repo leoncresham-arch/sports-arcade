@@ -76,12 +76,10 @@ class PossessionPressureTests(unittest.TestCase):
 
     def test_team_support_does_not_claim_airborne_or_separated_ball(self):
         code = SOURCE.read_text(encoding="utf-8")
-        section = code.split("const bool bAttributedControl", 1)[1].split(
-            "const int32 RecentTouchTeam", 1
-        )[0]
-        self.assertIn("LastToucher->GetActorLocation().Z", section)
-        self.assertIn("Ball->GetActorLocation().Z) <= 135.f", section)
-        self.assertIn("FMath::Square(220.f)", section)
+        ball = (SOURCE.parent / "SportsArcadeBall.cpp").read_text()
+        self.assertIn("Ball->GetControlledPlayer()", code)
+        self.assertIn("MaximumHeightDifferenceCm", ball)
+        self.assertIn("FVector::DistSquared2D(Player->GetActorLocation()", ball)
 
     def test_defensive_marking_does_not_override_attacking_support(self):
         code = SOURCE.read_text(encoding="utf-8")
