@@ -1113,6 +1113,7 @@ void ASportsArcadeTeamAIController::Tick(float DeltaSeconds)
         TransitionToucher->TeamIndex != Footballer->TeamIndex &&
         // Do not treat a player moving rapidly away from the ball as
         // a sustained counterattacking carrier solely on last touch.
+        !TransitionToucher->GetVelocity().ContainsNaN() &&
         FVector::DotProduct(TransitionToucher->GetVelocity().GetSafeNormal2D(),
             (Ball->GetActorLocation() - TransitionToucher->GetActorLocation()).GetSafeNormal2D()) >= -0.3f &&
         !TransitionToucher->GetActorLocation().ContainsNaN() &&
