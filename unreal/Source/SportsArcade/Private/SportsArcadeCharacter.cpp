@@ -423,19 +423,19 @@ void ASportsArcadeCharacter::Tick(float DeltaSeconds)
 
 void ASportsArcadeCharacter::PassBall()
 {
-    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->ShortPassing) : 1.f;
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::ContextualRatingFactor(PlayerAttributes->ShortPassing, GetStaminaNormalized(), 0.f) : 1.f;
     StrikeNearbyBall(PassImpulseKgCmPerSec * Factor, false);
 }
 
 void ASportsArcadeCharacter::ShootBall()
 {
-    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Finishing) : 1.f;
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::ContextualRatingFactor(PlayerAttributes->Finishing, GetStaminaNormalized(), 0.f) : 1.f;
     StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor, true);
 }
 
 void ASportsArcadeCharacter::ChipBall()
 {
-    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::RatingFactor(PlayerAttributes->Finishing) : 1.f;
+    const float Factor = PlayerAttributes ? USportsArcadePlayerAttributes::ContextualRatingFactor(PlayerAttributes->Finishing, GetStaminaNormalized(), 0.f) : 1.f;
     StrikeNearbyBall(ShotImpulseKgCmPerSec * Factor * ChipPowerFactor, true, ChipLiftRatio);
 }
 
