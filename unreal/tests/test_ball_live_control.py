@@ -19,6 +19,13 @@ class LiveBallControlTests(unittest.TestCase):
         self.assertIn("MaximumPlanarRangeCm <= 0.f", part)
         self.assertIn("MaximumHeightDifferenceCm <= 0.f", part)
         self.assertIn("FVector::DistSquared2D(Player->GetActorLocation()", part)
+    def test_kick_respects_vertical_foot_contact(self):
+        part = CPP.split("bool ASportsArcadeBall::KickByPlayer(", 1)[1].split(
+            "void ASportsArcadeBall::StopMotion()", 1)[0]
+        self.assertIn("FMath::Min(MaxContactDistanceCm, 225.f)", part)
+        self.assertLess(part.index("FMath::Min(MaxContactDistanceCm, 225.f)"),
+                        part.index("LastTouchPlayer = Player;"))
+
     def test_touch_changes_attribution_only_after_valid_impulse(self):
         part = CPP.split("bool ASportsArcadeBall::ApplyControlledTouch(", 1)[1].split(
             "int32 ASportsArcadeBall::GetLastTouchTeamIndex()", 1)[0]
