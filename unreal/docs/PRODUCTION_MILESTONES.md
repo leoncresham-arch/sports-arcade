@@ -102,3 +102,7 @@ Primary and secondary AI pressers are now selected together in a single roster p
 ## 2026-10-26 — Defensive marking conflict integration
 
 Nested alternate-runner coverage checks reuse the existing validated tactical opposition snapshot instead of traversing every world character again for each closer teammate. This preserves nearest-runner priority, competing-assignment checks, and the 75 cm alternative-threat margin while reducing repeated actor enumeration. Added source regression coverage. This is not a new defensive AI mode or proof of CPU improvements: Unreal 5.5 native compile, 11v11 transition playtests, and frame profiling remain pending.
+
+## 2026-10-26 — Live-carrier defensive marking consistency
+
+The marking eligibility gate now uses a nearby, same-world, grounded teammate's actual team attribution, consistent with attacking-support possession classification. Previously a historical last-touch team could suppress defensive marking despite a detached, aerial or contested ball. Autonomous pressers retain priority; the existing contact and distance limits stay in place. Source regression tests have been updated. Full UE5.5 C++ compilation and controlled transition scenarios remain pending; the legacy browser stadium review does not reflect this native gameplay source.
