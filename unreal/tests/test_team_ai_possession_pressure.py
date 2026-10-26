@@ -11,6 +11,7 @@ class PossessionPressureTests(unittest.TestCase):
         self.assertIn("TacticalOpponents.Add(Candidate);", code)
         self.assertIn("for (ASportsArcadeCharacter* Threat : TacticalOpponents)", code)
         self.assertIn("for (ASportsArcadeCharacter* Blocker : TacticalOpponents)", code)
+        self.assertIn("for (ASportsArcadeCharacter* LaneIt : TacticalOpponents)", code)
 
     def test_midfield_support_runs_remain_bounded_and_possession_based(self):
         code = SOURCE.read_text(encoding="utf-8")
