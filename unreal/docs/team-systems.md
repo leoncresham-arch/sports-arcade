@@ -628,3 +628,7 @@ When the ball moves toward a touchline, advanced forward runners in slots 9–10
 ### Infield attacking run bias (October 26)
 
 During wide possession, advanced forwards now apply an additional bounded infield component to their navigation targets alongside the previous narrowed lane separation. The bias increases with proximity to the touchline and is capped at 35% of the authored lateral separation. Final pitch boundaries and movement horizon still apply. Source regression added; native Unreal gameplay testing remains deferred.
+
+### Forward lane touchline margin (October 26)
+
+Advanced forward-run targets now retain at least 300 cm of nominal lateral margin from the authored pitch edge after their channel split and infield shift. This is a local support target constraint; the controller's existing final navigation clipping still applies. The source contract is checked in `test_team_ai_forward_runs.py`. Native Unreal compilation and full gameplay tuning remain deferred.
