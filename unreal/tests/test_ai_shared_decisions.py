@@ -54,10 +54,9 @@ class SharedOpponentDecisionTests(unittest.TestCase):
 
     def test_controlled_possession_uses_valid_nearby_carrier_team(self):
         code = self.code
-        self.assertIn("const int32 RecentTouchTeam = bAttributedControl &&", code)
-        self.assertIn("LastToucher->TeamIndex == 0 || LastToucher->TeamIndex == 1", code)
+        self.assertIn("Ball->GetControlledPlayer()", code)
         self.assertIn("? LastToucher->TeamIndex : INDEX_NONE;", code)
-        self.assertIn("FVector::DistSquared2D(LastToucher->GetActorLocation(),", code)
+        self.assertIn("Ball->GetControlledPlayer() : nullptr", code)
 
     def test_dead_ball_guard_precedes_snapshot(self):
         code = self.code
