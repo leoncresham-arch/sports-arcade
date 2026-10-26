@@ -3,6 +3,7 @@
 #include "SportsArcadeCupSave.h"
 #include "SportsArcadeLeagueTable.h"
 #include "SportsArcadeFootballDatabase.h"
+#include "SportsArcadePlayerAttributes.h"
 #include "SportsArcadePenaltyShootout.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
@@ -221,6 +222,34 @@ bool FSportsArcadeHomeStadiumAutomation::RunTest(const FString& Parameters)
     TestEqual(TEXT("Invalid stadium falls back safely"),
         Catalog->GetHomeStadiumOrDefault(Club.Id).Id,
         FName(TEXT("GenericStadium")));
+    return true;
+}
+
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSportsArcadePlayerRatingAutomation,
+    "SportsArcade.Gameplay.PlayerRatingScaling",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FSportsArcadePlayerRatingAutomation::RunTest(const FString& Parameters)
+{
+    // Exercise the rating function used by speed, fatigue and football actions.
+    const float Low = USportsArcadePlayerAttributes::RatingFactor(1);
+    const float Neutral = USportsArcadePlayerAttributes::RatingFactor(65);
+    const float High = USportsArcadePlayerAttributes::RatingFactor(99);
+    TestTrue(TEXT("Low rating has a physical disadvantage"), Low < Neutral);
+    TestTrue(TEXT("Neutral rating preserves baseline"), FMath::IsNearlyEqual(Neutral, 1.f));
+    TestTrue(TEXT("High rating confers an advantage"), High > Neutral);
+    TestTrue(TEXT("Below-range ratings clamp"), FMath::IsNearlyEqual(
+        USportsArcadePlayerAttributes::RatingFactor(-100), Low));
+    TestTrue(TEXT("Above-range ratings clamp"), FMath::IsNearlyEqual(
+        USportsArcadePlayerAttributes::RatingFactor(1000), High));
+    for (int32 Rating = 2; Rating <= 99; ++Rating)
+    {
+        if (!TestTrue(TEXT("Rating factor must be monotonic"),
+            USportsArcadePlayerAttributes::RatingFactor(Rating) >=
+            USportsArcadePlayerAttributes::RatingFactor(Rating - 1)))
+            return false;
+    }
     return true;
 }
 
