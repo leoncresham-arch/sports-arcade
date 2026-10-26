@@ -616,3 +616,7 @@ Advanced attacking runs in slots 9–10 now require the footballer to be within 
 ### Tempo-adaptive advanced forward runs (October 26)
 
 Attacking runners in slots 9 and 10 now scale the configured forward-run distance by the ball's forward movement speed, from 65% for backward-travelling-but-eligible play to 115% on a quick developing forward pass (input mapped from -450 to 850 cm/s). Existing possession, local-distance, ball-height, backward-pass and cross-field-switch gates still apply. The distance multiplier is bounded, and final navigation targets retain the existing pitch and planning-horizon clamps. Tests remain source-level; Unreal 5.5 native compilation and tuning are deferred.
+
+### Midfield attack-tempo support (October 26)
+
+Midfielders in slots 5–8 now scale their already-bounded forward supporting advance from 85% at stationary/slow forward ball movement to 112% when the attacking ball moves forward at 850 cm/s. Retreating balls, fast switches and live carrier pressure still suppress this advance, and the support location remains behind the ball carrier as before. Regression contracts cover the speed mapping; native Unreal compilation and gameplay verification are deferred.
