@@ -150,3 +150,7 @@ The native standing-tackle candidate selector now uses `GetControlledPlayer(135.
 ## 2026-10-26 — Active-carrier tackle direction
 
 Standing-tackle deflection direction now uses the ball's validated `GetControlledPlayer(220.f,135.f)` instead of historical last touch to determine whether an opposing carrier should influence the challenge lane. Detached older contacts cannot continue steering a defensive tackle. This joins the existing grounded tackle flight restriction and friendly-carrier protections in the same live contact model. Structural regression test expectations were updated, and native Unreal execution and tackling animations remain outstanding.
+
+## 2026-10-27 — Integrated 11v11 pressing selection correctness
+
+Reworked `FSportsArcadeTacticalSelection::SelectPressPair` to consolidate candidates by lineup slot before assigning primary press and second-defender cover. This guards against stale or duplicate lineup readings distorting the press roles. The same utility is called by the actual live TeamAIController. Extended Unreal-native automation scenarios for improved duplicate readings and reversed input ordering, and updated source contracts. Source CI is green on the implementation and automation commits; **actual Unreal test execution, in-game tactical acceptance, and native compilation are still pending**. Continue with coordinated pressing/possession transition scenarios and other full-match milestones rather than isolated scalar tuning.
