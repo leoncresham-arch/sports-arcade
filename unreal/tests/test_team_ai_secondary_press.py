@@ -25,6 +25,15 @@ class SecondaryPressTests(unittest.TestCase):
         self.assertIn("Candidate.DistanceSquared < Current.DistanceSquared - 1.f", algorithm)
         self.assertIn("Candidate.Slot < Current.Slot", algorithm)
 
+    def test_duplicate_slots_ranked_before_press_pair_assignment(self):
+        algorithm = (ROOT / "Private/SportsArcadeTacticalSelection.cpp").read_text()
+        native = (ROOT / "Private/SportsArcadeAutomationTests.cpp").read_text()
+        self.assertIn("TMap<int32, float> BestDistanceBySlot;", algorithm)
+        self.assertIn("BestDistanceBySlot.Find(Candidate.Slot)", algorithm)
+        self.assertIn("for (const TPair<int32, float>& Entry : BestDistanceBySlot)", algorithm)
+        self.assertIn("Improved duplicate claims primary role", native)
+        self.assertIn("Duplicate insertion order preserves cover", native)
+
     def test_second_defender_is_distinct_and_excludes_keeper(self):
         code = SOURCE.read_text(encoding="utf-8")
         self.assertIn("CandidateSlot < 1 || CandidateSlot > 10", code)
