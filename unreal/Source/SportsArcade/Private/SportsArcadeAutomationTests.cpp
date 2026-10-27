@@ -346,6 +346,22 @@ bool FSportsArcadePressPairAutomation::RunTest(const FString& Parameters)
         FSportsArcadeTacticalSelection::SelectPressPair(RepeatedSlots);
     TestEqual(TEXT("Duplicate player slot only ranks once"), DeDuplicated.PrimarySlot, 5);
     TestEqual(TEXT("Cover is a different player"), DeDuplicated.CoverSlot, 2);
+    // A late improvement to the current cover slot must not erase a
+    // third footballer who is now the rightful second defender.
+    const TArray<FSportsArcadePressCandidate> LateImprovement = {
+        {2, 100.f}, {3, 300.f}, {4, 200.f}, {3, 50.f}};
+    const FSportsArcadePressPair Improved =
+        FSportsArcadeTacticalSelection::SelectPressPair(LateImprovement);
+    TestEqual(TEXT("Improved duplicate claims primary role"), Improved.PrimarySlot, 3);
+    TestEqual(TEXT("Original primary remains second"), Improved.CoverSlot, 2);
+    const TArray<FSportsArcadePressCandidate> ImprovedReverse = {
+        {3, 50.f}, {4, 200.f}, {3, 300.f}, {2, 100.f}};
+    const FSportsArcadePressPair Stable =
+        FSportsArcadeTacticalSelection::SelectPressPair(ImprovedReverse);
+    TestEqual(TEXT("Duplicate insertion order preserves primary"),
+        Stable.PrimarySlot, Improved.PrimarySlot);
+    TestEqual(TEXT("Duplicate insertion order preserves cover"),
+        Stable.CoverSlot, Improved.CoverSlot);
     const TArray<FSportsArcadePressCandidate> NonFinite = {
         {3, TNumericLimits<float>::Infinity()}, {4, 25.f}};
     TestEqual(TEXT("Infinite distance rejected"),
