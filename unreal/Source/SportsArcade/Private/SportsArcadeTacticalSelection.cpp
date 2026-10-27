@@ -12,36 +12,23 @@ bool FSportsArcadeTacticalSelection::Before(
 FSportsArcadePressPair FSportsArcadeTacticalSelection::SelectPressPair(
     const TArray<FSportsArcadePressCandidate>& Eligible)
 {
-    FSportsArcadePressCandidate First, Second;
-    FSportsArcadePressPair Result;
+    // Aggregate each physical lineup slot before ranking. This prevents a
+    // better duplicate reading from accidentally displacing the cover slot.
+    TMap<int32, float> BestDistanceBySlot;
     for (const FSportsArcadePressCandidate& Candidate : Eligible)
     {
         if (Candidate.Slot < 1 || Candidate.Slot > 10 ||
             !FMath::IsFinite(Candidate.DistanceSquared) ||
             Candidate.DistanceSquared < 0.f) continue;
-        // Keep slot identity unique even if a malformed caller supplies
-        // repeated lineup records. The better reading wins deterministically.
-        if (Candidate.Slot == First.Slot)
-        {
-            if (Before(Candidate, First)) First = Candidate;
-            continue;
-        }
-        if (Candidate.Slot == Second.Slot)
-        {
-            if (Before(Candidate, Second))
-            {
-                if (Before(Candidate, First))
-                {
-                    Second = First;
-                    First = Candidate;
-                }
-                else
-                {
-                    Second = Candidate;
-                }
-            }
-            continue;
-        }
+        float* Existing = BestDistanceBySlot.Find(Candidate.Slot);
+        if (!Existing || Candidate.DistanceSquared < *Existing)
+            BestDistanceBySlot.Add(Candidate.Slot, Candidate.DistanceSquared);
+    }
+    FSportsArcadePressCandidate First, Second;
+    FSportsArcadePressPair Result;
+    for (const TPair<int32, float>& Entry : BestDistanceBySlot)
+    {
+        const FSportsArcadePressCandidate Candidate(Entry.Key, Entry.Value);
         if (Before(Candidate, First))
         {
             Second = First;
